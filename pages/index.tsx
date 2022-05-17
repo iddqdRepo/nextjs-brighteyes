@@ -4,7 +4,8 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const a = "b";
+  const b = "b";
+  // TODO Linter in git isnt breaking on above lint warning, should it be an error?
 
   return (
     <div className={styles.container}>
