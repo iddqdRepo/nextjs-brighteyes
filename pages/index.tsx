@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   // TODO Linter in git isnt breaking on above lint warning, should it be an error?
-  const c = "c";
+  const c = "d";
 
   return (
     <div className={styles.container}>
