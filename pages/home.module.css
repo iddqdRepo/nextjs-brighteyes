@@ -48,7 +48,7 @@
   width: 100%;
   margin: 0%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("./labSittingOnGrassHeroImage.jpg");
+    url("../public/labSittingOnGrassHeroImage.jpg");
   /* 	min-min-height: 80vh;
       background: #BBDEFB; */
   background-position: center;
@@ -168,7 +168,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url("./puppyDogEyes.jpg");
+  background-image: url("../public/puppyDogEyes.jpg");
 }
 
 .button {
