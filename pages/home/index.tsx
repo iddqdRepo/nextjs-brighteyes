@@ -48,7 +48,9 @@ function Home() {
         {/* <Link to="/about"]}> */}
         <button
           type="button"
-          className={styles["button about-us-read-more-button"]}
+          className={[styles["about-us-read-more-button"], styles.button].join(
+            " "
+          )}
         >
           Learn More
         </button>
@@ -81,7 +83,10 @@ function Home() {
             <button
               type="button"
               data-testid={"moreInfoAdoptButton"}
-              className={styles["button get-involved-more-info-button"]}
+              className={[
+                styles["get-involved-more-info-button"],
+                styles.button,
+              ].join(" ")}
             >
               More Info
             </button>
@@ -98,7 +103,10 @@ function Home() {
             <button
               type="button"
               data-testid={"moreInfoDonateButton"}
-              className={styles["button get-involved-more-info-button"]}
+              className={[
+                styles["get-involved-more-info-button"],
+                styles.button,
+              ].join(" ")}
             >
               More Info
             </button>
@@ -115,7 +123,10 @@ function Home() {
             <button
               type="button"
               data-testid={"moreInfoVolunteerButton"}
-              className={styles["button get-involved-more-info-button"]}
+              className={[
+                styles["get-involved-more-info-button"],
+                styles.button,
+              ].join(" ")}
             >
               More Info
             </button>
