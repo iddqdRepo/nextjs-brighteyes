@@ -16,7 +16,8 @@ function NavbarComponent() {
     { Forms: "/forms" },
   ];
 
-  const refs = useRef<HTMLAnchorElement[] | null>([]);
+  const refs = useRef<HTMLAnchorElement[]>([]);
+
   const hideNavRef = useRef<any>();
 
   const activeToggle = (ref: HTMLAnchorElement, text: string) => {
@@ -149,7 +150,7 @@ function NavbarComponent() {
                       className={styles.navitem}
                       data-testid={`nav${Object.keys(el)[0]}`}
                       ref={(element) => {
-                        refs.current[index] = element;
+                        refs.current[index] = element as HTMLAnchorElement;
                       }}
                       onClick={() => {
                         activeToggle(refs.current[index], Object.keys(el)[0]);
