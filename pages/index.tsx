@@ -1,7 +1,7 @@
 import React from "react";
 // import Map from "./Map";
 import Link from "next/link";
-import ContactUsComponent from "../components/ContactUsComponent";
+import ContactUsComponent from "../components/ContactUs/ContactUsComponent";
 import styles from "./home.module.css";
 
 function Home() {
@@ -20,7 +20,7 @@ function Home() {
 
             <h1 className={styles["about-us-split-text-description"]}>
               Bright Eyes was established in 1989 and is based in{" "}
-              <span className={styles["slanted-about-us-bold-desc"]}>
+              <span className={styles["bolding"]}>
                 Co.Fermanagh, Northern Ireland{" "}
               </span>
               .
@@ -28,11 +28,9 @@ function Home() {
               Our main purpose is to reduce unnecessary suffering and distress
               of companion animals through the provision of a rescue and
               re-homing service. We operate a strict{" "}
-              <span className={styles["slanted-about-us-bold-desc"]}>
-                no kill policy
-              </span>{" "}
-              at Bright Eyes and if an animal, for any reason, cannot get a home
-              it will have shelter here with us for life. <br />
+              <span className={styles["bolding"]}>no kill policy</span> at
+              Bright Eyes and if an animal, for any reason, cannot get a home it
+              will have shelter here with us for life. <br />
               We support the local community and offer volunteering
               opportunities, training and education on animal welfare. <br />
               We receive no government funding and rely purely on the generosity
