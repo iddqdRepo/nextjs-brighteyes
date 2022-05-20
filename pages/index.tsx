@@ -1,5 +1,5 @@
 import React from "react";
-// import Map from "./Map";
+import Map from "../components/MapComponent/Map.js";
 import Link from "next/link";
 import ContactUsComponent from "../components/ContactUs/ContactUsComponent";
 import styles from "./home.module.css";
@@ -200,7 +200,7 @@ function Home() {
         </div>
       </div>
 
-      {/* <Map /> */}
+      <Map />
     </>
   );
 }

@@ -19,7 +19,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/MapComponent/Map.jsx"
+    "components/MapComponent/Map.js"
   ],
   "exclude": ["node_modules"]
 }

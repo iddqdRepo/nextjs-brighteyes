@@ -201,8 +201,6 @@ function Map() {
         options={options}
       >
         <Marker position={position} />
-
-        <></>
       </GoogleMap>
     </LoadScript>
   );
