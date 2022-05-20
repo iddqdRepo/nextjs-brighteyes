@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import ContactUsComponent from "../../components/ContactUs/ContactUsComponent";
 import styles from "./donate.module.css";
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 
 function Donate() {
   useEffect(() => {
@@ -82,11 +83,6 @@ function Donate() {
               make a huge difference to animal welfare and help us continue to
               rescue more animals that need us.
             </div>
-            {/* <a href="/about">
-              <button type="button" className={styles["button donate-donation-button">
-                Make a donation
-              </button>
-            </a> */}
           </div>
 
           <div className={styles["donate-split-image"]}></div>
@@ -122,10 +118,9 @@ function Donate() {
               title="PayPal - The safer, easier way to pay online!"
               alt="Donate with PayPal button"
             />
-            <img
+            <Image
               className={styles["paypal-donate"]}
               alt=""
-              border="0"
               src="https://www.paypal.com/en_GB/i/scr/pixel.gif"
               width="1"
               height="1"
