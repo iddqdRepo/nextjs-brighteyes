@@ -1,0 +1,96 @@
+/* ^About Pat section */
+.about-pat-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 1000px;
+  margin-bottom: 100px;
+  align-items: center;
+  color: var(--main-color);
+}
+
+.about-header {
+  font-size: 3em;
+  margin: 70px 90px;
+  text-align: center;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  /*   color:var(--main-color); */
+}
+
+.about-pat-split-content {
+  display: flex;
+  /* border: 1px solid red; */
+  width: 85%;
+  min-height: 70%;
+  flex-direction: row;
+}
+
+.about-pat-image-name-container {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 30%;
+  align-content: center;
+  justify-content: center;
+}
+.about-pat-split-text-title {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+  color: var(--main-color);
+  font-family: var(--ff-noto);
+  font-weight: 600;
+  font-size: 2.2em;
+  justify-content: center;
+}
+.about-pat-split-text-subtitle {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+  color: var(--main-color);
+  font-family: var(--ff-noto);
+  font-weight: 600;
+  font-size: 1.4em;
+  justify-content: center;
+}
+
+.about-pat-split-image {
+  border: 5px solid var(--main-color);
+  min-height: 40%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("../../public/pat.jpg");
+}
+
+.about-pat-description-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  /* width: 20em; */
+  flex-wrap: wrap;
+}
+.pat-p {
+  font-size: 2em;
+  margin-right: -9px;
+}
+
+.about-pat-split-text-description {
+  align-items: center;
+  /* align-content: flex-end; */
+  /* border: 1px solid black; */
+  /* justify-content: space-between; */
+  /* width: 50%; */
+  margin-left: 500px;
+  padding: 10px;
+  margin: 5px;
+  color: var(--main-color);
+  font-family: var(--ff-lato);
+  font-weight: 300;
+  font-size: 1.4em;
+  line-height: 30px;
+  flex: 0 1 80%;
+}
