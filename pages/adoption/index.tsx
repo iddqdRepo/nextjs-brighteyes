@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
 import styles from "./adoption.module.css";
 import Link from "next/link";
+import { image } from "./testImage";
 // import * as api from "../api/apiIndex";
 // import DonateSlantedComponent from "../../components/";
 
 function Adoption() {
+  interface animalInterface {
+    _id: string;
+    type: string;
+    name: string;
+    age: string;
+    yearsOrMonths: string;
+    breed: string;
+    size: string;
+    image: string;
+    suitableForChildren: string;
+    suitableForAnimals: string;
+    adopted: string;
+    desc: string;
+  }
+
   // let navigate = useNavigate();
-  const [animals, setAnimals] = useState("");
+  const [animals, setAnimals] = useState<animalInterface[] | null>(null);
   const [filteredAnimals, setFilteredAnimals] = useState("");
 
   useEffect(() => {
@@ -14,7 +30,7 @@ function Adoption() {
     //   const data = await api.fetchPets();
     //   // console.log(data);
     //   setAnimals(
-    //     data.data.filter((animal) => {
+    //     data.data.filter((animal) => {`
     //       return animal.adopted === "No";
     //     })
     //   );
@@ -23,15 +39,37 @@ function Adoption() {
     //   });
     // };
     // getAllAnimals();
+    setAnimals([
+      {
+        _id: "string",
+        type: "string",
+        name: "string",
+        age: "string",
+        yearsOrMonths: "string",
+        breed: "string",
+        size: "string",
+        image: image,
+        suitableForChildren: "string",
+        suitableForAnimals: "string",
+        adopted: "string",
+        desc: "string",
+      },
+      {
+        _id: "number",
+        type: "number",
+        name: "number",
+        age: "number",
+        yearsOrMonths: "number",
+        breed: "number",
+        size: "number",
+        image: image,
+        suitableForChildren: "number",
+        suitableForAnimals: "number",
+        adopted: "number",
+        desc: "number",
+      },
+    ]);
   }, []);
-
-  const handleViewBio = (id) => {
-    // navigate(`/adoption/viewBio?id=${id}`, {
-    //   state: {
-    //     detail: { id },
-    //   },
-    // });
-  };
 
   return (
     <>
@@ -198,12 +236,14 @@ function Adoption() {
                     {/* <div className={styles["pet-description"]}>{key.desc}</div> */}
                     <div className={styles["pet-name"]}>{key.name}</div>
 
-                    <button
-                      className={styles["button pet-read-more-link"]}
-                      onClick={() => handleViewBio(key._id)}
-                    >
-                      view {key.name}
-                    </button>
+                    <Link href={`/adoption/viewBio?id=${key._id}`}>
+                      <button
+                        className={styles["button pet-read-more-link"]}
+                        // onClick={() => handleViewBio(key._id)}
+                      >
+                        view {key.name}
+                      </button>
+                    </Link>
                   </div>
                 );
               })
