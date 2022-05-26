@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./adoption.module.css";
 import Link from "next/link";
-import { image } from "./testImage";
+import { image } from "../../public/testImage";
 // import * as api from "../api/apiIndex";
 // import DonateSlantedComponent from "../../components/";
 
