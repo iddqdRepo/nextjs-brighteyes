@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-};
 
-module.exports = nextConfig;
+module.exports = {
+  reactStrictMode: true,
+  env: {
+    MAPS_API: process.env.MAPS_API,
+  },
+  images: {
+    domains: ["www.paypal.com"],
+  },
+};

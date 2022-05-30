@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./ContactUsComponent.module.css";
 
 function ContactUsComponent() {
   const [name, setName] = useState("");
@@ -47,24 +48,27 @@ function ContactUsComponent() {
   };
 
   return (
-    <div className="contact-us-container">
-      <div className="contact-us-header">Contact Us</div>
+    <div className={styles["contact-us-container"]}>
+      <div className={styles["contact-us-header"]}>Contact Us</div>
 
-      <div className="contact-us-split-content">
-        <div className="contact-us-split-name-email-message">
+      <div className={styles["contact-us-split-content"]}>
+        <div className={styles["contact-us-split-name-email-message"]}>
           {messageSentAlert === "" ? (
             <>
-              <div className="errorAlertText" data-testid={"errorAlertText"}>
+              <div
+                className={styles["errorAlertText"]}
+                data-testid={"errorAlertText"}
+              >
                 {errorAlertText}
               </div>
               <form onSubmit={(e) => sendFormEmail(e)}>
-                <div className="contact-us-name-email-row">
-                  <div className="contact-us-name-col">
-                    <label htmlFor="name" className="name-text">
+                <div className={styles["contact-us-name-email-row"]}>
+                  <div className={styles["contact-us-name-col"]}>
+                    <label htmlFor="name" className={styles["name-text"]}>
                       Name
                     </label>
                     <input
-                      className="name-form-box"
+                      className={styles["name-form-box"]}
                       onInput={(e) => {
                         updateForm(e);
                       }}
@@ -74,12 +78,12 @@ function ContactUsComponent() {
                       name="name"
                     />
                   </div>
-                  <div className="contact-us-email-col">
-                    <label htmlFor="email" className="email-text">
+                  <div className={styles["contact-us-email-col"]}>
+                    <label htmlFor="email" className={styles["email-text"]}>
                       Email
                     </label>
                     <input
-                      className="email-form-box"
+                      className={styles["email-form-box"]}
                       onInput={(e) => {
                         updateForm(e);
                       }}
@@ -90,12 +94,12 @@ function ContactUsComponent() {
                     />
                   </div>
                 </div>
-                <div className="contact-us-message">
-                  <label htmlFor="message" className="message-text">
+                <div className={styles["contact-us-message"]}>
+                  <label htmlFor="message" className={styles["message-text"]}>
                     Message
                   </label>
                   <textarea
-                    className="message-form-box"
+                    className={styles["message-form-box"]}
                     onInput={(e) => {
                       updateForm(e);
                     }}
@@ -105,7 +109,10 @@ function ContactUsComponent() {
                   />
                 </div>
                 <button
-                  className="button contact-us-submit-button"
+                  className={[
+                    styles["contact-us-submit-button"],
+                    styles.button,
+                  ].join(" ")}
                   type="submit"
                 >
                   Submit
@@ -115,8 +122,8 @@ function ContactUsComponent() {
           ) : (
             <>
               {messageSentAlert === "loading" ? (
-                <div className="loading-container">
-                  <div className="Loading-ring">
+                <div className={styles["loading-container"]}>
+                  <div className={styles["Loading-ring"]}>
                     <div></div>
                     <div></div>
                     <div></div>
@@ -127,8 +134,8 @@ function ContactUsComponent() {
                 <>
                   {messageSentAlert === "Success" ? (
                     <>
-                      <div className="messageSentContainer">
-                        <div className="messageSentContent">
+                      <div className={styles["messageSentContainer"]}>
+                        <div className={styles["messageSentContent"]}>
                           Message sent successfully.
                         </div>
                       </div>
@@ -146,7 +153,7 @@ function ContactUsComponent() {
           )}
         </div>
 
-        <div className="contact-us-split-image"> </div>
+        <div className={styles["contact-us-split-image"]}> </div>
       </div>
     </div>
   );

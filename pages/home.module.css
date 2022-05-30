@@ -48,7 +48,7 @@
   width: 100%;
   margin: 0%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("./labSittingOnGrassHeroImage.jpg");
+    url("../public/labSittingOnGrassHeroImage.jpg");
   /* 	min-min-height: 80vh;
       background: #BBDEFB; */
   background-position: center;
@@ -91,7 +91,7 @@
   padding: 10px;
   margin: 5px;
   color: #8b3479;
-  font-family: var(--ff-noto);
+  font-family: "Noto Sans", sans-serif;
   font-weight: 400;
   font-size: 1.7em;
 }
@@ -102,7 +102,7 @@
   padding: 10px;
   margin: 5px;
   color: #8b3479;
-  font-family: var(--ff-lato);
+  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-size: 1.4em;
   line-height: 30px;
@@ -141,7 +141,7 @@
   padding: 10px;
   margin: 5px;
   color: #8b3479;
-  font-family: var(--ff-noto);
+  font-family: "Noto Sans", sans-serif;
   font-weight: 400;
   font-size: 1.7em;
 }
@@ -152,12 +152,14 @@
   padding: 10px;
   margin: 5px;
   color: #8b3479;
-  font-family: var(--ff-lato);
+  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-size: 1.4em;
   line-height: 30px;
 }
-
+.bolding {
+  font-weight: 600;
+}
 .about-us-split-image {
   /* border: 1px solid black; */
   min-height: 20em;
@@ -168,7 +170,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url("./puppyDogEyes.jpg");
+  background-image: url("../public/puppyDogEyes.jpg");
 }
 
 .button {
@@ -216,7 +218,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--ff-noto);
+  font-family: "Noto Sans", sans-serif;
 
   height: 10em;
   width: 18em;
@@ -230,7 +232,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--ff-noto);
+  font-family: "Noto Sans", sans-serif;
   height: 10em;
   width: 18em;
   /* flex-basis: 100%; */
@@ -243,7 +245,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--ff-noto);
+  font-family: "Noto Sans", sans-serif;
   height: 10em;
   width: 18em;
   /* flex-basis: 100%; */
@@ -257,7 +259,7 @@
 
 .stats-box-info {
   font-size: 1.5em;
-  font-weight: var(--light);
+  font-weight: 300;
 }
 
 .get-involved-container-home {
@@ -339,9 +341,9 @@
 
 .involved-main-subtext {
   margin-top: 1em;
-  font-family: var(--ff-lato);
+  font-family: "Lato", sans-serif;
   font-size: 1.2em;
-  font-weight: var(--regular);
+  font-weight: 400;
   line-height: 1.2em;
   text-align: center;
 }
@@ -393,8 +395,8 @@
 
 .info-main-text {
   text-align: center;
-  font-family: var(--ff-lato);
-  font-weight: var(--regular);
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
   line-height: 1.6;
   height: 100%;
 }

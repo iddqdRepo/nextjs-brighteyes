@@ -1,0 +1,390 @@
+/* *------------------ADOPTION PAGE STYLES------------------ */
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 10rem;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #8b3479;
+  border-radius: 10rem;
+  z-index: -2;
+}
+.button:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #c8a9c0;
+  transition: all 0.3s;
+  border-radius: 10rem;
+  z-index: -1;
+}
+.button:hover {
+  color: #fff;
+  cursor: pointer;
+}
+.button:hover:before {
+  width: 100%;
+}
+.adoption-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 700px;
+  align-items: center;
+  color: #8b3479;
+}
+
+.adoption-header {
+  font-size: 3em;
+  margin: 1.5em 0 0.5em 0;
+  text-align: center;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  /*   color:#8b3479; */
+}
+.adoption-subtext {
+  font-size: 1.5em;
+  /* margin: 70px 90px; */
+  text-align: center;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  width: 70%;
+  margin-bottom: 1.5em;
+  /*   color:#8b3479; */
+}
+
+.adoption-split-content {
+  display: flex;
+  /* border: 1px solid red; */
+  width: 80%;
+  min-height: 50%;
+  flex-direction: row;
+  margin-bottom: 2em;
+}
+
+.adoption-split-text {
+  flex: 0 1 70%;
+}
+
+.adoption-split-text-title {
+  /* border: 1px solid black; */
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.7em;
+}
+
+.adoption-split-points-left-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  max-width: 30em;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 2.5em;
+  flex: 0 1 50%;
+}
+
+.adoption-split-points-right-container {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  /* align-content: center; */
+  /* justify-content: center; */
+  max-width: 30em;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 2.5em;
+  flex: 0 1 50%;
+}
+
+.adoption-point-container {
+  margin: 40px;
+}
+
+.adoption-point-text {
+  /* margin-right: -30px; */
+}
+
+.adoption-form-button {
+  padding: 0.75rem 2.25rem;
+  margin-bottom: 50px;
+}
+
+.slanted-div-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 40px 0;
+  margin-top: 30px;
+  background: #c8a9c0;
+  overflow: visible;
+  z-index: 1;
+  width: 100%;
+}
+
+/* where the magic happens */
+.slanted-div-filter:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: -1;
+  bottom: 0;
+  transform-origin: top right;
+  transform: skewY(1.4deg);
+}
+
+/* displays the content inside, as these settings in the parent breaks the effect */
+.slanted-div-filter-content-container {
+  display: flex;
+  width: 90%;
+}
+
+.slanted-div-left-filter-text-container {
+  display: flex;
+  flex: 0 1 70%;
+  flex-direction: column;
+  color: #8b3479;
+}
+
+.filter-header {
+  font-size: 2.5em;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+}
+.filter-dropdown {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  width: 70%;
+  flex-wrap: wrap;
+}
+.slanted-div-right-filter-button-container {
+  flex: 0 1 30%;
+  justify-content: flex-end;
+}
+
+.slanted-div-filter-button {
+  margin-top: 100px;
+  fill: #8b3479;
+  color: white;
+  background-color: #8b3479;
+  border-style: solid;
+  border-width: 2px 2px 2px 2px;
+  border-color: #8b3479;
+  border-radius: 30px 30px 30px 30px;
+  line-height: 1;
+  font-size: 15px;
+  padding: 12px 24px;
+  width: 70%;
+}
+
+.dropdown {
+  /* margin: 0 20px; */
+  vertical-align: top;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  height: 28px;
+  width: 190px;
+  background: #f2f2f2;
+  border: 1px solid;
+  border-color: white #f7f7f7 whitesmoke;
+  border-radius: 3px;
+  background-image: -webkit-linear-gradient(
+    top,
+    transparent,
+    rgba(0, 0, 0, 0.06)
+  );
+  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.06)
+  );
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.dropdown:before,
+.dropdown:after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 9px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 4px dashed;
+  border-color: #888888 transparent;
+  pointer-events: none;
+}
+
+.dropdown:before {
+  border-bottom-style: solid;
+  border-top: none;
+}
+
+.dropdown:after {
+  margin-top: 7px;
+  border-top-style: solid;
+  border-bottom: none;
+}
+
+.dropdown-select {
+  position: relative;
+  width: 130%;
+  margin: 0;
+  padding: 6px 8px 6px 10px;
+  height: 28px;
+  line-height: 14px;
+  font-size: 12px;
+  color: #62717a;
+  text-shadow: 0 1px white;
+  background: #f2f2f2; /* Fallback for IE 8 */
+  background: rgba(
+    0,
+    0,
+    0,
+    0
+  ) !important; /* "transparent" doesn't work with Opera */
+  border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.dropdown-select:focus {
+  z-index: 3;
+  width: 100%;
+  color: #394349;
+  outline: 2px solid #49aff2;
+  outline: 2px solid -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.dropdown-select > option {
+  margin: 3px;
+  padding: 6px 8px;
+  text-shadow: none;
+  background: #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* ^Pet Viewer */
+
+.pet-viewer-content-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+  /* min-height: 700px; */
+  width: 100%;
+}
+
+.pet-container {
+  /* border: 2px solid #8b3479; */
+  /* border: 4px solid red; */
+  /* margin-top: 50px;  */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 50px;
+  margin: 3em;
+  max-width: 300px;
+  min-width: 300px;
+  height: 30em;
+  /* max-height: 400px; */
+  overflow: hidden;
+}
+.pet-image {
+  /* background-image: url("https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg"); */
+  /* background-image: url("https://scontent.fbhd1-1.fna.fbcdn.net/v/t39.30808-6/259809182_4468471229874944_728072661913702259_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=qC6zjvTnXxEAX-YXPsP&_nc_ht=scontent.fbhd1-1.fna&oh=154eed08b0f9644414d1fde8d42f88ad&oe=61BB4A8D"); */
+
+  border-radius: 10%;
+  height: 100%;
+  /* width:100%; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.pet-age-weight {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  font-size: 1em;
+  margin-top: 10px;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+}
+.pet-weight {
+  margin-right: 8px;
+}
+#pet {
+  background-color: black;
+}
+.pet-name {
+  text-align: center;
+  color: #8b3479;
+
+  margin: 0.5em 0 0.5em 0;
+  font-size: 2em;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+}
+
+.pet-description {
+  color: black;
+  margin: 0.5em 0 0.5em 0;
+  font-size: 1.5em;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  max-height: 15%;
+  /* overflow: scroll; */
+  overflow-y: scroll;
+}
+.pet-read-more-link {
+  padding: 6px;
+  font-size: 1em;
+  color: white;
+  text-transform: capitalize;
+  /* height:10%; */
+}

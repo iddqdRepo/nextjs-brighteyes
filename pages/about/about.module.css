@@ -1,0 +1,206 @@
+/* ^About Pat section */
+.about-pat-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 1000px;
+  margin-bottom: 100px;
+  align-items: center;
+  color: #8b3479;
+}
+
+/* :root {
+  --main-color: #8b3479;
+  --accent-color: #c8a9c0;
+  --ff-noto: "Noto Sans", sans-serif;
+  --ff-lato: "Lato", sans-serif;
+  --bold: 900;
+  --semibold: 600;
+  --regular: 400;
+  --light: 300;
+} */
+
+.about-header {
+  font-size: 3em;
+  margin: 70px 90px;
+  text-align: center;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  /*   color:#8b3479; */
+}
+
+.about-pat-split-content {
+  display: flex;
+  /* border: 1px solid red; */
+  width: 85%;
+  min-height: 70%;
+  flex-direction: row;
+}
+
+.about-pat-image-name-container {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 30%;
+  align-content: center;
+  justify-content: center;
+}
+.about-pat-split-text-title {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  font-size: 2.2em;
+  justify-content: center;
+}
+.about-pat-split-text-subtitle {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1.4em;
+  justify-content: center;
+}
+
+.about-pat-split-image {
+  border: 5px solid #8b3479;
+  min-height: 40%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("../../public/pat.jpg");
+}
+
+.about-pat-description-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 80%;
+  /* width: 20em; */
+  flex-wrap: wrap;
+}
+
+.pat-p {
+  font-size: 2em;
+  margin-right: -9px;
+}
+
+.about-pat-split-text-description {
+  align-items: center;
+  /* align-content: flex-end; */
+  /* border: 1px solid black; */
+  /* justify-content: space-between; */
+  /* width: 50%; */
+  margin-left: 500px;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.4em;
+  line-height: 30px;
+  flex: 0 1 80%;
+}
+
+/* ^Slanted About Bright Eyes Section */
+
+.slanted-div-about {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  align-items: center;
+  position: relative;
+  padding: 80px 0;
+  background: #c8a9c0;
+  color: #8b3479;
+  overflow: visible;
+  z-index: 1;
+}
+.slanted-div-about:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: -1;
+  bottom: 0;
+  transform-origin: top right;
+  transform: skewY(2deg);
+}
+
+.slanted-about-header {
+  font-size: 3em;
+  margin: 10px 0 50px 0;
+  text-align: center;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  /*   color:#8b3479; */
+}
+
+.slanted-about-us-split-content {
+  display: flex;
+  /* border: 1px solid red; */
+  width: 85%;
+  min-height: 50%;
+  flex-direction: row;
+}
+
+.slanted-about-us-split-text {
+  flex: 0 1 70%;
+}
+
+.slanted-about-us-split-text-title {
+  /* border: 1px solid black; */
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.7em;
+}
+
+.slanted-about-us-split-text-description {
+  /* border: 1px solid black; */
+  max-width: 40em;
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.3em;
+  line-height: 30px;
+}
+.slanted-about-us-bold-desc {
+  font-weight: 600;
+}
+.slanted-about-us-split-image {
+  /* border: 1px solid black; */
+  min-height: 20em;
+  padding: 10px;
+  margin: 5px;
+  flex: 0 1 30%;
+  border-radius: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("https://images.unsplash.com/photo-1616178725135-6a5ffbf2da69?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80");
+}
+
+.pat-video-header {
+  font-size: 3em;
+  margin: 70px 90px;
+  text-align: center;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+  color: #8b3479;
+}
+.video-responsive {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10em;
+}
