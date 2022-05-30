@@ -335,6 +335,10 @@
   /* max-height: 400px; */
   overflow: hidden;
 }
+.pet-container:hover {
+  cursor: pointer;
+}
+
 .pet-image {
   /* background-image: url("https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg"); */
   /* background-image: url("https://scontent.fbhd1-1.fna.fbcdn.net/v/t39.30808-6/259809182_4468471229874944_728072661913702259_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=qC6zjvTnXxEAX-YXPsP&_nc_ht=scontent.fbhd1-1.fna&oh=154eed08b0f9644414d1fde8d42f88ad&oe=61BB4A8D"); */

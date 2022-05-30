@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./adoption.module.css";
 import Link from "next/link";
 import { image } from "../../public/testImage";
+import { Icon } from "@iconify/react";
 // import * as api from "../api/apiIndex";
 // import DonateSlantedComponent from "../../components/";
 
@@ -84,30 +85,30 @@ function Adoption() {
         <div className={styles["adoption-split-content"]}>
           <div className={styles["adoption-split-points-left-container"]}>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Enclosed Garden{" "}
               </span>
             </div>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Sleeping Indoors{" "}
               </span>
             </div>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Landlord Permission{" "}
@@ -117,30 +118,30 @@ function Adoption() {
 
           <div className={styles["adoption-split-points-right-container"]}>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Children 12+{" "}
               </span>
             </div>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Compulsory Home Check{" "}
               </span>
             </div>
             <div className={styles["adoption-point-container"]}>
-              <span
+              <Icon
                 className={styles["iconify-inline"]}
-                data-icon="bi:check-circle"
-              ></span>
+                icon="bi:check-circle"
+              />
               <span className={styles["adoption-point-text"]}>
                 {" "}
                 Form Required{" "}
@@ -206,45 +207,51 @@ function Adoption() {
               })
               .map((key) => {
                 return (
-                  <div
-                    data-testid="AnimalContainer"
-                    className={styles["pet-container"]}
+                  <Link
                     key={key.name + key.age}
+                    href={`/adoption/viewBio?id=${key._id}`}
                   >
                     <div
-                      className={styles["pet-image"]}
-                      style={{
-                        backgroundImage: `url("${key.image}")`,
-                      }}
-                    ></div>
-                    <div className={styles["pet-age-weight"]}>
-                      <div className={styles["pet-weight"]}>
-                        <span
-                          className={styles["iconify-inline"]}
-                          data-icon="ion:scale-sharp"
-                        ></span>
-                        &nbsp;{key.size}
+                      data-testid="AnimalContainer"
+                      className={styles["pet-container"]}
+                    >
+                      <div
+                        className={styles["pet-image"]}
+                        style={{
+                          backgroundImage: `url("${key.image}")`,
+                        }}
+                      ></div>
+                      <div className={styles["pet-age-weight"]}>
+                        <div className={styles["pet-weight"]}>
+                          <span
+                            className={styles["iconify-inline"]}
+                            data-icon="ion:scale-sharp"
+                          ></span>
+                          &nbsp;{key.size}
+                        </div>
+                        <div className={styles["pet-age"]}>
+                          <span
+                            className={styles["iconify-inline"]}
+                            data-icon="bi:calendar-week-fill"
+                          ></span>
+                          &nbsp;{key.age} {key.yearsOrMonths}
+                        </div>
                       </div>
-                      <div className={styles["pet-age"]}>
-                        <span
-                          className={styles["iconify-inline"]}
-                          data-icon="bi:calendar-week-fill"
-                        ></span>
-                        &nbsp;{key.age} {key.yearsOrMonths}
-                      </div>
-                    </div>
-                    {/* <div className={styles["pet-description"]}>{key.desc}</div> */}
-                    <div className={styles["pet-name"]}>{key.name}</div>
+                      {/* <div className={styles["pet-description"]}>{key.desc}</div> */}
+                      <div className={styles["pet-name"]}>{key.name}</div>
 
-                    <Link href={`/adoption/viewBio?id=${key._id}`}>
+                      {/* <Link href={`/adoption/viewBio?id=${key._id}`}> */}
                       <button
-                        className={styles["button pet-read-more-link"]}
-                        // onClick={() => handleViewBio(key._id)}
+                        type="button"
+                        className={[
+                          styles["pet-read-more-link"],
+                          styles.button,
+                        ].join(" ")}
                       >
                         view {key.name}
                       </button>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                 );
               })
           )}
