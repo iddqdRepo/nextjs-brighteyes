@@ -1,7 +1,7 @@
 import React from "react";
 
 function viewBio() {
-  return <div>view bio</div>;
+  return <div>View Bio for animal</div>;
 }
 
 export default viewBio;
