@@ -24,6 +24,4 @@ const petSchema = new Schema({
 
 //Model provides us with an interface to communicate with the databse collection
 //looks for the model name (Pet), pluralises it, the look for that collection inside the database
-const PetModel = mongoose.model("Pets", petSchema);
-
-export default PetModel;
+module.exports = mongoose.models.Pets || mongoose.model("Pets", petSchema);

@@ -202,12 +202,15 @@ const formVolunteerSchema = new Schema({
   archive: String,
 });
 
-const FormPetAdoptionModel = mongoose.model(
-  "PetAdoptionForm",
-  formPetAdoptionSchema
-);
-const FormGiftAidModel = mongoose.model("GiftAidForm", formGiftAidSchema);
-const FormVolunteerModel = mongoose.model("VolunteerForm", formVolunteerSchema);
+const FormPetAdoptionModel =
+  mongoose.models.PetAdoptionForm ||
+  mongoose.model("PetAdoptionForm", formPetAdoptionSchema);
+const FormGiftAidModel =
+  mongoose.models.GiftAidForm ||
+  mongoose.model("GiftAidForm", formGiftAidSchema);
+const FormVolunteerModel =
+  mongoose.models.VolunteerForm ||
+  mongoose.model("VolunteerForm", formVolunteerSchema);
 
 let modelExport = {
   FormPetAdoptionModel,
