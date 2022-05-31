@@ -17,9 +17,11 @@
     "@mui/material": "^5.8.0",
     "@react-google-maps/api": "^2.10.3",
     "iconify": "^1.4.0",
+    "mongoose": "^6.3.5",
     "next": "12.1.6",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "save-dev": "^0.0.1-security"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
