@@ -1,5 +1,21 @@
-function userModel() {
-  return null;
-}
+import mongoose from "mongoose";
 
-export default userModel;
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const UserModel = mongoose.model("User", userSchema);
+
+export default UserModel;
