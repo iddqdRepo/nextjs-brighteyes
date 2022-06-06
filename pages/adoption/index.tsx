@@ -10,6 +10,8 @@ import Pets from "../../models/petModel";
 // import DonateSlantedComponent from "../../components/";
 
 function Adoption(props) {
+  console.log("function adoption");
+
   interface animalInterface {
     _id: string;
     type: string;
@@ -294,6 +296,7 @@ function Adoption(props) {
 // This function gets called at build time on server-side.
 export async function getStaticProps() {
   await dbConnect();
+  console.log("running getStaticProps adoption");
   const result = await Pets.find({ adopted: "No" });
 
   const pets = result.map((individualPet) => {

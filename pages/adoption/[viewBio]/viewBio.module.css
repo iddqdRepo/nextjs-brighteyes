@@ -1,0 +1,201 @@
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 10rem;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.15rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.button:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #8b3479;
+  border-radius: 10rem;
+  z-index: -2;
+}
+.button:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: #c8a9c0;
+  transition: all 0.3s;
+  border-radius: 10rem;
+  z-index: -1;
+}
+.button:hover {
+  color: #fff;
+  cursor: pointer;
+}
+.button:hover:before {
+  width: 100%;
+}
+
+.bio-page-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 100px;
+  /* width: 1000px; */
+}
+
+.bio-name {
+  color: #8b3479;
+  font-size: 3em;
+  text-align: center;
+  margin-top: 1em;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 600;
+}
+
+.bio-split-content {
+  display: flex;
+  /* border: 1px solid red; */
+  width: 100%;
+  min-height: 60%;
+  /* flex-direction: row; */
+  justify-content: center;
+
+  /* justify-content: space-between; */
+}
+
+.bio-split-image {
+  /* border: 1px solid black; */
+  min-height: 30em;
+  min-width: 30em;
+  padding: 10px;
+  margin: 5px;
+  flex: 0 1 30%;
+  border-radius: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  /* background-image: url("https://ggsc.s3.amazonaws.com/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner.jpg"); */
+}
+
+.bio-split-text {
+  /* flex: 0 1 30%; */
+  /* width: 80%; */
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bio-split-text-title {
+  /* border: 1px solid black; */
+  padding: 10px;
+  margin: 5px;
+  color: #8b3479;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  font-size: 1.7em;
+}
+
+.bio-split-text-description {
+  display: flex;
+  /* justify-content: flex-end; */
+  /* border: 1px solid black; */
+  width: 100%;
+  /* max-width: 50em; */
+  /* padding: 10px; */
+  /* margin: 5px; */
+  justify-content: center;
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.4em;
+  flex-wrap: nowrap;
+}
+
+.bio-split-list-title {
+}
+
+.bio-list-item {
+  display: flex;
+  justify-content: space-between;
+  /* justify-content: flex-end; */
+  /* width: 100%; */
+  width: 25em;
+}
+.bio-right-text {
+}
+.bio-right-text {
+  /* width: 200px; */
+  /* display: flex;
+    
+    justify-content: flex-end; */
+}
+.dotted-line {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border: none;
+  border-top: 1px dashed darkgray;
+}
+
+.bio-description-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 15em;
+}
+
+.bio-description-content {
+  border: 1px solid #8b3479;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  line-height: 35px;
+  font-family: "Lato", sans-serif;
+  color: #8b3479;
+  font-size: 1.2em;
+  min-height: 10em;
+  padding: 10px;
+  margin: 5px;
+  flex: 0 1 30%;
+  border-radius: 10px;
+}
+.bio-ul {
+  width: 80%;
+}
+/* pre {
+  white-space: pre-wrap;
+} */
+.bio-split-adoption-button-container {
+  display: flex;
+  width: 700px;
+}
+.bio-split-adoption-button {
+  /* border: 1px solid red; */
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  /* max-width: 50em; */
+  color: #8b3479;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.4em;
+  flex-wrap: nowrap;
+}
+
+.bio-adoption-form-button {
+  margin-top: 30px;
+  width: 40%;
+}
