@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./adoption.module.css";
 import Link from "next/link";
-import { image } from "../../public/testImage";
+// import { image } from "../../public/testImage";
 import { Icon } from "@iconify/react";
+import dbConnect from "../../utils/dbConnect";
+import Pets from "../../models/petModel";
+
 // import * as api from "../api/apiIndex";
 // import DonateSlantedComponent from "../../components/";
 
-function Adoption() {
+function Adoption(props) {
   interface animalInterface {
     _id: string;
     type: string;
@@ -27,6 +30,8 @@ function Adoption() {
   const [filteredAnimals, setFilteredAnimals] = useState("");
 
   useEffect(() => {
+    console.log("useEffect animal = ", props.pets);
+
     // const getAllAnimals = async () => {
     //   const data = await api.fetchPets();
     //   // console.log(data);
@@ -40,37 +45,39 @@ function Adoption() {
     //   });
     // };
     // getAllAnimals();
-    setAnimals([
-      {
-        _id: "string",
-        type: "string",
-        name: "string",
-        age: "string",
-        yearsOrMonths: "string",
-        breed: "string",
-        size: "string",
-        image: image,
-        suitableForChildren: "string",
-        suitableForAnimals: "string",
-        adopted: "string",
-        desc: "string",
-      },
-      {
-        _id: "number",
-        type: "number",
-        name: "number",
-        age: "number",
-        yearsOrMonths: "number",
-        breed: "number",
-        size: "number",
-        image: image,
-        suitableForChildren: "number",
-        suitableForAnimals: "number",
-        adopted: "number",
-        desc: "number",
-      },
-    ]);
-  }, []);
+
+    // setAnimals([
+    //   {
+    //     _id: "string",
+    //     type: "string",
+    //     name: "string",
+    //     age: "string",
+    //     yearsOrMonths: "string",
+    //     breed: "string",
+    //     size: "string",
+    //     image: image,
+    //     suitableForChildren: "string",
+    //     suitableForAnimals: "string",
+    //     adopted: "string",
+    //     desc: "string",
+    //   },
+    //   {
+    //     _id: "number",
+    //     type: "number",
+    //     name: "number",
+    //     age: "number",
+    //     yearsOrMonths: "number",
+    //     breed: "number",
+    //     size: "number",
+    //     image: image,
+    //     suitableForChildren: "number",
+    //     suitableForAnimals: "number",
+    //     adopted: "number",
+    //     desc: "number",
+    //   },
+    // ]);
+    setAnimals(props.pets);
+  }, [props.animal]);
 
   return (
     <>
@@ -261,6 +268,55 @@ function Adoption() {
       {/* <DonateSlantedComponent /> */}
     </>
   );
+}
+
+// export const getServerSideProps = async () => {
+//   console.log("Connecting");
+//   await dbConnect();
+//   const result = await Pets.find({ adopted: "No" });
+//   console.log("result = ", result);
+
+//   const pets = result.map((individualPet) => {
+//     const pet = individualPet.toObject();
+//     pet._id = pet._id.toString();
+//     if (pet.createdAt) {
+//       pet.createdAt = pet.createdAt.toString();
+//     }
+//     if (pet.updatedAt) {
+//       pet.updatedAt = pet.updatedAt.toString();
+//     }
+//     return pet;
+//   });
+
+//   return { props: { pets } };
+// };
+
+// This function gets called at build time on server-side.
+export async function getStaticProps() {
+  await dbConnect();
+  const result = await Pets.find({ adopted: "No" });
+
+  const pets = result.map((individualPet) => {
+    const pet = individualPet.toObject();
+    pet._id = pet._id.toString();
+    if (pet.createdAt) {
+      pet.createdAt = pet.createdAt.toString();
+    }
+    if (pet.updatedAt) {
+      pet.updatedAt = pet.updatedAt.toString();
+    }
+    return pet;
+  });
+
+  return {
+    props: {
+      pets,
+    },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 10 seconds
+    revalidate: 10, // In seconds
+  };
 }
 
 export default Adoption;
