@@ -8,7 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Merriweather"],
+        sans: ["Noto Sans"],
+        poppins: ["Poppins"],
+        roboto: ["Roboto"],
       },
     },
   },
