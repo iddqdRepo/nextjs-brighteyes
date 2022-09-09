@@ -12,6 +12,9 @@ module.exports = {
         poppins: ["Poppins"],
         roboto: ["Roboto"],
       },
+      height: {
+        "85-vh": "85vh",
+      },
     },
   },
   plugins: [],

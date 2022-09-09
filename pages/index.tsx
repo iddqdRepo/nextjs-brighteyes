@@ -4,7 +4,7 @@ import React from "react";
 import Map from "../components/MapComponent/Map.js";
 // import Image from "next/image.js";
 // import Link from "next/link";
-import ContactUsComponent from "../components/ContactUs/ContactUsComponent";
+// import ContactUsComponent from "../components/ContactUs/ContactUsComponent";
 import { RoughNotation } from "react-rough-notation";
 import { Icon } from "@iconify/react";
 
@@ -38,24 +38,12 @@ function Home() {
               <h1 className="w-11/12 text-lg font-roboto">
                 Bright Eyes was established in 1989 and is based in{" "}
                 <span className="font-semibold ">
-                  Co.Fermanagh, Northern Ireland
+                  Co.Fermanagh, Northern Ireland.
                 </span>
-                .
                 <br />
                 Our main purpose is to reduce unnecessary suffering and distress
                 of companion animals through the provision of a rescue and
-                re-homing service. We operate a &nbsp;
-                <RoughNotation
-                  iterations={5}
-                  type="highlight"
-                  show={true}
-                  color="#8b3479"
-                  strokeWidth={3}
-                  animate={false}
-                >
-                  <span className="text-white">strict no kill policy</span>
-                </RoughNotation>
-                {/* <span className="font-semibold"></span> */}&nbsp; at Bright
+                re-homing service. We operate a strict no kill policy at Bright
                 Eyes and if an animal, for any reason, cannot get a home it will
                 have shelter here with us for life. <br />
               </h1>
@@ -127,12 +115,32 @@ function Home() {
     );
   };
 
+  const Button = () => {
+    return (
+      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
+        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
+          <span className="pr-4">View Animals</span>
+          <Icon
+            className=""
+            icon="fa:long-arrow-right"
+            inline={true}
+            color="white"
+          />
+        </div>
+      </button>
+    );
+  };
+
   return (
     <>
-      {/* <img  className="hero-image"></div> */}
-      <div className="relative w-full h-full bg-center bg-no-repeat bg-contain">
-        <img src="/DogHero4.png" alt="" />
-        <div className="absolute w-full rotate-180 -bottom-1 top-1/3">
+      <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DogHero4.png')]">
+        <div className="h-85-vh"></div>
+        {/* <div className="relative w-full h-auto bg-center bg-no-repeat bg-contain"> */}
+        {/* <img className="" src="/DogHero4.png" alt="" /> */}
+        {/* <div className="w-full h-screen bg-no-repeat bg-[url('../public/DogHero4.png')]"></div> */}
+        {/* <img className=" sm:hidden" src="/MobileHero.png" alt="" /> */}
+        {/* <img src="/DogHero4.png" alt="" /> */}
+        <div className="absolute w-full rotate-180 -bottom-1 top-1/3 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 283.5 19.6"
@@ -150,8 +158,29 @@ function Home() {
             <path className="fill-white" d="M0 0v1l142 3 142-3V0z" />
           </svg>
         </div>
-        <div className="absolute flex top-1/4 top-4/6 left-20">
-          <span className="text-5xl font-semibold font-poppins">
+        {/* <div className="relative w-96 h-96">
+        <div className="w-full h-full bg-center bg-no-repeat bg-contain bg-[url('../public/DogHero4.png')]"></div>
+        <div className="absolute w-full rotate-180 -bottom-1 top-1/3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 283.5 19.6"
+            preserveAspectRatio="none"
+          >
+            <path
+              className="fill-white opacity-20"
+              d="M0 0v19L142 4l142 15V0z"
+            />
+            <path
+              className="fill-white opacity-20"
+              d="M0 0v13l142-9 142 9V0z"
+            />
+            <path className="fill-white opacity-20" d="M0 0v6l142-2 142 2V0z" />
+            <path className="fill-white" d="M0 0v1l142 3 142-3V0z" />
+          </svg>
+        </div> */}
+
+        <div className="absolute flex top-1/4 left-5 xl:left-20">
+          <span className="text-3xl font-semibold font-poppins sm:text-5xl">
             Don&apos;t buy, &nbsp;
             <RoughNotation
               iterations={5}
@@ -163,37 +192,61 @@ function Home() {
               adopt!
             </RoughNotation>
           </span>
+          <div className="absolute flex flex-col mt-14 sm:mt-20 ">
+            <span className="text-lg font-normal sm:text-xl font-poppins">
+              Take a look at some of the wonderful animals we have at <br />
+              Bright Eyes Animal Sanctuary.
+            </span>
+            <Button />
+          </div>
         </div>
-        <div className="absolute flex mt-2 top-1/3 left-20">
-          <span className="text-xl font-normal font-poppins">
-            Take a look at some of the wonderful animals we have at <br />
-            Bright Eyes Animal Sanctuary.
+        {/* 
+        <div className="absolute flex top-8 left-5 xl:left-20 m">
+          <span className="text-2xl font-semibold font-poppins">
+            Don&apos;t buy, &nbsp;
+            <RoughNotation
+              iterations={5}
+              type="circle"
+              show={true}
+              color="#8b3479"
+              strokeWidth={1}
+            >
+              adopt!
+            </RoughNotation>
           </span>
-        </div>
+          <div className="absolute flex flex-col mt-10 ">
+            <span className="text-sm font-normal font-poppins">
+              Take a look at some of the wonderful animals we have at <br />
+              Bright Eyes Animal Sanctuary.
+            </span>
+            <Button />
+          </div>
+        </div> */}
       </div>
+
       <AboutUsSection />
 
       <div className="flex items-center justify-center ">
-        <div className="flex items-center justify-center w-4/6 ">
-          <div className="flex p-8 mr-10 border rounded-lg shadow-xl hover:shadow-2xl basis-1/3">
+        <div className="flex flex-wrap items-center justify-center w-5/6">
+          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
-                icon="fluent:animal-dog-16-regular"
+                icon="fluent-emoji-high-contrast:dog"
                 color="#8b3479"
                 width="70"
                 height="70"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-3/6">
               <span className="text-lg font-medium font-poppins text-[#8b3479]">
                 OVER 2000
               </span>
-              <span className="flex-wrap text-sm font-normal font-poppins">
+              <span className="text-sm font-normal flex-nowrap font-poppins">
                 Pets Adopted within the past 5 years
               </span>
             </div>
           </div>
-          <div className="flex p-8 mr-10 border rounded-lg shadow-xl hover:shadow-2xl basis-1/3">
+          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
                 icon="ic:outline-volunteer-activism"
@@ -211,7 +264,7 @@ function Home() {
               </span>
             </div>
           </div>{" "}
-          <div className="flex p-8 mr-10 border rounded-lg shadow-xl hover:shadow-2xl basis-1/3">
+          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
                 icon="iconoir:stats-square-up"
@@ -232,20 +285,6 @@ function Home() {
         </div>
       </div>
 
-      <div className="stats-box-container">
-        <div className="stats-box-1">
-          <div className="stats-box-title">2000+</div>
-          <div className="stats-box-info">Pets Adopted</div>
-        </div>
-        <div className="stats-box-2">
-          <div className="stats-box-title">20+</div>
-          <div className="stats-box-info">Volunteers</div>
-        </div>
-        <div className="stats-box-3">
-          <div className="stats-box-title">30+</div>
-          <div className="stats-box-info">Years Experience</div>
-        </div>
-      </div>
       <div className="get-involved-container-home">
         <div className="get-involved-header">Get Involved</div>
 
@@ -312,7 +351,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <ContactUsComponent />
+      {/* <ContactUsComponent /> */}
       <div className="info-container">
         <div className="info-split-container">
           <div className="info-split">
