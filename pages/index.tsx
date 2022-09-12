@@ -93,7 +93,7 @@ function Home() {
             {/* <div className="about-us-split-image"> </div> */}
             <div className="flex justify-center basis-1/3">
               <img
-                className="w-2/5 bg-center bg-no-repeat xl:w-auto xl:h-4/5 rounded-xl"
+                className="w-4/5 bg-center bg-no-repeat sm:w-2/5 xl:w-auto xl:h-4/5 rounded-xl"
                 src="/puppyDogEyes.jpg"
                 alt=""
               />
@@ -119,33 +119,33 @@ function Home() {
     return (
       <>
         <div className="flex flex-col items-center ">
-          <div className="flex justify-end w-5/6 mt-16 mb-10 mr-20 text-xl font-semibold font-poppins">
-            Get Involved
+          <div className="flex w-5/6 mt-16 mb-10 text-xl font-semibold font-poppins">
             <div className="flex items-center">
-              <div className="ml-2 border-b-4 border-[#8b3479] w-7"></div>
+              <div className="mr-2 border-b-4 border-[#8b3479] w-7"></div>
             </div>
+            Get Involved
           </div>
         </div>
 
         <div className="bg-[url('../public/DogGetInvolved.png')] bg-no-repeat bg-center bg-fixed bg-cover flex ">
-          <div className="flex flex-col w-1/3 pt-20 ml-20 h-card-vh">
-            <span className="text-3xl font-semibold text-[#8b3479] font-poppins sm:text-5xl">
+          <div className="flex flex-col w-2/3 pt-5 ml-20 sm:pt-20 xl:w-1/3 h-card-vh">
+            <span className="text-5xl font-semibold text-[#8b3479] font-poppins">
               Want to help out?
             </span>
-            <span className="mt-3 text-xl font-semibold text-white font-poppins sm:text-2xl">
+            <span className="mt-3 text-2xl font-semibold text-white font-poppins ">
               Join The Bright Eyes Team
             </span>
-            <span className="mt-5 text-3xl font-semibold text-white font-poppins sm:text-xl">
+            <span className="mt-5 text-xl font-semibold text-white font-poppins ">
               We receive no government funding and rely purely on the generosity
               of the public to help us continue our work.
             </span>
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-screen -mt-40">
-          <div className="flex items-center justify-center w-full xl:w-4/5">
-            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mr-10">
-              <div className="mt-5 ml-10">
+        <div className="flex items-center justify-center w-screen -mt-10 sm:-mt-40">
+          <div className="flex flex-wrap items-center justify-center w-full xl:flex-nowrap xl:w-4/5">
+            <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10">
+              <div className="mt-8 ml-10">
                 <Icon icon="cil:dog" color="white" width="60" height="60" />
               </div>
               <div className="flex flex-col p-10 ">
@@ -157,8 +157,8 @@ function Home() {
                 <Button />
               </div>
             </div>
-            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mr-10 ">
-              <div className="mt-5 ml-10">
+            <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10">
+              <div className="mt-8 ml-10">
                 <Icon
                   icon="bx:donate-heart"
                   color="white"
@@ -175,8 +175,8 @@ function Home() {
                 <Button />
               </div>
             </div>
-            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover">
-              <div className="mt-5 ml-10">
+            <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10">
+              <div className="mt-8 ml-10">
                 <Icon
                   icon="carbon:person-favorite"
                   color="white"
@@ -310,9 +310,9 @@ function Home() {
 
       <AboutUsSection />
 
-      <div className="flex items-center justify-center ">
-        <div className="flex flex-wrap items-center justify-center w-5/6">
-          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
+      <div className="flex items-center justify-center">
+        <div className="flex flex-wrap items-center justify-center w-full sm:w-5/6">
+          <div className="flex items-center justify-center p-8 m-2 mt-10 border rounded-lg shadow-xl sm:mr-10 h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
                 icon="fluent-emoji-high-contrast:dog"
@@ -330,7 +330,7 @@ function Home() {
               </span>
             </div>
           </div>
-          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
+          <div className="flex items-center justify-center p-8 m-2 mt-10 border rounded-lg shadow-xl sm:mr-10 h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
                 icon="ic:outline-volunteer-activism"
@@ -347,8 +347,8 @@ function Home() {
                 Helpful volunteers working at Bright Eyes
               </span>
             </div>
-          </div>{" "}
-          <div className="flex items-center justify-center p-8 mt-10 mr-10 border rounded-lg shadow-xl h-36 hover:shadow-2xl w-96">
+          </div>
+          <div className="flex items-center justify-center p-8 m-2 mt-10 border rounded-lg shadow-xl sm:mr-10 h-36 hover:shadow-2xl w-96">
             <div className="flex pr-10">
               <Icon
                 icon="iconoir:stats-square-up"
@@ -369,72 +369,7 @@ function Home() {
         </div>
       </div>
       <GetInvolvedSection />
-      <div className="get-involved-container-home">
-        <div className="get-involved-header">Get Involved</div>
 
-        <div className="get-involved-split-container">
-          <div className="get-involved-split">
-            <div className="involved-main-text"> Adopt</div>
-            <div className="involved-image-1"></div>
-            {/* <Link href="/adoption">
-              <button
-                type="button"
-                data-testid={"moreInfoAdoptButton"}
-                className={[
-                  styles["get-involved-more-info-button"],
-                  styles.button,
-                ].join(" ")}
-              >
-                More Info
-              </button>
-            </Link> */}
-            <div className="involved-main-subtext">
-              Take a look at our pets for Adoption. Join the 2000+ other people
-              and find the perfect pet for your home!
-            </div>
-          </div>
-          <div className="get-involved-split">
-            <div className="involved-main-text"> Donate</div>
-            <div className="involved-image-2"> </div>
-            {/* <Link href="/donate">
-              <button
-                type="button"
-                data-testid={"moreInfoDonateButton"}
-                className={[
-                  styles["get-involved-more-info-button"],
-                  styles.button,
-                ].join(" ")}
-              >
-                More Info
-              </button>
-            </Link> */}
-            <div className="involved-main-subtext">
-              We receive no government funding and rely purely on the generosity
-              of the public to help us continue our work.
-            </div>
-          </div>
-          <div className="get-involved-split">
-            <div className="involved-main-text"> Volunteer</div>
-            <div className="involved-image-3"> </div>
-            {/* <Link href="/forms/volunteer">
-              <button
-                type="button"
-                data-testid={"moreInfoVolunteerButton"}
-                className={[
-                  styles["get-involved-more-info-button"],
-                  styles.button,
-                ].join(" ")}
-              >
-                More Info
-              </button>
-            </Link> */}
-            <div className="involved-main-subtext">
-              Our fantastic volunteers are the backbone of Bright Eyes. Want to
-              help care for the animals and earn some valuable experience?
-            </div>
-          </div>
-        </div>
-      </div>
       {/* <ContactUsComponent /> */}
       <div className="info-container">
         <div className="info-split-container">
