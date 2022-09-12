@@ -115,6 +115,90 @@ function Home() {
     );
   };
 
+  const GetInvolvedSection = () => {
+    return (
+      <>
+        <div className="flex flex-col items-center ">
+          <div className="flex justify-end w-5/6 mt-16 mb-10 mr-20 text-xl font-semibold font-poppins">
+            Get Involved
+            <div className="flex items-center">
+              <div className="ml-2 border-b-4 border-[#8b3479] w-7"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[url('../public/DogGetInvolved.png')] bg-no-repeat bg-center bg-fixed bg-cover flex ">
+          <div className="flex flex-col w-1/3 pt-20 ml-20 h-card-vh">
+            <span className="text-3xl font-semibold text-[#8b3479] font-poppins sm:text-5xl">
+              Want to help out?
+            </span>
+            <span className="mt-3 text-xl font-semibold text-white font-poppins sm:text-2xl">
+              Join The Bright Eyes Team
+            </span>
+            <span className="mt-5 text-3xl font-semibold text-white font-poppins sm:text-xl">
+              We receive no government funding and rely purely on the generosity
+              of the public to help us continue our work.
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center w-screen -mt-40">
+          <div className="flex items-center justify-center w-full xl:w-4/5">
+            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mr-10">
+              <div className="mt-5 ml-10">
+                <Icon icon="cil:dog" color="white" width="60" height="60" />
+              </div>
+              <div className="flex flex-col p-10 ">
+                <span className="text-3xl font-semibold text-[#8b3479] font-poppins mt-5 mb-5">
+                  Adopt
+                </span>
+                Take a look at our pets for Adoption. Join the 2000+ other
+                people and find the perfect pet for your home!
+                <Button />
+              </div>
+            </div>
+            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mr-10 ">
+              <div className="mt-5 ml-10">
+                <Icon
+                  icon="bx:donate-heart"
+                  color="white"
+                  width="60"
+                  height="60"
+                />
+              </div>
+              <div className="flex flex-col p-10 ">
+                <span className="text-3xl font-semibold text-[#8b3479] font-poppins mt-5 mb-5">
+                  Donate
+                </span>
+                We receive no government funding and rely purely on the
+                generosity of the public to help us continue our work.
+                <Button />
+              </div>
+            </div>
+            <div className="flex flex-col w-80 h-96 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover">
+              <div className="mt-5 ml-10">
+                <Icon
+                  icon="carbon:person-favorite"
+                  color="white"
+                  width="60"
+                  height="60"
+                />
+              </div>
+              <div className="flex flex-col p-10 ">
+                <span className="text-3xl font-semibold text-[#8b3479] font-poppins mt-5 mb-5">
+                  Volunteer
+                </span>
+                Our fantastic volunteers are the backbone of Bright Eyes. Want
+                to help care for the animals and earn some valuable experience?
+                <Button />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   const Button = () => {
     return (
       <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
@@ -284,7 +368,7 @@ function Home() {
           </div>
         </div>
       </div>
-
+      <GetInvolvedSection />
       <div className="get-involved-container-home">
         <div className="get-involved-header">Get Involved</div>
 

@@ -14,6 +14,7 @@ module.exports = {
       },
       height: {
         "85-vh": "85vh",
+        "card-vh": "65vh",
       },
     },
   },
