@@ -2,6 +2,8 @@
 
 import React from "react";
 import Map from "../components/MapComponent/Map.js";
+import { Formik } from "formik";
+
 // import Image from "next/image.js";
 // import Link from "next/link";
 // import ContactUsComponent from "../components/ContactUs/ContactUsComponent";
@@ -9,6 +11,12 @@ import { RoughNotation } from "react-rough-notation";
 import { Icon } from "@iconify/react";
 
 function Home() {
+  const initialValues = {
+    name: "",
+    email: "",
+    message: "",
+  };
+
   const AboutUsSection = () => {
     return (
       <>
@@ -98,6 +106,111 @@ function Home() {
                 alt=""
               />
             </div>
+          </div>
+          {/* <Link href={`/about`}>
+          <button
+            type="button"
+            className={[
+              styles["about-us-read-more-button"],
+              styles.button,
+            ].join(" ")}
+          >
+            Learn More
+          </button>
+        </Link> */}
+        </div>
+      </>
+    );
+  };
+
+  const ContactUsSection = () => {
+    return (
+      <>
+        <div className="flex flex-col items-center mt-20">
+          <div className="flex w-4/6 mt-16 mb-10 text-xl font-semibold font-poppins">
+            <div className="flex items-center">
+              <div className="mr-2 border-b-4 border-[#8b3479] w-7"></div>
+            </div>
+            Contact Us
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
+            <Formik
+              initialValues={initialValues}
+              onSubmit={(data) => console.log(data)}
+            >
+              {({ values, handleChange }) => (
+                <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
+                  <div className="flex">
+                    <div className="flex flex-col mr-4 lg:mr-20">
+                      <label
+                        htmlFor="name"
+                        className={
+                          "block mb-2 text-lg font-normal font-poppins"
+                        }
+                      >
+                        Name
+                      </label>
+                      <input
+                        className={
+                          "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
+                        }
+                        type="text"
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <label
+                        htmlFor="email"
+                        className={
+                          "block mb-2 text-lg font-normal font-poppins"
+                        }
+                      >
+                        Email
+                      </label>
+                      <input
+                        className={
+                          "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
+                        }
+                        type="text"
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  <label
+                    htmlFor="message"
+                    className={"block mb-2 text-lg font-normal font-poppins"}
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    className={
+                      "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
+                    }
+                    rows={14}
+                    name="message"
+                    value={values.message}
+                    onChange={handleChange}
+                  />
+                  {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+                </div>
+              )}
+            </Formik>
+            <div className="flex justify-center basis-2/3">
+              <img
+                className="bg-center bg-no-repeat sm:w-4/5 xl:w-full"
+                src="/ContactUsImage.png"
+                alt=""
+              />
+            </div>
+
+            {/* <div className="about-us-split-image"> </div> */}
           </div>
           {/* <Link href={`/about`}>
           <button
@@ -369,7 +482,7 @@ function Home() {
         </div>
       </div>
       <GetInvolvedSection />
-
+      <ContactUsSection />
       {/* <ContactUsComponent /> */}
       <div className="info-container">
         <div className="info-split-container">
