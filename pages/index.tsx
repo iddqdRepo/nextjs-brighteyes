@@ -135,7 +135,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mb-20">
           <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
             <Formik
               initialValues={initialValues}
@@ -255,7 +255,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-screen -mt-10 sm:-mt-40">
+        <div className="flex items-center justify-center w-full -mt-10 sm:-mt-40">
           <div className="flex flex-wrap items-center justify-center w-full xl:flex-nowrap xl:w-4/5">
             <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10">
               <div className="mt-8 ml-10">
@@ -484,67 +484,232 @@ function Home() {
       <GetInvolvedSection />
       <ContactUsSection />
       {/* <ContactUsComponent /> */}
-      <div className="info-container">
-        <div className="info-split-container">
-          <div className="info-split">
-            <div className="info-header">Location</div>
-            <div className="info-main-text">
-              53 Killymittan Road,
-              <br />
-              BT94 2FW,
-              <br />
-              Ballinamallard
+
+      <Map />
+
+      <div className="bg-[#000000] h-96 pt-4">
+        <div className="flex items-center justify-center">
+          <img className="w-32 h-32" src="/logo-nav.png" alt="" />
+        </div>
+        <div className="flex items-center justify-center w-full">
+          <div className="flex flex-wrap items-center justify-center w-full 2xl:w-5/6">
+            <div className="flex items-center justify-start h-20 mt-8 xl:justify-center w-80">
+              <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center mr-2">
+                <Icon
+                  className=""
+                  color="#ffffff"
+                  icon="akar-icons:location"
+                  width="40"
+                  height="40"
+                />
+              </div>
+
+              <span className="font-medium text-white text-md font-poppins">
+                53 Killymittan Road, <br /> BT94 2FW <br />
+                Ballinamallard
+              </span>
             </div>
-          </div>
-          <div className="info-split">
-            <div className="info-header">Hours</div>
-            <div className="info-main-text">
-              {" "}
-              <span className="bold-noto">Mon - Sun:</span> 12:00 – 15:00
-              <br />
+            <div className="flex items-center justify-start h-20 mt-8 xl:justify-center w-80">
+              <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center mr-2">
+                <Icon
+                  className=""
+                  color="#ffffff"
+                  icon="clarity:alarm-clock-line"
+                  width="50"
+                  height="50"
+                />
+              </div>
+
+              <span className="font-medium text-white text-md font-poppins">
+                Mon &#8211; Sun: 12:00 &#8211; 15:00
+              </span>
             </div>
-          </div>
-          <div className="info-split">
-            <div className="info-header">Contact Info</div>
-            <div className="info-main-text">
-              <span className="bold-noto">Mobile:</span> 07710607816
-              <br />
-              <span className="bold-noto">Phone:</span> 028 66 388885
-              <br />
-              <span className="bold-noto">Email:</span>{" "}
-              brighteyes.sanctuary@btinternet.com
+            <div className="flex items-center justify-start h-20 mt-8 xl:justify-center w-80">
+              <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center mr-2">
+                <Icon
+                  className=""
+                  color="#ffffff"
+                  icon="akar-icons:envelope"
+                  width="50"
+                  height="50"
+                />
+              </div>
+
+              <span className="font-medium text-white text-md font-poppins">
+                brighteyes.sanctuary@
+                <br />
+                btinternet.com
+              </span>
             </div>
-          </div>
-          <div className="info-split">
-            <div className="info-header">Follow Us</div>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://www.facebook.com/brighteyes.a.s/"
-            >
-              <span
-                // className={styles.iconify}
-                data-icon="akar-icons:facebook-fill"
-                data-width="20"
-                data-height="20"
-              ></span>
-            </a>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://www.instagram.com/brighteyesanimalsanctuary"
-            >
-              <span
-                // className={styles.iconify}
-                data-icon="akar-icons:instagram-fill"
-                data-width="20"
-                data-height="20"
-              ></span>
-            </a>
+            <div className="flex items-center justify-start h-20 mt-8 xl:justify-center w-80">
+              <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center mr-2">
+                <Icon
+                  className=""
+                  color="#ffffff"
+                  icon="carbon:phone-voice"
+                  width="50"
+                  height="50"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-white text-md font-poppins">
+                  07710607816
+                </span>
+                <span className="font-medium text-white text-md font-poppins">
+                  028 66 388885
+                </span>
+              </div>
+            </div>
           </div>
         </div>
+        <div className="flex items-center justify-center mt-10">
+          <Icon
+            className="mr-2"
+            icon="akar-icons:facebook-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+          <Icon
+            className="mr-2"
+            icon="akar-icons:instagram-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+        </div>
       </div>
-      <Map />
+      {/* <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DogFooter.png')]">
+        <div className="flex items-center justify-center h-96">
+          <div className="flex w-5/6">
+            <div className="flex flex-col mr-10 basis-1/6">
+              <img className="w-32 h-32" src="/logo-nav.png" alt="" />
+              <div className="flex">
+                <Icon
+                  className="mr-2"
+                  icon="akar-icons:facebook-fill"
+                  color="#8b3479"
+                  width="30"
+                  height="30"
+                />
+                <Icon
+                  className="mr-2"
+                  icon="akar-icons:instagram-fill"
+                  color="#8b3479"
+                  width="30"
+                  height="30"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col basis-2/6">
+              <div className="">
+                <span className="text-3xl font-medium font-poppins text-[#8b3479]">
+                  About
+                </span>
+              </div>
+              <div className="flex flex-col justify-between">
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="akar-icons:location"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins">
+                    53 Killymittan Road, BT94 2FW <br /> Ballinamallard
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="clarity:alarm-clock-line"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins">
+                    Mon &#8211; Sun: 12:00 &#8211; 15:00
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="akar-icons:envelope"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins ">
+                    brighteyes.sanctuary@btinternet.com
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="carbon:phone-voice"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins ">
+                    07710607816
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col basis-1/3">
+              <div className="">
+                <span className="text-3xl font-medium font-poppins text-[#8b3479]">
+                  Quick Links
+                </span>
+              </div>
+              <div className="flex flex-col justify-between">
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="akar-icons:location"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins">
+                    53 Killymittan Road, BT94 2FW <br /> Ballinamallard
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="clarity:alarm-clock-line"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins">
+                    Mon &#8211; Sun: 12:00 &#8211; 15:00
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="akar-icons:envelope"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins ">
+                    brighteyes.sanctuary@btinternet.com
+                  </span>
+                </div>
+                <div className="flex items-center mt-3">
+                  <Icon
+                    className="mr-2"
+                    icon="carbon:phone-voice"
+                    width="30"
+                    height="30"
+                  />
+                  <span className="text-xs font-medium font-poppins ">
+                    07710607816
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
     </>
   );
 }
