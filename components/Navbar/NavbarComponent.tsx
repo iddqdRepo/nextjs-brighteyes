@@ -35,7 +35,7 @@ function NavbarComponent() {
         className="flex py-4 mx-4 text-lg font-medium text-black font-poppins justify-left"
         onClick={hideMobileNav}
       >
-        <Link href={path ? `/${path}` : `/`}>
+        <Link href={path}>
           <a className="text-lg font-normal leading-6 text-black" href="#">
             {text}
           </a>
@@ -53,6 +53,7 @@ function NavbarComponent() {
   });
 
   useEffect(() => {
+    console.log(navRefs);
     const path = router.pathname === "/" ? "/home" : router.pathname;
     Object.entries(navRefs.current).forEach((element) => {
       if ("/" + element[0] === path) {
@@ -90,11 +91,11 @@ function NavbarComponent() {
                 <a className="flex items-center mr-5 text-lg font-medium font-poppins">
                   <div className="w-5">
                     <div
-                      ref={(e) =>
-                        navRefs.current.home === null
-                          ? (navRefs.current.home = e)
-                          : console.log("NotAdded")
-                      }
+                      ref={(e) => {
+                        if (navRefs.current.home === null) {
+                          navRefs.current.home = e;
+                        }
+                      }}
                       className="hidden"
                     >
                       <Icon
@@ -109,25 +110,28 @@ function NavbarComponent() {
                 </a>
               </Link>
             </li>
-            <li
-              onClick={() => handleNavPaw(navRefs.current.about)}
-              className="flex items-center mr-5 text-lg font-medium cursor-pointer font-poppins"
-            >
-              <div className="w-5">
-                <div
-                  ref={(e) => (navRefs.current.about = e)}
-                  className="hidden"
-                >
-                  <Icon
-                    icon="foundation:paw"
-                    color="#8b3479"
-                    width="20"
-                    height="20"
-                  />
-                </div>
-              </div>
+            <li onClick={() => handleNavPaw(navRefs.current.about)}>
               <Link href="/about">
-                <a>About</a>
+                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                  <div className="w-5">
+                    <div
+                      ref={(e) => {
+                        if (navRefs.current.about === null) {
+                          navRefs.current.about = e;
+                        }
+                      }}
+                      className="hidden"
+                    >
+                      <Icon
+                        icon="foundation:paw"
+                        color="#8b3479"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
+                  </div>
+                  <span className="cursor-pointer">About</span>
+                </a>
               </Link>
             </li>
             <li
@@ -232,7 +236,7 @@ function NavbarComponent() {
           className="absolute flex-col hidden w-full bg-white lg:hidden"
         >
           <ul ref={defaultNavRef} className="">
-            <MobileNavListItem text={"Home"} path={""} />
+            <MobileNavListItem text={"Home"} path={"/"} />
             <MobileNavListItem text={"About"} path={"about"} />
             <MobileNavListItem text={"Adoption"} path={"adoption"} />
             <MobileNavListItem text={"Donate"} path={"donate"} />
