@@ -1,9 +1,5 @@
-import {
-  DashedTitle,
-  InfoCard,
-  AboutCard,
-} from "../HomeLayout/HomeLayoutComponents";
-import { Button } from "../../common/CommonComponents";
+import { InfoCard, AboutCard } from "../HomeLayout/HomeLayoutComponents";
+import { Button, DashedTitle } from "../../common/CommonComponents";
 import { Formik } from "formik";
 import { RoughNotation } from "react-rough-notation";
 import { Icon } from "@iconify/react";

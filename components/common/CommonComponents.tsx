@@ -1,7 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import React from "react";
-
+export const DashedTitle = ({ text }: { text: string }) => {
+  return (
+    <div className="flex flex-col items-center ">
+      <div className="flex w-5/6 mt-16 mb-10 text-xl font-semibold font-poppins">
+        <div className="flex items-center">
+          <div className="mr-2 border-b-4 border-[#8b3479] w-7"></div>
+        </div>
+        {text}
+      </div>
+    </div>
+  );
+};
 export const FooterSection = () => {
   const FooterIconText = ({
     icon,
