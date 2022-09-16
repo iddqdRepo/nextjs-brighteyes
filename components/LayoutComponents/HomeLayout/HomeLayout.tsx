@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import { InfoCard, AboutCard } from "../HomeLayout/HomeLayoutComponents";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import { Formik } from "formik";

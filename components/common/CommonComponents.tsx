@@ -84,18 +84,50 @@ export const FooterSection = () => {
   );
 };
 
-export const Button = ({ text }: { text: string }) => {
+export const Button = ({
+  text,
+  iconStr,
+}: {
+  text: string;
+  iconStr?: string;
+}) => {
   return (
     <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
       <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
         <span className="pr-4">{text}</span>
         <Icon
           className=""
-          icon="fa:long-arrow-right"
+          icon={iconStr ? iconStr : "fa:long-arrow-right"}
           inline={true}
           color="white"
         />
       </div>
     </button>
+  );
+};
+
+export const DonationComponent = () => {
+  return (
+    <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DonationBanner.png')]">
+      <div className="h-100"></div>
+
+      <div className="absolute flex w-10/12 top-10 md:w-3/6 left-5 xl:left-20">
+        <div className="absolute flex flex-col md:mt-5 lg:mt-14 ">
+          <span className="mb-4 text-3xl font-normal font-poppins">
+            Want to make a donation?
+          </span>
+          <span className="w-full text-sm font-normal sm:text-base font-poppins">
+            In the past 5 years we have rehomed over 1,000 Cats and Dogs. We
+            receive no government funding and rely purely on the generosity of
+            the public to help us continue our work. We would be grateful if you
+            would like to set up a standing order each month or leave a legacy
+            in your will, your contribution will make a huge difference to
+            animal welfare and help us continue to rescue more animals that need
+            us.
+          </span>
+          <Button text="Donate" iconStr="ant-design:heart-filled" />
+        </div>
+      </div>
+    </div>
   );
 };
