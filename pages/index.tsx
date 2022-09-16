@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Map from "../components/layoutComponents/HomeLayout/MapComponent/Map";
-import { FooterSection } from "../components/common/CommonComponents";
+import {
+  FooterSection,
+  ContactUsSection,
+} from "../components/common/CommonComponents";
 import {
   HeroSection,
   AboutUsSection,
   CardsSection,
-  ContactUsSection,
   GetInvolvedSection,
 } from "../components/layoutComponents/HomeLayout/HomeLayout";
 
