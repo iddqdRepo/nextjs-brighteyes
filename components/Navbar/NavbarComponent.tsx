@@ -134,63 +134,79 @@ function NavbarComponent() {
                 </a>
               </Link>
             </li>
-            <li
-              onClick={() => handleNavPaw(navRefs.current.adoption)}
-              className="flex items-center mr-5 text-lg font-medium cursor-pointer font-poppins"
-            >
-              <div className="w-5">
-                <div
-                  ref={(e) => (navRefs.current.adoption = e)}
-                  className="hidden"
-                >
-                  <Icon
-                    icon="foundation:paw"
-                    color="#8b3479"
-                    width="20"
-                    height="20"
-                  />
-                </div>
-              </div>
-              Adoption
+
+            <li onClick={() => handleNavPaw(navRefs.current.adoption)}>
+              <Link href="/adoption">
+                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                  <div className="w-5">
+                    <div
+                      ref={(e) => {
+                        if (navRefs.current.adoption === null) {
+                          navRefs.current.adoption = e;
+                        }
+                      }}
+                      className="hidden"
+                    >
+                      <Icon
+                        icon="foundation:paw"
+                        color="#8b3479"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
+                  </div>
+                  <span className="cursor-pointer">Adoption</span>
+                </a>
+              </Link>
             </li>
-            <li
-              onClick={() => handleNavPaw(navRefs.current.donate)}
-              className="flex items-center mr-5 text-lg font-medium cursor-pointer font-poppins"
-            >
-              <div className="w-5">
-                <div
-                  ref={(e) => (navRefs.current.donate = e)}
-                  className="hidden"
-                >
-                  <Icon
-                    icon="foundation:paw"
-                    color="#8b3479"
-                    width="20"
-                    height="20"
-                  />
-                </div>
-              </div>
-              Donate
+            <li onClick={() => handleNavPaw(navRefs.current.donate)}>
+              <Link href="/donate">
+                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                  <div className="w-5">
+                    <div
+                      ref={(e) => {
+                        if (navRefs.current.donate === null) {
+                          navRefs.current.donate = e;
+                        }
+                      }}
+                      className="hidden"
+                    >
+                      <Icon
+                        icon="foundation:paw"
+                        color="#8b3479"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
+                  </div>
+                  <span className="cursor-pointer">Donate</span>
+                </a>
+              </Link>
             </li>
 
-            <li
-              onClick={() => handleNavPaw(navRefs.current.forms)}
-              className="flex items-center mr-5 text-lg font-medium cursor-pointer font-poppins"
-            >
-              <div className="w-5">
-                <div
-                  ref={(e) => (navRefs.current.forms = e)}
-                  className="hidden"
-                >
-                  <Icon
-                    icon="foundation:paw"
-                    color="#8b3479"
-                    width="20"
-                    height="20"
-                  />
-                </div>
-              </div>
-              Forms
+            <li onClick={() => handleNavPaw(navRefs.current.forms)}>
+              <Link href="/forms">
+                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                  <div className="w-5">
+                    <div
+                      ref={(e) => {
+                        if (navRefs.current.forms === null) {
+                          navRefs.current.forms = e;
+                        }
+                      }}
+                      className="hidden"
+                    >
+                      <Icon
+                        icon="foundation:paw"
+                        color="#8b3479"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
+                  </div>
+                  <span className="cursor-pointer">Forms</span>
+                </a>
+              </Link>
             </li>
           </ul>
         </div>
