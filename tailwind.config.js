@@ -16,6 +16,7 @@ module.exports = {
         "85-vh": "85vh",
         "card-vh": "65vh",
         100: "27rem",
+        120: "36rem",
       },
     },
   },
