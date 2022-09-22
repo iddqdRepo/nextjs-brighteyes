@@ -13,6 +13,7 @@ import ContactUsComponent from "../../components/contactUs/ContactUsComponent";
 
 function Donate() {
   useEffect(() => {
+    //d
     //^When donate button is clicked from another page
     //^ React-Router-Link goes to bottom of this page, this is to offset that
     window.scrollTo(0, 0);
