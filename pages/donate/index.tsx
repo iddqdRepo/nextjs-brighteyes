@@ -9,7 +9,7 @@ import React, { useEffect } from "react";
 import styles from "./donate.module.css";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
-import ContactUsComponent from "../../components/contactUs/ContactUsComponent";
+// import ContactUsComponent from "../../components/contactUs/ContactUsComponent";
 
 function Donate() {
   useEffect(() => {
@@ -174,7 +174,7 @@ function Donate() {
         </div>
       </div>
 
-      <ContactUsComponent />
+      {/* <ContactUsComponent /> */}
     </>
   );
 }
