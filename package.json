@@ -12,8 +12,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.8.0",
     "@react-google-maps/api": "^2.10.3",
     "iconify": "^1.4.0",
