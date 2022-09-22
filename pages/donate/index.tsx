@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 // import * as api from "../api/apiIndex";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import ContactUsComponent from "../../components/ContactUs/ContactUsComponent";
+// import Table from "@mui/material/Table";
+// import TableBody from "@mui/material/TableBody";
+// import TableCell from "@mui/material/TableCell";
+// import TableHead from "@mui/material/TableHead";
+// import TableRow from "@mui/material/TableRow";
+
 import styles from "./donate.module.css";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
+import ContactUsComponent from "../../components/contactUs/ContactUsComponent";
 
 function Donate() {
   useEffect(() => {
@@ -17,45 +18,8 @@ function Donate() {
     window.scrollTo(0, 0);
   }, []);
 
-  function createData(type: string, details: string) {
-    return { type, details };
-  }
-
-  const rows = [
-    createData("Bank", "Santander Bank"),
-    createData("Sort Code", "09-01-26"),
-    createData("Account Number", "23320595"),
-    createData("Type", "Business"),
-    createData("Name", "Bright Eyes Animal Sanctuary"),
-    createData("Reference", "Bright Eyes Donation"),
-  ];
-
   function BasicTable() {
-    return (
-      <div style={{ width: "100%" }}>
-        <Table sx={{ width: 300, margin: "auto" }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Type</TableCell>
-              <TableCell align="right">Details</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.type}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.type}
-                </TableCell>
-                <TableCell align="right">{row.details}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    );
+    return <div></div>;
   }
   return (
     <>
