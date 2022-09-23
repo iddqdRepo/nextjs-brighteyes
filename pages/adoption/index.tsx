@@ -3,7 +3,7 @@ import { FooterSection } from "../../components/common/CommonComponents";
 import {
   AdoptionCardSection,
   AdoptionCriteriaSection,
-} from "../../components/layoutComponents/AdoptionLayout/AdoptionLayout";
+} from "../../components/LayoutComponents/AdoptionLayout/AdoptionLayout";
 
 function Adoption() {
   // interface animalInterface {
