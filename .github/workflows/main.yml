@@ -24,12 +24,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          # cache: "npm"
+      # - run: npm install --legacy-peer-deps
       - run: npm ci
       - run: npm run lint
       - run: npm run check-format
       - run: npm run build
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          start: npm start
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     install: false
+      #     start: npm start
