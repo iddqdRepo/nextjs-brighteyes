@@ -6,7 +6,7 @@ import {
   DonateHeroSection,
   DonateUsesSection,
   DonationTypesSection,
-} from "../../components/layoutComponents/DonateLayout/DonateLayout";
+} from "../../components/LayoutComponents/DonateLayout/DonateLayout";
 
 function Donate() {
   return (

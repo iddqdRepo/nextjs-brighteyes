@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import Map from "../components/layoutComponents/HomeLayout/MapComponent/Map";
+import Map from "../components/LayoutComponents/HomeLayout/MapComponent/Map";
 import {
   FooterSection,
   ContactUsSection,
@@ -10,7 +10,7 @@ import {
   AboutUsSection,
   CardsSection,
   GetInvolvedSection,
-} from "../components/layoutComponents/HomeLayout/HomeLayout";
+} from "../components/LayoutComponents/HomeLayout/HomeLayout";
 
 function Home() {
   return (
