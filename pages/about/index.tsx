@@ -7,7 +7,7 @@ import {
   AboutPatSection,
   AboutBrightEyesSection,
   InterviewSection,
-} from "../../components/layoutComponents/AboutLayout/AboutLayout";
+} from "../../components/LayoutComponents/AboutLayout/AboutLayout";
 
 function About() {
   return (
