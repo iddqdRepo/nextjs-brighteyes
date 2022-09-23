@@ -30,8 +30,8 @@ jobs:
       - run: npm run lint
       - run: npm run check-format
       - run: npm run build
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          install: false
-          start: npm start
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     install: false
+      #     start: npm start
