@@ -4,9 +4,22 @@ import {
   AdoptionIconContainer,
   IconText,
 } from "./AdoptionLayoutComponents";
-const image1test = "";
-const image2test = "";
-export const AdoptionCardSection = () => {
+
+interface animalInterface {
+  _id: string;
+  type: string;
+  name: string;
+  age: string;
+  yearsOrMonths: string;
+  breed: string;
+  size: string;
+  image: string;
+  suitableForChildren: string;
+  suitableForAnimals: string;
+  adopted: string;
+  desc: string;
+}
+export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
   return (
     <>
       <DashedTitle text={"Animals For Adoption"} />
@@ -30,20 +43,18 @@ export const AdoptionCardSection = () => {
 
       <div className="flex justify-center w-full">
         <div className="flex flex-wrap justify-center w-full lg:w-11/12 2xl:w-9/12">
-          <AdoptionCard
-            name={"Marie"}
-            type={"Domestic Cat"}
-            age={"1-2"}
-            sex={"male"}
-            image={image1test}
-          />
-          <AdoptionCard
-            name={"Marie"}
-            type={"Domestic Cat"}
-            age={"1-2"}
-            sex={"male"}
-            image={image2test}
-          />
+          {pets.map((pet) => {
+            return (
+              <AdoptionCard
+                key={pet.name + pet.breed}
+                name={pet.name}
+                type={pet.breed}
+                age={`${pet.age} ${pet.yearsOrMonths}`}
+                sex={"temp"}
+                image={pet.image}
+              />
+            );
+          })}
         </div>
       </div>
     </>
