@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
 import React, { useRef, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
