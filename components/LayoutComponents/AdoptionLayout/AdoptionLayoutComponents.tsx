@@ -46,7 +46,7 @@ export const AdoptionCard = ({
                     color="#8b3479"
                   />
                   <span>Age:&nbsp;</span>
-                  <span>{age} yrs</span>
+                  <span>{age}</span>
                 </div>
                 <div className="flex items-center">
                   <Icon

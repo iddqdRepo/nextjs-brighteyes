@@ -4,30 +4,44 @@ import {
   AdoptionCardSection,
   AdoptionCriteriaSection,
 } from "../../components/LayoutComponents/AdoptionLayout/AdoptionLayout";
+import petModel from "../../models/petModel";
+import dbConnect from "../../utils/dbConnect";
 
-function Adoption() {
-  // interface animalInterface {
-  //   _id: string;
-  //   type: string;
-  //   name: string;
-  //   age: string;
-  //   yearsOrMonths: string;
-  //   breed: string;
-  //   size: string;
-  //   image: string;
-  //   suitableForChildren: string;
-  //   suitableForAnimals: string;
-  //   adopted: string;
-  //   desc: string;
-  // }
+function Adoption(props: any) {
+  console.log("props =", props.data);
 
   return (
     <>
       <AdoptionCriteriaSection />
-      <AdoptionCardSection />
+      <AdoptionCardSection pets={props.data} />
       <FooterSection />
     </>
   );
 }
 
 export default Adoption;
+
+export async function getStaticProps() {
+  await dbConnect();
+
+  const result = await petModel.find({ adopted: "No" }).lean();
+
+  const pets = result.map((pet) => {
+    pet._id = pet._id.toString();
+    if (pet.createdAt) {
+      pet.createdAt = pet.createdAt.toString();
+    }
+    if (pet.updatedAt) {
+      pet.updatedAt = pet.updatedAt.toString();
+    }
+    return pet;
+  });
+  console.log(pets);
+
+  return {
+    props: {
+      data: pets,
+    },
+    revalidate: 10,
+  };
+}
