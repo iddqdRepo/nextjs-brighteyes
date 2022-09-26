@@ -31,7 +31,7 @@ jobs:
       - run: npm run check-format
       - run: npm run build
         env:
-        MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
       # - name: Cypress run
       #   uses: cypress-io/github-action@v2
       #   with:
