@@ -8,7 +8,7 @@ import petModel from "../../models/petModel";
 import dbConnect from "../../utils/dbConnect";
 
 function Adoption(props: any) {
-  console.log("props =", props.data);
+  // console.log("props =", props.data);
 
   return (
     <>
@@ -36,7 +36,6 @@ export async function getStaticProps() {
     }
     return pet;
   });
-  console.log(pets);
 
   return {
     props: {
