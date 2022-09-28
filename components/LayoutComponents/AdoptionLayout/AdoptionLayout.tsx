@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import {
   AdoptionCard,
@@ -19,22 +20,67 @@ interface animalInterface {
   adopted: string;
   desc: string;
 }
+
 export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
+  const [filter, setFilter] = useState("");
+  const dogButtonRef = useRef<HTMLButtonElement | null>(null);
+  const catButtonRef = useRef<HTMLButtonElement | null>(null);
+  const allButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const filterAnimals = (filter: string) => {
+    const selected =
+      "mr-5 flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 shadow:2xl";
+    const deSelected =
+      "mr-5 flex rounded-full justify-center items-center bg-[#c0c0c0] max-w-fit mt-5";
+    if (dogButtonRef.current && catButtonRef.current && allButtonRef.current) {
+      if (filter === "Dog") {
+        setFilter("Dog");
+        dogButtonRef.current.className = selected;
+        catButtonRef.current.className = deSelected;
+        allButtonRef.current.className = deSelected;
+      }
+      if (filter === "Cat") {
+        setFilter("Cat");
+        catButtonRef.current.className = selected;
+        dogButtonRef.current.className = deSelected;
+        allButtonRef.current.className = deSelected;
+      }
+      if (filter === "All") {
+        setFilter("");
+        allButtonRef.current.className = selected;
+        catButtonRef.current.className = deSelected;
+        dogButtonRef.current.className = deSelected;
+      }
+    }
+  };
+
   return (
     <>
       <DashedTitle text={"Animals For Adoption"} />
       <div className="flex justify-center w-full mt-20 mb-20">
-        <button className="mr-5 flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
+        <button
+          onClick={() => filterAnimals("All")}
+          ref={allButtonRef}
+          className="mr-5 flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 shadow:2xl"
+        >
           <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
             <span className="">All</span>
           </div>
         </button>
-        <button className="mr-5 flex rounded-full justify-center items-center bg-[#c0c0c0] max-w-fit mt-5 hover:shadow-inner">
+        <button
+          onClick={() => filterAnimals("Dog")}
+          ref={dogButtonRef}
+          className="mr-5 flex rounded-full justify-center items-center bg-[#c0c0c0] max-w-fit mt-5"
+        >
           <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
             <span className="">Dogs</span>
           </div>
         </button>
-        <button className="flex rounded-full justify-center items-center bg-[#c0c0c0] max-w-fit mt-5 hover:shadow-inner">
+        <button
+          onClick={() => filterAnimals("Cat")}
+          ref={catButtonRef}
+          className="flex rounded-full justify-center items-center bg-[#c0c0c0] max-w-fit mt-5"
+        >
           <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
             <span className="">Cats</span>
           </div>
@@ -43,18 +89,26 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
 
       <div className="flex justify-center w-full">
         <div className="flex flex-wrap justify-center w-full lg:w-11/12 2xl:w-9/12">
-          {pets.map((pet) => {
-            return (
-              <AdoptionCard
-                key={pet.name + pet.breed}
-                name={pet.name}
-                type={pet.breed}
-                age={`${pet.age} ${pet.yearsOrMonths}`}
-                sex={"temp"}
-                image={pet.image}
-              />
-            );
-          })}
+          {pets
+            .filter((animal) => {
+              if (filter) {
+                return animal.type === filter;
+              } else {
+                return animal;
+              }
+            })
+            .map((pet) => {
+              return (
+                <AdoptionCard
+                  key={pet.name + pet.breed}
+                  name={pet.name}
+                  type={pet.breed}
+                  age={`${pet.age} ${pet.yearsOrMonths}`}
+                  sex={"temp"}
+                  image={pet.image}
+                />
+              );
+            })}
         </div>
       </div>
     </>
