@@ -2,16 +2,16 @@ import React from "react";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
 
-function viewBio({ viewBio }: { viewBio: any }) {
-  console.log(viewBio[0]);
+function Animal({ animal }: { animal: any }) {
+  console.log("DATA IN PAGE = ", animal[0]);
   return (
     <div className="">
-      <h1 className="text-red-600 ">View Bio for animal</h1>
+      <h1 className="text-red-600 ">Bio for {animal[0].name}</h1>
     </div>
   );
 }
 
-export default viewBio;
+export default Animal;
 
 export async function getStaticPaths() {
   dbConnect();
@@ -21,11 +21,13 @@ export async function getStaticPaths() {
   const paths = data.map((obj) => {
     console.log(obj.name);
     return {
-      params: { viewBio: obj.name.toString() },
+      params: {
+        animal: obj.name.toString().trim(),
+      },
     };
   });
 
-  // console.log("PATHS", paths);
+  console.log("PATHS", paths);
   //returning paths to tell Next to build pages in the paths array
   return {
     paths, //paths which is the same as paths:paths
@@ -33,17 +35,18 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context: { params: { viewBio: any } }) {
+export async function getStaticProps(context: { params: { animal: any } }) {
   dbConnect();
-  console.log(context.params.viewBio);
-
-  const anim = context.params.viewBio;
+  const animals = context.params.animal;
   // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
-  const dataTemp = await petModel.find({ name: anim }).lean();
+  const dataTemp = await petModel.find({ name: animals }).lean();
 
   // console.log("dataTemp = ", dataTemp);
   const data = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
+    if (doc.name) {
+      doc.name = doc.name.trim();
+    }
     if (doc.createdAt) {
       doc.createdAt = doc.createdAt.toString();
     }
@@ -55,7 +58,7 @@ export async function getStaticProps(context: { params: { viewBio: any } }) {
 
   return {
     props: {
-      viewBio: data,
+      animal: data,
     },
     revalidate: 10, // In seconds
   };
