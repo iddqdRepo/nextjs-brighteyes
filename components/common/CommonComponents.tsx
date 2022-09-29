@@ -36,7 +36,7 @@ export const FooterSection = () => {
     );
   };
   return (
-    <div className="h-screen pt-4 bg-black md:h-96">
+    <div className="pt-4 bg-black h-fit">
       <div className="flex items-center justify-center">
         <img className="w-32 h-32" src="/logo-nav.png" alt="" />
       </div>
