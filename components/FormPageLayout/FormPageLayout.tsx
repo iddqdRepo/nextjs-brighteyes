@@ -10,7 +10,7 @@ export const FormCardSection = () => {
         text=" Take a look at our pets for Adoption. Join the 2000+ other
         people and find the perfect pet for your home!"
         buttonText="View Form"
-        query="dog"
+        query="Dog"
       />
       <FormCard
         icon="cil:cat"
@@ -18,7 +18,7 @@ export const FormCardSection = () => {
         text="We receive no government funding and rely purely on the
         generosity of the public to help us continue our work."
         buttonText="View Form"
-        query="cat"
+        query="Cat"
       />
       <FormCard
         icon="akar-icons:gift"
