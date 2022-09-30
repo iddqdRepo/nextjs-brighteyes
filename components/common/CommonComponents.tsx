@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import { Formik } from "formik";
+import Link from "next/link";
 
 import React from "react";
 export const DashedTitle = ({ text }: { text: string }) => {
@@ -89,22 +90,61 @@ export const FooterSection = () => {
 export const Button = ({
   text,
   iconStr,
+  link,
 }: {
   text: string;
   iconStr?: string;
+  link?: string;
 }) => {
   return (
-    <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
-      <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-        <span className="pr-4">{text}</span>
-        <Icon
-          className=""
-          icon={iconStr ? iconStr : "fa:long-arrow-right"}
-          inline={true}
-          color="white"
-        />
-      </div>
-    </button>
+    <Link href={`${link}`}>
+      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
+        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
+          <span className="pr-4">{text}</span>
+          <Icon
+            className=""
+            icon={iconStr ? iconStr : "fa:long-arrow-right"}
+            inline={true}
+            color="white"
+          />
+        </div>
+      </button>
+    </Link>
+  );
+};
+
+export const ButtonWithQuery = ({
+  text,
+  iconStr,
+  link,
+  query,
+}: {
+  text: string;
+  iconStr?: string;
+  link: string;
+  query: string;
+}) => {
+  return (
+    <Link
+      href={{
+        pathname: link,
+        query: {
+          type: query,
+        },
+      }}
+    >
+      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
+        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
+          <span className="pr-4">{text}</span>
+          <Icon
+            className=""
+            icon={iconStr ? iconStr : "fa:long-arrow-right"}
+            inline={true}
+            color="white"
+          />
+        </div>
+      </button>
+    </Link>
   );
 };
 
