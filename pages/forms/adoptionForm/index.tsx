@@ -6,8 +6,9 @@ import {
   // Label,
 } from "../../../components/FormLayout/FormComponents";
 import { clsx } from "clsx";
-import { AdoptionSchema } from "../../../yup/yupSchema";
-import { adoptionInitialValues } from "../../../formik/initialValues";
+import { AdoptionSchema } from "../../../utils/yup/yupSchema";
+import { adoptionInitialValues } from "../../../utils/formik/initialValues";
+import { formBuilder } from "../../../utils/formik/formBuilder";
 
 interface InitialValuesInterface {
   type: string;
@@ -39,176 +40,7 @@ interface catMatchingQuestionsInterface {
   catAllergy: string;
 }
 
-interface FormBuilderInterface {
-  aboutQuestions: {
-    title: string;
-    name: string;
-    address: string;
-    postcode: string;
-    phone: string;
-    mobile: string;
-    email: string;
-  };
-  dogMatchingQuestions: {
-    dogName: { title: string; type: string; values?: any };
-    dogSize: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-    dogType: {
-      title: string;
-      type: string;
-      values?: any;
-    };
-    dogAge: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-    dogSex: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-  };
-  catMatchingQuestions: {
-    catName: { title: string; type: string; values?: any };
-    catAge: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-    catType: {
-      title: string;
-      type: string;
-      values?: any;
-    };
-    catColour: {
-      title: string;
-      type: string;
-      values?: any;
-    };
-    catSex: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-    catAllergy: {
-      title: string;
-      type: string;
-      values: string[][];
-    };
-  };
-}
-
 function Index({ type }: { type: string }) {
-  const formBuilder: FormBuilderInterface = {
-    aboutQuestions: {
-      title: "",
-      name: "",
-      address: "",
-      postcode: "",
-      phone: "",
-      mobile: "",
-      email: "",
-    },
-    dogMatchingQuestions: {
-      dogName: { title: "Name of dog (optional)", type: "text" },
-      dogSize: {
-        title: "What SIZE of dog are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Small e.g. a Terrier", "Small"],
-          ["Medium (e.g. Collie)", "Medium"],
-          ["Large (e.g. Labrador)", "Large"],
-          ["Any Size", "Any Size"],
-        ],
-      },
-      dogType: {
-        title: "What TYPE of dog are you looking for?",
-        type: "text",
-      },
-      dogAge: {
-        title: "What AGE of dog are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Less than 2 years", "Less than 2 years"],
-          ["2-8 years", "2-8 years"],
-          ["8+ years", "8+ years"],
-          ["Any age", "Any age"],
-        ],
-      },
-      dogSex: {
-        title: "What SEX of dog are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Male", "Male"],
-          ["Female", "Female"],
-          ["Either", "Either"],
-        ],
-      },
-    },
-    catMatchingQuestions: {
-      catName: { title: "Name of cat (optional)", type: "text" },
-      catAge: {
-        title: "What SEX of cat are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Kitten", "Kitten"],
-          ["Less than 2 years", "Less than 2 years"],
-          ["2-8 years", "2-8 years"],
-          ["8+ years", "8+ years"],
-          ["Any age", "Any age"],
-        ],
-      },
-      catType: {
-        title: "What TYPE of cat are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Short Haired", "Short Haired"],
-          ["Semi Long Haired", "Semi Long Haired"],
-          ["Long Haired", "Long Haired"],
-        ],
-      },
-      catColour: {
-        title: "What COLOUR of cat are you looking for?",
-        type: "text",
-      },
-      catSex: {
-        title: "What SEX of cat are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Male", "Male"],
-          ["Female", "Female"],
-          ["Either", "Either"],
-        ],
-      },
-      catAllergy: {
-        title: "What SEX of cat are you looking for?",
-        type: "select",
-        values: [
-          ["Select", ""],
-          ["Yes", "Yes"],
-          ["No", "No"],
-        ],
-      },
-    },
-  };
-
-  // const FieldContainer = ({ children }: { children: React.ReactNode }) => {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center mr-2">
-  //       {children}
-  //     </div>
-  //   );
-  // };
   function Label({
     text,
     hFor,
@@ -463,7 +295,7 @@ function Index({ type }: { type: string }) {
                   </div>
                 )}
               </FieldSet>
-              <FieldSet legendText="About you">
+              <FieldSet legendText="Home Questions">
                 <div className="flex ">
                   {Object.entries(adoptionInitialValues.aboutQuestions).map(
                     (entry) => {
