@@ -1,4 +1,4 @@
-import React, { Key } from "react";
+import React, { Key, useState, useEffect } from "react";
 import { Field, Formik } from "formik";
 import {
   FieldSet,
@@ -41,6 +41,42 @@ interface catMatchingQuestionsInterface {
 }
 
 function Index({ type }: { type: string }) {
+  const [toShow, setToShow] = useState([]);
+
+  useEffect(() => {
+    /* 
+    ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
+    ^ Flattened with the following recursive function instead of manually to keep the object path
+    * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
+  */
+    console.log(Object.entries(formBuilder));
+    let temp = Object.entries(formBuilder);
+    let tempStore = [];
+
+    const flattenObj = (ob) => {
+      let result = {};
+      for (const i in ob) {
+        if (typeof ob[i] === "object" && !Array.isArray(ob[i])) {
+          const temp = flattenObj(ob[i]);
+          for (const j in temp) {
+            // Store temp in result
+            result[i + "." + j] = temp[j];
+          }
+        } else {
+          result[i] = ob[i][0];
+        }
+      }
+      return result;
+    };
+
+    temp.forEach((nest) => {
+      tempStore.push({ [nest[0]]: flattenObj(formBuilder[nest[0]]) });
+    });
+    console.log("tempStore = ", tempStore);
+    console.log("formBuilder = ", formBuilder.dogMatchingQuestions);
+    setToShow(tempStore[3]);
+  }, []);
+
   function Label({
     text,
     hFor,
@@ -110,7 +146,7 @@ function Index({ type }: { type: string }) {
   }) => {
     return (
       <div className="flex flex-col items-center justify-center mb-4 mr-2">
-        <Label text={labelText} hFor={val} />
+        {/* <Label text={labelText} hFor={val} />
         <Field
           className={
             "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
@@ -122,10 +158,40 @@ function Index({ type }: { type: string }) {
             return <option value={entries[1]}>{entries[0]}</option>;
           })}
         </Field>
-        {children}
+        {children} */}
       </div>
     );
   };
+
+  // const BuildForm = () => {
+  //   let tempShow = []
+  //   Object.entries(mapValues).forEach(entry => {
+
+  //     //if it's a nested object recursively check it.
+  //     if(typeof yourVariable === 'object' &&
+  //     !Array.isArray(yourVariable) &&
+  //     yourVariable !== null
+  // )
+
+  //     if(formBuilder.homeQuestions[entry[0]].hidden){
+  //       return
+  //     }else{
+  //       tempShow.push(entry[0])
+  //     }
+
+  //   })
+
+  // }
+
+  // const RenderFlattened = ({ ob }) => {
+  //   // const toRender = flattenObj(b);
+
+  //   // return toRender.map((el) => {
+  //   //   console.log("el = ", el);
+  //   //   return <div>{el.title}</div>;
+  //   });
+  // };
+  // const flat = flattenObj(b)
 
   return (
     <form className="flex flex-col items-center justify-center ">
@@ -134,6 +200,10 @@ function Index({ type }: { type: string }) {
           Adopt Animal
         </div>
       </div>
+      {/* <RenderFlattened ob={b} /> */}
+      {toShow ? <pre>{JSON.stringify(toShow, null, 2)}</pre> : "loading"}
+      {console.log(toShow)}
+
       <Formik
         initialValues={adoptionInitialValues}
         validationSchema={AdoptionSchema}

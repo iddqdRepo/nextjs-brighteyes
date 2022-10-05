@@ -46,10 +46,7 @@ const dogMatchingSchema = Yup.object().shape({
     .required("Required"),
 });
 const catMatchingSchema = Yup.object().shape({
-  catName: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+  catName: Yup.string(),
   catAge: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
