@@ -64,7 +64,7 @@ function Index({ type }: { type: string }) {
     ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
     ^ Flattened with the following recursive function instead of manually to keep the object path
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
-  */
+   */
 
     console.log(Object.entries(formBuilder));
     let temp = Object.entries(formBuilder);
@@ -77,7 +77,12 @@ function Index({ type }: { type: string }) {
         if (typeof ob[i] === "object" && !Array.isArray(ob[i])) {
           const temp = flattenObj(ob[i]);
           for (const j in temp) {
-            // Store temp in result
+            /*
+             * result needs to be joined with ">" because formik splits on "."
+             * which makes flattening pointless as it's rebuilt in initialValues
+             * when passed into <Field name={}/> making initialValues not Match toShow
+             * this causes bugs on expose() etc
+             */
             result[i + ">" + j] = temp[j];
           }
         } else {
@@ -233,9 +238,6 @@ function Index({ type }: { type: string }) {
       //   val
       // );
 
-      //! Am I updated toShow with the updated values? I'm not building the form off initialValues
-      //! but it's updating properly
-
       if (val === key) {
         console.group(path);
         console.log("Value changed was:", labelText);
@@ -273,6 +275,39 @@ function Index({ type }: { type: string }) {
         </Field>
         {children}
       </div>
+    );
+  };
+
+  const ErrorFormik = ({ err, touch, main, field }) => {
+    // console.log("INERROR", field);
+    // {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] &&
+    //   touched?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] ? (
+    //     <div className="text-xs text-red-600">
+    //       {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface]}
+    //     </div>
+    //   ) : (
+    //     <div className="mt-4">{/* {console.log("Value", value)} */}</div>
+    //   )}
+    if (err.homeQuestions) {
+      console.log("IN err.homeQuestions.retired");
+      console.log("err[main]", err[main][field]);
+    }
+    // console.log("errors =", err);
+    return (
+      // <>
+      //   {err[main][field] && touch[main][field] ? (
+      //     <div className="text-xs text-red-600">{err[main][field]}</div>
+      //   ) : (
+      //     <div className="mt-4"></div>
+      //   )}
+      // </>
+      <>
+        {err["homeQuestions"] && touch["homeQuestions"] ? (
+          <div className="text-xs text-red-600">{}</div>
+        ) : (
+          <div className="mt-4"></div>
+        )}
+      </>
     );
   };
 
@@ -394,11 +429,6 @@ function Index({ type }: { type: string }) {
                                     <DropdownFormik
                                       key={entry[1].title as Key}
                                       labelText={entry[1].title}
-                                      // val={
-                                      //   values["homeQuestions"][
-                                      //     "gardenOrYardInfo.gardenOrYardSize"
-                                      //   ]
-                                      // }
                                       val={values.homeQuestions[entry[0]]}
                                       forNameId={`homeQuestions[${entry[0]}]`}
                                       selectArray={entry[1].values}
@@ -407,6 +437,12 @@ function Index({ type }: { type: string }) {
                                       }
                                       path={`homeQuestions.${entry[0]}`}
                                     >
+                                      {/* <ErrorFormik
+                                        err={errors}
+                                        touch={touched}
+                                        field={`["${entry[0]}"]`}
+                                        main={"homeQuestions"}
+                                      /> */}
                                       {errors?.homeQuestions?.[
                                         entry[0] as keyof homeQuestionsInterface
                                       ] &&
@@ -421,9 +457,7 @@ function Index({ type }: { type: string }) {
                                           }
                                         </div>
                                       ) : (
-                                        <div className="mt-4">
-                                          {/* {console.log("Value", value)} */}
-                                        </div>
+                                        <div className="mt-4"></div>
                                       )}
                                     </DropdownFormik>
                                     {/* <DropdownFormik

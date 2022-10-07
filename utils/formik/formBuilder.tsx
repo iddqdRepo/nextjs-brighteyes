@@ -212,7 +212,7 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
-          //   hidden: true,
+          hidden: true,
           exposes: {
             Yes: ["gardenOrYardInfo>fenceHeight"],
           },
@@ -264,8 +264,8 @@ export const formBuilder: FormBuilderInterface = {
           ],
           exposes: {
             Yes: [
-              "otherChildrenVisitInfo.otherChildrenAges",
-              "otherChildrenVisitInfo.otherChildrenVisitFrequency",
+              "otherChildrenVisitInfo>otherChildrenAges",
+              "otherChildrenVisitInfo>otherChildrenVisitFrequency",
             ],
           },
         },
