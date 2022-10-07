@@ -188,8 +188,8 @@ export const formBuilder: FormBuilderInterface = {
         ],
         exposes: {
           Yes: [
-            ["gardenOrYardInfo", "gardenOrYardSize"],
-            ["gardenOrYardInfo", "fullyEnclosed"],
+            "gardenOrYardInfo.gardenOrYardSize",
+            "gardenOrYardInfo.fullyEnclosed",
           ],
         },
       },
@@ -211,8 +211,9 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          hidden: true,
           exposes: {
-            Yes: ["fenceHeight"],
+            Yes: ["gardenOrYardInfo.fenceHeight"],
           },
         },
       ],
@@ -260,12 +261,20 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          exposes: {
+            Yes: [
+              "otherChildrenVisitInfo.otherChildrenAges",
+              "otherChildrenVisitInfo.otherChildrenVisitFrequency",
+            ],
+          },
         },
       ],
       otherChildrenAges: [
         {
-          title: "Childrens ages?",
+          title: "Ages of visiting children?",
           type: "text",
+          hidden: true,
+
           placeholder: "e.g. 7 & 10",
         },
       ],
@@ -273,6 +282,7 @@ export const formBuilder: FormBuilderInterface = {
         {
           title: "How often do they visit?",
           type: "text",
+          hidden: true,
           placeholder: "e.g. Once a week",
         },
       ],

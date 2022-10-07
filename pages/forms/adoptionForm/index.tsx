@@ -1,5 +1,5 @@
-import React, { Key, useState, useEffect } from "react";
-import { Field, Formik } from "formik";
+import React, { Key, useState, useEffect, useRef } from "react";
+import { Field, FieldArray, Formik } from "formik";
 import {
   FieldSet,
   // InputTextFormik,
@@ -41,7 +41,23 @@ interface catMatchingQuestionsInterface {
 }
 
 function Index({ type }: { type: string }) {
-  const [toShow, setToShow] = useState([]);
+  const [toShow, setToShow] = useState({});
+  const toShowRef = useRef({});
+  const [render, setRender] = useState([]);
+  const renderCounter = useRef(0);
+  console.log(renderCounter.current);
+  const Counter = () => {
+    renderCounter.current = renderCounter.current + 1;
+    return <h1>Renders: {renderCounter.current}</h1>;
+  };
+
+  const doRender = () => {
+    console.log("DORENDEr");
+    let temp = render;
+    temp.push(1);
+    console.log(temp);
+    setRender([...temp]);
+  };
 
   useEffect(() => {
     /* 
@@ -49,9 +65,11 @@ function Index({ type }: { type: string }) {
     ^ Flattened with the following recursive function instead of manually to keep the object path
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
   */
+
     console.log(Object.entries(formBuilder));
     let temp = Object.entries(formBuilder);
-    let tempStore = [];
+    // let tempStore = [];
+    let tempObj = {};
 
     const flattenObj = (ob) => {
       let result = {};
@@ -69,12 +87,19 @@ function Index({ type }: { type: string }) {
       return result;
     };
 
+    // temp.forEach((nest) => {
+    //   console.log("temp = ", temp);
+    //   tempStore.push({ [nest[0]]: flattenObj(formBuilder[nest[0]]) });
+    // });
     temp.forEach((nest) => {
-      tempStore.push({ [nest[0]]: flattenObj(formBuilder[nest[0]]) });
+      console.log("temp = ", temp);
+      tempObj[nest[0]] = flattenObj(formBuilder[nest[0]]);
     });
-    console.log("tempStore = ", tempStore);
-    console.log("formBuilder = ", formBuilder.dogMatchingQuestions);
-    setToShow(tempStore[3]);
+    // console.log("tempStore = ", tempStore);
+    console.log("tempObj = ", tempObj);
+    console.log("tempObj.entries = ", Object.entries(tempObj));
+    // setToShow(tempObj);
+    toShowRef.current = tempObj;
   }, []);
 
   function Label({
@@ -131,12 +156,43 @@ function Index({ type }: { type: string }) {
     );
   };
 
+  const expose = (current, pathToExpose) => {
+    console.group("EXPOSE");
+    console.log("CURRENT = ", current);
+    console.log("EXPOSING PATH ", pathToExpose);
+    console.log("expose() ", pathToExpose);
+    let temp = toShow;
+    temp[current][pathToExpose].hidden = false;
+    console.log(
+      "PATH",
+      temp[current][pathToExpose],
+      "hidden set to",
+      temp[current][pathToExpose].hidden
+    );
+    setToShow(temp);
+    console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
+    console.groupEnd();
+  };
+  const hide = (current, pathToExpose) => {
+    console.group("HIDE");
+
+    console.log("CURRENT = ", current);
+    console.log("EXPOSING PATH ", pathToExpose);
+    let temp = toShow;
+    temp[current][pathToExpose].hidden = true;
+    setToShow(temp);
+    // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
+    console.groupEnd();
+  };
+
   const DropdownFormik = ({
     labelText,
     val,
     selectArray,
     children,
     forNameId,
+    exposes,
+    path,
   }: {
     labelText: string;
     val: string;
@@ -144,21 +200,58 @@ function Index({ type }: { type: string }) {
     children: React.ReactNode;
     forNameId: string;
   }) => {
+    // const getNewPaths = (toExposePath) => {
+    //   console.log("GETTING NEW PATH ", toExposePath);
+    //   let temp = toExposePath;
+    //   let newPath = temp.split(".");
+    //   console.log("newPath =", newPath);
+    //   return newPath;
+    // };
+
+    if (exposes) {
+      const [key, value] = Object.entries(exposes)[0];
+
+      if (val === key) {
+        console.group("Exposes value match");
+
+        console.log("PATH = ", path);
+        console.log("value =", value);
+        // console.log("toShow[forNameId]", path);
+
+        value.forEach((p) => {
+          console.log("PATH=", p);
+          // let totalPaths = getNewPaths(p);
+          // console.log("totalPaths", totalPaths);
+          expose("homeQuestions", p);
+        });
+      }
+      // else {
+      //   value.forEach((p) => {
+      //     console.log("PATH=", p);
+      //     // let totalPaths = getNewPaths(p);
+      //     // console.log("totalPaths", totalPaths);
+      //     // hide("homeQuestions", p);
+      //   });
+      // }
+      console.groupEnd();
+    }
+
     return (
       <div className="flex flex-col items-center justify-center mb-4 mr-2">
-        {/* <Label text={labelText} hFor={val} />
+        <Label text={labelText} hFor={val} />
         <Field
           className={
             "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
           }
           name={forNameId}
           as="select"
+          // onChange={(e) => expose(e)}
         >
           {selectArray.map((entries) => {
             return <option value={entries[1]}>{entries[0]}</option>;
           })}
         </Field>
-        {children} */}
+        {children}
       </div>
     );
   };
@@ -199,10 +292,12 @@ function Index({ type }: { type: string }) {
         <div className="m-3 mt-10 text-xl font-semibold text-black-600">
           Adopt Animal
         </div>
+        &nbsp;
+        {render.length} &nbsp;
+        <div onClick={() => doRender()}>RERENDER</div>
       </div>
       {/* <RenderFlattened ob={b} /> */}
-      {toShow ? <pre>{JSON.stringify(toShow, null, 2)}</pre> : "loading"}
-      {console.log(toShow)}
+      {/* {toShow ? <pre>{JSON.stringify(toShow, null, 2)}</pre> : "loading"} */}
 
       <Formik
         initialValues={adoptionInitialValues}
@@ -212,198 +307,107 @@ function Index({ type }: { type: string }) {
         {({ values, handleChange, errors, touched }) => (
           <div className="flex justify-center w-full">
             <div className="flex flex-col items-center w-11/12 p-8 bg-white border rounded-md shadow-md">
-              <FieldSet legendText="About you">
-                <div className="flex ">
-                  {Object.entries(adoptionInitialValues.aboutQuestions).map(
-                    (entry) => {
-                      const capitalized =
-                        entry[0].charAt(0).toUpperCase() + entry[0].slice(1);
-                      return (
-                        <>
-                          <InputTextFormik
-                            key={entry[0] as Key}
-                            labelText={capitalized}
-                            val={
-                              values.aboutQuestions[
-                                entry[0] as keyof aboutQuestionsInterface
-                              ]
-                            }
-                            forNameId={`aboutQuestions.${entry[0]}`}
-                            type={entry[0] === "email" ? "email" : ""}
-                          >
-                            {errors?.aboutQuestions?.[
-                              entry[0] as keyof aboutQuestionsInterface
-                            ] &&
-                            touched?.aboutQuestions?.[
-                              entry[0] as keyof aboutQuestionsInterface
-                            ] ? (
-                              <div className="text-xs text-red-600">
-                                {
-                                  errors?.aboutQuestions?.[
-                                    entry[0] as keyof aboutQuestionsInterface
-                                  ]
-                                }
-                              </div>
-                            ) : (
-                              <div className="mt-4"></div>
-                            )}
-                          </InputTextFormik>
-                        </>
-                      );
-                    }
-                  )}
-                </div>
-              </FieldSet>
-              <FieldSet legendText={type + " Matching Questions"}>
-                {type === "Dog" ? (
-                  <div className="flex ">
-                    {Object.entries(
-                      adoptionInitialValues.dogMatchingQuestions
-                    ).map((entry) => {
-                      const value =
-                        entry[0] as keyof dogMatchingQuestionsInterface;
-                      return (
-                        <>
-                          {formBuilder.dogMatchingQuestions[value].type ===
-                          "text" ? (
-                            <InputTextFormik
-                              key={entry[0] as Key}
-                              labelText={
-                                formBuilder.dogMatchingQuestions[value].title
-                              }
-                              val={values.dogMatchingQuestions[value]}
-                              forNameId={`dogMatchingQuestions[${entry[0]}]`}
-                            >
-                              {errors?.dogMatchingQuestions?.[value] &&
-                              touched?.dogMatchingQuestions?.[value] ? (
-                                <div className="text-xs text-red-600">
-                                  {errors?.dogMatchingQuestions?.[value]}
-                                </div>
-                              ) : (
-                                <div className="mt-4"></div>
-                              )}
-                            </InputTextFormik>
-                          ) : (
-                            <DropdownFormik
-                              key={entry[0] as Key}
-                              labelText={
-                                formBuilder.dogMatchingQuestions[value].title
-                              }
-                              val={values.dogMatchingQuestions[value]}
-                              forNameId={`dogMatchingQuestions[${entry[0]}]`}
-                              selectArray={
-                                formBuilder.dogMatchingQuestions[value].values
-                              }
-                            >
-                              {errors?.dogMatchingQuestions?.[value] &&
-                              touched?.dogMatchingQuestions?.[value] ? (
-                                <div className="text-xs text-red-600">
-                                  {errors?.dogMatchingQuestions?.[value]}
-                                </div>
-                              ) : (
-                                <div className="mt-4"></div>
-                              )}
-                            </DropdownFormik>
-                          )}
-                        </>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="flex ">
-                    {Object.entries(
-                      adoptionInitialValues.catMatchingQuestions
-                    ).map((entry) => {
-                      const value =
-                        entry[0] as keyof catMatchingQuestionsInterface;
-                      return (
-                        <>
-                          {formBuilder.catMatchingQuestions[value].type ===
-                          "text" ? (
-                            <InputTextFormik
-                              key={entry[0] as Key}
-                              labelText={
-                                formBuilder.catMatchingQuestions[value].title
-                              }
-                              val={values.catMatchingQuestions[value]}
-                              forNameId={`catMatchingQuestions[${entry[0]}]`}
-                            >
-                              {errors?.catMatchingQuestions?.[value] &&
-                              touched?.catMatchingQuestions?.[value] ? (
-                                <div className="text-xs text-red-600">
-                                  {errors?.catMatchingQuestions?.[value]}
-                                </div>
-                              ) : (
-                                <div className="mt-4"></div>
-                              )}
-                            </InputTextFormik>
-                          ) : (
-                            <DropdownFormik
-                              key={entry[0] as Key}
-                              labelText={
-                                formBuilder.catMatchingQuestions[value].title
-                              }
-                              val={values.catMatchingQuestions[value]}
-                              forNameId={`catMatchingQuestions[${entry[0]}]`}
-                              selectArray={
-                                formBuilder.catMatchingQuestions[value].values
-                              }
-                            >
-                              {errors?.catMatchingQuestions?.[value] &&
-                              touched?.catMatchingQuestions?.[value] ? (
-                                <div className="text-xs text-red-600">
-                                  {errors?.catMatchingQuestions?.[value]}
-                                </div>
-                              ) : (
-                                <div className="mt-4"></div>
-                              )}
-                            </DropdownFormik>
-                          )}
-                        </>
-                      );
-                    })}
-                  </div>
-                )}
-              </FieldSet>
+              {/* PASTE OF OTHERS GOES IN HERE*/}
               <FieldSet legendText="Home Questions">
-                <div className="flex ">
-                  {Object.entries(adoptionInitialValues.aboutQuestions).map(
-                    (entry) => {
-                      const capitalized =
-                        entry[0].charAt(0).toUpperCase() + entry[0].slice(1);
+                <Counter />
+                <div className="flex flex-wrap w-full">
+                  {toShow.homeQuestions ? (
+                    Object.entries(toShow.homeQuestions).map((entry) => {
+                      const value = entry[0] as keyof homeQuestionsInterface;
                       return (
                         <>
-                          <InputTextFormik
-                            key={entry[0] as Key}
-                            labelText={capitalized}
-                            val={
-                              values.aboutQuestions[
-                                entry[0] as keyof aboutQuestionsInterface
-                              ]
-                            }
-                            forNameId={`aboutQuestions.${entry[0]}`}
-                            type={entry[0] === "email" ? "email" : ""}
-                          >
-                            {errors?.aboutQuestions?.[
-                              entry[0] as keyof aboutQuestionsInterface
-                            ] &&
-                            touched?.aboutQuestions?.[
-                              entry[0] as keyof aboutQuestionsInterface
-                            ] ? (
-                              <div className="text-xs text-red-600">
-                                {
-                                  errors?.aboutQuestions?.[
-                                    entry[0] as keyof aboutQuestionsInterface
-                                  ]
-                                }
-                              </div>
-                            ) : (
-                              <div className="mt-4"></div>
-                            )}
-                          </InputTextFormik>
+                          {entry[1].type === "text" ? (
+                            <>
+                              {/* {console.log("entry hidden?", entry[0])} */}
+                              {!entry[1].hidden ? (
+                                <InputTextFormik
+                                  key={entry[0] as Key}
+                                  labelText={entry[1].title as Key}
+                                  val={
+                                    values.homeQuestions[
+                                      entry[0] as keyof homeQuestionsInterface
+                                    ]
+                                  }
+                                  forNameId={`homeQuestions.${entry[0]}`}
+                                  type={entry[0] === "email" ? "email" : ""}
+                                >
+                                  {errors?.homeQuestions?.[
+                                    entry[0] as keyof homeQuestionsInterface
+                                  ] &&
+                                  touched?.homeQuestions?.[
+                                    entry[0] as keyof homeQuestionsInterface
+                                  ] ? (
+                                    <div className="text-xs text-red-600">
+                                      {
+                                        errors?.homeQuestions?.[
+                                          entry[0] as keyof homeQuestionsInterface
+                                        ]
+                                      }
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <div className="mt-4"></div>
+                                    </>
+                                  )}
+                                </InputTextFormik>
+                              ) : (
+                                <>
+                                  <div>{entry[0]}</div>
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {/* {console.log("entry type!==text", entry)} */}
+                              {entry[1].type === "select" ? (
+                                !entry[1].hidden ? (
+                                  <>
+                                    <DropdownFormik
+                                      key={entry[1].title as Key}
+                                      labelText={entry[1].title}
+                                      val={values.homeQuestions[value]}
+                                      forNameId={`homeQuestions[${entry[0]}]`}
+                                      selectArray={entry[1].values}
+                                      exposes={
+                                        entry[1].exposes ? entry[1].exposes : ""
+                                      }
+                                      path={`homeQuestions.${entry[0]}`}
+                                    >
+                                      {errors?.homeQuestions?.[
+                                        entry[0] as keyof homeQuestionsInterface
+                                      ] &&
+                                      touched?.homeQuestions?.[
+                                        entry[0] as keyof homeQuestionsInterface
+                                      ] ? (
+                                        <div className="text-xs text-red-600">
+                                          {
+                                            errors?.homeQuestions?.[
+                                              entry[0] as keyof homeQuestionsInterface
+                                            ]
+                                          }
+                                        </div>
+                                      ) : (
+                                        <div className="mt-4">
+                                          {/* {console.log("Value", value)} */}
+                                        </div>
+                                      )}
+                                    </DropdownFormik>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div>{entry[0]}</div>
+                                  </>
+                                )
+                              ) : (
+                                <div>CHECKBOX</div>
+                              )}
+                            </>
+                          )}
                         </>
                       );
-                    }
+                    })
+                  ) : (
+                    <div>loading</div>
                   )}
                 </div>
               </FieldSet>
