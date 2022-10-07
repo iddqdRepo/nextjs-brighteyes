@@ -9,6 +9,7 @@ import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/initialValues";
 import { formBuilder } from "../../../utils/formik/formBuilder";
+import { flatFormBuilder } from "../../../utils/formik/flatFormBuilder";
 
 interface InitialValuesInterface {
   type: string;
@@ -59,7 +60,7 @@ function Index({ type }: { type: string }) {
   };
 
   useEffect(() => {
-    /* 
+    /*
     ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
     ^ Flattened with the following recursive function instead of manually to keep the object path
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
@@ -77,7 +78,7 @@ function Index({ type }: { type: string }) {
           const temp = flattenObj(ob[i]);
           for (const j in temp) {
             // Store temp in result
-            result[i + "." + j] = temp[j];
+            result[i + ">" + j] = temp[j];
           }
         } else {
           result[i] = ob[i][0];
@@ -96,7 +97,7 @@ function Index({ type }: { type: string }) {
     });
     // console.log("tempStore = ", tempStore);
     console.log("tempObj = ", tempObj);
-    console.log("tempObj.entries = ", Object.entries(tempObj));
+    console.log("initialValues = ", adoptionInitialValues);
     setToShow(tempObj);
   }, []);
 
@@ -155,21 +156,28 @@ function Index({ type }: { type: string }) {
   };
 
   const expose = (current, pathToExpose) => {
-    console.group("EXPOSE");
     console.log("CURRENT = ", current);
     console.log("EXPOSING PATH ", pathToExpose);
     console.log("expose() ", pathToExpose);
     let temp = toShow;
+    // console.group("in expose ()", temp[current][pathToExpose].title);
+    // console.log("Setting path ", temp[current][pathToExpose].title, "to false");
     temp[current][pathToExpose].hidden = false;
     console.log(
-      "PATH",
-      temp[current][pathToExpose],
-      "hidden set to",
+      "path",
+      temp[current][pathToExpose].title,
+      "is now",
       temp[current][pathToExpose].hidden
     );
+    // console.log(
+    //   "PATH",
+    //   temp[current][pathToExpose],
+    //   "hidden set to",
+    //   temp[current][pathToExpose].hidden
+    // );
     setToShow(temp);
-    console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
-    console.groupEnd();
+    // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
+    // console.groupEnd();
   };
   const hide = (current, pathToExpose) => {
     console.group("HIDE");
@@ -206,20 +214,34 @@ function Index({ type }: { type: string }) {
     //   return newPath;
     // };
 
+    if (labelText === "FULLY ENCLOSED") {
+      console.group(path);
+      console.log("Value changed was:", labelText);
+      console.log("val:", val);
+      console.log("forNameId:", forNameId);
+      console.groupEnd();
+    }
+
     if (exposes) {
       const [key, value] = Object.entries(exposes)[0];
+      // console.log(
+      //   "Value changed was:",
+      //   labelText,
+      //   "should be:",
+      //   key,
+      //   "is",
+      //   val
+      // );
+
+      //! Am I updated toShow with the updated values? I'm not building the form off initialValues
+      //! but it's updating properly
 
       if (val === key) {
-        console.group("Exposes value match");
-
-        console.log("PATH = ", path);
-        console.log("value =", value);
-        // console.log("toShow[forNameId]", path);
+        console.group(path);
+        console.log("Value changed was:", labelText);
 
         value.forEach((p) => {
-          console.log("PATH=", p);
-          // let totalPaths = getNewPaths(p);
-          // console.log("totalPaths", totalPaths);
+          console.log("exposes", p);
           expose("homeQuestions", p);
         });
       }
@@ -236,14 +258,14 @@ function Index({ type }: { type: string }) {
 
     return (
       <div className="flex flex-col items-center justify-center mb-4 mr-2">
-        <Label text={labelText} hFor={val} />
+        <Label text={labelText} hFor={forNameId} />
         <Field
           className={
             "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
           }
           name={forNameId}
+          // name="homeQuestions[gardenOrYardInfo>gardenOrYardSize]"
           as="select"
-          // onChange={(e) => expose(e)}
         >
           {selectArray.map((entries) => {
             return <option value={entries[1]}>{entries[0]}</option>;
@@ -307,11 +329,16 @@ function Index({ type }: { type: string }) {
             <div className="flex flex-col items-center w-11/12 p-8 bg-white border rounded-md shadow-md">
               {/* PASTE OF OTHERS GOES IN HERE*/}
               <FieldSet legendText="Home Questions">
-                <Counter />
+                {/* {console.log("toShow", toShow.homeQuestions)} */}
+                {/* {console.log("values", values.homeQuestions)} */}
+                {console.log(
+                  "values.homeQuestions[gardenOrYardInfo.fullyEnclosed] = ",
+                  values.homeQuestions
+                )}
                 <div className="flex flex-wrap w-full">
                   {toShow.homeQuestions ? (
                     Object.entries(toShow.homeQuestions).map((entry) => {
-                      const value = entry[0] as keyof homeQuestionsInterface;
+                      // const value = entry[0] as keyof homeQuestionsInterface;
                       return (
                         <>
                           {entry[1].type === "text" ? (
@@ -321,11 +348,7 @@ function Index({ type }: { type: string }) {
                                 <InputTextFormik
                                   key={entry[0] as Key}
                                   labelText={entry[1].title as Key}
-                                  val={
-                                    values.homeQuestions[
-                                      entry[0] as keyof homeQuestionsInterface
-                                    ]
-                                  }
+                                  val={values.homeQuestions[entry[0]]}
                                   forNameId={`homeQuestions.${entry[0]}`}
                                   type={entry[0] === "email" ? "email" : ""}
                                 >
@@ -356,14 +379,27 @@ function Index({ type }: { type: string }) {
                             </>
                           ) : (
                             <>
-                              {/* {console.log("entry type!==text", entry)} */}
+                              {/* {console.log(
+                                "Title: ",
+                                entry[1].title,
+                                "| exposes:",
+                                entry[1].exposes,
+                                "| hidden :",
+                                entry[1].hidden
+                              )} */}
+                              {console.log(entry[1].title, " = ", entry[0])}
                               {entry[1].type === "select" ? (
                                 !entry[1].hidden ? (
                                   <>
                                     <DropdownFormik
                                       key={entry[1].title as Key}
                                       labelText={entry[1].title}
-                                      val={values.homeQuestions[value]}
+                                      // val={
+                                      //   values["homeQuestions"][
+                                      //     "gardenOrYardInfo.gardenOrYardSize"
+                                      //   ]
+                                      // }
+                                      val={values.homeQuestions[entry[0]]}
                                       forNameId={`homeQuestions[${entry[0]}]`}
                                       selectArray={entry[1].values}
                                       exposes={
@@ -390,6 +426,35 @@ function Index({ type }: { type: string }) {
                                         </div>
                                       )}
                                     </DropdownFormik>
+                                    {/* <DropdownFormik
+                                      key={entry[1].title as Key}
+                                      labelText={entry[1].title}
+                                      val={values.homeQuestions[entry[0]]}
+                                      forNameId={`homeQuestions[${entry[0]}]`}
+                                      selectArray={entry[1].values}
+                                      exposes={
+                                        entry[1].exposes ? entry[1].exposes : ""
+                                      }
+                                      path={`homeQuestions.${entry[0]}`}
+                                    >
+                                      {errors?.homeQuestions?.[
+                                        entry[0] as keyof homeQuestionsInterface
+                                      ] &&
+                                      touched?.homeQuestions?.[
+                                        entry[0] as keyof homeQuestionsInterface
+                                      ] ? (
+                                        <div className="text-xs text-red-600">
+                                          {
+                                            errors?.homeQuestions?.[
+                                              entry[0] as keyof homeQuestionsInterface
+                                            ]
+                                          }
+                                        </div>
+                                      ) : (
+                                        <div className="mt-4">
+                                        </div>
+                                      )}
+                                    </DropdownFormik> */}
                                   </>
                                 ) : (
                                   <>

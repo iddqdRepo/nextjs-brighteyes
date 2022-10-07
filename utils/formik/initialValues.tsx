@@ -30,11 +30,16 @@ export const adoptionInitialValues = {
     townOrCountry: "",
     nextToRoad: "",
     gardenOrYard: "",
-    gardenOrYardInfo: {
-      gardenOrYardSize: "",
-      fullyEnclosed: "",
-      fenceHeight: "",
-    },
+    // gardenOrYardInfo: {
+    //   gardenOrYardSize: "",
+    //   fullyEnclosed: "",
+    //   fenceHeight: "",
+    // },
+
+    "gardenOrYardInfo>gardenOrYardSize": "",
+    "gardenOrYardInfo>fullyEnclosed": "",
+    "gardenOrYardInfo>fenceHeight": "",
+
     numAdults: "",
     numChildren: "",
     childrenAges: "",

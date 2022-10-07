@@ -188,8 +188,8 @@ export const formBuilder: FormBuilderInterface = {
         ],
         exposes: {
           Yes: [
-            "gardenOrYardInfo.gardenOrYardSize",
-            "gardenOrYardInfo.fullyEnclosed",
+            "gardenOrYardInfo>gardenOrYardSize",
+            "gardenOrYardInfo>fullyEnclosed",
           ],
         },
       },
@@ -204,16 +204,17 @@ export const formBuilder: FormBuilderInterface = {
       ],
       fullyEnclosed: [
         {
-          title: "Is your garden/yard fully enclosed?",
+          //   title: "Is your garden/yard fully enclosed?",
+          title: "FULLY ENCLOSED",
           type: "select",
           values: [
             ["Select", ""],
             ["Yes", "Yes"],
             ["No", "No"],
           ],
-          hidden: true,
+          //   hidden: true,
           exposes: {
-            Yes: ["gardenOrYardInfo.fenceHeight"],
+            Yes: ["gardenOrYardInfo>fenceHeight"],
           },
         },
       ],
