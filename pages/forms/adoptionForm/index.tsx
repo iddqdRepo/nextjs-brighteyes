@@ -42,7 +42,6 @@ interface catMatchingQuestionsInterface {
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({});
-  const toShowRef = useRef({});
   const [render, setRender] = useState([]);
   const renderCounter = useRef(0);
   console.log(renderCounter.current);
@@ -98,8 +97,7 @@ function Index({ type }: { type: string }) {
     // console.log("tempStore = ", tempStore);
     console.log("tempObj = ", tempObj);
     console.log("tempObj.entries = ", Object.entries(tempObj));
-    // setToShow(tempObj);
-    toShowRef.current = tempObj;
+    setToShow(tempObj);
   }, []);
 
   function Label({
