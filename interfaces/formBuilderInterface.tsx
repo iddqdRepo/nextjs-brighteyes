@@ -1,466 +1,481 @@
 export interface FormBuilderInterface {
-  aboutQuestions: {
-    title: {
+  aboutQuestions: aboutQuestionsInterface;
+  dogMatchingQuestions: dogMatchingQuestionsInterface;
+  catMatchingQuestions: catMatchingQuestionsInterface;
+  homeQuestions: homeQuestionsInterface;
+  dogQuestions: dogQuestionsInterface;
+  catQuestions: catMatchingQuestionsInterface;
+  hearAboutUsInfo: hearAboutUsInfoInterface;
+}
+
+export interface aboutQuestionsInterface {
+  title: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  name: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  address: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  postcode: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  phone: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  mobile: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  email: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+}
+
+export interface dogMatchingQuestionsInterface {
+  dogName: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  dogSize: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  dogType: {
+    title: string;
+    type: string;
+    values?: any;
+  }[];
+  dogAge: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  dogSex: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+}
+
+export interface catMatchingQuestionsInterface {
+  catName: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  catAge: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  catType: {
+    title: string;
+    type: string;
+    values?: any;
+  }[];
+  catColour: {
+    title: string;
+    type: string;
+    values?: any;
+  }[];
+  catSex: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  catAllergy: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+}
+
+export interface homeQuestionsInterface {
+  homeType: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  rentOrOwn: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  townOrCountry: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  nextToRoad: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  gardenOrYard: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+    exposes: {
+      [key: string]: string[] | string[][];
+    };
+  }[];
+  gardenOrYardInfo: {
+    gardenOrYardSize: {
       title: string;
       type: string;
       values?: any;
-      placeholder?: string;
+      placeholder?: string | undefined;
+      hidden: boolean;
     }[];
-    name: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    address: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    postcode: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    phone: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    mobile: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    email: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-  };
-  dogMatchingQuestions: {
-    dogName: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    dogSize: {
+    fullyEnclosed: {
       title: string;
       type: string;
       values: string[][];
-      placeholder?: string;
-    }[];
-    dogType: {
-      title: string;
-      type: string;
-      values?: any;
-    }[];
-    dogAge: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    dogSex: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-  };
-  catMatchingQuestions: {
-    catName: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    catAge: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    catType: {
-      title: string;
-      type: string;
-      values?: any;
-    }[];
-    catColour: {
-      title: string;
-      type: string;
-      values?: any;
-    }[];
-    catSex: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    catAllergy: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-  };
-  homeQuestions: {
-    homeType: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    rentOrOwn: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    townOrCountry: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    nextToRoad: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    gardenOrYard: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
+      hidden: boolean;
       exposes: {
         [key: string]: string[] | string[][];
       };
     }[];
-    gardenOrYardInfo: {
-      gardenOrYardSize: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-        hidden: boolean;
-      }[];
-      fullyEnclosed: {
-        title: string;
-        type: string;
-        values: string[][];
-        exposes: {
-          [key: string]: string[] | string[][];
-        };
-      }[];
-      fenceHeight: {
-        title: string;
-        type: string;
-        values: string[][];
-        hidden: boolean;
-      }[];
-    };
-    numAdults: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    numChildren: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    childrenAges: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder: string;
-    }[];
-    otherChildrenVisitInfo: {
-      otherChildrenVisit: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherChildrenAges: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      otherChildrenVisitFrequency: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-    retired: {
+    fenceHeight: {
       title: string;
       type: string;
       values: string[][];
-      placeholder?: string;
-    }[];
-    planning: {
-      baby: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      moving: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      workHoursChange: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      holiday: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-    };
-  };
-
-  dogQuestions: {
-    dogReason: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    dogHomeAloneInfo: {
-      dogHomeAlone: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      dogHomeAloneHours: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      dogHomeAloneFrequency: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-
-    exerciseType: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    exerciseTime: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    dogSleepLocation: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-
-    ownOtherDogsCurrentInfo: {
-      ownOtherCurrentDogs: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherCurrentDogBreed: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      otherCurrentDogNeutered: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherCurrentDogTime: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-    dogOwnOtherPetsCurrentInfo: {
-      dogOwnOtherCurrentPets: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      dogOtherCurrentPetTypes: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-    ownOtherDogsPastInfo: {
-      ownOtherPastDogs: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherPastDogTime: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      otherDogFate: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-
-    dogAwareOfCostsAndLegal: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
-    }[];
-    dogHowSoon: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    dogFurtherInfo: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string;
+      hidden: boolean;
     }[];
   };
-  catQuestions: {
-    catReason: {
+  numAdults: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  numChildren: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  childrenAges: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder: string;
+  }[];
+  otherChildrenVisitInfo: {
+    otherChildrenVisit: {
       title: string;
       type: string;
       values: string[][];
-      placeholder?: string;
+      exposes: {
+        [key: string]: string[] | string[][];
+      };
     }[];
-    catHomeAloneInfo: {
-      catHomeAlone: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      catHomeAloneHours: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      catHomeAloneFrequency: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-    catSleepLocation: {
+    otherChildrenAges: {
       title: string;
       type: string;
       values?: any;
-      placeholder?: string;
-    }[];
+      hidden: boolean;
 
-    ownOtherCatsCurrentInfo: {
-      ownOtherCurrentCats: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-    };
-    ownOtherPetsCurrentInfo: {
-      ownOtherCurrentPets: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherCurrentPetTypes: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-    ownOtherCatsPastInfo: {
-      ownOtherPastCats: {
-        title: string;
-        type: string;
-        values: string[][];
-      }[];
-      otherPastCatTime: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-      otherCatFate: {
-        title: string;
-        type: string;
-        values?: any;
-        placeholder?: string;
-      }[];
-    };
-
-    catAwareOfCostsAndLegal: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
+      placeholder?: string | undefined;
     }[];
-    catHowSoon: {
-      title: string;
-      type: string;
-      values: string[][];
-      placeholder?: string;
-    }[];
-    catFurtherInfo: {
+    otherChildrenVisitFrequency: {
       title: string;
       type: string;
       values?: any;
-      placeholder?: string;
+      hidden: boolean;
+
+      placeholder?: string | undefined;
+    }[];
+  };
+  retired: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  planning: {
+    baby: {
+      title: string;
+      type: string;
+    }[];
+    moving: {
+      title: string;
+      type: string;
+    }[];
+    workHoursChange: {
+      title: string;
+      type: string;
+    }[];
+    holiday: {
+      title: string;
+      type: string;
+    }[];
+  };
+}
+
+export interface dogQuestionsInterface {
+  dogReason: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  dogHomeAloneInfo: {
+    dogHomeAlone: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    dogHomeAloneHours: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+    dogHomeAloneFrequency: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
     }[];
   };
 
-  hearAboutUsInfo: {
-    hearAboutUs: {
+  exerciseType: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  exerciseTime: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  dogSleepLocation: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+
+  ownOtherDogsCurrentInfo: {
+    ownOtherCurrentDogs: {
       title: string;
       type: string;
       values: string[][];
-      placeholder?: string;
     }[];
-    other: {
+    otherCurrentDogBreed: {
       title: string;
       type: string;
       values?: any;
-      placeholder?: string;
+      placeholder?: string | undefined;
+    }[];
+    otherCurrentDogNeutered: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    otherCurrentDogTime: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
     }[];
   };
+  dogOwnOtherPetsCurrentInfo: {
+    dogOwnOtherCurrentPets: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    dogOtherCurrentPetTypes: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+  };
+  ownOtherDogsPastInfo: {
+    ownOtherPastDogs: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    otherPastDogTime: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+    otherDogFate: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+  };
+
+  dogAwareOfCostsAndLegal: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+  dogHowSoon: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  dogFurtherInfo: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+}
+
+export interface catMatchingQuestionsInterface {
+  catReason: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  catHomeAloneInfo: {
+    catHomeAlone: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    catHomeAloneHours: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+    catHomeAloneFrequency: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+  };
+  catSleepLocation: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+
+  ownOtherCatsCurrentInfo: {
+    ownOtherCurrentCats: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+  };
+  ownOtherPetsCurrentInfo: {
+    ownOtherCurrentPets: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    otherCurrentPetTypes: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+  };
+  ownOtherCatsPastInfo: {
+    ownOtherPastCats: {
+      title: string;
+      type: string;
+      values: string[][];
+    }[];
+    otherPastCatTime: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+    otherCatFate: {
+      title: string;
+      type: string;
+      values?: any;
+      placeholder?: string | undefined;
+    }[];
+  };
+
+  catAwareOfCostsAndLegal: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  catHowSoon: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  catFurtherInfo: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
+}
+export interface hearAboutUsInfoInterface {
+  hearAboutUs: {
+    title: string;
+    type: string;
+    values: string[][];
+    placeholder?: string | undefined;
+  }[];
+  other: {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string | undefined;
+  }[];
 }

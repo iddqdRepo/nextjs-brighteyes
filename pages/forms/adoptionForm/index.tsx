@@ -9,40 +9,22 @@ import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/initialValues";
 import { formBuilder } from "../../../utils/formik/formBuilder";
-import { flatFormBuilder } from "../../../utils/formik/flatFormBuilder";
-
-interface InitialValuesInterface {
-  type: string;
-  aboutQuestions: aboutQuestionsInterface;
-}
-interface aboutQuestionsInterface {
-  title: string;
-  name: string;
-  address: string;
-  postcode: string;
-  phone: string;
-  mobile: string;
-  email: string;
-}
-
-interface dogMatchingQuestionsInterface {
-  dogName: string;
-  dogSize: string;
-  dogType: string;
-  dogAge: string;
-  dogSex: string;
-}
-interface catMatchingQuestionsInterface {
-  catName: string;
-  catAge: string;
-  catType: string;
-  catColour: string;
-  catSex: string;
-  catAllergy: string;
-}
+import {
+  aboutQuestionsInterface,
+  catMatchingQuestionsInterface,
+  dogMatchingQuestionsInterface,
+  dogQuestionsInterface,
+  FormBuilderInterface,
+  hearAboutUsInfoInterface,
+  homeQuestionsInterface,
+} from "../../../interfaces/formBuilderInterface";
+import {
+  InitialValuesInterface,
+  ivHomeQuestionsInterface,
+} from "../../../interfaces/initialValuesInterface";
 
 function Index({ type }: { type: string }) {
-  const [toShow, setToShow] = useState({});
+  const [toShow, setToShow] = useState({} as InitialValuesInterface);
   const [render, setRender] = useState([]);
   const renderCounter = useRef(0);
   console.log(renderCounter.current);
@@ -59,6 +41,20 @@ function Index({ type }: { type: string }) {
     setRender([...temp]);
   };
 
+  interface Result {
+    title: string;
+    type: string;
+    values?: any;
+    placeholder?: string;
+  }
+
+  interface ResultObj {
+    [key: string]: Result;
+  }
+
+  interface tempObjInterface {
+    [key: string]: string;
+  }
   useEffect(() => {
     /*
     ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
@@ -66,16 +62,29 @@ function Index({ type }: { type: string }) {
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
    */
 
-    console.log(Object.entries(formBuilder));
+    console.log("Object.entries(formBuilder)", Object.entries(formBuilder));
     let temp = Object.entries(formBuilder);
-    // let tempStore = [];
-    let tempObj = {};
+    let tempObj = {} as InitialValuesInterface;
 
-    const flattenObj = (ob) => {
-      let result = {};
-      for (const i in ob) {
-        if (typeof ob[i] === "object" && !Array.isArray(ob[i])) {
-          const temp = flattenObj(ob[i]);
+    const flattenObj = (
+      objToFlatten:
+        | aboutQuestionsInterface
+        | dogMatchingQuestionsInterface
+        | catMatchingQuestionsInterface
+        | homeQuestionsInterface
+        | dogQuestionsInterface
+        | hearAboutUsInfoInterface
+    ) => {
+      console.log("objToFlatten = ", objToFlatten);
+      let result: ResultObj = {};
+      for (const i in objToFlatten) {
+        console.log("ERROR i =", i);
+        if (
+          typeof objToFlatten[i] === "object" &&
+          !Array.isArray(objToFlatten[i])
+        ) {
+          const temp = flattenObj(objToFlatten[i]);
+
           for (const j in temp) {
             /*
              * result needs to be joined with ">" because formik splits on "."
@@ -83,24 +92,30 @@ function Index({ type }: { type: string }) {
              * when passed into <Field name={}/> making initialValues not Match toShow
              * this causes bugs on expose() etc
              */
+            console.log(
+              " result[i + " > " + j] = temp[j] ",
+              (result[i + ">" + j] = temp[j])
+            );
             result[i + ">" + j] = temp[j];
           }
         } else {
-          result[i] = ob[i][0];
+          console.log(
+            " result[i] = ob[i][0] ",
+            (result[i] = objToFlatten[i][0])
+          );
+          result[i] = objToFlatten[i][0];
         }
       }
+      console.log("result =", result);
       return result;
     };
 
-    // temp.forEach((nest) => {
-    //   console.log("temp = ", temp);
-    //   tempStore.push({ [nest[0]]: flattenObj(formBuilder[nest[0]]) });
-    // });
     temp.forEach((nest) => {
-      console.log("temp = ", temp);
-      tempObj[nest[0]] = flattenObj(formBuilder[nest[0]]);
+      console.log("nest[0] = ", nest[0]);
+      tempObj[nest[0]] = flattenObj(
+        formBuilder[nest[0] as keyof FormBuilderInterface]
+      );
     });
-    // console.log("tempStore = ", tempStore);
     console.log("tempObj = ", tempObj);
     console.log("initialValues = ", adoptionInitialValues);
     setToShow(tempObj);
@@ -160,7 +175,7 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const expose = (current, pathToExpose) => {
+  const expose = (current: string, pathToExpose: string | number) => {
     console.log("CURRENT = ", current);
     console.log("EXPOSING PATH ", pathToExpose);
     console.log("expose() ", pathToExpose);
@@ -184,7 +199,7 @@ function Index({ type }: { type: string }) {
     // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
     // console.groupEnd();
   };
-  const hide = (current, pathToExpose) => {
+  const hide = (current: string, pathToExpose: string | number) => {
     console.group("HIDE");
 
     console.log("CURRENT = ", current);
@@ -229,32 +244,23 @@ function Index({ type }: { type: string }) {
 
     if (exposes) {
       const [key, value] = Object.entries(exposes)[0];
-      // console.log(
-      //   "Value changed was:",
-      //   labelText,
-      //   "should be:",
-      //   key,
-      //   "is",
-      //   val
-      // );
 
       if (val === key) {
         console.group(path);
         console.log("Value changed was:", labelText);
 
-        value.forEach((p) => {
+        value.forEach((p: string | number) => {
           console.log("exposes", p);
           expose("homeQuestions", p);
         });
+      } else {
+        value.forEach((p: any) => {
+          console.log("PATH=", p);
+          // let totalPaths = getNewPaths(p);
+          // console.log("totalPaths", totalPaths);
+          hide("homeQuestions", p);
+        });
       }
-      // else {
-      //   value.forEach((p) => {
-      //     console.log("PATH=", p);
-      //     // let totalPaths = getNewPaths(p);
-      //     // console.log("totalPaths", totalPaths);
-      //     // hide("homeQuestions", p);
-      //   });
-      // }
       console.groupEnd();
     }
 
@@ -266,7 +272,6 @@ function Index({ type }: { type: string }) {
             "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
           }
           name={forNameId}
-          // name="homeQuestions[gardenOrYardInfo>gardenOrYardSize]"
           as="select"
         >
           {selectArray.map((entries) => {
@@ -274,6 +279,28 @@ function Index({ type }: { type: string }) {
           })}
         </Field>
         {children}
+      </div>
+    );
+  };
+
+  const CheckboxPlanningFormik = ({}) => {
+    return (
+      <div className="flex flex-col items-center justify-center mb-4 mr-2">
+        <div id="checkbox-group">Checked</div>
+        <div role="group" aria-labelledby="checkbox-group">
+          <label>
+            <Field type="checkbox" name="checked" value="Yes" />
+            One
+          </label>
+          <label>
+            <Field type="checkbox" name="checked" value="Yes" />
+            Two
+          </label>
+          <label>
+            <Field type="checkbox" name="checked" value="Yes" />
+            Three
+          </label>
+        </div>
       </div>
     );
   };
@@ -311,36 +338,6 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  // const BuildForm = () => {
-  //   let tempShow = []
-  //   Object.entries(mapValues).forEach(entry => {
-
-  //     //if it's a nested object recursively check it.
-  //     if(typeof yourVariable === 'object' &&
-  //     !Array.isArray(yourVariable) &&
-  //     yourVariable !== null
-  // )
-
-  //     if(formBuilder.homeQuestions[entry[0]].hidden){
-  //       return
-  //     }else{
-  //       tempShow.push(entry[0])
-  //     }
-
-  //   })
-
-  // }
-
-  // const RenderFlattened = ({ ob }) => {
-  //   // const toRender = flattenObj(b);
-
-  //   // return toRender.map((el) => {
-  //   //   console.log("el = ", el);
-  //   //   return <div>{el.title}</div>;
-  //   });
-  // };
-  // const flat = flattenObj(b)
-
   return (
     <form className="flex flex-col items-center justify-center ">
       <div className="flex justify-start w-3/6">
@@ -366,10 +363,7 @@ function Index({ type }: { type: string }) {
               <FieldSet legendText="Home Questions">
                 {/* {console.log("toShow", toShow.homeQuestions)} */}
                 {/* {console.log("values", values.homeQuestions)} */}
-                {console.log(
-                  "values.homeQuestions[gardenOrYardInfo.fullyEnclosed] = ",
-                  values.homeQuestions
-                )}
+
                 <div className="flex flex-wrap w-full">
                   {toShow.homeQuestions ? (
                     Object.entries(toShow.homeQuestions).map((entry) => {
@@ -382,21 +376,28 @@ function Index({ type }: { type: string }) {
                               {!entry[1].hidden ? (
                                 <InputTextFormik
                                   key={entry[0] as Key}
-                                  labelText={entry[1].title as Key}
-                                  val={values.homeQuestions[entry[0]]}
+                                  labelText={
+                                    entry[1]
+                                      .title as keyof ivHomeQuestionsInterface
+                                  }
+                                  val={
+                                    values.homeQuestions[
+                                      entry[0] as keyof ivHomeQuestionsInterface
+                                    ]
+                                  }
                                   forNameId={`homeQuestions.${entry[0]}`}
                                   type={entry[0] === "email" ? "email" : ""}
                                 >
                                   {errors?.homeQuestions?.[
-                                    entry[0] as keyof homeQuestionsInterface
+                                    entry[0] as keyof ivHomeQuestionsInterface
                                   ] &&
                                   touched?.homeQuestions?.[
-                                    entry[0] as keyof homeQuestionsInterface
+                                    entry[0] as keyof ivHomeQuestionsInterface
                                   ] ? (
                                     <div className="text-xs text-red-600">
                                       {
                                         errors?.homeQuestions?.[
-                                          entry[0] as keyof homeQuestionsInterface
+                                          entry[0] as keyof ivHomeQuestionsInterface
                                         ]
                                       }
                                     </div>
@@ -407,21 +408,11 @@ function Index({ type }: { type: string }) {
                                   )}
                                 </InputTextFormik>
                               ) : (
-                                <>
-                                  <div>{entry[0]}</div>
-                                </>
+                                <></>
                               )}
                             </>
                           ) : (
                             <>
-                              {/* {console.log(
-                                "Title: ",
-                                entry[1].title,
-                                "| exposes:",
-                                entry[1].exposes,
-                                "| hidden :",
-                                entry[1].hidden
-                              )} */}
                               {console.log(entry[1].title, " = ", entry[0])}
                               {entry[1].type === "select" ? (
                                 !entry[1].hidden ? (
@@ -429,7 +420,11 @@ function Index({ type }: { type: string }) {
                                     <DropdownFormik
                                       key={entry[1].title as Key}
                                       labelText={entry[1].title}
-                                      val={values.homeQuestions[entry[0]]}
+                                      val={
+                                        values.homeQuestions[
+                                          entry[0] as keyof ivHomeQuestionsInterface
+                                        ]
+                                      }
                                       forNameId={`homeQuestions[${entry[0]}]`}
                                       selectArray={entry[1].values}
                                       exposes={
@@ -444,15 +439,15 @@ function Index({ type }: { type: string }) {
                                         main={"homeQuestions"}
                                       /> */}
                                       {errors?.homeQuestions?.[
-                                        entry[0] as keyof homeQuestionsInterface
+                                        entry[0] as keyof ivHomeQuestionsInterface
                                       ] &&
                                       touched?.homeQuestions?.[
-                                        entry[0] as keyof homeQuestionsInterface
+                                        entry[0] as keyof ivHomeQuestionsInterface
                                       ] ? (
                                         <div className="text-xs text-red-600">
                                           {
                                             errors?.homeQuestions?.[
-                                              entry[0] as keyof homeQuestionsInterface
+                                              entry[0] as keyof ivHomeQuestionsInterface
                                             ]
                                           }
                                         </div>
@@ -460,43 +455,12 @@ function Index({ type }: { type: string }) {
                                         <div className="mt-4"></div>
                                       )}
                                     </DropdownFormik>
-                                    {/* <DropdownFormik
-                                      key={entry[1].title as Key}
-                                      labelText={entry[1].title}
-                                      val={values.homeQuestions[entry[0]]}
-                                      forNameId={`homeQuestions[${entry[0]}]`}
-                                      selectArray={entry[1].values}
-                                      exposes={
-                                        entry[1].exposes ? entry[1].exposes : ""
-                                      }
-                                      path={`homeQuestions.${entry[0]}`}
-                                    >
-                                      {errors?.homeQuestions?.[
-                                        entry[0] as keyof homeQuestionsInterface
-                                      ] &&
-                                      touched?.homeQuestions?.[
-                                        entry[0] as keyof homeQuestionsInterface
-                                      ] ? (
-                                        <div className="text-xs text-red-600">
-                                          {
-                                            errors?.homeQuestions?.[
-                                              entry[0] as keyof homeQuestionsInterface
-                                            ]
-                                          }
-                                        </div>
-                                      ) : (
-                                        <div className="mt-4">
-                                        </div>
-                                      )}
-                                    </DropdownFormik> */}
                                   </>
                                 ) : (
-                                  <>
-                                    <div>{entry[0]}</div>
-                                  </>
+                                  <></>
                                 )
                               ) : (
-                                <div>CHECKBOX</div>
+                                <></>
                               )}
                             </>
                           )}
@@ -505,6 +469,51 @@ function Index({ type }: { type: string }) {
                     })
                   ) : (
                     <div>loading</div>
+                  )}
+                  {toShow!.homeQuestions ? (
+                    <div className="flex flex-col items-center justify-center mb-4 mr-2">
+                      <Label
+                        text={
+                          "Are you planning any of the following in the next 6 months"
+                        }
+                        hFor={""}
+                        classN="w-60"
+                      />
+                      <label>
+                        <Field
+                          type="checkbox"
+                          name={`homeQuestions["planning>baby"]`}
+                          value="Yes"
+                        />
+                        {toShow.homeQuestions["planning>baby"].title}
+                      </label>
+                      <label>
+                        <Field
+                          type="checkbox"
+                          name={`homeQuestions["planning>moving"]`}
+                          value="Yes"
+                        />
+                        {toShow.homeQuestions["planning>moving"].title}
+                      </label>
+                      <label>
+                        <Field
+                          type="checkbox"
+                          name={`homeQuestions["planning>workHoursChange"]`}
+                          value="Yes"
+                        />
+                        {toShow.homeQuestions["planning>workHoursChange"].title}
+                      </label>
+                      <label>
+                        <Field
+                          type="checkbox"
+                          name={`homeQuestions["planning>holiday"]`}
+                          value="Yes"
+                        />
+                        {toShow.homeQuestions["planning>holiday"].title}
+                      </label>
+                    </div>
+                  ) : (
+                    <></>
                   )}
                 </div>
               </FieldSet>

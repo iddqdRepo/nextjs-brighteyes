@@ -302,50 +302,26 @@ export const formBuilder: FormBuilderInterface = {
     planning: {
       baby: [
         {
-          title: "What SEX of cat are you looking for?",
+          title: "A baby?",
           type: "checkbox",
-          values: [
-            ["Select", ""],
-            ["Male", "Male"],
-            ["Female", "Female"],
-            ["Either", "Either"],
-          ],
         },
       ],
       moving: [
         {
-          title: "What SEX of cat are you looking for?",
+          title: "Moving house?",
           type: "checkbox",
-          values: [
-            ["Select", ""],
-            ["Male", "Male"],
-            ["Female", "Female"],
-            ["Either", "Either"],
-          ],
         },
       ],
       workHoursChange: [
         {
-          title: "What SEX of cat are you looking for?",
+          title: "A change in work hours?",
           type: "checkbox",
-          values: [
-            ["Select", ""],
-            ["Male", "Male"],
-            ["Female", "Female"],
-            ["Either", "Either"],
-          ],
         },
       ],
       holiday: [
         {
-          title: "What SEX of cat are you looking for?",
+          title: "A holiday (in the next month)?",
           type: "checkbox",
-          values: [
-            ["Select", ""],
-            ["Male", "Male"],
-            ["Female", "Female"],
-            ["Either", "Either"],
-          ],
         },
       ],
     },
