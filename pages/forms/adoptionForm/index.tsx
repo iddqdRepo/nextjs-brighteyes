@@ -1,10 +1,6 @@
 import React, { Key, useState, useEffect, useRef } from "react";
 import { Field, FieldArray, Formik } from "formik";
-import {
-  FieldSet,
-  // InputTextFormik,
-  // Label,
-} from "../../../components/FormLayout/FormComponents";
+import { FieldSet } from "../../../components/FormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/initialValues";
@@ -12,6 +8,7 @@ import { formBuilder } from "../../../utils/formik/formBuilder";
 import {
   aboutQuestionsInterface,
   catMatchingQuestionsInterface,
+  catQuestionsInterface,
   dogMatchingQuestionsInterface,
   dogQuestionsInterface,
   FormBuilderInterface,
@@ -25,21 +22,6 @@ import {
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as InitialValuesInterface);
-  const [render, setRender] = useState([]);
-  const renderCounter = useRef(0);
-  console.log(renderCounter.current);
-  const Counter = () => {
-    renderCounter.current = renderCounter.current + 1;
-    return <h1>Renders: {renderCounter.current}</h1>;
-  };
-
-  const doRender = () => {
-    console.log("DORENDEr");
-    let temp = render;
-    temp.push(1);
-    console.log(temp);
-    setRender([...temp]);
-  };
 
   interface Result {
     title: string;
@@ -61,63 +43,68 @@ function Index({ type }: { type: string }) {
     ^ Flattened with the following recursive function instead of manually to keep the object path
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
    */
-
-    console.log("Object.entries(formBuilder)", Object.entries(formBuilder));
-    let temp = Object.entries(formBuilder);
+    let tempEntries = Object.entries(formBuilder);
     let tempObj = {} as InitialValuesInterface;
 
     const flattenObj = (
-      objToFlatten:
-        | aboutQuestionsInterface
-        | dogMatchingQuestionsInterface
-        | catMatchingQuestionsInterface
-        | homeQuestionsInterface
-        | dogQuestionsInterface
-        | hearAboutUsInfoInterface
+      // objToFlatten:
+      //   | aboutQuestionsInterface
+      //   | dogMatchingQuestionsInterface
+      //   | catMatchingQuestionsInterface
+      //   | homeQuestionsInterface
+      //   | catQuestionsInterface
+      //   | dogQuestionsInterface
+      //   | hearAboutUsInfoInterface
+      objToFlatten: keyof FormBuilderInterface
     ) => {
-      console.log("objToFlatten = ", objToFlatten);
-      let result: ResultObj = {};
-      for (const i in objToFlatten) {
-        console.log("ERROR i =", i);
-        if (
-          typeof objToFlatten[i] === "object" &&
-          !Array.isArray(objToFlatten[i])
-        ) {
-          const temp = flattenObj(objToFlatten[i]);
+      let result = {} as tempObjInterface;
+      console.log("objToFlatten", objToFlatten);
 
-          for (const j in temp) {
+      for (const [i, v] of Object.entries(objToFlatten)) {
+        if (typeof v === "object" && !Array.isArray(v)) {
+          const tempFlatten = flattenObj(v);
+
+          // for (const j in tempFlatten) {
+          for (const [j, jValue] of Object.entries(tempFlatten)) {
+            // console.log("j =", j, "tempFlatten[j] =", tempFlatten[j]);
+            console.log("j =", j, "tempFlatten[j] =", jValue);
             /*
              * result needs to be joined with ">" because formik splits on "."
              * which makes flattening pointless as it's rebuilt in initialValues
              * when passed into <Field name={}/> making initialValues not Match toShow
              * this causes bugs on expose() etc
              */
+            // console.log(
+            //   " result[i + " > " + j] = temp[j] ",
+            //   (result[i + ">" + j] = tempFlatten[j])
+            // );
+            // result[i + ">" + j] = tempFlatten[j];
             console.log(
               " result[i + " > " + j] = temp[j] ",
-              (result[i + ">" + j] = temp[j])
+              (result[i + ">" + j] = jValue)
             );
-            result[i + ">" + j] = temp[j];
+            result[i + ">" + j] = jValue;
           }
         } else {
-          console.log(
-            " result[i] = ob[i][0] ",
-            (result[i] = objToFlatten[i][0])
-          );
-          result[i] = objToFlatten[i][0];
+          result[i] = v[0];
         }
       }
       console.log("result =", result);
       return result;
     };
 
-    temp.forEach((nest) => {
+    tempEntries.forEach((nest) => {
       console.log("nest[0] = ", nest[0]);
-      tempObj[nest[0]] = flattenObj(
+      console.log(
+        "formBuilder[nest[0]]",
         formBuilder[nest[0] as keyof FormBuilderInterface]
+      );
+      tempObj[nest[0] as keyof InitialValuesInterface] = flattenObj(
+        formBuilder[nest[0]]
       );
     });
     console.log("tempObj = ", tempObj);
-    console.log("initialValues = ", adoptionInitialValues);
+    // console.log("initialValues = ", adoptionInitialValues);
     setToShow(tempObj);
   }, []);
 
@@ -179,16 +166,12 @@ function Index({ type }: { type: string }) {
     console.log("CURRENT = ", current);
     console.log("EXPOSING PATH ", pathToExpose);
     console.log("expose() ", pathToExpose);
-    let temp = toShow;
+    let temp: InitialValuesInterface = toShow; //! SPREAD OR NOT?
+
     // console.group("in expose ()", temp[current][pathToExpose].title);
     // console.log("Setting path ", temp[current][pathToExpose].title, "to false");
     temp[current][pathToExpose].hidden = false;
-    console.log(
-      "path",
-      temp[current][pathToExpose].title,
-      "is now",
-      temp[current][pathToExpose].hidden
-    );
+
     // console.log(
     //   "PATH",
     //   temp[current][pathToExpose],
@@ -225,15 +208,9 @@ function Index({ type }: { type: string }) {
     selectArray: string[];
     children: React.ReactNode;
     forNameId: string;
+    exposes: { [key: string]: string[] };
+    path: string;
   }) => {
-    // const getNewPaths = (toExposePath) => {
-    //   console.log("GETTING NEW PATH ", toExposePath);
-    //   let temp = toExposePath;
-    //   let newPath = temp.split(".");
-    //   console.log("newPath =", newPath);
-    //   return newPath;
-    // };
-
     if (labelText === "FULLY ENCLOSED") {
       console.group(path);
       console.log("Value changed was:", labelText);
@@ -305,38 +282,38 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const ErrorFormik = ({ err, touch, main, field }) => {
-    // console.log("INERROR", field);
-    // {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] &&
-    //   touched?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] ? (
-    //     <div className="text-xs text-red-600">
-    //       {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface]}
-    //     </div>
-    //   ) : (
-    //     <div className="mt-4">{/* {console.log("Value", value)} */}</div>
-    //   )}
-    if (err.homeQuestions) {
-      console.log("IN err.homeQuestions.retired");
-      console.log("err[main]", err[main][field]);
-    }
-    // console.log("errors =", err);
-    return (
-      // <>
-      //   {err[main][field] && touch[main][field] ? (
-      //     <div className="text-xs text-red-600">{err[main][field]}</div>
-      //   ) : (
-      //     <div className="mt-4"></div>
-      //   )}
-      // </>
-      <>
-        {err["homeQuestions"] && touch["homeQuestions"] ? (
-          <div className="text-xs text-red-600">{}</div>
-        ) : (
-          <div className="mt-4"></div>
-        )}
-      </>
-    );
-  };
+  // const ErrorFormik = ({ err, touch, main, field }) => {
+  //   // console.log("INERROR", field);
+  //   // {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] &&
+  //   //   touched?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface] ? (
+  //   //     <div className="text-xs text-red-600">
+  //   //       {errors?.homeQuestions?.[entry[0] as keyof homeQuestionsInterface]}
+  //   //     </div>
+  //   //   ) : (
+  //   //     <div className="mt-4">{/* {console.log("Value", value)} */}</div>
+  //   //   )}
+  //   if (err.homeQuestions) {
+  //     console.log("IN err.homeQuestions.retired");
+  //     console.log("err[main]", err[main][field]);
+  //   }
+  //   // console.log("errors =", err);
+  //   return (
+  //     // <>
+  //     //   {err[main][field] && touch[main][field] ? (
+  //     //     <div className="text-xs text-red-600">{err[main][field]}</div>
+  //     //   ) : (
+  //     //     <div className="mt-4"></div>
+  //     //   )}
+  //     // </>
+  //     <>
+  //       {err["homeQuestions"] && touch["homeQuestions"] ? (
+  //         <div className="text-xs text-red-600">{}</div>
+  //       ) : (
+  //         <div className="mt-4"></div>
+  //       )}
+  //     </>
+  //   );
+  // };
 
   return (
     <form className="flex flex-col items-center justify-center ">
@@ -345,12 +322,7 @@ function Index({ type }: { type: string }) {
           Adopt Animal
         </div>
         &nbsp;
-        {render.length} &nbsp;
-        <div onClick={() => doRender()}>RERENDER</div>
       </div>
-      {/* <RenderFlattened ob={b} /> */}
-      {/* {toShow ? <pre>{JSON.stringify(toShow, null, 2)}</pre> : "loading"} */}
-
       <Formik
         initialValues={adoptionInitialValues}
         validationSchema={AdoptionSchema}

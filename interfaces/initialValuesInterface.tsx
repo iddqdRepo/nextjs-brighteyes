@@ -5,6 +5,8 @@ export interface InitialValuesInterface {
   catMatchingQuestions: ivCatMatchingQuestionsInterface;
   homeQuestions: ivHomeQuestionsInterface;
   dogQuestions: ivDogQuestionsInterface;
+  catQuestions: ivCatQuestions;
+  hearAboutUsInfo: ivHearAboutUsInfoInterface;
 }
 export interface ivAboutQuestionsInterface {
   title: string;
@@ -74,4 +76,26 @@ export interface ivDogQuestionsInterface {
   dogAwareOfCostsAndLegal: string;
   dogHowSoon: string;
   dogFurtherInfo: string;
+}
+
+export interface ivCatQuestions {
+  catReason: string;
+  "catHomeAloneInfo>catHomeAlone": string;
+  "catHomeAloneInfo>catHomeAloneFrequency": string;
+  "catHomeAloneInfo>catHomeAloneHours": string;
+  catSleepLocation: string;
+  "ownOtherCatsCurrentInfo>ownOtherCurrentCats": string;
+  "ownOtherCatsPastInfo>ownOtherPastCats": string;
+  "ownOtherCatsPastInfo>otherCatFate": string;
+  "ownOtherCatsPastInfo>otherPastCatTime": string;
+  "ownOtherPetsCurrentInfo>ownOtherCurrentPets": string;
+  "ownOtherPetsCurrentInfo>otherCurrentPetTypes": string;
+  catAwareOfCostsAndLegal: string;
+  catHowSoon: string;
+  catFurtherInfo: string;
+}
+
+export interface ivHearAboutUsInfoInterface {
+  hearAboutUs: string;
+  other: string;
 }

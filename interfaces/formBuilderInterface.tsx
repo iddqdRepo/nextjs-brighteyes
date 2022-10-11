@@ -4,7 +4,7 @@ export interface FormBuilderInterface {
   catMatchingQuestions: catMatchingQuestionsInterface;
   homeQuestions: homeQuestionsInterface;
   dogQuestions: dogQuestionsInterface;
-  catQuestions: catMatchingQuestionsInterface;
+  catQuestions: catQuestionsInterface;
   hearAboutUsInfo: hearAboutUsInfoInterface;
 }
 
@@ -373,7 +373,7 @@ export interface dogQuestionsInterface {
   }[];
 }
 
-export interface catMatchingQuestionsInterface {
+export interface catQuestionsInterface {
   catReason: {
     title: string;
     type: string;
