@@ -8,474 +8,132 @@ export interface FormBuilderInterface {
   hearAboutUsInfo: hearAboutUsInfoInterface;
 }
 
+interface FieldTemplateInterface {
+  title: string;
+  type: string;
+  values?: string[][];
+  placeholder?: string | undefined;
+  hidden?: boolean;
+  exposes?: {
+    [key: string]: string[] | string[][];
+  };
+}
+
 export interface aboutQuestionsInterface {
-  title: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  name: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  address: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  postcode: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  phone: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  mobile: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  email: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  title: FieldTemplateInterface[];
+  name: FieldTemplateInterface[];
+  address: FieldTemplateInterface[];
+  postcode: FieldTemplateInterface[];
+  phone: FieldTemplateInterface[];
+  mobile: FieldTemplateInterface[];
+  email: FieldTemplateInterface[];
 }
 
 export interface dogMatchingQuestionsInterface {
-  dogName: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  dogSize: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  dogType: {
-    title: string;
-    type: string;
-    values?: any;
-  }[];
-  dogAge: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  dogSex: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
+  dogName: FieldTemplateInterface[];
+  dogSize: FieldTemplateInterface[];
+  dogType: FieldTemplateInterface[];
+  dogAge: FieldTemplateInterface[];
+  dogSex: FieldTemplateInterface[];
 }
 
 export interface catMatchingQuestionsInterface {
-  catName: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  catAge: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  catType: {
-    title: string;
-    type: string;
-    values?: any;
-  }[];
-  catColour: {
-    title: string;
-    type: string;
-    values?: any;
-  }[];
-  catSex: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  catAllergy: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
+  catName: FieldTemplateInterface[];
+  catAge: FieldTemplateInterface[];
+  catType: FieldTemplateInterface[];
+  catColour: FieldTemplateInterface[];
+  catSex: FieldTemplateInterface[];
+  catAllergy: FieldTemplateInterface[];
 }
 
 export interface homeQuestionsInterface {
-  homeType: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  rentOrOwn: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  townOrCountry: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  nextToRoad: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  gardenOrYard: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-    exposes: {
-      [key: string]: string[] | string[][];
-    };
-  }[];
+  homeType: FieldTemplateInterface[];
+  rentOrOwn: FieldTemplateInterface[];
+  townOrCountry: FieldTemplateInterface[];
+  nextToRoad: FieldTemplateInterface[];
+  gardenOrYard: FieldTemplateInterface[];
   gardenOrYardInfo: {
-    gardenOrYardSize: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-      hidden: boolean;
-    }[];
-    fullyEnclosed: {
-      title: string;
-      type: string;
-      values: string[][];
-      hidden: boolean;
-      exposes: {
-        [key: string]: string[] | string[][];
-      };
-    }[];
-    fenceHeight: {
-      title: string;
-      type: string;
-      values: string[][];
-      hidden: boolean;
-    }[];
+    gardenOrYardSize: FieldTemplateInterface[];
+    fullyEnclosed: FieldTemplateInterface[];
+    fenceHeight: FieldTemplateInterface[];
   };
-  numAdults: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  numChildren: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  childrenAges: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder: string;
-  }[];
+  numAdults: FieldTemplateInterface[];
+  numChildren: FieldTemplateInterface[];
+  childrenAges: FieldTemplateInterface[];
   otherChildrenVisitInfo: {
-    otherChildrenVisit: {
-      title: string;
-      type: string;
-      values: string[][];
-      exposes: {
-        [key: string]: string[] | string[][];
-      };
-    }[];
-    otherChildrenAges: {
-      title: string;
-      type: string;
-      values?: any;
-      hidden: boolean;
-
-      placeholder?: string | undefined;
-    }[];
-    otherChildrenVisitFrequency: {
-      title: string;
-      type: string;
-      values?: any;
-      hidden: boolean;
-
-      placeholder?: string | undefined;
-    }[];
+    otherChildrenVisit: FieldTemplateInterface[];
+    otherChildrenAges: FieldTemplateInterface[];
+    otherChildrenVisitFrequency: FieldTemplateInterface[];
   };
-  retired: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
+  retired: FieldTemplateInterface[];
   planning: {
-    baby: {
-      title: string;
-      type: string;
-    }[];
-    moving: {
-      title: string;
-      type: string;
-    }[];
-    workHoursChange: {
-      title: string;
-      type: string;
-    }[];
-    holiday: {
-      title: string;
-      type: string;
-    }[];
+    baby: FieldTemplateInterface[];
+    moving: FieldTemplateInterface[];
+    workHoursChange: FieldTemplateInterface[];
+    holiday: FieldTemplateInterface[];
   };
 }
 
 export interface dogQuestionsInterface {
-  dogReason: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
+  dogReason: FieldTemplateInterface[];
   dogHomeAloneInfo: {
-    dogHomeAlone: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    dogHomeAloneHours: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
-    dogHomeAloneFrequency: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    dogHomeAlone: FieldTemplateInterface[];
+    dogHomeAloneHours: FieldTemplateInterface[];
+    dogHomeAloneFrequency: FieldTemplateInterface[];
   };
 
-  exerciseType: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  exerciseTime: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  dogSleepLocation: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  exerciseType: FieldTemplateInterface[];
+  exerciseTime: FieldTemplateInterface[];
+  dogSleepLocation: FieldTemplateInterface[];
 
   ownOtherDogsCurrentInfo: {
-    ownOtherCurrentDogs: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    otherCurrentDogBreed: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
-    otherCurrentDogNeutered: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    otherCurrentDogTime: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    ownOtherCurrentDogs: FieldTemplateInterface[];
+    otherCurrentDogBreed: FieldTemplateInterface[];
+    otherCurrentDogNeutered: FieldTemplateInterface[];
+    otherCurrentDogTime: FieldTemplateInterface[];
   };
   dogOwnOtherPetsCurrentInfo: {
-    dogOwnOtherCurrentPets: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    dogOtherCurrentPetTypes: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    dogOwnOtherCurrentPets: FieldTemplateInterface[];
+    dogOtherCurrentPetTypes: FieldTemplateInterface[];
   };
   ownOtherDogsPastInfo: {
-    ownOtherPastDogs: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    otherPastDogTime: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
-    otherDogFate: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    ownOtherPastDogs: FieldTemplateInterface[];
+    otherPastDogTime: FieldTemplateInterface[];
+    otherDogFate: FieldTemplateInterface[];
   };
 
-  dogAwareOfCostsAndLegal: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
-  dogHowSoon: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  dogFurtherInfo: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  dogAwareOfCostsAndLegal: FieldTemplateInterface[];
+  dogHowSoon: FieldTemplateInterface[];
+  dogFurtherInfo: FieldTemplateInterface[];
 }
 
 export interface catQuestionsInterface {
-  catReason: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
+  catReason: FieldTemplateInterface[];
   catHomeAloneInfo: {
-    catHomeAlone: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    catHomeAloneHours: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
-    catHomeAloneFrequency: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    catHomeAlone: FieldTemplateInterface[];
+    catHomeAloneHours: FieldTemplateInterface[];
+    catHomeAloneFrequency: FieldTemplateInterface[];
   };
-  catSleepLocation: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  catSleepLocation: FieldTemplateInterface[];
 
   ownOtherCatsCurrentInfo: {
-    ownOtherCurrentCats: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
+    ownOtherCurrentCats: FieldTemplateInterface[];
   };
   ownOtherPetsCurrentInfo: {
-    ownOtherCurrentPets: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    otherCurrentPetTypes: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    ownOtherCurrentPets: FieldTemplateInterface[];
+    otherCurrentPetTypes: FieldTemplateInterface[];
   };
   ownOtherCatsPastInfo: {
-    ownOtherPastCats: {
-      title: string;
-      type: string;
-      values: string[][];
-    }[];
-    otherPastCatTime: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
-    otherCatFate: {
-      title: string;
-      type: string;
-      values?: any;
-      placeholder?: string | undefined;
-    }[];
+    ownOtherPastCats: FieldTemplateInterface[];
+    otherPastCatTime: FieldTemplateInterface[];
+    otherCatFate: FieldTemplateInterface[];
   };
 
-  catAwareOfCostsAndLegal: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  catHowSoon: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  catFurtherInfo: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  catAwareOfCostsAndLegal: FieldTemplateInterface[];
+  catHowSoon: FieldTemplateInterface[];
+  catFurtherInfo: FieldTemplateInterface[];
 }
 export interface hearAboutUsInfoInterface {
-  hearAboutUs: {
-    title: string;
-    type: string;
-    values: string[][];
-    placeholder?: string | undefined;
-  }[];
-  other: {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string | undefined;
-  }[];
+  hearAboutUs: FieldTemplateInterface[];
+  other: FieldTemplateInterface[];
 }

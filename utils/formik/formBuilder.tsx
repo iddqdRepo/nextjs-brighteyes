@@ -350,6 +350,12 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          exposes: {
+            Yes: [
+              "dogHomeAloneInfo>dogHomeAloneHours",
+              "dogHomeAloneInfo>dogHomeAloneFrequency",
+            ],
+          },
         },
       ],
       dogHomeAloneHours: [
@@ -357,6 +363,7 @@ export const formBuilder: FormBuilderInterface = {
           title: "How many hours per day?",
           type: "text",
           placeholder: "e.g. 4 Hours",
+          hidden: true,
         },
       ],
       dogHomeAloneFrequency: [
@@ -364,6 +371,7 @@ export const formBuilder: FormBuilderInterface = {
           title: "How often?",
           type: "text",
           placeholder: "e.g. Every day",
+          hidden: true,
         },
       ],
     },
@@ -400,6 +408,13 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          exposes: {
+            Yes: [
+              "ownOtherDogsCurrentInfo>otherCurrentDogBreed",
+              "ownOtherDogsCurrentInfo>otherCurrentDogNeutered",
+            ],
+            No: ["ownOtherDogsPastInfo>ownOtherPastDogs"],
+          },
         },
       ],
       otherCurrentDogBreed: [
@@ -407,6 +422,7 @@ export const formBuilder: FormBuilderInterface = {
           title: "Dog Breeds?",
           type: "text",
           placeholder: "e.g. Collie, Labrador",
+          hidden: true,
         },
       ],
       otherCurrentDogNeutered: [
@@ -418,11 +434,13 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          hidden: true,
         },
       ],
       otherCurrentDogTime: [
         {
           title: "How long have you had them?",
+          hidden: true,
           type: "text",
         },
       ],
@@ -458,12 +476,20 @@ export const formBuilder: FormBuilderInterface = {
             ["As an Adult", "As an Adult"],
             ["No", "No"],
           ],
+          hidden: true,
+          exposes: {
+            Yes: [
+              "ownOtherDogsPastInfo>otherPastDogTime",
+              "ownOtherDogsPastInfo>otherDogFate",
+            ],
+          },
         },
       ],
       otherPastDogTime: [
         {
           title: "How long did you have it?",
           type: "text",
+          hidden: true,
           placeholder: "e.g. 2 Hours",
         },
       ],
@@ -471,6 +497,7 @@ export const formBuilder: FormBuilderInterface = {
         {
           title: "What happened to it?",
           type: "text",
+          hidden: true,
           placeholder: "e.g. Died of old age",
         },
       ],
