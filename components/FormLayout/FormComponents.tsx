@@ -1,8 +1,9 @@
 import { clsx } from "clsx";
+import React from "react";
 
 export function Label({
   text,
-  hFor,
+  // hFor,
   classN,
 }: {
   text: string;

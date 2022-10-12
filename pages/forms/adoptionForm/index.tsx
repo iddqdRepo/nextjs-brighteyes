@@ -1,20 +1,11 @@
-import React, { Key, useState, useEffect, useRef } from "react";
-import { Field, FieldArray, Formik } from "formik";
+import React, { Key, useState, useEffect } from "react";
+import { Field, Formik } from "formik";
 import { FieldSet } from "../../../components/FormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/initialValues";
 import { formBuilder } from "../../../utils/formik/formBuilder";
-import {
-  aboutQuestionsInterface,
-  catMatchingQuestionsInterface,
-  catQuestionsInterface,
-  dogMatchingQuestionsInterface,
-  dogQuestionsInterface,
-  FormBuilderInterface,
-  hearAboutUsInfoInterface,
-  homeQuestionsInterface,
-} from "../../../interfaces/formBuilderInterface";
+import { FormBuilderInterface } from "../../../interfaces/formBuilderInterface";
 import {
   InitialValuesInterface,
   ivHomeQuestionsInterface,
@@ -22,18 +13,8 @@ import {
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as InitialValuesInterface);
-
-  interface Result {
-    title: string;
-    type: string;
-    values?: any;
-    placeholder?: string;
-  }
-
-  interface ResultObj {
-    [key: string]: Result;
-  }
-
+  const t = type; //placeholder for lint
+  console.log(t);
   interface tempObjInterface {
     [key: string]: string;
   }
@@ -44,7 +25,7 @@ function Index({ type }: { type: string }) {
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
    */
     let tempEntries = Object.entries(formBuilder);
-    let tempObj = {} as InitialValuesInterface;
+    let tempObj: any = {};
 
     const flattenObj = (
       // objToFlatten:
@@ -92,20 +73,21 @@ function Index({ type }: { type: string }) {
       console.log("result =", result);
       return result;
     };
+    console.log("tempEntries =", tempEntries);
 
-    tempEntries.forEach((nest) => {
-      console.log("nest[0] = ", nest[0]);
+    for (const [key, value] of Object.entries(formBuilder)) {
+      console.log("key = ", key);
+      console.log("value =", value);
       console.log(
         "formBuilder[nest[0]]",
-        formBuilder[nest[0] as keyof FormBuilderInterface]
+        formBuilder[key as keyof FormBuilderInterface]
       );
-      tempObj[nest[0] as keyof InitialValuesInterface] = flattenObj(
-        formBuilder[nest[0]]
-      );
-    });
+      tempObj[key] = flattenObj(value);
+    }
+
     console.log("tempObj = ", tempObj);
     // console.log("initialValues = ", adoptionInitialValues);
-    setToShow(tempObj);
+    setToShow({ ...tempObj });
   }, []);
 
   function Label({
@@ -162,37 +144,32 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const expose = (current: string, pathToExpose: string | number) => {
-    console.log("CURRENT = ", current);
-    console.log("EXPOSING PATH ", pathToExpose);
-    console.log("expose() ", pathToExpose);
-    let temp: InitialValuesInterface = toShow; //! SPREAD OR NOT?
+  // const expose = (
+  //   current: keyof InitialValuesInterface,
+  //   pathToExpose: keyof ivHomeQuestionsInterface
+  // ) => {
+  //   console.log("expose CURRENT = ", current);
+  //   console.log("expose EXPOSING PATH ", pathToExpose);
+  //   let exposeTemp: InitialValuesInterface = toShow;
+  //   console.log("TEMP IS TOSHOW?", exposeTemp === toShow);
+  //   // let b = temp[current]
+  //   // console.group("in expose ()", temp[current][pathToExpose].title);
+  //   // console.log("Setting path ", temp[current][pathToExpose].title, "to false");
+  //   exposeTemp[current][pathToExpose].hidden = false;
+  //   setToShow(exposeTemp);
+  //   // setToShow({ ...exposeTemp });
+  // };
+  // const hide = (current: string, pathToExpose: string) => {
+  //   console.group("HIDE");
 
-    // console.group("in expose ()", temp[current][pathToExpose].title);
-    // console.log("Setting path ", temp[current][pathToExpose].title, "to false");
-    temp[current][pathToExpose].hidden = false;
-
-    // console.log(
-    //   "PATH",
-    //   temp[current][pathToExpose],
-    //   "hidden set to",
-    //   temp[current][pathToExpose].hidden
-    // );
-    setToShow(temp);
-    // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
-    // console.groupEnd();
-  };
-  const hide = (current: string, pathToExpose: string | number) => {
-    console.group("HIDE");
-
-    console.log("CURRENT = ", current);
-    console.log("EXPOSING PATH ", pathToExpose);
-    let temp = toShow;
-    temp[current][pathToExpose].hidden = true;
-    setToShow(temp);
-    // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
-    console.groupEnd();
-  };
+  //   console.log("CURRENT = ", current);
+  //   console.log("EXPOSING PATH ", pathToExpose);
+  //   let temp = toShow;
+  //   temp[current][pathToExpose].hidden = true;
+  //   setToShow(temp);
+  //   // console.log("TOSHOWPATHSTOEXPOSE", temp[current][pathToExpose]);
+  //   console.groupEnd();
+  // };
 
   const DropdownFormik = ({
     labelText,
@@ -208,7 +185,7 @@ function Index({ type }: { type: string }) {
     selectArray: string[];
     children: React.ReactNode;
     forNameId: string;
-    exposes: { [key: string]: string[] };
+    exposes: { [key: string]: (keyof ivHomeQuestionsInterface)[] };
     path: string;
   }) => {
     if (labelText === "FULLY ENCLOSED") {
@@ -226,16 +203,21 @@ function Index({ type }: { type: string }) {
         console.group(path);
         console.log("Value changed was:", labelText);
 
-        value.forEach((p: string | number) => {
-          console.log("exposes", p);
-          expose("homeQuestions", p);
+        value.forEach((p: keyof ivHomeQuestionsInterface) => {
+          console.log("exposes p", p);
+          console.log("exposes", toShow);
+          // expose("homeQuestions", p);
+          let exposeTemp = toShow as InitialValuesInterface;
+          console.log("exposes exposeTemp", exposeTemp);
+          exposeTemp["homeQuestions"][p].hidden = false;
+          setToShow(exposeTemp);
         });
       } else {
-        value.forEach((p: any) => {
+        value.forEach((p: string) => {
           console.log("PATH=", p);
           // let totalPaths = getNewPaths(p);
           // console.log("totalPaths", totalPaths);
-          hide("homeQuestions", p);
+          // hide("homeQuestions", p);
         });
       }
       console.groupEnd();
@@ -252,7 +234,11 @@ function Index({ type }: { type: string }) {
           as="select"
         >
           {selectArray.map((entries) => {
-            return <option value={entries[1]}>{entries[0]}</option>;
+            return (
+              <option key={entries[0] as Key} value={entries[1]}>
+                {entries[0]}
+              </option>
+            );
           })}
         </Field>
         {children}
@@ -260,27 +246,27 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const CheckboxPlanningFormik = ({}) => {
-    return (
-      <div className="flex flex-col items-center justify-center mb-4 mr-2">
-        <div id="checkbox-group">Checked</div>
-        <div role="group" aria-labelledby="checkbox-group">
-          <label>
-            <Field type="checkbox" name="checked" value="Yes" />
-            One
-          </label>
-          <label>
-            <Field type="checkbox" name="checked" value="Yes" />
-            Two
-          </label>
-          <label>
-            <Field type="checkbox" name="checked" value="Yes" />
-            Three
-          </label>
-        </div>
-      </div>
-    );
-  };
+  // const CheckboxPlanningFormik = ({}) => {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center mb-4 mr-2">
+  //       <div id="checkbox-group">Checked</div>
+  //       <div role="group" aria-labelledby="checkbox-group">
+  //         <label>
+  //           <Field type="checkbox" name="checked" value="Yes" />
+  //           One
+  //         </label>
+  //         <label>
+  //           <Field type="checkbox" name="checked" value="Yes" />
+  //           Two
+  //         </label>
+  //         <label>
+  //           <Field type="checkbox" name="checked" value="Yes" />
+  //           Three
+  //         </label>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   // const ErrorFormik = ({ err, touch, main, field }) => {
   //   // console.log("INERROR", field);
@@ -328,7 +314,7 @@ function Index({ type }: { type: string }) {
         validationSchema={AdoptionSchema}
         onSubmit={(data) => console.log(data)}
       >
-        {({ values, handleChange, errors, touched }) => (
+        {({ values, errors, touched }) => (
           <div className="flex justify-center w-full">
             <div className="flex flex-col items-center w-11/12 p-8 bg-white border rounded-md shadow-md">
               {/* PASTE OF OTHERS GOES IN HERE*/}
