@@ -89,20 +89,18 @@ const homeQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  gardenOrYardInfo: Yup.object().shape({
-    gardenOrYardSize: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    fullyEnclosed: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    fenceHeight: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "gardenOrYardInfo>gardenOrYardSize": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "gardenOrYardInfo>fullyEnclosed": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "gardenOrYardInfo>fenceHeight": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   numAdults: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -115,62 +113,40 @@ const homeQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  otherChildrenVisitInfo: Yup.object().shape({
-    otherChildrenVisit: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherChildrenAges: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherChildrenVisitFrequency: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "otherChildrenVisitInfo>otherChildrenVisit": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "otherChildrenVisitInfo>otherChildrenAges": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "otherChildrenVisitInfo>otherChildrenVisitFrequency": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   retired: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  planning: Yup.object().shape({
-    baby: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    moving: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    workHoursChange: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    holiday: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
 });
 const dogQuestionsSchema = Yup.object().shape({
   dogReason: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  dogHomeAloneInfo: Yup.object().shape({
-    dogHomeAlone: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    dogHomeAloneHours: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    dogHomeAloneFrequency: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "dogHomeAloneInfo>dogHomeAlone": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "dogHomeAloneInfo>dogHomeAloneHours": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "dogHomeAloneInfo>dogHomeAloneFrequency": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   exerciseType: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -183,48 +159,42 @@ const dogQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  ownOtherDogsCurrentInfo: Yup.object().shape({
-    ownOtherCurrentDogs: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherCurrentDogBreed: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherCurrentDogNeutered: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherCurrentDogTime: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
-  dogOwnOtherPetsCurrentInfo: Yup.object().shape({
-    dogOwnOtherCurrentPets: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    dogOtherCurrentPetTypes: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
-  ownOtherDogsPastInfo: Yup.object().shape({
-    ownOtherPastDogs: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherPastDogTime: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherDogFate: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "ownOtherDogsCurrentInfo>ownOtherCurrentDogs": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsCurrentInfo>otherCurrentDogBreed": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsCurrentInfo>otherCurrentDogNeutered": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsCurrentInfo>otherCurrentDogTime": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "dogOwnOtherPetsCurrentInfo>dogOwnOtherCurrentPets": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "dogOwnOtherPetsCurrentInfo>dogOtherCurrentPetTypes": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsPastInfo>ownOtherPastDogs": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsPastInfo>otherPastDogTime": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherDogsPastInfo>otherDogFate": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   dogAwareOfCostsAndLegal: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -244,56 +214,46 @@ const catQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  catHomeAloneInfo: Yup.object().shape({
-    catHomeAlone: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    catHomeAloneHours: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    catHomeAloneFrequency: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "catHomeAloneInfo>catHomeAlone": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "catHomeAloneInfo>catHomeAloneHours": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "catHomeAloneInfo>catHomeAloneFrequency": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   catSleepLocation: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-
-  ownOtherCatsCurrentInfo: Yup.object().shape({
-    ownOtherCurrentCats: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
-  ownOtherPetsCurrentInfo: Yup.object().shape({
-    ownOtherCurrentPets: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherCurrentPetTypes: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
-  ownOtherCatsPastInfo: Yup.object().shape({
-    ownOtherPastCats: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherPastCatTime: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    otherCatFate: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
-
+  "ownOtherCatsCurrentInfo>ownOtherCurrentCats": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherPetsCurrentInfo>ownOtherCurrentPets": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherPetsCurrentInfo>otherCurrentPetTypes": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherCatsPastInfo>ownOtherPastCats": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherCatsPastInfo>otherPastCatTime": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "ownOtherCatsPastInfo>otherCatFate": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   catAwareOfCostsAndLegal: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -308,16 +268,14 @@ const catQuestionsSchema = Yup.object().shape({
     .required("Required"),
 });
 const hearAboutUsSchema = Yup.object().shape({
-  hearAboutUsInfo: Yup.object().shape({
-    hearAboutUs: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    other: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-  }),
+  "hearAboutUsInfo>hearAboutUs": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  "hearAboutUsInfo>other": Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
 });
 
 export const AdoptionSchema = Yup.object().shape({
