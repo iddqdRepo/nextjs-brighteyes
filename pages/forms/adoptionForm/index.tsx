@@ -145,6 +145,7 @@ function Index({ type }: { type: string }) {
         false;
     }
     if (category === "dogQuestions") {
+      // console.log("EXPOSING: ", exposeTemp[category][val]);
       exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden = false;
     }
     if (category === "catQuestions") {
@@ -165,7 +166,12 @@ function Index({ type }: { type: string }) {
     if (category === "homeQuestions") {
       exposeTemp[category][val as keyof ivHomeQuestionsInterface].hidden = true;
     }
-    if (category === "dogQuestions") {
+    if (
+      category === "dogQuestions" &&
+      exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden !== true
+    ) {
+      // console.log("HIDING: ", exposeTemp[category][val]);
+
       exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden = true;
     }
     if (category === "catQuestions") {
@@ -181,7 +187,7 @@ function Index({ type }: { type: string }) {
     children,
     forNameId,
     exposes,
-    path,
+    // path,
     category,
   }: {
     labelText: string;
@@ -200,27 +206,58 @@ function Index({ type }: { type: string }) {
     category: keyof InitialValuesInterface;
   }) => {
     if (exposes) {
-      const [key, value] = Object.entries(exposes)[0];
-      console.log("key, value", key, value);
+      for (const [key, value] of Object.entries(exposes)) {
+        // console.log("NEW  KEY", key, "NEW VALUE", value);
 
-      if (val === key) {
-        console.group(path);
-        console.log("key =", key);
-        console.log("Value changed was:", labelText);
+        if (val !== key) {
+          if (
+            forNameId === "dogQuestions.ownOtherDogsPastInfo>ownOtherPastDogs"
+          ) {
+            console.log("KEt = ", key);
+          }
+          value.forEach((val) => {
+            hide(category, val);
+          });
+        }
+        if (val === key) {
+          // console.group(path);
+          // console.log("key =", key);
+          // console.log("Value changed was:", labelText);
 
-        value.forEach((val) => {
-          console.log("exposes val", val);
-          console.log("exposes category", category);
-          console.log("exposes", toShow);
-
-          expose(category, val);
-        });
-      } else {
-        value.forEach((val) => {
-          hide(category, val);
-        });
+          value.forEach((val) => {
+            // console.log("exposes val", val);
+            // console.log("exposes category", category);
+            // console.log("exposes", toShow);
+            expose(category, val);
+          });
+        }
+        //  else {
+        //   value.forEach((val) => {
+        //     hide(category, val);
+        //   });
+        // }
       }
-      console.groupEnd();
+      // const [key, value] = Object.entries(exposes)[0];
+      // console.log("key", key, "value", value);
+      // console.log("forNameId", forNameId);
+      // console.log("category", category);
+      // if (val === key) {
+      //   // console.group(path);
+      //   // console.log("key =", key);
+      //   // console.log("Value changed was:", labelText);
+
+      //   value.forEach((val) => {
+      //     // console.log("exposes val", val);
+      //     // console.log("exposes category", category);
+      //     // console.log("exposes", toShow);
+      //     expose(category, val);
+      //   });
+      // } else {
+      //   value.forEach((val) => {
+      //     hide(category, val);
+      //   });
+      // }
+      // console.groupEnd();
     }
 
     return (
@@ -232,6 +269,9 @@ function Index({ type }: { type: string }) {
           }
           name={forNameId}
           as="select"
+          // onClick={(e) => {
+          //   console.log("eee", e.target.value);
+          // }}
         >
           {selectArray ? (
             selectArray.map((entries) => {

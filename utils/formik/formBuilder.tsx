@@ -445,26 +445,7 @@ export const formBuilder: FormBuilderInterface = {
         },
       ],
     },
-    dogOwnOtherPetsCurrentInfo: {
-      dogOwnOtherCurrentPets: [
-        {
-          title: "Do you own other pets?",
-          type: "select",
-          values: [
-            ["Select", ""],
-            ["Yes", "Yes"],
-            ["No", "No"],
-          ],
-        },
-      ],
-      dogOtherCurrentPetTypes: [
-        {
-          title: "What types of pets do you have?",
-          type: "text",
-          placeholder: "e.g. 2 Cats, A snake",
-        },
-      ],
-    },
+
     ownOtherDogsPastInfo: {
       ownOtherPastDogs: [
         {
@@ -472,13 +453,17 @@ export const formBuilder: FormBuilderInterface = {
           type: "select",
           values: [
             ["Select", ""],
-            ["As a child", "As a child"],
+            ["As a Child", "As a Child"],
             ["As an Adult", "As an Adult"],
             ["No", "No"],
           ],
           hidden: true,
           exposes: {
-            Yes: [
+            "As an Adult": [
+              "ownOtherDogsPastInfo>otherPastDogTime",
+              "ownOtherDogsPastInfo>otherDogFate",
+            ],
+            "As a Child": [
               "ownOtherDogsPastInfo>otherPastDogTime",
               "ownOtherDogsPastInfo>otherDogFate",
             ],
@@ -502,7 +487,26 @@ export const formBuilder: FormBuilderInterface = {
         },
       ],
     },
-
+    dogOwnOtherPetsCurrentInfo: {
+      dogOwnOtherCurrentPets: [
+        {
+          title: "Do you own other pets?",
+          type: "select",
+          values: [
+            ["Select", ""],
+            ["Yes", "Yes"],
+            ["No", "No"],
+          ],
+        },
+      ],
+      dogOtherCurrentPetTypes: [
+        {
+          title: "What types of pets do you have?",
+          type: "text",
+          placeholder: "e.g. 2 Cats, A snake",
+        },
+      ],
+    },
     dogAwareOfCostsAndLegal: [
       {
         title:
@@ -624,7 +628,7 @@ export const formBuilder: FormBuilderInterface = {
           type: "select",
           values: [
             ["Select", ""],
-            ["As a child", "As a child"],
+            ["As a Child", "As a Child"],
             ["As an Adult", "As an Adult"],
             ["No", "No"],
           ],
