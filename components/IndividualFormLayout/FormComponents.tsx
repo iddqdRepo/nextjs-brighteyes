@@ -1,5 +1,17 @@
 import { clsx } from "clsx";
+import { Field } from "formik";
 import React from "react";
+import {
+  ivAboutQuestionsInterface,
+  ivDogMatchingQuestionsInterface,
+  ivCatMatchingQuestionsInterface,
+  ivHomeQuestionsInterface,
+  ivDogQuestionsInterface,
+  ivCatQuestionsInterface,
+  ivHearAboutUsInfoInterface,
+  AdoptionInitialValuesInterface,
+} from "../../interfaces/adoptionInitialValuesInterface";
+import { GiftAidInitialValuesInterface } from "../../interfaces/giftAidInitialValuesInterface";
 
 export const Label = ({
   text,
@@ -37,30 +49,65 @@ export function FieldSet({
     </fieldset>
   );
 }
-export function InputTextFormik({
+export const InputTextFormik = ({
+  labelText,
   forNameId,
   val,
   classN,
-  changeHandler,
+  type,
+  children,
 }: {
+  labelText: string;
   val: string;
   forNameId: string;
   classN?: string;
-  changeHandler: any;
-}) {
+  type?: string;
+  children: React.ReactNode;
+}) => {
   return (
-    <>
-      <input
+    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
+      <Label text={labelText} hFor={val} />
+
+      <Field
         className={clsx(
-          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-9 p-2.5 mb-4",
+          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
           classN
         )}
-        type="text"
         name={forNameId}
-        id={forNameId}
-        value={val}
-        onChange={changeHandler}
+        type={type && type}
       />
+      {children}
+    </div>
+  );
+};
+
+export const ErrorFormik = ({
+  err,
+  touch,
+  field,
+  parent,
+}: {
+  err: any;
+  touch: any;
+  field:
+    | keyof ivAboutQuestionsInterface
+    | keyof ivDogMatchingQuestionsInterface
+    | keyof ivCatMatchingQuestionsInterface
+    | keyof ivHomeQuestionsInterface
+    | keyof ivDogQuestionsInterface
+    | keyof ivCatQuestionsInterface
+    | keyof ivHearAboutUsInfoInterface;
+  parent:
+    | keyof AdoptionInitialValuesInterface
+    | keyof GiftAidInitialValuesInterface;
+}) => {
+  return (
+    <>
+      {err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
+        <div className="text-xs text-red-600">{err?.[parent]?.[field]}</div>
+      ) : (
+        <div className="mt-4"></div>
+      )}
     </>
   );
-}
+};
