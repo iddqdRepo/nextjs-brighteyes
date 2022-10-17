@@ -375,14 +375,6 @@ export const formBuilder: FormBuilderInterface = {
         },
       ],
     },
-
-    exerciseType: [
-      {
-        title: "What type of exercise will your dog receive?",
-        type: "text",
-        placeholder: "e.g. Walking, playing fetch",
-      },
-    ],
     exerciseTime: [
       {
         title: "How much daily exercise will you give your dog?",
@@ -390,6 +382,14 @@ export const formBuilder: FormBuilderInterface = {
         placeholder: "e.g. 2 Hours",
       },
     ],
+    exerciseType: [
+      {
+        title: "What type of exercise will your dog receive?",
+        type: "text",
+        placeholder: "e.g. Walking, playing fetch",
+      },
+    ],
+
     dogSleepLocation: [
       {
         title: "Where will your dog sleep at night?",
@@ -497,6 +497,9 @@ export const formBuilder: FormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          exposes: {
+            Yes: ["dogOwnOtherPetsCurrentInfo>dogOtherCurrentPetTypes"],
+          },
         },
       ],
       dogOtherCurrentPetTypes: [
@@ -504,6 +507,7 @@ export const formBuilder: FormBuilderInterface = {
           title: "What types of pets do you have?",
           type: "text",
           placeholder: "e.g. 2 Cats, A snake",
+          hidden: true,
         },
       ],
     },
@@ -685,7 +689,7 @@ export const formBuilder: FormBuilderInterface = {
   hearAboutUsInfo: {
     hearAboutUs: [
       {
-        title: "What SEX of cat are you looking for?",
+        title: "How did you hear about Bright Eyes?",
         type: "select",
         values: [
           ["Select", ""],
@@ -699,12 +703,16 @@ export const formBuilder: FormBuilderInterface = {
           ["Web Search (e.g. Google)", "Web Search (e.g. Google)"],
           ["Other", "Other"],
         ],
+        exposes: {
+          Other: ["other"],
+        },
       },
     ],
     other: [
       {
         title: "We'd love to know where you heard of us!",
         type: "text",
+        hidden: true,
         placeholder:
           "It lets us know how to advertise ourselves and help more animals!",
       },

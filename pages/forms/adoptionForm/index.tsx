@@ -29,9 +29,7 @@ function Index({ type }: { type: string }) {
     ^ Flattened with the following recursive function instead of manually to keep the object path
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
    */
-    // let tempEntries = Object.entries(formBuilder);
     let tempObj: any = {};
-
     const flattenObj = (objToFlatten: keyof FormBuilderInterface) => {
       let result = {} as tempObjInterface;
       // console.log("objToFlatten", objToFlatten);
@@ -41,39 +39,26 @@ function Index({ type }: { type: string }) {
           const tempFlatten = flattenObj(v);
 
           for (const [j, jValue] of Object.entries(tempFlatten)) {
-            // console.log("j =", j, "tempFlatten[j] =", jValue);
             /*
              * result needs to be joined with ">" because formik splits on "."
              * which makes flattening pointless as it's rebuilt in initialValues
              * when passed into <Field name={}/> making initialValues not Match toShow
              * this causes bugs on expose() etc
              */
-            // console.log(
-            //   " result[i + " > " + j] = temp[j] ",
-            //   (result[i + ">" + j] = jValue)
-            // );
+
             result[i + ">" + j] = jValue;
           }
         } else {
           result[i] = v[0];
         }
       }
-      //console.log("result =", result);
       return result;
     };
-    //console.log("tempEntries =", tempEntries);
 
     for (const [key, value] of Object.entries(formBuilder)) {
-      //console.log("key = ", key);
-      //console.log("value =", value);
-      // console.log(
-      //   "formBuilder[nest[0]]",
-      //   formBuilder[key as keyof FormBuilderInterface]
-      // );
       tempObj[key] = flattenObj(value);
     }
 
-    //console.log("tempObj = ", tempObj);
     setToShow({ ...tempObj });
   }, []);
 
@@ -90,12 +75,21 @@ function Index({ type }: { type: string }) {
       <label
         htmlFor={hFor}
         className={clsx(
-          "block mb-2 w-48 text-center h-10 text-sm font-medium font-poppins text-gray-900 dark:text-gray-300",
+          "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900 ",
           classN
         )}
       >
         {text}
       </label>
+      // <label
+      //   htmlFor={hFor}
+      //   className={clsx(
+      //     "flex flex-col mb-2 text-center w-48 items-center justify-end  h-10 text-sm font-medium font-poppins text-gray-900 ",
+      //     classN
+      //   )}
+      // >
+      //   {text}
+      // </label>
     );
   }
 
@@ -115,7 +109,7 @@ function Index({ type }: { type: string }) {
     children: React.ReactNode;
   }) => {
     return (
-      <div className="flex flex-col items-center justify-center mb-4 mr-2">
+      <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
         <Label text={labelText} hFor={val} />
 
         <Field
@@ -131,67 +125,97 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const expose = (
+  const exposeOrHideFields = (
     category: keyof InitialValuesInterface,
     val:
       | keyof ivHomeQuestionsInterface
       | keyof ivDogQuestionsInterface
       | keyof ivCatQuestionsInterface
+      | keyof ivHearAboutUsInfoInterface,
+    hideOrExpose: string
   ) => {
     let exposeTemp = toShow as InitialValuesInterface;
 
     if (category === "homeQuestions") {
-      exposeTemp[category][val as keyof ivHomeQuestionsInterface].hidden =
-        false;
+      if (hideOrExpose === "expose") {
+        exposeTemp[category][val as keyof ivHomeQuestionsInterface].hidden =
+          false;
+      } else {
+        exposeTemp[category][val as keyof ivHomeQuestionsInterface].hidden =
+          true;
+      }
     }
     if (category === "dogQuestions") {
-      // console.log("EXPOSING: ", exposeTemp[category][val]);
-      exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden = false;
+      if (hideOrExpose === "expose") {
+        exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden =
+          false;
+      } else {
+        exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden =
+          true;
+      }
     }
     if (category === "catQuestions") {
-      exposeTemp[category][val as keyof ivCatQuestionsInterface].hidden = false;
+      if (hideOrExpose === "expose") {
+        exposeTemp[category][val as keyof ivCatQuestionsInterface].hidden =
+          false;
+      } else {
+        exposeTemp[category][val as keyof ivCatQuestionsInterface].hidden =
+          true;
+      }
+    }
+    if (category === "hearAboutUsInfo") {
+      if (hideOrExpose === "expose") {
+        exposeTemp[category][val as keyof ivHearAboutUsInfoInterface].hidden =
+          false;
+      } else {
+        exposeTemp[category][val as keyof ivHearAboutUsInfoInterface].hidden =
+          true;
+      }
     }
     setToShow(exposeTemp);
   };
 
-  const hide = (
-    category: keyof InitialValuesInterface,
-    val:
-      | keyof ivHomeQuestionsInterface
-      | keyof ivDogQuestionsInterface
-      | keyof ivCatQuestionsInterface
+  const handleExposeAndHideFields = (
+    ev: { target: any },
+    exposes: {
+      [key: string]: (
+        | keyof ivHomeQuestionsInterface
+        | keyof ivDogQuestionsInterface
+        | keyof ivCatQuestionsInterface
+      )[];
+    },
+    category: keyof InitialValuesInterface
   ) => {
-    let exposeTemp = toShow as InitialValuesInterface;
-
-    if (category === "homeQuestions") {
-      exposeTemp[category][val as keyof ivHomeQuestionsInterface].hidden = true;
+    for (const [key, value] of Object.entries(exposes)) {
+      if (ev.target.value === key) {
+        value.forEach((val) => {
+          console.log("exposing", category, val);
+          exposeOrHideFields(category, val, "expose");
+        });
+      } else {
+        if (
+          //^ This added because "As an Adult" and "As a Child" both reveal the same hidden fields,
+          //^ this stops them being hidden if "As an Adult" is selected then switched to "As a Child"
+          ev.target.value !== "As an Adult" &&
+          ev.target.value !== "As a Child"
+        ) {
+          value.forEach((val) => {
+            exposeOrHideFields(category, val, "hide");
+          });
+        }
+      }
     }
-    if (
-      category === "dogQuestions" &&
-      exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden !== true
-    ) {
-      // console.log("HIDING: ", exposeTemp[category][val]);
-
-      exposeTemp[category][val as keyof ivDogQuestionsInterface].hidden = true;
-    }
-    if (category === "catQuestions") {
-      exposeTemp[category][val as keyof ivCatQuestionsInterface].hidden = true;
-    }
-    setToShow(exposeTemp);
   };
 
   const DropdownFormik = ({
     labelText,
-    val,
     selectArray,
     children,
     forNameId,
     exposes,
-    // path,
     category,
   }: {
     labelText: string;
-    val: string;
     selectArray: string[];
     children: React.ReactNode;
     forNameId: string;
@@ -205,63 +229,8 @@ function Index({ type }: { type: string }) {
     path?: string;
     category: keyof InitialValuesInterface;
   }) => {
-    if (exposes) {
-      for (const [key, value] of Object.entries(exposes)) {
-        // console.log("NEW  KEY", key, "NEW VALUE", value);
-
-        if (val !== key) {
-          if (
-            forNameId === "dogQuestions.ownOtherDogsPastInfo>ownOtherPastDogs"
-          ) {
-            console.log("KEt = ", key);
-          }
-          value.forEach((val) => {
-            hide(category, val);
-          });
-        }
-        if (val === key) {
-          // console.group(path);
-          // console.log("key =", key);
-          // console.log("Value changed was:", labelText);
-
-          value.forEach((val) => {
-            // console.log("exposes val", val);
-            // console.log("exposes category", category);
-            // console.log("exposes", toShow);
-            expose(category, val);
-          });
-        }
-        //  else {
-        //   value.forEach((val) => {
-        //     hide(category, val);
-        //   });
-        // }
-      }
-      // const [key, value] = Object.entries(exposes)[0];
-      // console.log("key", key, "value", value);
-      // console.log("forNameId", forNameId);
-      // console.log("category", category);
-      // if (val === key) {
-      //   // console.group(path);
-      //   // console.log("key =", key);
-      //   // console.log("Value changed was:", labelText);
-
-      //   value.forEach((val) => {
-      //     // console.log("exposes val", val);
-      //     // console.log("exposes category", category);
-      //     // console.log("exposes", toShow);
-      //     expose(category, val);
-      //   });
-      // } else {
-      //   value.forEach((val) => {
-      //     hide(category, val);
-      //   });
-      // }
-      // console.groupEnd();
-    }
-
     return (
-      <div className="flex flex-col items-center justify-center mb-4 mr-2">
+      <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
         <Label text={labelText} hFor={forNameId} />
         <Field
           className={
@@ -269,9 +238,11 @@ function Index({ type }: { type: string }) {
           }
           name={forNameId}
           as="select"
-          // onClick={(e) => {
-          //   console.log("eee", e.target.value);
-          // }}
+          onClick={(e: { target: { value: any } }) => {
+            if (e.target.value && exposes) {
+              handleExposeAndHideFields(e, exposes, category);
+            }
+          }}
         >
           {selectArray ? (
             selectArray.map((entries) => {
@@ -290,27 +261,49 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  // const CheckboxPlanningFormik = ({}) => {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center mb-4 mr-2">
-  //       <div id="checkbox-group">Checked</div>
-  //       <div role="group" aria-labelledby="checkbox-group">
-  //         <label>
-  //           <Field type="checkbox" name="checked" value="Yes" />
-  //           One
-  //         </label>
-  //         <label>
-  //           <Field type="checkbox" name="checked" value="Yes" />
-  //           Two
-  //         </label>
-  //         <label>
-  //           <Field type="checkbox" name="checked" value="Yes" />
-  //           Three
-  //         </label>
-  //       </div>
-  //     </div>
-  //   );
-  // };
+  const CheckboxPlanningFormik = () => {
+    return (
+      <div className="flex flex-col items-center justify-center mb-4 mr-2">
+        <Label
+          text={"Are you planning any of the following in the next 6 months"}
+          hFor={""}
+          classN="w-60"
+        />
+        <label>
+          <Field
+            type="checkbox"
+            name={`homeQuestions["planning>baby"]`}
+            value="Yes"
+          />
+          {toShow.homeQuestions["planning>baby"].title}
+        </label>
+        <label>
+          <Field
+            type="checkbox"
+            name={`homeQuestions["planning>moving"]`}
+            value="Yes"
+          />
+          {toShow.homeQuestions["planning>moving"].title}
+        </label>
+        <label>
+          <Field
+            type="checkbox"
+            name={`homeQuestions["planning>workHoursChange"]`}
+            value="Yes"
+          />
+          {toShow.homeQuestions["planning>workHoursChange"].title}
+        </label>
+        <label>
+          <Field
+            type="checkbox"
+            name={`homeQuestions["planning>holiday"]`}
+            value="Yes"
+          />
+          {toShow.homeQuestions["planning>holiday"].title}
+        </label>
+      </div>
+    );
+  };
 
   const ErrorFormik = ({
     err,
@@ -399,7 +392,6 @@ function Index({ type }: { type: string }) {
                       <DropdownFormik
                         key={entry[0] as Key}
                         labelText={title}
-                        val={values[category][field]}
                         forNameId={`${category}.${entry[0]}`}
                         selectArray={entry[1].values}
                         exposes={entry[1].exposes ? entry[1].exposes : ""}
@@ -432,9 +424,9 @@ function Index({ type }: { type: string }) {
 
   return (
     <form className="flex flex-col items-center justify-center ">
-      <div className="flex justify-start w-3/6">
-        <div className="m-3 mt-10 text-xl font-semibold text-black-600">
-          Adopt Animal
+      <div className="flex justify-center w-3/6">
+        <div className="m-3 mt-10 text-2xl font-medium text-center text-gray-900 font-poppins">
+          Adopt a {type} Form
         </div>
         &nbsp;
       </div>
@@ -445,112 +437,141 @@ function Index({ type }: { type: string }) {
       >
         {({ values, errors, touched }) => (
           <div className="flex justify-center w-full">
-            <div className="flex flex-col items-center w-11/12 p-8 bg-white border rounded-md shadow-md">
+            <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
               <FieldSet legendText="About you">
-                <div className="flex ">
-                  <QuestionsMap
-                    category={"aboutQuestions"}
-                    values={values}
-                    touch={touched}
-                    err={errors}
-                  />
-                </div>
+                <QuestionsMap
+                  category={"aboutQuestions"}
+                  values={values}
+                  touch={touched}
+                  err={errors}
+                />
               </FieldSet>
               <FieldSet legendText={type + " Matching Questions"}>
-                <div className="flex ">
-                  {type === "Dog" ? (
-                    <QuestionsMap
-                      category={"dogMatchingQuestions"}
-                      values={values}
-                      touch={touched}
-                      err={errors}
-                    />
-                  ) : (
-                    <QuestionsMap
-                      category={"catMatchingQuestions"}
-                      values={values}
-                      touch={touched}
-                      err={errors}
-                    />
-                  )}
-                </div>
+                {type === "Dog" ? (
+                  <QuestionsMap
+                    category={"dogMatchingQuestions"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
+                ) : (
+                  <QuestionsMap
+                    category={"catMatchingQuestions"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
+                )}
               </FieldSet>
               <FieldSet legendText="Home Questions">
-                <div className="flex flex-wrap w-full">
+                <QuestionsMap
+                  category={"homeQuestions"}
+                  values={values}
+                  err={errors}
+                  touch={touched}
+                />
+                {toShow!.homeQuestions ? <CheckboxPlanningFormik /> : <></>}
+              </FieldSet>
+              <FieldSet legendText={type + " Questions"}>
+                {type === "Dog" ? (
                   <QuestionsMap
-                    category={"homeQuestions"}
+                    category={"dogQuestions"}
                     values={values}
                     err={errors}
                     touch={touched}
                   />
-                  {toShow!.homeQuestions ? (
-                    <div className="flex flex-col items-center justify-center mb-4 mr-2">
-                      <Label
-                        text={
-                          "Are you planning any of the following in the next 6 months"
-                        }
-                        hFor={""}
-                        classN="w-60"
-                      />
-                      <label>
-                        <Field
-                          type="checkbox"
-                          name={`homeQuestions["planning>baby"]`}
-                          value="Yes"
-                        />
-                        {toShow.homeQuestions["planning>baby"].title}
-                      </label>
-                      <label>
-                        <Field
-                          type="checkbox"
-                          name={`homeQuestions["planning>moving"]`}
-                          value="Yes"
-                        />
-                        {toShow.homeQuestions["planning>moving"].title}
-                      </label>
-                      <label>
-                        <Field
-                          type="checkbox"
-                          name={`homeQuestions["planning>workHoursChange"]`}
-                          value="Yes"
-                        />
-                        {toShow.homeQuestions["planning>workHoursChange"].title}
-                      </label>
-                      <label>
-                        <Field
-                          type="checkbox"
-                          name={`homeQuestions["planning>holiday"]`}
-                          value="Yes"
-                        />
-                        {toShow.homeQuestions["planning>holiday"].title}
-                      </label>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                ) : (
+                  <QuestionsMap
+                    category={"catQuestions"}
+                    values={values}
+                    err={errors}
+                    touch={touched}
+                  />
+                )}
+              </FieldSet>
+              <FieldSet legendText={"Legal Agreement"}>
+                <ul className="flex flex-col ">
+                  <span className="mb-5 font-medium text-gray-900 font-poppins">
+                    By submitting this form you understand and agree to the
+                    following:
+                  </span>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that the {type} will be rehomed to me as a
+                    house pet and is not to be kept closed in a kennel or shed,
+                    the {type} will NOT be chained up outside.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    The {type} is being rehomed to me as a companion, not as a
+                    guard animal or for fighting or breeding purposes
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    Bright Eyes Animal Sanctuary will at all times retain
+                    ownership of the {type}, and reserve the right to reclaim it
+                    if they feel the {type} is not being fed, housed or cared
+                    for to their satisfaction.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    Should I wish to no longer care for the {type} I will return
+                    it to Bright Eyes Animal Sanctuary. I will not sell, give
+                    away or dispose of the {type} in any other way. The {type}{" "}
+                    may only be “Put to Sleep” on the advice of a qualified vet,
+                    and Bright Eyes Animal Sanctuary must be notified in
+                    Advance.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that when I&apos;m away on holiday, I will need
+                    to place the {type} in registered kennels or cattery, or
+                    arrange for the {type} to be looked after by a responsible
+                    adult.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that all {type}&apos;s leaving Bright Eyes
+                    Animal Sanctuary must be neutered. Where the {type} has been
+                    rehomed but is not neutered I agree that I will return the{" "}
+                    {type} to be neutered or undertake to ensure that the
+                    neutering is carried out by a fully qualified vet.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that full liability for any veterinary fees, or
+                    costs arising from any incident, damages or injury incurred
+                    at any future date will be mine and remain mine while I am
+                    responsible for the {type}.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that although Bright Eyes Animal Sanctuary
+                    tells me everything they know about the {type}, they do not
+                    always have a complete history and therefore cannot
+                    guarantee behaviour etc.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I confirm that Bright Eyes Animal Sanctuary may contact my
+                    landlord to confirm that my tenancy agreement allows pets.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I confirm that Bright Eyes Animal Sanctuary may contact my
+                    Vet to confirm that I am a responsible owner.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    I understand that I must bring valid photographic I.D. when
+                    collecting the {type} I am rehoming.
+                  </li>
+                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                    A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 125 : 30}{" "}
+                    IS REQUESTED.
+                  </li>
+                </ul>
+              </FieldSet>
+              <FieldSet legendText={"How Did you hear about us?"}>
+                <div className="flex ">
+                  <QuestionsMap
+                    category={"hearAboutUsInfo"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
                 </div>
               </FieldSet>
-              {/* //*---------------------------------------------------------------------------------------------------------------- */}
-              <FieldSet legendText={type + " Questions"}>
-                <div className="flex flex-wrap w-full ">
-                  {type === "Dog" ? (
-                    <QuestionsMap
-                      category={"dogQuestions"}
-                      values={values}
-                      err={errors}
-                      touch={touched}
-                    />
-                  ) : (
-                    <QuestionsMap
-                      category={"catQuestions"}
-                      values={values}
-                      err={errors}
-                      touch={touched}
-                    />
-                  )}
-                </div>
-              </FieldSet>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
+              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
             </div>
           </div>
         )}
