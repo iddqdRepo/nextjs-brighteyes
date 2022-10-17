@@ -1,4 +1,4 @@
-export interface FormBuilderInterface {
+export interface AdoptionFormBuilderInterface {
   aboutQuestions: aboutQuestionsInterface;
   dogMatchingQuestions: dogMatchingQuestionsInterface;
   catMatchingQuestions: catMatchingQuestionsInterface;

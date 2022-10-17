@@ -1,4 +1,4 @@
-export interface InitialValuesInterface {
+export interface AdoptionInitialValuesInterface {
   type: string;
   aboutQuestions: ivAboutQuestionsInterface;
   dogMatchingQuestions: ivDogMatchingQuestionsInterface;
