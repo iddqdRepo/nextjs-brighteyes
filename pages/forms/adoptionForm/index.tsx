@@ -1,6 +1,6 @@
 import React, { Key, useState, useEffect } from "react";
 import { Field, Formik } from "formik";
-import { FieldSet } from "../../../components/FormLayout/FormComponents";
+import { FieldSet } from "../../../components/IndividualFormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/initialValues";

@@ -33,7 +33,7 @@ export function FieldSet({
   return (
     <fieldset className="flex flex-col items-center w-full p-3 mb-10 border border-gray-300 border-solid">
       <legend className="text-sm">{legendText}</legend>
-      {children}
+      <div className="flex flex-wrap justify-center w-full">{children}</div>
     </fieldset>
   );
 }
