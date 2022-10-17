@@ -20,6 +20,10 @@ import {
   ivCatQuestionsInterface,
   ivHearAboutUsInfoInterface,
 } from "../../../interfaces/adoptionInitialValuesInterface";
+import {
+  FormikFormContainer,
+  FormPageTitle,
+} from "../../../components/IndividualFormLayout/CommonFormComponents";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -368,156 +372,148 @@ function Index({ type }: { type: string }) {
 
   return (
     <form className="flex flex-col items-center justify-center ">
-      <div className="flex justify-center w-3/6">
-        <div className="m-3 mt-10 text-2xl font-medium text-center text-gray-900 font-poppins">
-          Adopt a {type} Form
-        </div>
-        &nbsp;
-      </div>
+      <FormPageTitle title={` Adopt a ${type} Form`} />
       <Formik
         initialValues={adoptionInitialValues}
         validationSchema={AdoptionSchema}
         onSubmit={(data) => console.log(data)}
       >
         {({ values, errors, touched }) => (
-          <div className="flex justify-center w-full">
-            <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
-              <FieldSet legendText="About you">
+          <FormikFormContainer>
+            <FieldSet legendText="About you">
+              <QuestionsMap
+                category={"aboutQuestions"}
+                values={values}
+                touch={touched}
+                err={errors}
+              />
+            </FieldSet>
+            <FieldSet legendText={type + " Matching Questions"}>
+              {type === "Dog" ? (
                 <QuestionsMap
-                  category={"aboutQuestions"}
+                  category={"dogMatchingQuestions"}
                   values={values}
                   touch={touched}
                   err={errors}
                 />
-              </FieldSet>
-              <FieldSet legendText={type + " Matching Questions"}>
-                {type === "Dog" ? (
-                  <QuestionsMap
-                    category={"dogMatchingQuestions"}
-                    values={values}
-                    touch={touched}
-                    err={errors}
-                  />
-                ) : (
-                  <QuestionsMap
-                    category={"catMatchingQuestions"}
-                    values={values}
-                    touch={touched}
-                    err={errors}
-                  />
-                )}
-              </FieldSet>
-              <FieldSet legendText="Home Questions">
+              ) : (
                 <QuestionsMap
-                  category={"homeQuestions"}
+                  category={"catMatchingQuestions"}
+                  values={values}
+                  touch={touched}
+                  err={errors}
+                />
+              )}
+            </FieldSet>
+            <FieldSet legendText="Home Questions">
+              <QuestionsMap
+                category={"homeQuestions"}
+                values={values}
+                err={errors}
+                touch={touched}
+              />
+              {toShow!.homeQuestions ? <CheckboxPlanningFormik /> : <></>}
+            </FieldSet>
+            <FieldSet legendText={type + " Questions"}>
+              {type === "Dog" ? (
+                <QuestionsMap
+                  category={"dogQuestions"}
                   values={values}
                   err={errors}
                   touch={touched}
                 />
-                {toShow!.homeQuestions ? <CheckboxPlanningFormik /> : <></>}
-              </FieldSet>
-              <FieldSet legendText={type + " Questions"}>
-                {type === "Dog" ? (
-                  <QuestionsMap
-                    category={"dogQuestions"}
-                    values={values}
-                    err={errors}
-                    touch={touched}
-                  />
-                ) : (
-                  <QuestionsMap
-                    category={"catQuestions"}
-                    values={values}
-                    err={errors}
-                    touch={touched}
-                  />
-                )}
-              </FieldSet>
-              <FieldSet legendText={"Legal Agreement"}>
-                <ul className="flex flex-col ">
-                  <span className="mb-5 font-medium text-gray-900 font-poppins">
-                    By submitting this form you understand and agree to the
-                    following:
-                  </span>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that the {type} will be rehomed to me as a
-                    house pet and is not to be kept closed in a kennel or shed,
-                    the {type} will NOT be chained up outside.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    The {type} is being rehomed to me as a companion, not as a
-                    guard animal or for fighting or breeding purposes
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    Bright Eyes Animal Sanctuary will at all times retain
-                    ownership of the {type}, and reserve the right to reclaim it
-                    if they feel the {type} is not being fed, housed or cared
-                    for to their satisfaction.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    Should I wish to no longer care for the {type} I will return
-                    it to Bright Eyes Animal Sanctuary. I will not sell, give
-                    away or dispose of the {type} in any other way. The {type}{" "}
-                    may only be “Put to Sleep” on the advice of a qualified vet,
-                    and Bright Eyes Animal Sanctuary must be notified in
-                    Advance.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that when I&apos;m away on holiday, I will need
-                    to place the {type} in registered kennels or cattery, or
-                    arrange for the {type} to be looked after by a responsible
-                    adult.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that all {type}&apos;s leaving Bright Eyes
-                    Animal Sanctuary must be neutered. Where the {type} has been
-                    rehomed but is not neutered I agree that I will return the{" "}
-                    {type} to be neutered or undertake to ensure that the
-                    neutering is carried out by a fully qualified vet.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that full liability for any veterinary fees, or
-                    costs arising from any incident, damages or injury incurred
-                    at any future date will be mine and remain mine while I am
-                    responsible for the {type}.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that although Bright Eyes Animal Sanctuary
-                    tells me everything they know about the {type}, they do not
-                    always have a complete history and therefore cannot
-                    guarantee behaviour etc.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I confirm that Bright Eyes Animal Sanctuary may contact my
-                    landlord to confirm that my tenancy agreement allows pets.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I confirm that Bright Eyes Animal Sanctuary may contact my
-                    Vet to confirm that I am a responsible owner.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    I understand that I must bring valid photographic I.D. when
-                    collecting the {type} I am rehoming.
-                  </li>
-                  <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                    A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 125 : 30}{" "}
-                    IS REQUESTED.
-                  </li>
-                </ul>
-              </FieldSet>
-              <FieldSet legendText={"How Did you hear about us?"}>
-                <div className="flex ">
-                  <QuestionsMap
-                    category={"hearAboutUsInfo"}
-                    values={values}
-                    touch={touched}
-                    err={errors}
-                  />
-                </div>
-              </FieldSet>
-              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
-            </div>
-          </div>
+              ) : (
+                <QuestionsMap
+                  category={"catQuestions"}
+                  values={values}
+                  err={errors}
+                  touch={touched}
+                />
+              )}
+            </FieldSet>
+            <FieldSet legendText={"Legal Agreement"}>
+              <ul className="flex flex-col ">
+                <span className="mb-5 font-medium text-gray-900 font-poppins">
+                  By submitting this form you understand and agree to the
+                  following:
+                </span>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that the {type} will be rehomed to me as a house
+                  pet and is not to be kept closed in a kennel or shed, the{" "}
+                  {type} will NOT be chained up outside.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  The {type} is being rehomed to me as a companion, not as a
+                  guard animal or for fighting or breeding purposes
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  Bright Eyes Animal Sanctuary will at all times retain
+                  ownership of the {type}, and reserve the right to reclaim it
+                  if they feel the {type} is not being fed, housed or cared for
+                  to their satisfaction.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  Should I wish to no longer care for the {type} I will return
+                  it to Bright Eyes Animal Sanctuary. I will not sell, give away
+                  or dispose of the {type} in any other way. The {type} may only
+                  be “Put to Sleep” on the advice of a qualified vet, and Bright
+                  Eyes Animal Sanctuary must be notified in Advance.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that when I&apos;m away on holiday, I will need
+                  to place the {type} in registered kennels or cattery, or
+                  arrange for the {type} to be looked after by a responsible
+                  adult.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that all {type}&apos;s leaving Bright Eyes Animal
+                  Sanctuary must be neutered. Where the {type} has been rehomed
+                  but is not neutered I agree that I will return the {type} to
+                  be neutered or undertake to ensure that the neutering is
+                  carried out by a fully qualified vet.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that full liability for any veterinary fees, or
+                  costs arising from any incident, damages or injury incurred at
+                  any future date will be mine and remain mine while I am
+                  responsible for the {type}.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that although Bright Eyes Animal Sanctuary tells
+                  me everything they know about the {type}, they do not always
+                  have a complete history and therefore cannot guarantee
+                  behaviour etc.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I confirm that Bright Eyes Animal Sanctuary may contact my
+                  landlord to confirm that my tenancy agreement allows pets.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I confirm that Bright Eyes Animal Sanctuary may contact my Vet
+                  to confirm that I am a responsible owner.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  I understand that I must bring valid photographic I.D. when
+                  collecting the {type} I am rehoming.
+                </li>
+                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
+                  A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 125 : 30} IS
+                  REQUESTED.
+                </li>
+              </ul>
+            </FieldSet>
+            <FieldSet legendText={"How Did you hear about us?"}>
+              <div className="flex ">
+                <QuestionsMap
+                  category={"hearAboutUsInfo"}
+                  values={values}
+                  touch={touched}
+                  err={errors}
+                />
+              </div>
+            </FieldSet>
+            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+          </FormikFormContainer>
         )}
       </Formik>
     </form>
