@@ -3,14 +3,15 @@ import { Field, Formik } from "formik";
 import {
   FieldSet,
   Label,
+  ErrorFormik,
 } from "../../../components/IndividualFormLayout/FormComponents";
 import { clsx } from "clsx";
-import { AdoptionSchema } from "../../../utils/yup/yupSchema";
+import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
 import { adoptionInitialValues } from "../../../utils/formik/AdoptionInitialValues";
-import { formBuilder } from "../../../utils/formik/adoptionFormBuilder";
-import { FormBuilderInterface } from "../../../interfaces/formBuilderInterface";
+import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
+import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
 import {
-  InitialValuesInterface,
+  AdoptionInitialValuesInterface,
   ivAboutQuestionsInterface,
   ivHomeQuestionsInterface,
   ivDogMatchingQuestionsInterface,
@@ -18,10 +19,10 @@ import {
   ivDogQuestionsInterface,
   ivCatQuestionsInterface,
   ivHearAboutUsInfoInterface,
-} from "../../../interfaces/initialValuesInterface";
+} from "../../../interfaces/adoptionInitialValuesInterface";
 
 function Index({ type }: { type: string }) {
-  const [toShow, setToShow] = useState({} as InitialValuesInterface);
+  const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
 
   interface tempObjInterface {
     [key: string]: string;
@@ -33,7 +34,7 @@ function Index({ type }: { type: string }) {
     * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
    */
     let tempObj: any = {};
-    const flattenObj = (objToFlatten: keyof FormBuilderInterface) => {
+    const flattenObj = (objToFlatten: keyof AdoptionFormBuilderInterface) => {
       let result = {} as tempObjInterface;
       // console.log("objToFlatten", objToFlatten);
 
@@ -58,7 +59,7 @@ function Index({ type }: { type: string }) {
       return result;
     };
 
-    for (const [key, value] of Object.entries(formBuilder)) {
+    for (const [key, value] of Object.entries(adoptionFormBuilder)) {
       tempObj[key] = flattenObj(value);
     }
 
@@ -98,7 +99,7 @@ function Index({ type }: { type: string }) {
   };
 
   const exposeOrHideFields = (
-    category: keyof InitialValuesInterface,
+    category: keyof AdoptionInitialValuesInterface,
     val:
       | keyof ivHomeQuestionsInterface
       | keyof ivDogQuestionsInterface
@@ -106,7 +107,7 @@ function Index({ type }: { type: string }) {
       | keyof ivHearAboutUsInfoInterface,
     hideOrExpose: string
   ) => {
-    let exposeTemp = toShow as InitialValuesInterface;
+    let exposeTemp = toShow as AdoptionInitialValuesInterface;
 
     if (category === "homeQuestions") {
       if (hideOrExpose === "expose") {
@@ -156,7 +157,7 @@ function Index({ type }: { type: string }) {
         | keyof ivCatQuestionsInterface
       )[];
     },
-    category: keyof InitialValuesInterface
+    category: keyof AdoptionInitialValuesInterface
   ) => {
     for (const [key, value] of Object.entries(exposes)) {
       if (ev.target.value === key) {
@@ -199,7 +200,7 @@ function Index({ type }: { type: string }) {
       )[];
     };
     path?: string;
-    category: keyof InitialValuesInterface;
+    category: keyof AdoptionInitialValuesInterface;
   }) => {
     return (
       <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
@@ -277,42 +278,13 @@ function Index({ type }: { type: string }) {
     );
   };
 
-  const ErrorFormik = ({
-    err,
-    touch,
-    field,
-    parent,
-  }: {
-    err: any;
-    touch: any;
-    field:
-      | keyof ivAboutQuestionsInterface
-      | keyof ivDogMatchingQuestionsInterface
-      | keyof ivCatMatchingQuestionsInterface
-      | keyof ivHomeQuestionsInterface
-      | keyof ivDogQuestionsInterface
-      | keyof ivCatQuestionsInterface
-      | keyof ivHearAboutUsInfoInterface;
-    parent: keyof InitialValuesInterface;
-  }) => {
-    return (
-      <>
-        {err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
-          <div className="text-xs text-red-600">{err?.[parent]?.[field]}</div>
-        ) : (
-          <div className="mt-4"></div>
-        )}
-      </>
-    );
-  };
-
   const QuestionsMap = ({
     category,
     values,
     err,
     touch,
   }: {
-    category: keyof InitialValuesInterface;
+    category: keyof AdoptionInitialValuesInterface;
     values: any;
     err: any;
     touch: any;

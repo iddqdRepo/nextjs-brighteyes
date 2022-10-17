@@ -1,4 +1,4 @@
-import { FormBuilderInterface } from "../../interfaces/formBuilderInterface";
+import { AdoptionFormBuilderInterface } from "../../interfaces/adoptionFormBuilderInterface";
 
 /* 
 ^ AN OBJECT THAT IS USED TO BUILD THE FORMS. 
@@ -12,7 +12,7 @@ import { FormBuilderInterface } from "../../interfaces/formBuilderInterface";
  * type: type of form item e.g. checkbox, select, text
  */
 
-export const formBuilder: FormBuilderInterface = {
+export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
   aboutQuestions: {
     title: [{ title: "Title", type: "text" }],
     name: [{ title: "Name", type: "text" }],
