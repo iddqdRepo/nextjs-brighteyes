@@ -1,9 +1,12 @@
 import React, { Key, useState, useEffect } from "react";
 import { Field, Formik } from "formik";
-import { FieldSet } from "../../../components/IndividualFormLayout/FormComponents";
+import {
+  FieldSet,
+  Label,
+} from "../../../components/IndividualFormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
-import { adoptionInitialValues } from "../../../utils/formik/initialValues";
+import { adoptionInitialValues } from "../../../utils/formik/AdoptionInitialValues";
 import { formBuilder } from "../../../utils/formik/formBuilder";
 import { FormBuilderInterface } from "../../../interfaces/formBuilderInterface";
 import {
@@ -61,37 +64,6 @@ function Index({ type }: { type: string }) {
 
     setToShow({ ...tempObj });
   }, []);
-
-  function Label({
-    text,
-    hFor,
-    classN,
-  }: {
-    text: string;
-    hFor: string;
-    classN?: string;
-  }) {
-    return (
-      <label
-        htmlFor={hFor}
-        className={clsx(
-          "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900 ",
-          classN
-        )}
-      >
-        {text}
-      </label>
-      // <label
-      //   htmlFor={hFor}
-      //   className={clsx(
-      //     "flex flex-col mb-2 text-center w-48 items-center justify-end  h-10 text-sm font-medium font-poppins text-gray-900 ",
-      //     classN
-      //   )}
-      // >
-      //   {text}
-      // </label>
-    );
-  }
 
   const InputTextFormik = ({
     labelText,
