@@ -1,27 +1,27 @@
 import { clsx } from "clsx";
 import React from "react";
 
-export function Label({
+export const Label = ({
   text,
-  // hFor,
+  hFor,
   classN,
 }: {
   text: string;
   hFor: string;
   classN?: string;
-}) {
+}) => {
   return (
     <label
-      htmlFor="productTitle"
+      htmlFor={hFor}
       className={clsx(
-        "block mb-2 text-sm font-medium font-poppins text-gray-900 dark:text-gray-300",
+        "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900 ",
         classN
       )}
     >
       {text}
     </label>
   );
-}
+};
 
 export function FieldSet({
   legendText,
