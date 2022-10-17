@@ -6,7 +6,7 @@ import {
 } from "../../../components/IndividualFormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/yupSchema";
-import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
+import { adoptionInitialValues } from "../../../utils/formik/AdoptionInitialValues";
 import { formBuilder } from "../../../utils/formik/adoptionFormBuilder";
 import { FormBuilderInterface } from "../../../interfaces/formBuilderInterface";
 import {
