@@ -7,7 +7,7 @@ import {
 } from "../../../components/IndividualFormLayout/FormComponents";
 import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
-import { adoptionInitialValues } from "../../../utils/formik/AdoptionInitialValues";
+
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
 import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
 import {
@@ -24,6 +24,7 @@ import {
   FormikFormContainer,
   FormPageTitle,
 } from "../../../components/IndividualFormLayout/CommonFormComponents";
+import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);

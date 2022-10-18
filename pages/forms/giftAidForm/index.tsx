@@ -9,7 +9,7 @@ import {
   GiftAidSection,
   LegalAgreementSection,
 } from "../../../components/IndividualFormLayout/GiftAidFormPageLayout";
-import { giftAidInitialValues } from "../../../utils/formik/GiftAidInitialValues";
+import { giftAidInitialValues } from "../../../utils/formik/giftAidInitialValues";
 import { GiftAidSchema } from "../../../utils/yup/giftAidYupSchema";
 
 const Index = () => {
