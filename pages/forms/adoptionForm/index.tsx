@@ -4,10 +4,9 @@ import {
   FieldSet,
   Label,
   ErrorFormik,
+  InputTextFormik,
 } from "../../../components/IndividualFormLayout/FormComponents";
-import { clsx } from "clsx";
 import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
-
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
 import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
 import {
@@ -25,6 +24,8 @@ import {
   FormPageTitle,
 } from "../../../components/IndividualFormLayout/CommonFormComponents";
 import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
+import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
+import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -36,7 +37,7 @@ function Index({ type }: { type: string }) {
     /*
     ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
     ^ Flattened with the following recursive function instead of manually to keep the object path
-    * e.g."gardenOrYardInfo.gardenOrYardSize" so it can be stored in the correct place in the db
+    * e.g."gardenOrYardInfo>gardenOrYardSize" so it can be stored in the correct place in the db
    */
     let tempObj: any = {};
     const flattenObj = (objToFlatten: keyof AdoptionFormBuilderInterface) => {
@@ -70,38 +71,6 @@ function Index({ type }: { type: string }) {
 
     setToShow({ ...tempObj });
   }, []);
-
-  const InputTextFormik = ({
-    labelText,
-    forNameId,
-    val,
-    classN,
-    type,
-    children,
-  }: {
-    labelText: string;
-    val: string;
-    forNameId: string;
-    classN?: string;
-    type?: string;
-    children: React.ReactNode;
-  }) => {
-    return (
-      <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-        <Label text={labelText} hFor={val} />
-
-        <Field
-          className={clsx(
-            "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
-            classN
-          )}
-          name={forNameId}
-          type={type && type}
-        />
-        {children}
-      </div>
-    );
-  };
 
   const exposeOrHideFields = (
     category: keyof AdoptionInitialValuesInterface,
@@ -238,51 +207,6 @@ function Index({ type }: { type: string }) {
       </div>
     );
   };
-
-  const CheckboxPlanningFormik = () => {
-    return (
-      <div className="flex flex-col items-center justify-center mb-4 mr-2">
-        <Label
-          text={"Are you planning any of the following in the next 6 months"}
-          hFor={""}
-          classN="w-60"
-        />
-        <label>
-          <Field
-            type="checkbox"
-            name={`homeQuestions["planning>baby"]`}
-            value="Yes"
-          />
-          {toShow.homeQuestions["planning>baby"].title}
-        </label>
-        <label>
-          <Field
-            type="checkbox"
-            name={`homeQuestions["planning>moving"]`}
-            value="Yes"
-          />
-          {toShow.homeQuestions["planning>moving"].title}
-        </label>
-        <label>
-          <Field
-            type="checkbox"
-            name={`homeQuestions["planning>workHoursChange"]`}
-            value="Yes"
-          />
-          {toShow.homeQuestions["planning>workHoursChange"].title}
-        </label>
-        <label>
-          <Field
-            type="checkbox"
-            name={`homeQuestions["planning>holiday"]`}
-            value="Yes"
-          />
-          {toShow.homeQuestions["planning>holiday"].title}
-        </label>
-      </div>
-    );
-  };
-
   const QuestionsMap = ({
     category,
     values,
@@ -313,64 +237,47 @@ function Index({ type }: { type: string }) {
             | keyof ivDogQuestionsInterface
             | keyof ivCatQuestionsInterface
             | keyof ivHearAboutUsInfoInterface;
-          return (
-            <>
-              {entry[1].type === "text" ? (
-                !entry[1].hidden ? (
-                  <InputTextFormik
-                    key={entry[0] as Key}
-                    labelText={title}
-                    val={values[category][field]}
-                    forNameId={`${category}.${entry[0]}`}
-                    type={entry[0] === "email" ? "email" : ""}
-                  >
-                    <ErrorFormik
-                      err={err}
-                      touch={touch}
-                      field={field}
-                      parent={category}
-                    />
-                  </InputTextFormik>
-                ) : (
-                  <></>
-                )
-              ) : (
-                <>
-                  {entry[1].type === "select" ? (
-                    !entry[1].hidden ? (
-                      <DropdownFormik
-                        key={entry[0] as Key}
-                        labelText={title}
-                        forNameId={`${category}.${entry[0]}`}
-                        selectArray={entry[1].values}
-                        exposes={entry[1].exposes ? entry[1].exposes : ""}
-                        path={`${category}.${entry[0]}`}
-                        category={category}
-                      >
-                        <ErrorFormik
-                          err={err}
-                          touch={touch}
-                          field={field}
-                          parent={category}
-                        />
-                      </DropdownFormik>
-                    ) : (
-                      <></>
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </>
-              )}
-            </>
-          );
+          return entry[1].type === "text"
+            ? !entry[1].hidden && (
+                <InputTextFormik
+                  key={entry[0] as Key}
+                  labelText={title}
+                  val={values[category][field]}
+                  forNameId={`${category}.${entry[0]}`}
+                  type={entry[0] === "email" ? "email" : ""}
+                >
+                  <ErrorFormik
+                    err={err}
+                    touch={touch}
+                    field={field}
+                    parent={category}
+                  />
+                </InputTextFormik>
+              )
+            : entry[1].type === "select" && !entry[1].hidden && (
+                <DropdownFormik
+                  key={entry[0] as Key}
+                  labelText={title}
+                  forNameId={`${category}.${entry[0]}`}
+                  selectArray={entry[1].values}
+                  exposes={entry[1].exposes ? entry[1].exposes : ""}
+                  path={`${category}.${entry[0]}`}
+                  category={category}
+                >
+                  <ErrorFormik
+                    err={err}
+                    touch={touch}
+                    field={field}
+                    parent={category}
+                  />
+                </DropdownFormik>
+              );
         })}
       </>
     ) : (
       <div>loading</div>
     );
   };
-
   return (
     <form className="flex flex-col items-center justify-center ">
       <FormPageTitle title={` Adopt a ${type} Form`} />
@@ -413,7 +320,11 @@ function Index({ type }: { type: string }) {
                 err={errors}
                 touch={touched}
               />
-              {toShow!.homeQuestions ? <CheckboxPlanningFormik /> : <></>}
+              {toShow!.homeQuestions ? (
+                <CheckboxPlanningFormik stateField={toShow} />
+              ) : (
+                <></>
+              )}
             </FieldSet>
             <FieldSet legendText={type + " Questions"}>
               {type === "Dog" ? (
@@ -432,77 +343,7 @@ function Index({ type }: { type: string }) {
                 />
               )}
             </FieldSet>
-            <FieldSet legendText={"Legal Agreement"}>
-              <ul className="flex flex-col ">
-                <span className="mb-5 font-medium text-gray-900 font-poppins">
-                  By submitting this form you understand and agree to the
-                  following:
-                </span>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that the {type} will be rehomed to me as a house
-                  pet and is not to be kept closed in a kennel or shed, the{" "}
-                  {type} will NOT be chained up outside.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  The {type} is being rehomed to me as a companion, not as a
-                  guard animal or for fighting or breeding purposes
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  Bright Eyes Animal Sanctuary will at all times retain
-                  ownership of the {type}, and reserve the right to reclaim it
-                  if they feel the {type} is not being fed, housed or cared for
-                  to their satisfaction.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  Should I wish to no longer care for the {type} I will return
-                  it to Bright Eyes Animal Sanctuary. I will not sell, give away
-                  or dispose of the {type} in any other way. The {type} may only
-                  be “Put to Sleep” on the advice of a qualified vet, and Bright
-                  Eyes Animal Sanctuary must be notified in Advance.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that when I&apos;m away on holiday, I will need
-                  to place the {type} in registered kennels or cattery, or
-                  arrange for the {type} to be looked after by a responsible
-                  adult.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that all {type}&apos;s leaving Bright Eyes Animal
-                  Sanctuary must be neutered. Where the {type} has been rehomed
-                  but is not neutered I agree that I will return the {type} to
-                  be neutered or undertake to ensure that the neutering is
-                  carried out by a fully qualified vet.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that full liability for any veterinary fees, or
-                  costs arising from any incident, damages or injury incurred at
-                  any future date will be mine and remain mine while I am
-                  responsible for the {type}.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that although Bright Eyes Animal Sanctuary tells
-                  me everything they know about the {type}, they do not always
-                  have a complete history and therefore cannot guarantee
-                  behaviour etc.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I confirm that Bright Eyes Animal Sanctuary may contact my
-                  landlord to confirm that my tenancy agreement allows pets.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I confirm that Bright Eyes Animal Sanctuary may contact my Vet
-                  to confirm that I am a responsible owner.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  I understand that I must bring valid photographic I.D. when
-                  collecting the {type} I am rehoming.
-                </li>
-                <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-                  A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 125 : 30} IS
-                  REQUESTED.
-                </li>
-              </ul>
-            </FieldSet>
+            <LegalAgreementSection type={type} />
             <FieldSet legendText={"How Did you hear about us?"}>
               <div className="flex ">
                 <QuestionsMap
@@ -513,7 +354,7 @@ function Index({ type }: { type: string }) {
                 />
               </div>
             </FieldSet>
-            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+            <pre>{JSON.stringify(values, null, 2)}</pre>
           </FormikFormContainer>
         )}
       </Formik>

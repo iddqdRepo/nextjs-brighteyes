@@ -8,7 +8,8 @@ import {
   AboutYouSection,
   GiftAidSection,
   LegalAgreementSection,
-} from "../../../components/IndividualFormLayout/GiftAidFormPageLayout";
+} from "../../../components/IndividualFormLayout/GiftAidFormLayout";
+
 import { giftAidInitialValues } from "../../../utils/formik/giftAidInitialValues";
 import { GiftAidSchema } from "../../../utils/yup/giftAidYupSchema";
 
