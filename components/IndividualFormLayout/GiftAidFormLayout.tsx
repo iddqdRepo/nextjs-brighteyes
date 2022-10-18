@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldSet } from "./FormComponents";
+import { FieldSet } from "./CommonFormComponents";
 import {
   QuestionsMap,
   CheckboxGiftAidFormik,

@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import React from "react";
 import { AdoptionInitialValuesInterface } from "../../interfaces/adoptionInitialValuesInterface";
-import { Label } from "./FormComponents";
+import { Label } from "./CommonFormComponents";
 
 export const CheckboxPlanningFormik = ({
   stateField,

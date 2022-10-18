@@ -3,7 +3,7 @@ import { Key } from "react";
 import { ivAboutQuestionsInterface } from "../../interfaces/adoptionInitialValuesInterface";
 import { GiftAidInitialValuesInterface } from "../../interfaces/giftAidInitialValuesInterface";
 import { giftAidFormBuilder } from "../../utils/formik/giftAidFormBuilder";
-import { InputTextFormik, ErrorFormik } from "./FormComponents";
+import { InputTextFormik, ErrorFormik } from "./CommonFormComponents";
 
 export const QuestionsMap = ({
   category,

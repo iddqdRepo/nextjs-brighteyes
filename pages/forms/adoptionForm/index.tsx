@@ -5,7 +5,9 @@ import {
   Label,
   ErrorFormik,
   InputTextFormik,
-} from "../../../components/IndividualFormLayout/FormComponents";
+  FormikFormContainer,
+  FormPageTitle,
+} from "../../../components/IndividualFormLayout/CommonFormComponents";
 import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
 import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
@@ -19,10 +21,7 @@ import {
   ivCatQuestionsInterface,
   ivHearAboutUsInfoInterface,
 } from "../../../interfaces/adoptionInitialValuesInterface";
-import {
-  FormikFormContainer,
-  FormPageTitle,
-} from "../../../components/IndividualFormLayout/CommonFormComponents";
+
 import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
 import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
 import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";

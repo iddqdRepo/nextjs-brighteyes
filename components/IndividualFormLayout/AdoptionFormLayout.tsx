@@ -1,4 +1,4 @@
-import { FieldSet } from "./FormComponents";
+import { FieldSet } from "./CommonFormComponents";
 
 export const LegalAgreementSection = ({ type }: { type: string }) => {
   return (
