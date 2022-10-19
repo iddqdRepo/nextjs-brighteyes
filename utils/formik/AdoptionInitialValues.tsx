@@ -1,5 +1,5 @@
 export const adoptionInitialValues = {
-  type: "",
+  type: "Adoption",
   aboutQuestions: {
     title: "",
     name: "",

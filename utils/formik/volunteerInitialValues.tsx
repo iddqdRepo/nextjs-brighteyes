@@ -1,5 +1,5 @@
 export const volunteerInitialValues = {
-  type: "",
+  type: "volunteer",
   aboutQuestions: {
     title: "",
     name: "",

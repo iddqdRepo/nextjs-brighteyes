@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Key } from "react";
 import { clsx } from "clsx";
 import { Field } from "formik";
 import {
@@ -177,5 +177,305 @@ export const ErrorFormik = ({
         <div className="mt-4"></div>
       )}
     </>
+  );
+};
+
+export const exposeOrHideFields = (
+  //This is a bit of a mess to make typescript happy, needs fix.
+  getState: VolunteerInitialValuesInterface | AdoptionInitialValuesInterface,
+  setState: any,
+  category:
+    | keyof VolunteerInitialValuesInterface
+    | keyof AdoptionInitialValuesInterface,
+  val:
+    | keyof ivHealthInfoInterface
+    | keyof ivOffenderInfoInterface
+    | keyof ivHomeQuestionsInterface
+    | keyof ivDogQuestionsInterface
+    | keyof ivCatQuestionsInterface
+    | keyof ivHearAboutUsInfoInterface,
+  hideOrExpose: string,
+  volunteerOrAdoption: string
+) => {
+  let exposeVolunteer = getState as VolunteerInitialValuesInterface;
+  let exposeAdoption = getState as AdoptionInitialValuesInterface;
+
+  if (category === "healthInfo") {
+    if (hideOrExpose === "expose") {
+      exposeVolunteer[category][val as keyof ivHealthInfoInterface].hidden =
+        false;
+    } else {
+      exposeVolunteer[category][val as keyof ivHealthInfoInterface].hidden =
+        true;
+    }
+  }
+  if (category === "offenderInfo") {
+    if (hideOrExpose === "expose") {
+      exposeVolunteer[category][val as keyof ivOffenderInfoInterface].hidden =
+        false;
+    } else {
+      exposeVolunteer[category][val as keyof ivOffenderInfoInterface].hidden =
+        true;
+    }
+  }
+  if (category === "homeQuestions") {
+    if (hideOrExpose === "expose") {
+      exposeAdoption[category][val as keyof ivHomeQuestionsInterface].hidden =
+        false;
+    } else {
+      exposeAdoption[category][val as keyof ivHomeQuestionsInterface].hidden =
+        true;
+    }
+  }
+  if (category === "dogQuestions") {
+    if (hideOrExpose === "expose") {
+      exposeAdoption[category][val as keyof ivDogQuestionsInterface].hidden =
+        false;
+    } else {
+      exposeAdoption[category][val as keyof ivDogQuestionsInterface].hidden =
+        true;
+    }
+  }
+  if (category === "catQuestions") {
+    if (hideOrExpose === "expose") {
+      exposeAdoption[category][val as keyof ivCatQuestionsInterface].hidden =
+        false;
+    } else {
+      exposeAdoption[category][val as keyof ivCatQuestionsInterface].hidden =
+        true;
+    }
+  }
+  if (category === "hearAboutUsInfo") {
+    if (hideOrExpose === "expose") {
+      exposeAdoption[category][val as keyof ivHearAboutUsInfoInterface].hidden =
+        false;
+    } else {
+      exposeAdoption[category][val as keyof ivHearAboutUsInfoInterface].hidden =
+        true;
+    }
+  }
+  if (volunteerOrAdoption === "volunteer") {
+    setState(exposeVolunteer);
+  } else {
+    setState(exposeAdoption);
+  }
+};
+
+export const handleExposeAndHideFields = (
+  getState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface,
+  setState: any,
+  ev: { target: any },
+  exposes: {
+    [key: string]: (
+      | keyof ivHealthInfoInterface
+      | keyof ivOffenderInfoInterface
+      | keyof ivHomeQuestionsInterface
+      | keyof ivDogQuestionsInterface
+      | keyof ivCatQuestionsInterface
+    )[];
+  },
+  category:
+    | keyof VolunteerInitialValuesInterface
+    | keyof AdoptionInitialValuesInterface,
+  form: string
+) => {
+  for (const [key, value] of Object.entries(exposes)) {
+    if (ev.target.value === key) {
+      value.forEach((val) => {
+        console.log("exposing", category, val);
+        exposeOrHideFields(getState, setState, category, val, "expose", form);
+      });
+    } else {
+      if (
+        //^ This added because "As an Adult" and "As a Child" both reveal the same hidden fields,
+        //^ this stops them being hidden if "As an Adult" is selected then switched to "As a Child"
+        ev.target.value !== "As an Adult" &&
+        ev.target.value !== "As a Child"
+      ) {
+        value.forEach((val) => {
+          exposeOrHideFields(getState, setState, category, val, "hide", form);
+        });
+      }
+    }
+  }
+};
+
+export const DropdownFormik = ({
+  getState,
+  setState,
+  labelText,
+  selectArray,
+  children,
+  forNameId,
+  exposes,
+  category,
+  form,
+}: {
+  getState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface;
+  setState: any;
+  labelText: string;
+  selectArray: string[];
+  children: React.ReactNode;
+  forNameId: string;
+  exposes?: {
+    [key: string]: (
+      | keyof ivHealthInfoInterface
+      | keyof ivOffenderInfoInterface
+    )[];
+  };
+  path?: string;
+  category:
+    | keyof VolunteerInitialValuesInterface
+    | keyof AdoptionInitialValuesInterface;
+  form: string;
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
+      <Label text={labelText} hFor={forNameId} />
+      <Field
+        className={
+          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
+        }
+        name={forNameId}
+        as="select"
+        onClick={(e: { target: { value: any } }) => {
+          if (e.target.value && exposes) {
+            handleExposeAndHideFields(
+              getState,
+              setState,
+              e,
+              exposes,
+              category,
+              form
+            );
+          }
+        }}
+      >
+        {selectArray ? (
+          selectArray.map((entries) => {
+            return (
+              <option key={entries[0] as Key} value={entries[1]}>
+                {entries[0]}
+              </option>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </Field>
+      {children}
+    </div>
+  );
+};
+
+export const QuestionsMap = ({
+  getUseState,
+  setUseState,
+  category,
+  values,
+  type,
+  err,
+  touch,
+}: {
+  getUseState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface;
+  setUseState: any;
+  category:
+    | keyof AdoptionInitialValuesInterface
+    | keyof VolunteerInitialValuesInterface;
+  type: string;
+  values: any;
+  err: any;
+  touch: any;
+}) => {
+  let state;
+  let stateCategory;
+
+  if (type === "adoption") {
+    state = getUseState as AdoptionInitialValuesInterface;
+    stateCategory = state[category as keyof AdoptionInitialValuesInterface];
+  }
+
+  if (type === "volunteer") {
+    state = getUseState as VolunteerInitialValuesInterface;
+    stateCategory = state[category as keyof VolunteerInitialValuesInterface];
+  }
+
+  return stateCategory ? (
+    <>
+      {Object.entries(stateCategory).map((entry) => {
+        let title = entry[1].title;
+        let field = entry[0] as
+          | keyof ivAboutQuestionsVolunteerInterface
+          | keyof ivEmergencyContactInfoInterface
+          | keyof ivHealthInfoInterface
+          | keyof ivVolunteeringInfoInterface
+          | keyof ivRefereeInfoInterface
+          | keyof ivOffenderInfoInterface
+          | keyof ivAboutQuestionsInterface
+          | keyof ivDogMatchingQuestionsInterface
+          | keyof ivCatMatchingQuestionsInterface
+          | keyof ivHomeQuestionsInterface
+          | keyof ivDogQuestionsInterface
+          | keyof ivCatQuestionsInterface
+          | keyof ivHearAboutUsInfoInterface;
+        return entry[1].type === "text"
+          ? !entry[1].hidden && (
+              <InputTextFormik
+                key={entry[0] as Key}
+                labelText={title}
+                val={values[category][field]}
+                forNameId={`${category}.${entry[0]}`}
+                type={entry[0] === "email" ? "email" : ""}
+              >
+                <ErrorFormik
+                  err={err}
+                  touch={touch}
+                  field={field}
+                  parent={category}
+                />
+              </InputTextFormik>
+            )
+          : entry[1].type === "select"
+          ? !entry[1].hidden && (
+              <DropdownFormik
+                getState={getUseState}
+                setState={setUseState}
+                key={entry[0] as Key}
+                labelText={title}
+                forNameId={`${category}.${entry[0]}`}
+                selectArray={entry[1].values}
+                exposes={entry[1].exposes ? entry[1].exposes : ""}
+                path={`${category}.${entry[0]}`}
+                category={category}
+                form={type}
+              >
+                <ErrorFormik
+                  err={err}
+                  touch={touch}
+                  field={field}
+                  parent={category}
+                />
+              </DropdownFormik>
+            )
+          : entry[1].type === "textarea" &&
+            !entry[1].hidden && (
+              <InputTextAreaFormik
+                key={entry[0] as Key}
+                labelText={title}
+                val={values[category][field]}
+                forNameId={`${category}.${entry[0]}`}
+              >
+                <ErrorFormik
+                  err={err}
+                  touch={touch}
+                  field={field}
+                  parent={category}
+                />
+              </InputTextAreaFormik>
+            );
+      })}
+    </>
+  ) : (
+    <div>loading</div>
   );
 };
