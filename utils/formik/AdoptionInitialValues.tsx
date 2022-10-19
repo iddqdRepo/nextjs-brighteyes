@@ -87,9 +87,4 @@ export const adoptionInitialValues = {
     hearAboutUs: "",
     other: "",
   },
-  //   updatedAt: {
-  //     type: Date,
-  //     default: new Date(),
-  //   },
-  //   archive: "No",
 };
