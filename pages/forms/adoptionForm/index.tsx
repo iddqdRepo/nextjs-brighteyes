@@ -12,9 +12,99 @@ import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBu
 import { AdoptionInitialValuesInterface } from "../../../interfaces/adoptionInitialValuesInterface";
 import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
 import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
-import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
+// import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
 
 function Index({ type }: { type: string }) {
+  const adoptionInitialValues = {
+    type: "Adoption",
+    aboutQuestions: {
+      title: "",
+      name: "",
+      address: "",
+      postcode: "",
+      phone: "",
+      mobile: "",
+      email: "",
+    },
+    dogMatchingQuestions: {
+      dogName: "",
+      dogSize: "",
+      dogType: "",
+      dogAge: "",
+      dogSex: "",
+    },
+    catMatchingQuestions: {
+      catName: "",
+      catAge: "",
+      catType: "",
+      catColour: "",
+      catSex: "",
+      catAllergy: "",
+    },
+    homeQuestions: {
+      homeType: "",
+      rentOrOwn: "",
+      townOrCountry: "",
+      nextToRoad: "",
+      gardenOrYard: "",
+      "gardenOrYardInfo>gardenOrYardSize": "",
+      "gardenOrYardInfo>fullyEnclosed": "",
+      "gardenOrYardInfo>fenceHeight": "",
+      numAdults: "",
+      numChildren: "",
+      childrenAges: "",
+      "otherChildrenVisitInfo>otherChildrenVisit": "",
+      "otherChildrenVisitInfo>otherChildrenAges": "",
+      "otherChildrenVisitInfo>otherChildrenVisitFrequency": "",
+      retired: "",
+      "planning>baby": "",
+      "planning>moving": "",
+      "planning>workHoursChange": "",
+      "planning>holiday": "",
+    },
+    dogQuestions: {
+      dogReason: "",
+      "dogHomeAloneInfo>dogHomeAlone": "",
+      "dogHomeAloneInfo>dogHomeAloneHours": "",
+      "dogHomeAloneInfo>dogHomeAloneFrequency": "",
+      exerciseType: "",
+      exerciseTime: "",
+      dogSleepLocation: "",
+      "ownOtherDogsCurrentInfo>ownOtherCurrentDogs": "",
+      "ownOtherDogsCurrentInfo>otherCurrentDogBreed": "",
+      "ownOtherDogsCurrentInfo>otherCurrentDogNeutered": "",
+      "ownOtherDogsCurrentInfo>otherCurrentDogTime": "",
+      "dogOwnOtherPetsCurrentInfo>dogOwnOtherCurrentPets": "",
+      "dogOwnOtherPetsCurrentInfo>dogOtherCurrentPetTypes": "",
+      "ownOtherDogsPastInfo>ownOtherPastDogs": "",
+      "ownOtherDogsPastInfo>otherPastDogTime": "",
+      "ownOtherDogsPastInfo>otherDogFate": "",
+      dogAwareOfCostsAndLegal: "",
+      dogHowSoon: "",
+      dogFurtherInfo: "",
+    },
+    catQuestions: {
+      catReason: "",
+      "catHomeAloneInfo>catHomeAlone": "",
+      "catHomeAloneInfo>catHomeAloneHours": "",
+      "catHomeAloneInfo>catHomeAloneFrequency": "",
+      catSleepLocation: "",
+      "ownOtherCatsCurrentInfo>ownOtherCurrentCats": "",
+      "ownOtherPetsCurrentInfo>ownOtherCurrentPets": "",
+      "ownOtherPetsCurrentInfo>otherCurrentPetTypes": "",
+      "ownOtherCatsPastInfo>ownOtherPastCats": "",
+      "ownOtherCatsPastInfo>otherPastCatTime": "",
+      "ownOtherCatsPastInfo>otherCatFate": "",
+      catAwareOfCostsAndLegal: "",
+      catHowSoon: "",
+      catFurtherInfo: "",
+    },
+
+    hearAboutUsInfo: {
+      hearAboutUs: "",
+      other: "",
+    },
+  };
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
 
   interface tempObjInterface {
