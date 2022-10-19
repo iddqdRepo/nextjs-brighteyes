@@ -9,6 +9,7 @@ import { FieldSet } from "../../../components/IndividualFormLayout/CommonFormCom
 import { VolunteerInitialValuesInterface } from "../../../interfaces/volunteerInitialValuesInterface";
 import { volunteerFormBuilder } from "../../../utils/formik/volunteerFormBuilder";
 import { volunteerInitialValues } from "../../../utils/formik/volunteerInitialValues";
+import { VolunteerSchema } from "../../../utils/yup/volunteerYupSchema";
 
 function Index() {
   const [toShow, setToShow] = useState(
@@ -20,7 +21,7 @@ function Index() {
       <FormPageTitle title={` Volunteer Form`} />
       <Formik
         initialValues={volunteerInitialValues}
-        // validationSchema={AdoptionSchema}
+        validationSchema={VolunteerSchema}
         onSubmit={(data) => console.log(data)}
       >
         {({ values, errors, touched }) => (
