@@ -8,11 +8,12 @@ import {
 } from "../../../components/IndividualFormLayout/CommonFormComponents";
 import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
+// import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
 import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
 import { AdoptionInitialValuesInterface } from "../../../interfaces/adoptionInitialValuesInterface";
 import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
 import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
-import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
+import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionInitialValues";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -62,7 +63,7 @@ function Index({ type }: { type: string }) {
     <form className="flex flex-col items-center justify-center ">
       <FormPageTitle title={` Adopt a ${type} Form`} />
       <Formik
-        initialValues={adoptionInitialValues}
+        initialValues={newAdoptionInitialValues}
         validationSchema={AdoptionSchema}
         onSubmit={(data) => console.log(data)}
       >
