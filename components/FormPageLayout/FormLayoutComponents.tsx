@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Button } from "../common/CommonComponents";
+import { Button, ButtonWithQuery } from "../common/CommonComponents";
 import React from "react";
 
 export const FormCard = ({
@@ -7,11 +7,15 @@ export const FormCard = ({
   text,
   icon,
   buttonText,
+  query,
+  link,
 }: {
   title: string;
   text: string;
   icon: string;
   buttonText: string;
+  query?: string;
+  link?: string;
 }) => {
   return (
     <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10 mt-10">
@@ -23,7 +27,15 @@ export const FormCard = ({
           {title}
         </span>
         {text}
-        <Button text={buttonText} />
+        {query ? (
+          <ButtonWithQuery
+            text={buttonText}
+            link="/forms/adoptionForm"
+            query={query}
+          />
+        ) : (
+          <Button text={buttonText} link={`/forms/${link}`} />
+        )}
       </div>
     </div>
   );

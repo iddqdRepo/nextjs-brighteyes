@@ -3,7 +3,7 @@ import {
   DashedTitle,
   FooterSection,
 } from "../../components/common/CommonComponents";
-import { FormCardSection } from "../../components/FormLayout/FormLayout";
+import { FormCardSection } from "../../components/FormPageLayout/FormPageLayout";
 
 function Forms() {
   return (
