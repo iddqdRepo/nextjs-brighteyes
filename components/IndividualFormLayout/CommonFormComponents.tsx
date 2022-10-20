@@ -88,6 +88,7 @@ export const InputTextFormik = ({
   classN,
   type,
   children,
+  placeholder,
 }: {
   labelText: string;
   val: string;
@@ -95,6 +96,7 @@ export const InputTextFormik = ({
   classN?: string;
   type?: string;
   children: React.ReactNode;
+  placeholder: string;
 }) => {
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
@@ -102,11 +104,12 @@ export const InputTextFormik = ({
 
       <Field
         className={clsx(
-          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
+          "border border-gray-300 text-gray-900 text-xs font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
           classN
         )}
         name={forNameId}
         type={type && type}
+        placeholder={placeholder && placeholder}
       />
       {children}
     </div>
@@ -426,6 +429,7 @@ export const QuestionsMap = ({
                 val={values[category][field]}
                 forNameId={`${category}.${entry[0]}`}
                 type={entry[0] === "email" ? "email" : ""}
+                placeholder={entry[1].placeholder}
               >
                 <ErrorFormik
                   err={err}

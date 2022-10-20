@@ -200,12 +200,12 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           title: "Please estimate the size of your garden/yard?",
           type: "text",
           hidden: true,
+          placeholder: "e.g. 50 x 50ft",
         },
       ],
       fullyEnclosed: [
         {
-          //   title: "Is your garden/yard fully enclosed?",
-          title: "FULLY ENCLOSED",
+          title: "Is your garden/yard fully enclosed?",
           type: "select",
           values: [
             ["Select", ""],
@@ -567,6 +567,12 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
+          exposes: {
+            Yes: [
+              "catHomeAloneInfo>catHomeAloneHours",
+              "catHomeAloneInfo>catHomeAloneHours",
+            ],
+          },
         },
       ],
       catHomeAloneHours: [
@@ -574,6 +580,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           title: "How many hours per day?",
           type: "text",
           placeholder: "e.g. 4 Hours",
+          hidden: true,
         },
       ],
       catHomeAloneFrequency: [
@@ -581,6 +588,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           title: "How often?",
           type: "text",
           placeholder: "e.g. Every day",
+          hidden: true,
         },
       ],
     },
@@ -602,26 +610,9 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
             ["Yes", "Yes"],
             ["No", "No"],
           ],
-        },
-      ],
-    },
-    ownOtherPetsCurrentInfo: {
-      ownOtherCurrentPets: [
-        {
-          title: "Do you own other pets?",
-          type: "select",
-          values: [
-            ["Select", ""],
-            ["Yes", "Yes"],
-            ["No", "No"],
-          ],
-        },
-      ],
-      otherCurrentPetTypes: [
-        {
-          title: "What types of pets do you have?",
-          type: "text",
-          placeholder: "e.g. 2 Cats, A snake",
+          exposes: {
+            No: ["ownOtherCatsPastInfo>ownOtherPastCats"],
+          },
         },
       ],
     },
@@ -636,6 +627,18 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
             ["As an Adult", "As an Adult"],
             ["No", "No"],
           ],
+          hidden: true,
+
+          exposes: {
+            "As an Adult": [
+              "ownOtherCatsPastInfo>otherPastCatTime",
+              "ownOtherCatsPastInfo>otherCatFate",
+            ],
+            "As a Child": [
+              "ownOtherCatsPastInfo>otherPastCatTime",
+              "ownOtherCatsPastInfo>otherCatFate",
+            ],
+          },
         },
       ],
       otherPastCatTime: [
@@ -643,6 +646,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           title: "How long did you have it?",
           type: "text",
           placeholder: "e.g. 2 Hours",
+          hidden: true,
         },
       ],
       otherCatFate: [
@@ -650,6 +654,31 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           title: "What happened to it?",
           type: "text",
           placeholder: "e.g. Died of old age",
+          hidden: true,
+        },
+      ],
+    },
+    ownOtherPetsCurrentInfo: {
+      ownOtherCurrentPets: [
+        {
+          title: "Do you own other pets?",
+          type: "select",
+          values: [
+            ["Select", ""],
+            ["Yes", "Yes"],
+            ["No", "No"],
+          ],
+          exposes: {
+            Yes: ["ownOtherPetsCurrentInfo>otherCurrentPetTypes"],
+          },
+        },
+      ],
+      otherCurrentPetTypes: [
+        {
+          title: "What types of pets do you have?",
+          type: "text",
+          hidden: true,
+          placeholder: "e.g. 2 Cats, A snake",
         },
       ],
     },
