@@ -29,6 +29,7 @@ export const QuestionsMap = ({
             val={values[category][field]}
             forNameId={`${category}.${field}`}
             type={entry[0] === "email" ? "email" : ""}
+            placeholder={entry[1].placeholder}
           >
             <ErrorFormik
               err={err}
