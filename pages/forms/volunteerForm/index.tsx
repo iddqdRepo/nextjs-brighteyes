@@ -72,17 +72,15 @@ function Index() {
             </FieldSet>
             {/* <LegalAgreementSection type={type} /> */}
             <FieldSet legendText={"Referee Information"}>
-              <div className="flex ">
-                <QuestionsMap
-                  getUseState={toShow}
-                  setUseState={setToShow}
-                  type={"volunteer"}
-                  category={"refereeInfo"}
-                  values={values}
-                  touch={touched}
-                  err={errors}
-                />
-              </div>
+              <QuestionsMap
+                getUseState={toShow}
+                setUseState={setToShow}
+                type={"volunteer"}
+                category={"refereeInfo"}
+                values={values}
+                touch={touched}
+                err={errors}
+              />
             </FieldSet>
             <FieldSet legendText={"Rehabilitation of Offenders Act 1974"}>
               <div className="flex ">
