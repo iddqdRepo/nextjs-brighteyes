@@ -36,6 +36,7 @@ export const QuestionsMap = ({
               touch={touch}
               field={field}
               parent={category}
+              id={"err-" + entry[0]}
             />
           </InputTextFormik>
         );
