@@ -35,8 +35,8 @@ jobs:
 
       - name: Cypress tests
         # normally you would write
-        # uses: cypress-io/github-action@v2
-        uses: ./
+        uses: cypress-io/github-action@v4
+        # uses: ./
         with:
           install: false
           start: npm start
