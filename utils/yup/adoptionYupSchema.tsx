@@ -203,10 +203,6 @@ const dogQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  dogFurtherInfo: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
 });
 
 const catQuestionsSchema = Yup.object().shape({

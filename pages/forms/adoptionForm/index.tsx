@@ -69,7 +69,7 @@ function Index({ type }: { type: string }) {
       >
         {({ values, errors, touched }) => (
           <FormikFormContainer>
-            <FieldSet legendText="About you">
+            <FieldSet id="About-you" legendText="About you">
               <QuestionsMap
                 getUseState={toShow}
                 setUseState={setToShow}
@@ -80,7 +80,10 @@ function Index({ type }: { type: string }) {
                 err={errors}
               />
             </FieldSet>
-            <FieldSet legendText={type + " Matching Questions"}>
+            <FieldSet
+              id={type + "-matching-questions"}
+              legendText={type + " Matching Questions"}
+            >
               {type === "Dog" ? (
                 <QuestionsMap
                   getUseState={toShow}
@@ -103,7 +106,7 @@ function Index({ type }: { type: string }) {
                 />
               )}
             </FieldSet>
-            <FieldSet legendText="Home Questions">
+            <FieldSet id="Home-Questions" legendText="Home Questions">
               <QuestionsMap
                 getUseState={toShow}
                 setUseState={setToShow}
@@ -119,7 +122,7 @@ function Index({ type }: { type: string }) {
                 <></>
               )}
             </FieldSet>
-            <FieldSet legendText={type + " Questions"}>
+            <FieldSet id={type + "-questions"} legendText={type + " Questions"}>
               {type === "Dog" ? (
                 <QuestionsMap
                   getUseState={toShow}
@@ -143,7 +146,10 @@ function Index({ type }: { type: string }) {
               )}
             </FieldSet>
             <LegalAgreementSection type={type} />
-            <FieldSet legendText={"How Did you hear about us?"}>
+            <FieldSet
+              id="Hear-About-Us"
+              legendText={"How Did you hear about us?"}
+            >
               <div className="flex ">
                 <QuestionsMap
                   getUseState={toShow}
