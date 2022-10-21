@@ -74,7 +74,7 @@ export function FieldSet({
 }: {
   legendText?: string;
   children: React.ReactNode;
-  id: string;
+  id?: string;
 }) {
   return (
     <fieldset
@@ -177,7 +177,7 @@ export const ErrorFormik = ({
     | keyof AdoptionInitialValuesInterface
     | keyof GiftAidInitialValuesInterface
     | keyof VolunteerInitialValuesInterface;
-  id: string;
+  id?: string;
 }) => {
   return (
     <>
