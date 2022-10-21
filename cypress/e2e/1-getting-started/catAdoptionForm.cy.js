@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 
 describe("Cat Adoption Form", () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:3000/forms/adoptionForm?type=Cat");
-  });
-
+  // beforeEach(() => {
+  //   cy.visit("http://localhost:3000/forms/adoptionForm?type=Cat");
+  // });
   it("shows correct cat specific fields", () => {
+    cy.visit("http://localhost:3000/forms/adoptionForm?type=Cat");
     cy.contains("Adopt a Cat Form");
     cy.contains("Cat Questions");
     cy.contains("Name of cat (optional)");
