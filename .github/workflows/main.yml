@@ -32,15 +32,11 @@ jobs:
       - run: npm run build
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-      # - name: Cypress run
-      #   uses: cypress-io/github-action@v2
-      #   with:
-      #     install: false
-      #     start: npm start
-       - name: Cypress tests
+
+      - name: Cypress tests
         # normally you would write
         # uses: cypress-io/github-action@v2
-          uses: ./
-          with:
-            install: false
-            start: npm start
+        uses: ./
+        with:
+          install: false
+          start: npm start
