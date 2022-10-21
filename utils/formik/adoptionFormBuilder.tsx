@@ -570,7 +570,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
           exposes: {
             Yes: [
               "catHomeAloneInfo>catHomeAloneHours",
-              "catHomeAloneInfo>catHomeAloneHours",
+              "catHomeAloneInfo>catHomeAloneFrequency",
             ],
           },
         },
