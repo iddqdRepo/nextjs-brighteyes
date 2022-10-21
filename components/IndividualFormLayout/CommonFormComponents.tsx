@@ -70,12 +70,17 @@ export const Label = ({
 export function FieldSet({
   legendText,
   children,
+  id,
 }: {
   legendText?: string;
   children: React.ReactNode;
+  id: string;
 }) {
   return (
-    <fieldset className="flex flex-col items-center w-full p-3 mb-10 border border-gray-300 border-solid">
+    <fieldset
+      id={id}
+      className="flex flex-col items-center w-full p-3 mb-10 border border-gray-300 border-solid"
+    >
       <legend className="text-sm">{legendText}</legend>
       <div className="flex flex-wrap justify-center w-full">{children}</div>
     </fieldset>
@@ -150,6 +155,7 @@ export const ErrorFormik = ({
   touch,
   field,
   parent,
+  id,
 }: {
   err: any;
   touch: any;
@@ -171,13 +177,16 @@ export const ErrorFormik = ({
     | keyof AdoptionInitialValuesInterface
     | keyof GiftAidInitialValuesInterface
     | keyof VolunteerInitialValuesInterface;
+  id: string;
 }) => {
   return (
     <>
       {err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
-        <div className="text-xs text-red-600">{err?.[parent]?.[field]}</div>
+        <div id={id} className="text-xs text-red-600">
+          {err?.[parent]?.[field]}
+        </div>
       ) : (
-        <div className="mt-4"></div>
+        <div id={id} className="mt-4"></div>
       )}
     </>
   );
@@ -436,6 +445,7 @@ export const QuestionsMap = ({
                   touch={touch}
                   field={field}
                   parent={category}
+                  id={"err-" + entry[0]}
                 />
               </InputTextFormik>
             )
@@ -458,6 +468,7 @@ export const QuestionsMap = ({
                   touch={touch}
                   field={field}
                   parent={category}
+                  id={"err-" + entry[0]}
                 />
               </DropdownFormik>
             )
@@ -474,6 +485,7 @@ export const QuestionsMap = ({
                   touch={touch}
                   field={field}
                   parent={category}
+                  id={"err-" + entry[0]}
                 />
               </InputTextAreaFormik>
             );
