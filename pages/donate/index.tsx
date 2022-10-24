@@ -7,10 +7,13 @@ import {
   DonateUsesSection,
   DonationTypesSection,
 } from "../../components/LayoutComponents/DonateLayout/DonateLayout";
+import NavbarComponent from "../../components/Navbar/NavbarComponent";
 
 function Donate() {
   return (
     <>
+      <NavbarComponent />
+
       <DonateHeroSection />
       <DonationTypesSection />
       <DonateUsesSection />

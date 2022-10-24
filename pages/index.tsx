@@ -11,10 +11,12 @@ import {
   CardsSection,
   GetInvolvedSection,
 } from "../components/LayoutComponents/HomeLayout/HomeLayout";
+import NavbarComponent from "../components/Navbar/NavbarComponent";
 
 function Home() {
   return (
     <>
+      <NavbarComponent />
       <HeroSection />
       <AboutUsSection />
       <CardsSection />

@@ -8,10 +8,12 @@ import {
   AboutBrightEyesSection,
   InterviewSection,
 } from "../../components/LayoutComponents/AboutLayout/AboutLayout";
+import NavbarComponent from "../../components/Navbar/NavbarComponent";
 
 function About() {
   return (
     <>
+      <NavbarComponent />
       <AboutPatSection />
       <AboutBrightEyesSection />
       <InterviewSection />

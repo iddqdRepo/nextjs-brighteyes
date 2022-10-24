@@ -10,10 +10,13 @@ import {
   HeroBannerSection,
 } from "../../../components/LayoutComponents/Animal/AnimalLayout";
 import { Divider } from "../../../components/LayoutComponents/Animal/AnimalLayoutComponents";
+import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
 function Animal({ animal }: { animal: [AnimalInterface] }) {
   return (
     <>
+      <NavbarComponent />
+
       <HeroBannerSection name={animal[0].name} />
       <AnimalDetailSection animal={animal[0]} />
       <Divider />
