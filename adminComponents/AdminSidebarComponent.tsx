@@ -29,7 +29,7 @@ function AdminDashboardComponent(props: any) {
             : "flex flex-col font-poppins text-sm items-center mb-4 justify-center py-2 rounded-sm w-4/5 hover:cursor-pointer"
         }
       >
-        <Link href={"/admin/" + link}>
+        <Link href={"/admin" + link}>
           <div className="flex flex-row items-center justify-center w-3/5 md:justify-start">
             <Icon
               className={
@@ -75,34 +75,34 @@ function AdminDashboardComponent(props: any) {
           icon={"carbon:dashboard"}
           text={"Dashboard"}
         />
-        <AdminNavLink
+        {/* <AdminNavLink
           toggle={"AddAnimal"}
           link={"/addAnimal"}
           icon={"carbon:add"}
           text={"Add Animal"}
-        />
+        /> */}
         <AdminNavLink
-          toggle={"EditAnimal"}
-          link={"/editAnimal"}
-          icon={"dashicons:edit"}
-          text={"Edit Animal"}
+          toggle={"Animals"}
+          link={"/animals"}
+          icon={"mdi:paw-outline"}
+          text={"Animals"}
         />
         <AdminNavLink
           toggle={"Forms"}
           link={"/forms"}
-          icon={"ant-design:form-outlined"}
+          icon={"carbon:folder"}
           text={"Forms"}
         />
         <AdminNavLink
           toggle={"AnimalArchive"}
           link={"/animalArchive"}
-          icon={"clarity:archive-line"}
+          icon={"mdi:paw-off-outline"}
           text={"Animal Archive"}
         />
         <AdminNavLink
           toggle={"FormArchive"}
           link={"/formArchive"}
-          icon={"fluent-mdl2:form-library"}
+          icon={"carbon:folder-off"}
           text={"Form Archive"}
         />
         <AdminNavLink
