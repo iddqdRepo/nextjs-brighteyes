@@ -89,7 +89,7 @@ function AdminDashboardComponent(props: any) {
         />
         <AdminNavLink
           toggle={"Forms"}
-          link={"/forms"}
+          link={"/forms?archive=false"}
           icon={"carbon:folder"}
           text={"Forms"}
         />
@@ -101,7 +101,7 @@ function AdminDashboardComponent(props: any) {
         />
         <AdminNavLink
           toggle={"FormArchive"}
-          link={"/formArchive"}
+          link={"/forms?archive=false"}
           icon={"carbon:folder-off"}
           text={"Form Archive"}
         />
