@@ -10,11 +10,11 @@ import {
 } from "../../../adminComponents/commonAdminComponents";
 import petModel from "../../../models/petModel";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
+// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-function Index(props: { data: any }) {
+function Index(props: { data: any; archive: boolean }) {
   const [filter, setFilter] = useState("");
   const pets = props.data;
-  console.log("pets = ", props.data);
   const [textFilter, setTextFilter] = useState("");
 
   interface PetInterface {
@@ -33,10 +33,12 @@ function Index(props: { data: any }) {
     __v: string;
     _id: string;
   }
-
+  console.log("props.archive", props.archive);
   return (
     <>
-      <AdminSidebarComponent highlighted="Animals">
+      <AdminSidebarComponent
+        highlighted={props.archive ? "AnimalArchive" : "Animals"}
+      >
         <PageContainerComponent>
           <div className="flex flex-col items-center">
             <div className="flex flex-col-reverse items-center justify-center w-full px-2 py-5 mt-10 border sm:flex-row sm:justify-between xl:w-5/6 rounded-xl">
@@ -80,7 +82,7 @@ function Index(props: { data: any }) {
                   <tbody className="bg-white dark:bg-slate-800">
                     {pets
                       .filter((applied: { type: string }) => {
-                        console.log("applied", applied.type);
+                        // console.log("applied", applied.type);
                         if (filter) {
                           return applied.type === filter;
                         } else {
@@ -88,7 +90,7 @@ function Index(props: { data: any }) {
                         }
                       })
                       .filter((text: { type: string; name: string }) => {
-                        console.log("applied", text.type);
+                        // console.log("applied", text.type);
                         if (textFilter) {
                           return text.name
                             .toLowerCase()
@@ -155,26 +157,49 @@ function Index(props: { data: any }) {
 
 export default Index;
 
-export async function getStaticProps() {
+export async function getServerSideProps(context: { query: { archive: any } }) {
   await dbConnect();
+  console.log("context", context.query.archive);
 
-  const result = await petModel.find({ adopted: "No" }).lean();
+  if (context.query.archive === "false") {
+    const result = await petModel.find({ adopted: "No" }).lean();
 
-  const pets = result.map((pet) => {
-    pet._id = pet._id.toString();
-    if (pet.createdAt) {
-      pet.createdAt = pet.createdAt.toString();
-    }
-    if (pet.updatedAt) {
-      pet.updatedAt = pet.updatedAt.toString();
-    }
-    return pet;
-  });
+    const pets = result.map((pet) => {
+      pet._id = pet._id.toString();
+      if (pet.createdAt) {
+        pet.createdAt = pet.createdAt.toString();
+      }
+      if (pet.updatedAt) {
+        pet.updatedAt = pet.updatedAt.toString();
+      }
+      return pet;
+    });
 
-  return {
-    props: {
-      data: pets,
-    },
-    revalidate: 10,
-  };
+    return {
+      props: {
+        data: pets,
+        archive: false,
+      },
+    };
+  } else {
+    const result = await petModel.find({ adopted: "Yes" }).lean();
+
+    const pets = result.map((pet) => {
+      pet._id = pet._id.toString();
+      if (pet.createdAt) {
+        pet.createdAt = pet.createdAt.toString();
+      }
+      if (pet.updatedAt) {
+        pet.updatedAt = pet.updatedAt.toString();
+      }
+      return pet;
+    });
+
+    return {
+      props: {
+        data: pets,
+        archive: true,
+      },
+    };
+  }
 }
