@@ -21,6 +21,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-rough-notation": "^1.0.3",
+    "react-tabs": "^5.1.0",
+    "reactjs-popup": "^2.0.5",
     "rough-notation": "^0.5.1",
     "yup": "^0.32.11"
   },
