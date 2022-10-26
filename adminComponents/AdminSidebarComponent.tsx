@@ -83,7 +83,7 @@ function AdminDashboardComponent(props: any) {
         /> */}
         <AdminNavLink
           toggle={"Animals"}
-          link={"/animals"}
+          link={"/animals?archive=false"}
           icon={"mdi:paw-outline"}
           text={"Animals"}
         />
@@ -95,7 +95,7 @@ function AdminDashboardComponent(props: any) {
         />
         <AdminNavLink
           toggle={"AnimalArchive"}
-          link={"/animalArchive"}
+          link={"/animals?archive=true"}
           icon={"mdi:paw-off-outline"}
           text={"Animal Archive"}
         />
