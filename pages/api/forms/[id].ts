@@ -11,47 +11,68 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const type = query.type;
 
   async function get(type: string, model: Model<any, {}, {}, {}, any>) {
-    const petForm = await model.findById(id);
-    console.log(`Retrieved all ${type} forms from api/forms.ts`);
-    if (!petForm) {
+    const form = await model.findById(id);
+    if (!form) {
       res.status(404).json({
         success: false,
         message: `No ${type} form with ID of ${id} exists`,
       });
+      res.end();
+    } else {
+      res.status(200).json({
+        success: true,
+        message: `${type} form ${id} successfully retrieved`,
+        data: form,
+      });
     }
-    res.status(200).json(petForm);
+  }
+
+  async function put(type: string, model: Model<any, {}, {}, {}, any>) {
+    const form = await model.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!form) {
+      res.status(404).json({
+        success: false,
+        message: `No ${type} form with ID of ${id} exists`,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: `${type} form ${id} successfully updated`,
+        data: req.body,
+      });
+    }
+  }
+  async function del(type: string, model: Model<any, {}, {}, {}>) {
+    const form = await model.deleteOne({
+      _id: id,
+    });
+    if (!form.deletedCount) {
+      res.status(404).json({
+        success: false,
+        message: `No ${type} form with ID of ${id} exists`,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: `${type} form ${id} successfully deleted`,
+        data: {},
+      });
+    }
   }
 
   switch (method) {
     case "GET":
       try {
         if (type === "pet") {
-          get("pet", formModels.FormPetAdoptionModel);
-          //   const petForm = await formModels.FormPetAdoptionModel.findById(id);
-          //   console.log("Retrieved all pet forms from api/forms.ts");
-          //   if (!petForm) {
-          //     res.status(404).json({
-          //       success: false,
-          //       message: `No pet form with ID of ${id} exists`,
-          //     });
-          //   }
-          //   res.status(200).json(petForm);
+          get("giftaid", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
           get("giftaid", formModels.FormGiftAidModel);
-
-          //   console.log("Retrieved all giftaid forms from api/forms.ts");
-
-          //   const giftAidForm = await formModels.FormGiftAidModel.findById(id);
-          //   res.status(200).json(giftAidForm);
         } else if (type === "volunteer") {
-          const volunteerForm = await formModels.FormVolunteerModel.findById(
-            id
-          );
-
-          console.log("Retrieved all volunteer forms from api/forms.ts");
-          res.status(200).json(volunteerForm);
+          get("volunteer", formModels.FormVolunteerModel);
         } else {
-          console.log("In else get form by id");
           res
             .status(404)
             .json(
@@ -59,77 +80,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("error retrieving forms in api/forms.ts");
+        console.log("IN CATCH");
         res.status(404).json({ message: error.message });
       }
       break;
     case "PUT":
       try {
         if (type === "pet") {
-          const petForm =
-            await formModels.FormPetAdoptionModel.findByIdAndUpdate(
-              id,
-              req.body,
-              {
-                new: true,
-                runValidators: true,
-              }
-            );
-
-          if (!petForm) {
-            res.status(404).json({
-              success: false,
-              message: `No pet form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `pet form ${id} successfully updated`,
-            data: req.body,
-          });
+          put("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
-          const giftAidForm =
-            await formModels.FormGiftAidModel.findByIdAndUpdate(id, req.body, {
-              new: true,
-              runValidators: true,
-            });
-
-          if (!giftAidForm) {
-            res.status(404).json({
-              success: false,
-              message: `No giftAid form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `giftAid form ${id} successfully updated`,
-            data: req.body,
-          });
+          put("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
-          const volunteerForm =
-            await formModels.FormVolunteerModel.findByIdAndUpdate(
-              id,
-              req.body,
-              {
-                new: true,
-                runValidators: true,
-              }
+          put("volunteer", formModels.FormVolunteerModel);
+        } else {
+          res
+            .status(404)
+            .json(
+              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
             );
-
-          if (!volunteerForm) {
-            res.status(404).json({
-              success: false,
-              message: `No volunteer form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `volunteer form ${id} successfully updated`,
-            data: req.body,
-          });
         }
       } catch (error: any) {
         console.log("error posting products in api/forms.ts");
@@ -139,56 +107,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "DELETE":
       try {
         if (type === "pet") {
-          const petForm = await formModels.FormPetAdoptionModel.deleteOne({
-            _id: id,
-          });
-
-          if (!petForm) {
-            res.status(404).json({
-              success: false,
-              message: `No pet form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `pet form ${id} successfully deleted`,
-            data: {},
-          });
+          del("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
-          const giftAidForm = await formModels.FormGiftAidModel.deleteOne({
-            _id: id,
-          });
-
-          if (!giftAidForm) {
-            res.status(404).json({
-              success: false,
-              message: `No giftAid form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `giftAid form ${id} successfully deleted`,
-            data: {},
-          });
+          del("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
-          const volunteerForm = await formModels.FormVolunteerModel.deleteOne({
-            _id: id,
-          });
-
-          if (!volunteerForm) {
-            res.status(404).json({
-              success: false,
-              message: `No volunteer form with ID of ${id} exists`,
-            });
-          }
-
-          res.status(200).json({
-            success: true,
-            message: `volunteer form ${id} successfully deleted`,
-            data: {},
-          });
+          del("volunteer", formModels.FormVolunteerModel);
+        } else {
+          res
+            .status(404)
+            .json(
+              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
+            );
         }
       } catch (error: any) {
         console.log("error posting products in api/forms.ts");

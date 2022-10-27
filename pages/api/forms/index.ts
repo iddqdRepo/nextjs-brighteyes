@@ -6,25 +6,18 @@ dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
-  console.log("params", query);
   switch (method) {
     case "GET":
       try {
         if (query.type === "pet") {
           const petForm = await formModels.FormPetAdoptionModel.find();
-          console.log("Retrieved all pet forms from api/forms.ts");
-
-          res.status(200).json(petForm);
+          res.status(200).json({ success: true, data: petForm });
         } else if (query.type === "giftaid") {
-          console.log("Retrieved all giftaid forms from api/forms.ts");
-
           const giftAidForm = await formModels.FormGiftAidModel.find();
-          res.status(200).json(giftAidForm);
+          res.status(200).json({ success: true, data: giftAidForm });
         } else if (query.type === "volunteer") {
           const volunteerForm = await formModels.FormVolunteerModel.find();
-
-          console.log("Retrieved all volunteer forms from api/forms.ts");
-          res.status(200).json(volunteerForm);
+          res.status(200).json({ success: true, data: volunteerForm });
         } else {
           res
             .status(404)
@@ -43,12 +36,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const petForm = await formModels.FormPetAdoptionModel.create(
             req.body
           );
-          console.log("Retrieved all pet forms from api/forms.ts");
-
           res.status(201).json({ success: true, data: petForm });
         } else if (query.type === "giftaid") {
-          console.log("Retrieved all giftaid forms from api/forms.ts");
-
           const giftAidForm = await formModels.FormGiftAidModel.create(
             req.body
           );
@@ -57,8 +46,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const volunteerForm = await formModels.FormVolunteerModel.create(
             req.body
           );
-
-          console.log("Retrieved all volunteer forms from api/forms.ts");
           res.status(201).json({ success: true, data: volunteerForm });
         } else {
           res
@@ -68,7 +55,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("error posting products in api/forms.ts");
         res.status(404).json({ success: false, message: error });
       }
       break;
