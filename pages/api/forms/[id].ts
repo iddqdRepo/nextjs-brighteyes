@@ -9,6 +9,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const id = query.id;
   const type = query.type;
+  console.log("query = ", query);
+  console.log("type = ", type);
 
   async function get(type: string, model: Model<any, {}, {}, {}, any>) {
     const form = await model.findById(id);
@@ -24,6 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         message: `${type} form ${id} successfully retrieved`,
         data: form,
       });
+      res.end();
     }
   }
 
@@ -43,6 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         message: `${type} form ${id} successfully updated`,
         data: req.body,
       });
+      res.end();
     }
   }
   async function del(type: string, model: Model<any, {}, {}, {}>) {
@@ -60,6 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         message: `${type} form ${id} successfully deleted`,
         data: {},
       });
+      res.end();
     }
   }
 
@@ -67,7 +72,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       try {
         if (type === "pet") {
-          get("giftaid", formModels.FormPetAdoptionModel);
+          get("pet", formModels.FormPetAdoptionModel);
+          res.end();
         } else if (type === "giftaid") {
           get("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
