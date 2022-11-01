@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
   PageContainerComponent,
+  SearchInput,
   TableComponent,
   TableData,
   TableHeader,
@@ -9,9 +10,21 @@ import {
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Icon } from "@iconify/react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import axios from "axios";
+import {
+  getPetForms,
+  getGiftAidForms,
+  getVolunteerForms,
+  deletePetForm,
+  deleteGiftAidForm,
+  deleteVolunteerForm,
+} from "../../../routes/formRoutes";
+import { useRouter } from "next/router";
+import { Popup } from "../../../components/common/CommonComponents";
 
-function Index(props: { archive: string }) {
+function Index() {
+  const router = useRouter();
+  let isArchive = router.query.archive;
+  const highlighted = isArchive === "true" ? "FormArchive" : "Forms";
   const queryClient = useQueryClient();
   const nameId = useRef({ name: "", id: "", type: "" });
   const [hidden, setHidden] = useState(true);
@@ -20,99 +33,71 @@ function Index(props: { archive: string }) {
   const [volunteerTextFilter, setVolunteerTextFilter] = useState("");
   const [giftAidTextFilter, setGiftAidTextFilter] = useState("");
 
-  console.log(props.archive);
+  useEffect(() => {
+    setPetTextFilter("");
+    setVolunteerTextFilter("");
+    setGiftAidTextFilter("");
+  }, [isArchive]);
 
-  const getPetForms = async () => {
-    const petforms = await axios.get(
-      "http://localhost:3000/api/forms?type=pet"
-    );
-    return petforms.data;
-  };
-  const getGiftAidForms = async () => {
-    const giftAidforms = await axios.get(
-      "http://localhost:3000/api/forms?type=giftaid"
-    );
-    return giftAidforms.data;
-  };
-  const getVolunteerForms = async () => {
-    const volunteerforms = await axios.get(
-      "http://localhost:3000/api/forms?type=volunteer"
-    );
-    return volunteerforms.data;
-  };
+  const { isLoading: petFormsLoading, data: petForms } = useQuery(
+    "petForms",
+    getPetForms
+  );
+  const { isLoading: giftAidLoading, data: giftAidForms } = useQuery(
+    "giftAidForms",
+    getGiftAidForms
+  );
 
-  const deletePetForm = async (id: string) => {
-    axios.delete(`http://localhost:3000/api/forms/${id}?type=pet`);
-  };
-
-  const {
-    isLoading: petFormsLoading,
-    // isError: petFormsIsError,
-    // error: petFormsError,
-    // isSuccess: petFormsIsSuccess,
-    data: petForms,
-  } = useQuery("petForms", getPetForms);
-
-  const {
-    isLoading: giftAidLoading,
-    // isError: giftAidIsError,
-    // error: giftAidError,
-    // isSuccess: giftAidIsSuccess,
-    data: giftAidForms,
-  } = useQuery("giftAidForms", getGiftAidForms);
-
-  const {
-    isLoading: volunteerLoading,
-    // isError: volunteerIsError,
-    // error: volunteerError,
-    // isSuccess: volunteerIsSuccess,
-    data: volunteerForms,
-  } = useQuery("volunteerForms", getVolunteerForms);
+  const { isLoading: volunteerLoading, data: volunteerForms } = useQuery(
+    "volunteerForms",
+    getVolunteerForms
+  );
 
   const deletePetFormMutation = useMutation(deletePetForm, {
     onSuccess: () => {
-      // Invalidates cache and refetch
       queryClient.invalidateQueries("petForms");
+    },
+  });
+  const deleteGiftAidFormMutation = useMutation(deleteGiftAidForm, {
+    onSuccess: async () => {
+      console.log("deleteGiftAidFormMutation success");
+      await queryClient.invalidateQueries("giftAidForms");
+    },
+  });
+  // const archiveGiftAidFormMutation = useMutation(deleteGiftAidForm, {
+  //   onSuccess: async () => {
+  //     console.log("deleteGiftAidFormMutation success");
+  //     await queryClient.invalidateQueries("giftAidForms");
+  //   },
+  // });
+  const deleteVolunteerFormMutation = useMutation(deleteVolunteerForm, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("volunteerForms");
     },
   });
 
   const handleDelete = () => {
-    console.log("DELETING", nameId.current.name);
-    deletePetFormMutation.mutate(nameId.current.id);
+    if (nameId.current.type === "pet") {
+      deletePetFormMutation.mutate(nameId.current.id);
+    } else if (nameId.current.type === "giftAid") {
+      console.log("DELETING GIFT AID");
+      deleteGiftAidFormMutation.mutate(nameId.current.id);
+    } else if (nameId.current.type === "volunteer") {
+      deleteVolunteerFormMutation.mutate(nameId.current.id);
+    }
     setHidden(true);
   };
-
-  const Popup = () => {
-    console.log("id", nameId.current.id);
-    return (
-      <div className="absolute z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-slate-600 ">
-        <div className="flex flex-col items-center p-4 bg-white border-2 shadow-lg h-fit w-96">
-          <div className="pt-5 text-lg text-red-700 font-roboto">
-            Are you sure you want to delete
-          </div>
-          <div className="p-2 m-5 text-red-700 border-2 font-roboto">
-            {nameId.current.name}
-          </div>
-          <button
-            onClick={() => handleDelete()}
-            className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner"
-          >
-            <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-              <span className="">Yes</span>
-            </div>
-          </button>
-          <button
-            onClick={() => setHidden(true)}
-            className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner"
-          >
-            <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-              <span className="">No</span>
-            </div>
-          </button>
-        </div>
-      </div>
-    );
-  };
+  // const handleArchive = () => {
+  //   if (nameId.current.type === "pet") {
+  //     // deletePetFormMutation.mutate(nameId.current.id);
+  //   } else if (nameId.current.type === "giftAid") {
+  //     console.log("DELETING GIFT AID");
+  //     archiveGiftAidFormMutation.mutate(nameId.current.id);
+  //   } else if (nameId.current.type === "pet") {
+  //     // deleteVolunteerFormMutation.mutate(nameId.current.id);
+  //   }
+  //   setHidden(true);
+  // };
 
   const FormList = ({ list, type }: { list: []; type: string }) => {
     let filterType: string;
@@ -142,6 +127,13 @@ function Index(props: { archive: string }) {
 
             <tbody className="bg-white dark:bg-slate-800">
               {list
+                .filter((archiveFilter: { archive: string }) => {
+                  if (isArchive === "false") {
+                    return archiveFilter.archive === "No";
+                  } else {
+                    return archiveFilter.archive === "Yes";
+                  }
+                })
                 .filter((text: { aboutQuestions: { name: string } }) => {
                   if (filterType) {
                     return text.aboutQuestions.name
@@ -154,7 +146,6 @@ function Index(props: { archive: string }) {
                 .filter((dropdownType: { type: string }) => {
                   if (type === "pet") {
                     if (petFilter) {
-                      console.log("petFilter");
                       return dropdownType.type === petFilter;
                     } else {
                       return dropdownType;
@@ -215,12 +206,10 @@ function Index(props: { archive: string }) {
                               className="w-auto h-6 cursor-pointer"
                               icon="fluent:delete-20-filled"
                               onClick={() => {
-                                // deletePetFormMutation.mutate(form._id);
-                                setHidden(false);
-                                console.log("form.type", form.type);
                                 nameId.current.name = form.aboutQuestions.name;
                                 nameId.current.id = form._id;
-                                nameId.current.type = "pet";
+                                nameId.current.type = form.type;
+                                setHidden(false);
                               }}
                             />
                           </div>
@@ -237,9 +226,14 @@ function Index(props: { archive: string }) {
   };
 
   return (
-    <AdminSidebarComponent highlighted="Forms">
-      {!hidden && <Popup />}
-
+    <AdminSidebarComponent highlighted={highlighted}>
+      {!hidden && (
+        <Popup
+          name={nameId.current.id}
+          deleteHandler={handleDelete}
+          setHideState={setHidden}
+        />
+      )}
       <PageContainerComponent>
         <div className="flex justify-center mt-20 text-lg font-poppins">
           Active Forms
@@ -268,14 +262,11 @@ function Index(props: { archive: string }) {
             </TabList>
             <TabPanel>
               <div className="flex flex-col items-center mt-3">
-                <input
-                  className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  placeholder="Search by name"
-                  onChange={(e) => setPetTextFilter(e.target.value)}
-                  value={petTextFilter}
+                <SearchInput
+                  id={"petFilter"}
+                  change={setPetTextFilter}
+                  val={petTextFilter}
+                  placehold={"Search by name"}
                 />
                 <select
                   className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
@@ -296,14 +287,11 @@ function Index(props: { archive: string }) {
             </TabPanel>
             <TabPanel>
               <div className="flex flex-col items-center mt-3">
-                <input
-                  className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  placeholder="Search by name"
-                  onChange={(e) => setGiftAidTextFilter(e.target.value)}
-                  value={giftAidTextFilter}
+                <SearchInput
+                  id={"giftAidTextFilter"}
+                  change={setGiftAidTextFilter}
+                  val={giftAidTextFilter}
+                  placehold={"Search by name"}
                 />
               </div>
               <div className="lg:mr-20 lg:ml-20">
@@ -314,14 +302,11 @@ function Index(props: { archive: string }) {
             </TabPanel>
             <TabPanel>
               <div className="flex flex-col items-center mt-3">
-                <input
-                  className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  placeholder="Search by name"
-                  onChange={(e) => setVolunteerTextFilter(e.target.value)}
-                  value={volunteerTextFilter}
+                <SearchInput
+                  id={"volunteerTextFilter"}
+                  change={setVolunteerTextFilter}
+                  val={volunteerTextFilter}
+                  placehold={"Search by name"}
                 />
               </div>
               <div className="lg:mr-20 lg:ml-20">
@@ -338,59 +323,3 @@ function Index(props: { archive: string }) {
 }
 
 export default Index;
-
-export async function getServerSideProps(context: { query: { archive: any } }) {
-  // await dbConnect();
-  console.log("context", context.query.archive);
-
-  // const formPet = await formModels.FormPetAdoptionModel.find({
-  //   archive: "No",
-  // }).lean();
-  // const formGiftAid = await formModels.FormGiftAidModel.find({
-  //   archive: "No",
-  // }).lean();
-  // const formVolunteer = await formModels.FormVolunteerModel.find({
-  //   archive: "No",
-  // }).lean();
-
-  // const petForm = formPet.map((pet) => {
-  //   pet._id = pet._id.toString();
-  //   if (pet.createdAt) {
-  //     pet.createdAt = pet.createdAt.toString();
-  //   }
-  //   if (pet.updatedAt) {
-  //     pet.updatedAt = pet.updatedAt.toString();
-  //   }
-  //   return pet;
-  // });
-
-  // const giftAidForm = formGiftAid.map((giftAid) => {
-  //   giftAid._id = giftAid._id.toString();
-  //   if (giftAid.createdAt) {
-  //     giftAid.createdAt = giftAid.createdAt.toString();
-  //   }
-  //   if (giftAid.updatedAt) {
-  //     giftAid.updatedAt = giftAid.updatedAt.toString();
-  //   }
-  //   return giftAid;
-  // });
-  // const volunteerForm = formVolunteer.map((vol) => {
-  //   vol._id = vol._id.toString();
-  //   if (vol.createdAt) {
-  //     vol.createdAt = vol.createdAt.toString();
-  //   }
-  //   if (vol.updatedAt) {
-  //     vol.updatedAt = vol.updatedAt.toString();
-  //   }
-  //   return vol;
-  // });
-
-  return {
-    props: {
-      // petForm,
-      // giftAidForm,
-      // volunteerForm,
-      archive: false,
-    },
-  };
-}
