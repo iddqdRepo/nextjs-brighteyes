@@ -57,3 +57,29 @@ export function TableData(props: BaseProps) {
     </td>
   );
 }
+
+export function SearchInput({
+  id,
+  change,
+  val,
+  placehold,
+}: {
+  id: string;
+  change: any;
+  val: string;
+  placehold: string;
+}) {
+  return (
+    <input
+      className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
+      type="text"
+      id={id}
+      name={id}
+      placeholder={placehold}
+      onChange={(e) => {
+        change(e.target.value);
+      }}
+      value={val}
+    />
+  );
+}
