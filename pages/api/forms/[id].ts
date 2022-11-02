@@ -72,8 +72,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       try {
         if (type === "pet") {
+          console.log("GET");
           get("pet", formModels.FormPetAdoptionModel);
-          res.end();
         } else if (type === "giftaid") {
           get("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
