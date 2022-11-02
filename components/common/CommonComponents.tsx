@@ -262,21 +262,29 @@ export const ContactUsSection = () => {
 export const Popup = ({
   name,
   deleteHandler,
+  archiveHandler,
   setHideState,
+  action,
 }: {
   name: string;
   deleteHandler: any;
+  archiveHandler: any;
   setHideState: any;
+  action: string;
 }) => {
   return (
     <div className="absolute z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-slate-600 ">
       <div className="flex flex-col items-center p-4 bg-white border-2 shadow-lg h-fit w-96">
         <div className="pt-5 text-lg text-red-700 font-roboto">
-          Are you sure you want to delete
+          Are you sure you want to {action}
         </div>
         <div className="p-2 m-5 text-red-700 border-2 font-roboto">{name}</div>
         <button
-          onClick={() => deleteHandler()}
+          onClick={
+            action === "archive"
+              ? () => archiveHandler()
+              : () => deleteHandler()
+          }
           className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner"
         >
           <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
@@ -291,6 +299,27 @@ export const Popup = ({
             <span className="">No</span>
           </div>
         </button>
+      </div>
+    </div>
+  );
+};
+
+export const LoadingIcon = () => {
+  return (
+    <div className="mt-10">
+      <div className="relative">
+        <div className="w-20 h-20 border-2 border-purple-200 rounded-full"></div>
+        <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-purple-700 rounded-full animate-spin"></div>
+      </div>
+
+      <div className="relative">
+        <div className="w-10 h-10 border-2 border-purple-200 rounded-full"></div>
+        <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-purple-700 rounded-full animate-spin"></div>
+      </div>
+
+      <div className="relative">
+        <div className="w-5 h-5 border-2 border-purple-200 rounded-full"></div>
+        <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-purple-700 rounded-full animate-spin"></div>
       </div>
     </div>
   );
