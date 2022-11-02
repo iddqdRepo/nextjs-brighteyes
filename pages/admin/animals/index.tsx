@@ -1,45 +1,78 @@
-import dbConnect from "../../../utils/dbConnect";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   TableComponent,
   TableHeader,
   TableData,
   PageContainerComponent,
+  PageHeader,
 } from "../../../adminComponents/commonAdminComponents";
-import petModel from "../../../models/petModel";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
-// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useRouter } from "next/router";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deletePet, getPets, updatePet } from "../../../routes/petRoutes";
+import {
+  LoadingIcon,
+  Popup,
+} from "../../../components/common/CommonComponents";
+import { PetInterface } from "../../../interfaces/interfaces";
 
-function Index(props: { data: any; archive: boolean }) {
+function Index() {
   const [filter, setFilter] = useState("");
-  const pets = props.data;
   const [textFilter, setTextFilter] = useState("");
+  const [hidden, setHidden] = useState(true);
+  const deleteOrUpdateInfo = useRef({
+    name: "",
+    id: "",
+    data: {} as PetInterface,
+    action: "",
+  });
 
-  interface PetInterface {
-    adopted: string;
-    age: string;
-    breed: string;
-    desc: string;
-    image: string;
-    name: string;
-    size: string;
-    suitableForAnimals: string;
-    suitableForChildren: string;
-    type: string;
-    updatedAt: string;
-    yearsOrMonths: string;
-    __v: string;
-    _id: string;
-  }
-  console.log("props.archive", props.archive);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  let isArchive = router.query.archive;
+  const highlighted = isArchive === "true" ? "AnimalArchive" : "Animals";
+  const { isLoading, data: pets } = useQuery("pets", getPets);
+
+  const deletePetMutation = useMutation(deletePet, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("pets");
+    },
+  });
+  const updatePetMutation = useMutation(updatePet, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("pets");
+    },
+  });
+
+  const handleDelete = () => {
+    deletePetMutation.mutate(deleteOrUpdateInfo.current.id);
+    setHidden(true);
+  };
+  const handleArchive = () => {
+    deleteOrUpdateInfo.current.data.adopted = "Yes";
+    console.log("data = ", deleteOrUpdateInfo.current.data);
+    updatePetMutation.mutate(deleteOrUpdateInfo.current.data);
+    setHidden(true);
+  };
+
   return (
     <>
-      <AdminSidebarComponent
-        highlighted={props.archive ? "AnimalArchive" : "Animals"}
-      >
+      <AdminSidebarComponent highlighted={highlighted}>
+        {!hidden && (
+          <Popup
+            name={deleteOrUpdateInfo.current.id}
+            deleteHandler={handleDelete}
+            setHideState={setHidden}
+            archiveHandler={handleArchive}
+            action={deleteOrUpdateInfo.current.action}
+          />
+        )}
         <PageContainerComponent>
+          <PageHeader>
+            {isArchive === "true" ? "Archived Animals" : "Active Animals"}
+          </PageHeader>
           <div className="flex flex-col items-center">
             <div className="flex flex-col-reverse items-center justify-center w-full px-2 py-5 mt-10 border sm:flex-row sm:justify-between xl:w-5/6 rounded-xl">
               <input
@@ -68,86 +101,136 @@ function Index(props: { data: any; archive: boolean }) {
               </Link>
             </div>
 
-            <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-5/6">
-              <div className="mt-3 mb-8 overflow-hidden shadow-sm">
-                <TableComponent>
-                  <thead>
-                    <tr>
-                      <TableHeader>Image</TableHeader>
-                      <TableHeader>Name</TableHeader>
-                      <TableHeader>Type</TableHeader>
-                      <TableHeader>Adopted</TableHeader>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-slate-800">
-                    {pets
-                      .filter((applied: { type: string }) => {
-                        // console.log("applied", applied.type);
-                        if (filter) {
-                          return applied.type === filter;
-                        } else {
-                          return applied;
-                        }
-                      })
-                      .filter((text: { type: string; name: string }) => {
-                        // console.log("applied", text.type);
-                        if (textFilter) {
-                          return text.name
-                            .toLowerCase()
-                            .includes(textFilter.toLowerCase());
-                        } else {
-                          return text;
-                        }
-                      })
-                      .map((pet: PetInterface) => {
-                        return (
-                          <>
-                            <tr className="h-20">
-                              <TableData className="flex flex-row items-center justify-center p-4 border-b border-slate-100 text-slate-500">
-                                <div
-                                  className="w-24 h-20 bg-center bg-no-repeat bg-cover rounded-xl fit"
-                                  style={{
-                                    backgroundImage: `url("${pet.image}")`,
-                                  }}
-                                ></div>
-                              </TableData>
+            {!isLoading ? (
+              <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-5/6">
+                <div className="mt-3 mb-8 overflow-hidden shadow-sm">
+                  <TableComponent>
+                    <thead>
+                      <tr>
+                        <TableHeader>Image</TableHeader>
+                        <TableHeader>Name</TableHeader>
+                        <TableHeader>View</TableHeader>
+                        <TableHeader>Edit</TableHeader>
+                        <TableHeader>Archive</TableHeader>
+                        <TableHeader>Delete</TableHeader>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-slate-800">
+                      {pets.data
+                        .filter((archiveFilter: { adopted: string }) => {
+                          if (isArchive === "false") {
+                            return archiveFilter.adopted === "No";
+                          } else {
+                            return archiveFilter.adopted === "Yes";
+                          }
+                        })
+                        .filter((applied: { type: string }) => {
+                          if (filter) {
+                            return applied.type === filter;
+                          } else {
+                            return applied;
+                          }
+                        })
+                        .filter((text: { type: string; name: string }) => {
+                          if (textFilter) {
+                            return text.name
+                              .toLowerCase()
+                              .includes(textFilter.toLowerCase());
+                          } else {
+                            return text;
+                          }
+                        })
+                        .map((pet: PetInterface) => {
+                          return (
+                            <>
+                              <tr className="h-20">
+                                <TableData className="flex flex-row items-center justify-center p-4 border-b border-slate-100 text-slate-500">
+                                  <div
+                                    className="w-24 h-20 bg-center bg-no-repeat bg-cover rounded-xl fit"
+                                    style={{
+                                      backgroundImage: `url("${pet.image}")`,
+                                    }}
+                                  ></div>
+                                </TableData>
 
-                              <TableData>
-                                <div className="text-lg text-center font-roboto">
-                                  {pet.name}
-                                </div>
-                              </TableData>
-                              <TableData>
-                                <div className="text-lg text-center font-roboto">
-                                  {pet.type}
-                                </div>
-                              </TableData>
-                              <TableData>
-                                <div className="flex flex-row items-center justify-center">
-                                  <Icon
-                                    className="w-auto h-6 mr-5 cursor-pointer"
-                                    icon="bxs:edit"
-                                    onClick={() => {
-                                      console.log("edit clicked");
-                                    }}
-                                  />
-                                  <Icon
-                                    className="w-auto h-6 cursor-pointer"
-                                    icon="fluent:delete-20-filled"
-                                    onClick={(e) => {
-                                      console.log(e.target, "delete clicked");
-                                    }}
-                                  />
-                                </div>
-                              </TableData>
-                            </tr>
-                          </>
-                        );
-                      })}
-                  </tbody>
-                </TableComponent>
+                                <TableData>
+                                  <div className="text-lg text-center font-roboto">
+                                    {pet.name}
+                                  </div>
+                                </TableData>
+
+                                <TableData>
+                                  <div className="flex flex-row items-center justify-center">
+                                    <Icon
+                                      className="w-auto h-6 cursor-pointer"
+                                      icon="carbon:view-filled"
+                                      onClick={() => {
+                                        console.log("view clicked");
+                                      }}
+                                    />
+                                  </div>
+                                </TableData>
+                                <TableData>
+                                  <div className="flex flex-row items-center justify-center">
+                                    <Icon
+                                      className="w-auto h-6 cursor-pointer"
+                                      icon="bxs:edit"
+                                      onClick={() => {
+                                        console.log("edit clicked");
+                                      }}
+                                    />
+                                  </div>
+                                </TableData>
+                                <TableData>
+                                  <div className="flex flex-row items-center justify-center">
+                                    <Icon
+                                      className="w-auto h-6 cursor-pointer"
+                                      icon="fluent:tray-item-remove-24-filled"
+                                      onClick={() => {
+                                        deleteOrUpdateInfo.current.name =
+                                          pet.name;
+                                        deleteOrUpdateInfo.current.id = pet._id;
+                                        deleteOrUpdateInfo.current.data = pet;
+                                        deleteOrUpdateInfo.current.action =
+                                          "archive";
+                                        console.log(
+                                          "data = ",
+                                          deleteOrUpdateInfo.current.data
+                                        );
+
+                                        setHidden(false);
+                                      }}
+                                    />
+                                  </div>
+                                </TableData>
+                                <TableData>
+                                  <div className="flex flex-row items-center justify-center">
+                                    <Icon
+                                      className="w-auto h-6 cursor-pointer"
+                                      icon="fluent:delete-20-filled"
+                                      onClick={() => {
+                                        deleteOrUpdateInfo.current.name =
+                                          pet.name;
+                                        deleteOrUpdateInfo.current.id = pet._id;
+                                        deleteOrUpdateInfo.current.action =
+                                          "delete";
+
+                                        setHidden(false);
+                                      }}
+                                    />
+                                  </div>
+                                </TableData>
+                              </tr>
+                            </>
+                          );
+                        })}
+                    </tbody>
+                  </TableComponent>
+                </div>
               </div>
-            </div>
+            ) : (
+              <LoadingIcon />
+            )}
           </div>
         </PageContainerComponent>
       </AdminSidebarComponent>
@@ -156,50 +239,3 @@ function Index(props: { data: any; archive: boolean }) {
 }
 
 export default Index;
-
-export async function getServerSideProps(context: { query: { archive: any } }) {
-  await dbConnect();
-  console.log("context", context.query.archive);
-
-  if (context.query.archive === "false") {
-    const result = await petModel.find({ adopted: "No" }).lean();
-
-    const pets = result.map((pet) => {
-      pet._id = pet._id.toString();
-      if (pet.createdAt) {
-        pet.createdAt = pet.createdAt.toString();
-      }
-      if (pet.updatedAt) {
-        pet.updatedAt = pet.updatedAt.toString();
-      }
-      return pet;
-    });
-
-    return {
-      props: {
-        data: pets,
-        archive: false,
-      },
-    };
-  } else {
-    const result = await petModel.find({ adopted: "Yes" }).lean();
-
-    const pets = result.map((pet) => {
-      pet._id = pet._id.toString();
-      if (pet.createdAt) {
-        pet.createdAt = pet.createdAt.toString();
-      }
-      if (pet.updatedAt) {
-        pet.updatedAt = pet.updatedAt.toString();
-      }
-      return pet;
-    });
-
-    return {
-      props: {
-        data: pets,
-        archive: true,
-      },
-    };
-  }
-}
