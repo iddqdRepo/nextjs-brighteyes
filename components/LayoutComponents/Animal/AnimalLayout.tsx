@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { DetailContainer } from "./AnimalLayoutComponents";
 import { Icon } from "@iconify/react";
-import { AnimalInterface } from "../../../interfaces/interfaces";
+import { PetInterface } from "../../../interfaces/interfaces";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import {
   AdoptionIconContainer,
@@ -30,11 +30,7 @@ export const HeroBannerSection = ({ name }: { name: string }) => {
   );
 };
 
-export const AnimalDetailSection = ({
-  animal,
-}: {
-  animal: AnimalInterface;
-}) => {
+export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
   const {
     name,
     age,
