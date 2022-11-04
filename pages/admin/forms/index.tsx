@@ -6,7 +6,7 @@ import {
   SearchInput,
   TableComponent,
   TableData,
-  TableHeader,
+  TableHeadMap,
 } from "../../../adminComponents/commonAdminComponents";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Icon } from "@iconify/react";
@@ -45,6 +45,14 @@ function Index() {
     action: "",
     type: "",
   });
+  const tableHeaderArray = [
+    "Name",
+    "Type",
+    "Submitted",
+    "View",
+    "Archive",
+    "Delete",
+  ];
   const [hidden, setHidden] = useState(true);
   const [petFilter, setPetFilter] = useState("");
   const [petTextFilter, setPetTextFilter] = useState("");
@@ -154,16 +162,7 @@ function Index() {
       <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-full">
         <div className="mt-3 mb-8 overflow-hidden shadow-sm">
           <TableComponent>
-            <thead>
-              <tr>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Type</TableHeader>
-                <TableHeader>Submitted</TableHeader>
-                <TableHeader>View</TableHeader>
-                <TableHeader>Archive</TableHeader>
-                <TableHeader>Delete</TableHeader>
-              </tr>
-            </thead>
+            <TableHeadMap ArrayOfHeaderTitles={tableHeaderArray} />
 
             <tbody className="bg-white dark:bg-slate-800">
               {list
@@ -303,24 +302,6 @@ function Index() {
                   </Tab>
                 );
               })}
-              {/* <Tab
-                selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
-              >
-                Adoption Forms
-              </Tab>
-              <Tab
-                selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
-              >
-                GiftAid Forms
-              </Tab>
-              <Tab
-                selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
-              >
-                Volunteer Forms
-              </Tab> */}
             </TabList>
             <TabPanel>
               <div className="flex flex-col items-center mt-3">
