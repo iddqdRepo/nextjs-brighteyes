@@ -27,14 +27,13 @@ export function TableComponent(props: BaseProps) {
   );
 }
 
-export function TableHeader(props: BaseProps) {
+function TableHeader(props: BaseProps) {
   const { children, className } = props;
 
   return (
     <th
-      //If no className is passed in, render below as default, otherwise amend with new className
       className={clsx(
-        "p-4 pt-0 pb-3 font-medium text-center uppercase border-b text-slate-400",
+        "p-1 md:p-4 pt-0 pb-3 text-xs md:text-md font-medium text-center uppercase border-b text-slate-400",
         className
       )}
     >
@@ -42,19 +41,33 @@ export function TableHeader(props: BaseProps) {
     </th>
   );
 }
-
 export function TableData(props: BaseProps) {
   const { children, className } = props;
 
   return (
     <td
       className={clsx(
-        "p-4 border-b border-slate-100 text-slate-500",
+        " p-1 md:p-4 border-b border-slate-100 text-slate-500",
         className
       )}
     >
       {children}
     </td>
+  );
+}
+export function TableHeadMap({
+  ArrayOfHeaderTitles,
+}: {
+  ArrayOfHeaderTitles: string[];
+}) {
+  return (
+    <thead>
+      <tr>
+        {ArrayOfHeaderTitles.map((title) => {
+          return <TableHeader key={title}>{title}</TableHeader>;
+        })}
+      </tr>
+    </thead>
   );
 }
 
@@ -83,3 +96,11 @@ export function SearchInput({
     />
   );
 }
+
+export const PageHeader = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="flex justify-center mt-20 text-lg font-poppins">
+      {children}
+    </div>
+  );
+};

@@ -24,8 +24,8 @@ import {
 
 export const FormPageTitle = ({ title }: { title: string }) => {
   return (
-    <div className="flex justify-center w-3/6">
-      <div className="m-3 mt-10 text-2xl font-medium text-center text-gray-900 font-poppins">
+    <div className="flex justify-center w-10/12 lg:w-3/6 ">
+      <div className="m-3 mt-10 text-2xl font-medium text-center text-gray-900  font-poppins">
         {title}
       </div>
     </div>
@@ -101,7 +101,7 @@ export const InputTextFormik = ({
   classN?: string;
   type?: string;
   children: React.ReactNode;
-  placeholder: string;
+  placeholder?: string;
 }) => {
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
