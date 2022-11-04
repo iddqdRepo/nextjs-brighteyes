@@ -3,7 +3,7 @@ import React from "react";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
 import { FooterSection } from "../../../components/common/CommonComponents";
-import { AnimalInterface } from "../../../interfaces/interfaces";
+import { PetInterface } from "../../../interfaces/interfaces";
 import {
   AdoptionRulesSection,
   AnimalDetailSection,
@@ -12,7 +12,7 @@ import {
 import { Divider } from "../../../components/LayoutComponents/Animal/AnimalLayoutComponents";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
-function Animal({ animal }: { animal: [AnimalInterface] }) {
+function Animal({ animal }: { animal: [PetInterface] }) {
   return (
     <>
       <NavbarComponent />
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
   const data = await petModel.find({ adopted: "No" });
   //mapping through to create an array of the paths
   const paths = data.map((obj) => {
-    console.log(obj.name);
+    // console.log(obj.name);
     return {
       params: {
         animal: obj.name.toString().trim(),
