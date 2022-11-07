@@ -1,14 +1,17 @@
 import React from "react";
 import petModel from "../../../../models/petModel";
 import dbConnect from "../../../../utils/dbConnect";
-import { Field, Formik } from "formik";
-import {
-  FormPageTitle,
-  Label,
-} from "../../../../components/IndividualFormLayout/CommonFormComponents";
+import { Formik } from "formik";
+import { FormPageTitle } from "../../../../components/IndividualFormLayout/CommonFormComponents";
 import { PetInterface } from "../../../../interfaces/interfaces";
 import { PageContainerComponent } from "../../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../../adminComponents/AdminSidebarComponent";
+import { AnimalSchema } from "../../../../utils/yup/animalYupSchema";
+import {
+  InputOrTextArea,
+  AddOrEditAnimalErrorFormik,
+  DropdownField,
+} from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 
 function Index({ animal }: { animal: PetInterface[] }) {
   return (
@@ -18,10 +21,10 @@ function Index({ animal }: { animal: PetInterface[] }) {
           <FormPageTitle title={`Editing ${animal[0].name}'s adoption form`} />
           <Formik
             initialValues={animal[0]}
-            //   validationSchema={AdoptionSchema}
+            validationSchema={AnimalSchema}
             onSubmit={() => {}}
           >
-            {({ values, handleSubmit }) => (
+            {({ values, errors, touched, handleSubmit }) => (
               <div className="flex justify-center w-full">
                 <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
                   <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
@@ -32,143 +35,127 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       }}
                     ></div>
                   </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text="Name" hFor="Name" />
 
-                    <Field
-                      className="border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      name="name"
-                      type="text"
-                      value={values.name}
+                  <InputOrTextArea labelText={"Name"} labelHForAndName={"name"}>
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"name"}
                     />
-                  </div>
-                  {/* <InputTextFormik
-                labelText="Name"
-                val="Name"
-                forNameId="Name"
-                type="Text"
-              >
-                <ErrorFormik
-                  err={err}
-                  touch={touch}
-                  field={field}
-                  parent={category}
-                  id={"err-" + entry[0]}
-                />
-              </InputTextFormik> */}
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text={"Type"} hFor={"Type"} />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      }
-                      name="type"
-                      as="select"
-                    >
-                      <option value={""}>Select</option>
-                      <option value={"Dog"}>Dog</option>
-                      <option value={"Cat"}>Cat</option>
-                    </Field>
-                  </div>
+                  </InputOrTextArea>
+
+                  <DropdownField
+                    labelText={"Type"}
+                    labelHForAndName={"type"}
+                    valueArray={["Dog", "Cat"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"type"}
+                    />
+                  </DropdownField>
+
                   <div className="flex">
-                    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                      <Label text="Age" hFor="Age" classN="w-12" />
-                      <Field
-                        className="border w-12 border-gray-300 text-gray-900 text-xs font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-11 p-2.5 "
-                        name="age"
-                        type="text"
-                      />
-                    </div>
-                    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                      <Label
-                        text={"Years/Months"}
-                        hFor={"yearsOrMonths"}
-                        classN="w-28"
-                      />
-                      <Field
-                        className={
-                          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-28 h-11 p-2.5 "
-                        }
-                        name="yearsOrMonths"
-                        as="select"
-                      >
-                        <option value={""}>Select</option>
-                        <option value={"Months"}>Months</option>
-                        <option value={"Years"}>Years</option>
-                      </Field>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text={"Sex"} hFor={"Sex"} />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      }
-                      name="sex"
-                      as="select"
+                    <InputOrTextArea
+                      labelText={"Age"}
+                      labelHForAndName={"age"}
+                      labelClassN="w-12"
+                      fieldClassN="w-12"
                     >
-                      <option value={""}>Select</option>
-                      <option value={"Male"}>Male</option>
-                      <option value={"Female"}>Female</option>
-                    </Field>
-                  </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text={"Size"} hFor={"Size"} />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      }
-                      name="size"
-                      as="select"
+                      <AddOrEditAnimalErrorFormik
+                        err={errors}
+                        touch={touched}
+                        field={"age"}
+                      />
+                    </InputOrTextArea>
+
+                    <DropdownField
+                      labelText={"Years/Months"}
+                      labelHForAndName={"yearsOrMonths"}
+                      valueArray={["Months", "Years"]}
+                      labelClassN="w-28"
+                      fieldClassN="w-28"
                     >
-                      <option value={""}>Select</option>
-                      <option value={"Small"}>Small</option>
-                      <option value={"Medium"}>Medium</option>
-                      <option value={"Large"}>Large</option>
-                      <option value={"Giant"}>Giant</option>
-                    </Field>
+                      <AddOrEditAnimalErrorFormik
+                        err={errors}
+                        touch={touched}
+                        field={"yearsOrMonths"}
+                      />
+                    </DropdownField>
                   </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label
-                      text={"Suitable for children"}
-                      hFor={"Suitable for children"}
+
+                  <DropdownField
+                    labelText={"Sex"}
+                    labelHForAndName={"sex"}
+                    valueArray={["Male", "Female"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"sex"}
                     />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      }
-                      name="suitableForChildren"
-                      as="select"
-                    >
-                      <option value={""}>Select</option>
-                      <option value={"Yes"}>Yes</option>
-                      <option value={"No"}>No</option>
-                    </Field>
-                  </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text={"adopted"} hFor={"adopted"} />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
-                      }
-                      name="adopted"
-                      as="select"
-                    >
-                      <option value={""}>Select</option>
-                      <option value={"Yes"}>Yes</option>
-                      <option value={"No"}>No</option>
-                    </Field>
-                  </div>
-                  <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-                    <Label text={"Description"} hFor={"desc"} />
-                    <Field
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-64 h-32 p-2.5 "
-                      }
-                      name="desc"
-                      as="textarea"
-                    ></Field>
-                  </div>
+                  </DropdownField>
+
+                  <DropdownField
+                    labelText={"Size"}
+                    labelHForAndName={"size"}
+                    valueArray={["Small", "Medium", "Large", "Giant"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"size"}
+                    />
+                  </DropdownField>
+
+                  <DropdownField
+                    labelText={"Suitable for children"}
+                    labelHForAndName={"suitableForChildren"}
+                    valueArray={["Yes", "No"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"suitableForChildren"}
+                    />
+                  </DropdownField>
+                  <DropdownField
+                    labelText={"Suitable for animals"}
+                    labelHForAndName={"suitableForAnimals"}
+                    valueArray={["Yes", "No"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"suitableForAnimals"}
+                    />
+                  </DropdownField>
+
+                  <DropdownField
+                    labelText={"Adopted"}
+                    labelHForAndName={"adopted"}
+                    valueArray={["Yes", "No"]}
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"adopted"}
+                    />
+                  </DropdownField>
+                  <InputOrTextArea
+                    labelText={"Description"}
+                    labelHForAndName="desc"
+                    fieldClassN="w-64 h-32"
+                    fieldAs="textarea"
+                  >
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"desc"}
+                    />
+                  </InputOrTextArea>
+
                   <button
                     type="submit"
                     className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
@@ -179,17 +166,17 @@ function Index({ animal }: { animal: PetInterface[] }) {
                   >
                     Update {animal[0].name}
                   </button>
-                  {/* <pre>
-                {JSON.stringify(
-                  values,
-                  (key, value) => {
-                    if (key != "image") {
-                      return value;
-                    }
-                  },
-                  1
-                )}
-              </pre> */}
+                  <pre>
+                    {JSON.stringify(
+                      values,
+                      (key, value) => {
+                        if (key != "image") {
+                          return value;
+                        }
+                      },
+                      1
+                    )}
+                  </pre>
                 </div>
               </div>
             )}
