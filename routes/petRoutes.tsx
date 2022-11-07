@@ -11,7 +11,11 @@ export const deletePet = async (id: string) => {
 };
 
 export const updatePet = async (data: PetInterface) => {
-  await axios.put(`http://localhost:3000/api/pets/${data._id}`, data);
+  const updatePet = await axios.put(
+    `http://localhost:3000/api/pets/${data._id}`,
+    data
+  );
+  return updatePet.data.success;
 };
 export const postPet = async (data: PetInterface) => {
   const addPet = await axios.post(`http://localhost:3000/api/pets`, data);

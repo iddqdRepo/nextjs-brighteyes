@@ -8,10 +8,7 @@ export const AnimalSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  age: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+  age: Yup.number().required("Required").typeError("Must be a number"),
   yearsOrMonths: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
