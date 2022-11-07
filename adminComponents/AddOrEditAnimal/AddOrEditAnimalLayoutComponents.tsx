@@ -94,9 +94,8 @@ export const ChooseFile = ({
   children: React.ReactNode;
   labelClassN?: string;
   setter: any;
-  values: { [key: string]: string; image: string };
+  values: { [key: string]: string; image: string } | PetInterface;
 }) => {
-  console.log("choosefile values =", values);
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
       <Label
@@ -173,5 +172,139 @@ export const DropdownField = ({
       </Field>
       {children}
     </div>
+  );
+};
+
+export let submittingButtonIcon = () => {
+  return (
+    <div
+      aria-label="Loading..."
+      role="status"
+      className="flex items-center space-x-2"
+    >
+      <svg className="w-6 h-6 animate-spin stroke-white" viewBox="0 0 256 256">
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+      </svg>
+      <span className="text-xs font-medium text-white-500">Submitting...</span>
+    </div>
+  );
+};
+
+export const ShowButtonTextOnSubmit = ({
+  loading,
+  isSuccess,
+  buttonText,
+  submitHandler,
+  animalName,
+}: {
+  loading: boolean;
+  isSuccess: boolean;
+  buttonText: string;
+  submitHandler: any;
+  animalName: string;
+}) => {
+  return loading ? (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        e.preventDefault();
+        submitHandler();
+      }}
+    >
+      {submittingButtonIcon()}
+    </button>
+  ) : isSuccess ? (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] opacity-50 cursor-not-allowed text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
+      {`Submitted ${animalName}`}
+    </button>
+  ) : (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        e.preventDefault();
+        submitHandler();
+      }}
+    >
+      {buttonText}
+    </button>
   );
 };
