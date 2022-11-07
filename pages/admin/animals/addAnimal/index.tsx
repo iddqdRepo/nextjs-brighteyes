@@ -9,14 +9,18 @@ import {
   AddOrEditAnimalErrorFormik,
   DropdownField,
   ChooseFile,
+  ShowButtonTextOnSubmit,
 } from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 
 import { postPet } from "../../../../routes/petRoutes";
 import { PetInterface } from "../../../../interfaces/interfaces";
+import { sanitizeInput } from "../../../../utils/sanitizeData";
 
 function Index() {
   const [resizedImage, setResizedImage] = useState("");
-  console.log("iamge.len", resizedImage.length);
+  const [loading, setLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Add Animal");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const initialValues = {
     adopted: "",
@@ -33,19 +37,6 @@ function Index() {
     yearsOrMonths: "",
   };
 
-  const sanitizeInput = (data: PetInterface) => {
-    let sanitizedData: PetInterface = { ...data };
-    Object.entries(data).forEach(([key, value]) => {
-      let newValue: string = value;
-      if (key != "image") {
-        newValue = value.charAt(0).toUpperCase() + value.slice(1);
-        newValue = newValue.trim();
-      }
-      sanitizedData[key as keyof PetInterface] = newValue as string;
-    });
-    return sanitizedData;
-  };
-
   return (
     <AdminSidebarComponent highlighted={""}>
       <PageContainerComponent>
@@ -54,9 +45,19 @@ function Index() {
           <Formik
             initialValues={initialValues}
             validationSchema={AnimalSchema}
-            onSubmit={(data) => {
+            onSubmit={async (data) => {
+              setLoading(true);
+
               let toPost: PetInterface = sanitizeInput(data as PetInterface);
-              postPet(toPost);
+              let successful = await postPet(toPost);
+              if (successful) {
+                setLoading(false);
+                setIsSuccess(true);
+              } else {
+                setLoading(false);
+                setIsSuccess(false);
+                setButtonText("ERROR, try again");
+              }
             }}
           >
             {({ values, errors, touched, handleSubmit }) => (
@@ -209,16 +210,13 @@ function Index() {
                       }}
                     ></div>
                   </div>
-                  <button
-                    type="submit"
-                    className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSubmit();
-                    }}
-                  >
-                    Add Animal
-                  </button>
+                  <ShowButtonTextOnSubmit
+                    loading={loading}
+                    isSuccess={isSuccess}
+                    buttonText={buttonText}
+                    submitHandler={handleSubmit}
+                    animalName={values.name}
+                  />
                   {/* <pre>
                     {JSON.stringify(
                       values,
