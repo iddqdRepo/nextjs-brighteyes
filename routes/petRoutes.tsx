@@ -13,3 +13,7 @@ export const deletePet = async (id: string) => {
 export const updatePet = async (data: PetInterface) => {
   await axios.put(`http://localhost:3000/api/pets/${data._id}`, data);
 };
+export const postPet = async (data: PetInterface) => {
+  const addPet = await axios.post(`http://localhost:3000/api/pets`, data);
+  return addPet.data.success;
+};

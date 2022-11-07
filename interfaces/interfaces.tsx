@@ -10,10 +10,10 @@ export interface PetInterface {
   suitableForAnimals: string;
   suitableForChildren: string;
   type: string;
-  updatedAt: string;
   yearsOrMonths: string;
-  __v: number;
-  _id: string;
+  updatedAt?: string;
+  __v?: string | number;
+  _id?: string;
 }
 
 export interface GiftaidFormInterface {
