@@ -53,7 +53,6 @@ function Index() {
   };
   const handleArchive = () => {
     deleteOrUpdateInfo.current.data.adopted = "Yes";
-    console.log("data = ", deleteOrUpdateInfo.current.data);
     updatePetMutation.mutate(deleteOrUpdateInfo.current.data);
     setHidden(true);
   };
@@ -76,9 +75,9 @@ function Index() {
             {isArchive === "true" ? "Archived Animals" : "Active Animals"}
           </PageHeader>
           <div className="flex flex-col items-center">
-            <div className="flex flex-col-reverse items-center justify-center w-full px-2 py-5 mt-10 border sm:flex-row sm:justify-between xl:w-5/6 rounded-xl">
+            <div className="flex flex-col-reverse items-center justify-center w-full px-2 py-5 mt-10 border sm:flex-row sm:justify-center xl:w-5/6 rounded-xl">
               <input
-                className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
+                className="flex w-56 px-2 m-2 border rounded-lg h-14 sm:mr-0"
                 type="text"
                 id="fname"
                 name="fname"
@@ -86,7 +85,7 @@ function Index() {
                 onChange={(e) => setTextFilter(e.target.value)}
               />
               <select
-                className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
+                className="flex w-56 px-2 m-2 border rounded-lg h-14 sm:mr-0"
                 name="type"
                 id="type"
                 onChange={(e) => setFilter(e.target.value)}
@@ -95,12 +94,15 @@ function Index() {
                 <option value="Dog">Dogs</option>
                 <option value="Cat">Cats</option>
               </select>
-
-              <Link href={"/admin/animals/addAnimal"}>
-                <button className="flex p-3 border mb-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]">
-                  + Add Animal
-                </button>
-              </Link>
+              {isArchive === "false" ? (
+                <Link href={"/admin/animals/addAnimal"}>
+                  <button className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]">
+                    + Add Animal
+                  </button>
+                </Link>
+              ) : (
+                <></>
+              )}
             </div>
 
             {!isLoading ? (
@@ -171,7 +173,10 @@ function Index() {
                                     onClick={() => {
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
-                                      deleteOrUpdateInfo.current.id = pet._id;
+                                      if (pet._id) {
+                                        deleteOrUpdateInfo.current.id =
+                                          pet!._id;
+                                      }
                                       deleteOrUpdateInfo.current.data = pet;
                                       deleteOrUpdateInfo.current.action =
                                         "archive";
@@ -193,7 +198,10 @@ function Index() {
                                     onClick={() => {
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
-                                      deleteOrUpdateInfo.current.id = pet._id;
+                                      if (pet._id) {
+                                        deleteOrUpdateInfo.current.id =
+                                          pet!._id;
+                                      }
                                       deleteOrUpdateInfo.current.action =
                                         "delete";
 
