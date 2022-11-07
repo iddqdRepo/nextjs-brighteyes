@@ -24,7 +24,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
             validationSchema={AnimalSchema}
             onSubmit={() => {}}
           >
-            {({ values, errors, touched, handleSubmit }) => (
+            {({ errors, touched, handleSubmit }) => (
               <div className="flex justify-center w-full">
                 <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
                   <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
@@ -166,7 +166,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                   >
                     Update {animal[0].name}
                   </button>
-                  <pre>
+                  {/* <pre>
                     {JSON.stringify(
                       values,
                       (key, value) => {
@@ -176,7 +176,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       },
                       1
                     )}
-                  </pre>
+                  </pre> */}
                 </div>
               </div>
             )}

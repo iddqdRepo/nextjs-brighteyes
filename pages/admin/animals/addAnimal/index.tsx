@@ -230,7 +230,7 @@ function Index() {
                       1
                     )}
                   </pre> */}
-                  <pre>{JSON.stringify(values, null, 1)}</pre>
+                  {/* <pre>{JSON.stringify(values, null, 1)}</pre> */}
                 </div>
               </div>
             )}

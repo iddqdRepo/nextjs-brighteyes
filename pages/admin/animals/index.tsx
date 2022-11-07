@@ -96,7 +96,7 @@ function Index() {
                 <option value="Cat">Cats</option>
               </select>
 
-              <Link href={"/admin/addAnimal"}>
+              <Link href={"/admin/animals/addAnimal"}>
                 <button className="flex p-3 border mb-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]">
                   + Add Animal
                 </button>
