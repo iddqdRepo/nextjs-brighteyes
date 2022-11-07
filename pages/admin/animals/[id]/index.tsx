@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import petModel from "../../../../models/petModel";
 import dbConnect from "../../../../utils/dbConnect";
 import { Formik } from "formik";
@@ -11,9 +11,18 @@ import {
   InputOrTextArea,
   AddOrEditAnimalErrorFormik,
   DropdownField,
+  ShowButtonTextOnSubmit,
+  ChooseFile,
 } from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
+import { sanitizeInput } from "../../../../utils/sanitizeData";
+import { updatePet } from "../../../../routes/petRoutes";
 
 function Index({ animal }: { animal: PetInterface[] }) {
+  const [resizedImage, setResizedImage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Add Animal");
+  const [isSuccess, setIsSuccess] = useState(false);
+
   return (
     <AdminSidebarComponent highlighted={""}>
       <PageContainerComponent>
@@ -22,20 +31,23 @@ function Index({ animal }: { animal: PetInterface[] }) {
           <Formik
             initialValues={animal[0]}
             validationSchema={AnimalSchema}
-            onSubmit={() => {}}
+            onSubmit={async (data) => {
+              setLoading(true);
+              let toPost: PetInterface = sanitizeInput(data as PetInterface);
+              let successful = await updatePet(toPost);
+              if (successful) {
+                setLoading(false);
+                setIsSuccess(true);
+              } else {
+                setLoading(false);
+                setIsSuccess(false);
+                setButtonText("ERROR, try again");
+              }
+            }}
           >
-            {({ errors, touched, handleSubmit }) => (
+            {({ values, errors, touched, handleSubmit }) => (
               <div className="flex justify-center w-full">
                 <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
-                  <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
-                    <div
-                      className="bg-no-repeat bg-cover w-60 h-60 2xl:w-60 rounded-xl 2xl:h-60"
-                      style={{
-                        backgroundImage: `url("${animal[0].image}")`,
-                      }}
-                    ></div>
-                  </div>
-
                   <InputOrTextArea labelText={"Name"} labelHForAndName={"name"}>
                     <AddOrEditAnimalErrorFormik
                       err={errors}
@@ -155,17 +167,34 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       field={"desc"}
                     />
                   </InputOrTextArea>
-
-                  <button
-                    type="submit"
-                    className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleSubmit();
-                    }}
+                  <ChooseFile
+                    labelHForAndName="image"
+                    setter={setResizedImage}
+                    values={values}
                   >
-                    Update {animal[0].name}
-                  </button>
+                    <AddOrEditAnimalErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field={"desc"}
+                    />
+                  </ChooseFile>
+                  <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
+                    <div
+                      className="bg-no-repeat bg-cover w-60 h-60 2xl:w-60 rounded-xl 2xl:h-60"
+                      style={{
+                        backgroundImage: `url("${
+                          resizedImage ? resizedImage : values.image
+                        }")`,
+                      }}
+                    ></div>
+                  </div>
+                  <ShowButtonTextOnSubmit
+                    loading={loading}
+                    isSuccess={isSuccess}
+                    buttonText={buttonText}
+                    submitHandler={handleSubmit}
+                    animalName={values.name}
+                  />
                   {/* <pre>
                     {JSON.stringify(
                       values,
