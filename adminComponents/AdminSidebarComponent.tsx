@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 
-function AdminDashboardComponent(props: any) {
+function AdminSidebarComponent(props: any) {
   const [toggleSelected, setToggleSelected] = useState();
 
   useEffect(() => {
@@ -117,4 +117,4 @@ function AdminDashboardComponent(props: any) {
   );
 }
 
-export default AdminDashboardComponent;
+export default AdminSidebarComponent;
