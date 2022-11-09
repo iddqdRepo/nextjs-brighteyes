@@ -58,7 +58,7 @@ export const Label = ({
     <label
       htmlFor={hFor}
       className={clsx(
-        "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900 ",
+        "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900",
         classN
       )}
     >
