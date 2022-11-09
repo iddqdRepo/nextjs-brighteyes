@@ -34,11 +34,11 @@ function Index({
     answer: string;
   }) => {
     return (
-      <div className="flex flex-col items-start justify-start pt-2 mb-4 ml-1 mr-1 border border-gray-300 w-60">
+      <div className="flex flex-col items-center justify-start pt-2 mb-4 ml-1 mr-1 border border-gray-300 w-60">
         <Label
           text={titleMap[labelText as keyof TitleMapInterface]}
           hFor={"val"}
-          classN="w-60 text-xs"
+          classN=" text-xs"
         />
 
         <div className="text-center text-wrap h-fit text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60  p-2.5 ">

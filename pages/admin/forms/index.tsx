@@ -32,6 +32,7 @@ import {
   PetAdoptionFormInterface,
   VolunteerFormInterface,
 } from "../../../interfaces/interfaces";
+import Link from "next/link";
 
 function Index() {
   const router = useRouter();
@@ -44,6 +45,7 @@ function Index() {
     data: { archive: "" },
     action: "",
     type: "",
+    promptText: "",
   });
   const tableHeaderArray = [
     "Name",
@@ -218,15 +220,19 @@ function Index() {
                           </div>
                         </TableData>
                         <TableData>
-                          <div className="flex flex-row items-center justify-center">
-                            <Icon
-                              className="w-auto h-6 cursor-pointer"
-                              icon="carbon:view-filled"
-                              onClick={() => {
-                                console.log("view clicked");
-                              }}
-                            />
-                          </div>
+                          <Link
+                            href={`http://localhost:3000/admin/forms/${form._id}`}
+                          >
+                            <div className="flex flex-row items-center justify-center">
+                              <Icon
+                                className="w-auto h-6 cursor-pointer"
+                                icon="carbon:view-filled"
+                                onClick={() => {
+                                  console.log("view clicked");
+                                }}
+                              />
+                            </div>
+                          </Link>
                         </TableData>
                         <TableData>
                           <div className="flex flex-row items-center justify-center">
@@ -240,7 +246,11 @@ function Index() {
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.data = form;
                                 deleteOrUpdateInfo.current.action = "archive";
-
+                                isArchive
+                                  ? (deleteOrUpdateInfo.current.promptText =
+                                      "unArchive")
+                                  : (deleteOrUpdateInfo.current.promptText =
+                                      "archive");
                                 setHidden(false);
                               }}
                             />
@@ -257,6 +267,8 @@ function Index() {
                                 deleteOrUpdateInfo.current.id = form._id;
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.action = "delete";
+                                deleteOrUpdateInfo.current.promptText =
+                                  "delete";
                                 setHidden(false);
                               }}
                             />
@@ -277,11 +289,12 @@ function Index() {
     <AdminSidebarComponent highlighted={highlighted}>
       {!hidden && (
         <Popup
-          name={deleteOrUpdateInfo.current.id}
+          name={deleteOrUpdateInfo.current.name}
           deleteHandler={handleDelete}
           setHideState={setHidden}
           archiveHandler={handleArchive}
           action={deleteOrUpdateInfo.current.action}
+          promptText={deleteOrUpdateInfo.current.promptText}
         />
       )}
       <PageContainerComponent>
