@@ -6,22 +6,21 @@ dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
-  const id = query.id;
-
+  const username = query.username;
   switch (method) {
     case "GET":
       try {
-        const user = await userModel.findById(id);
+        const user = await userModel.find({ username: username });
         if (!user) {
           res.status(404).json({
             success: false,
-            message: `No user with ID of ${id} exists`,
+            message: `No user with username of ${username} exists`,
           });
           res.end();
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${id} successfully retrieved`,
+            message: `user ${username} successfully retrieved`,
             data: user,
           });
           res.end();
@@ -33,19 +32,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     case "PUT":
       try {
-        const user = await userModel.findByIdAndUpdate(id, req.body, {
-          new: true,
-          runValidators: true,
-        });
+        const user = await userModel.findOneAndUpdate(
+          { username: username },
+          req.body,
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
         if (!user) {
           res.status(404).json({
             success: false,
-            message: `No user with ID of ${id} exists`,
+            message: `No user with username of ${username} exists`,
           });
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${id} successfully updated`,
+            message: `user ${username} successfully updated`,
             data: req.body,
           });
           res.end();
@@ -57,17 +60,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "DELETE":
       try {
         const user = await userModel.deleteOne({
-          _id: id,
+          username: username,
         });
         if (!user.deletedCount) {
           res.status(404).json({
             success: false,
-            message: `No user with ID of ${id} exists`,
+            message: `No user with username of ${username} exists`,
           });
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${id} successfully deleted`,
+            message: `user ${username} successfully deleted`,
             data: {},
           });
           res.end();
