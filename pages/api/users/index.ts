@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
+import bcrypt from "bcrypt";
 
 dbConnect();
 
@@ -17,8 +18,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
     case "POST":
       try {
-        const users = await userModel.create(req.body);
-        res.status(201).json({ success: true, data: users });
+        const username = req.body.username;
+        const hash = bcrypt.hashSync(req.body.password, 10);
+        const user = await userModel.create({ username, password: hash });
+        res.status(201).json({ success: true, data: user });
       } catch (error: any) {
         res.status(404).json({ success: false, message: error });
       }

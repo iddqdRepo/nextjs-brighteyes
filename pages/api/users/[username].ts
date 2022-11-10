@@ -6,24 +6,25 @@ dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
-  const username = query.username;
+  const passedInUser = query.username;
+  console.log("query", query);
+  console.log("method", method);
+
   switch (method) {
     case "GET":
       try {
-        const user = await userModel.find({ username: username });
-        if (!user) {
-          res.status(404).json({
+        const user = await userModel.find({ username: passedInUser }).lean();
+        if (!user[0]) {
+          res.status(200).json({
             success: false,
-            message: `No user with username of ${username} exists`,
+            message: `No user with username of ${passedInUser} exists`,
           });
-          res.end();
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${username} successfully retrieved`,
+            message: `user ${passedInUser} successfully retrieved`,
             data: user,
           });
-          res.end();
         }
       } catch (error: any) {
         res.status(404).json({ message: error.message });
@@ -33,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       try {
         const user = await userModel.findOneAndUpdate(
-          { username: username },
+          { username: passedInUser },
           req.body,
           {
             new: true,
@@ -43,12 +44,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         if (!user) {
           res.status(404).json({
             success: false,
-            message: `No user with username of ${username} exists`,
+            message: `No user with username of ${passedInUser} exists`,
           });
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${username} successfully updated`,
+            message: `user ${passedInUser} successfully updated`,
             data: req.body,
           });
           res.end();
@@ -60,17 +61,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "DELETE":
       try {
         const user = await userModel.deleteOne({
-          username: username,
+          username: passedInUser,
         });
         if (!user.deletedCount) {
           res.status(404).json({
             success: false,
-            message: `No user with username of ${username} exists`,
+            message: `No user with username of ${passedInUser} exists`,
           });
         } else {
           res.status(200).json({
             success: true,
-            message: `user ${username} successfully deleted`,
+            message: `user ${passedInUser} successfully deleted`,
             data: {},
           });
           res.end();
