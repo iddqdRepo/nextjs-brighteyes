@@ -16,6 +16,13 @@ export interface PetInterface {
   _id?: string;
 }
 
+export interface UserInterface {
+  username: string;
+  password: string;
+  __v?: string | number;
+  _id?: string;
+}
+
 export interface GiftaidFormInterface {
   aboutQuestions: {
     address: string;
