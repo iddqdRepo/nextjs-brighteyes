@@ -27,6 +27,7 @@ function Index() {
     id: "",
     data: {} as PetInterface,
     action: "",
+    promptText: "",
   });
   const tableHeaderArray = ["Image", "Name", "Edit", "Archive", "Delete"];
 
@@ -67,6 +68,7 @@ function Index() {
             setHideState={setHidden}
             archiveHandler={handleArchive}
             action={deleteOrUpdateInfo.current.action}
+            promptText={deleteOrUpdateInfo.current.promptText}
           />
         )}
 
@@ -180,10 +182,11 @@ function Index() {
                                       deleteOrUpdateInfo.current.data = pet;
                                       deleteOrUpdateInfo.current.action =
                                         "archive";
-                                      console.log(
-                                        "data = ",
-                                        deleteOrUpdateInfo.current.data
-                                      );
+                                      isArchive
+                                        ? (deleteOrUpdateInfo.current.promptText =
+                                            "unArchive")
+                                        : (deleteOrUpdateInfo.current.promptText =
+                                            "archive");
 
                                       setHidden(false);
                                     }}
@@ -204,7 +207,8 @@ function Index() {
                                       }
                                       deleteOrUpdateInfo.current.action =
                                         "delete";
-
+                                      deleteOrUpdateInfo.current.promptText =
+                                        "delete";
                                       setHidden(false);
                                     }}
                                   />
