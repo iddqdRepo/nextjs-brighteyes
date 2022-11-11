@@ -1,14 +1,14 @@
-// import axios from "axios";
-// import { useRouter } from "next/router";
 import React, { useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import { PageContainerComponent } from "../../../adminComponents/commonAdminComponents";
+import { postUser } from "../../../routes/userRoutes";
 
 function Index() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordRetype, setPasswordRetype] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleAddUser = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -17,26 +17,18 @@ function Index() {
     if (username && password && passwordRetype) {
       if (password === passwordRetype) {
         console.log("Match");
+        if (!submitted) {
+          const addUser = await postUser({ username, password });
+          console.log("addUser", addUser);
+          setSubmitted(addUser);
+          setErrorMessage("");
+        }
       } else {
-        setErrorMessage("Passwords don't match");
+        return setErrorMessage("Passwords don't match");
       }
     } else {
-      setErrorMessage("Please fill in all fields ");
+      return setErrorMessage("Please fill in all fields ");
     }
-
-    // const credentials = { username, password };
-    // console.log("username", username);
-    // if (username && password && username != "admin") {
-    //   const user = await axios.post("/api/auth/login", credentials);
-    //   if (user.data.success) {
-    //     router.push("/admin");
-    //   } else {
-    //     console.log("setting Response");
-    //     setResponse(user.data.message);
-    //   }
-    // } else {
-    //   setResponse("Invalid username or password");
-    // }
   };
   return (
     <AdminSidebarComponent highlighted="AddUser">
@@ -98,12 +90,30 @@ function Index() {
             </div>
             <div className="flex flex-col items-center justify-between">
               <button
-                className="w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100"
+                className={
+                  submitted
+                    ? "w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100 opacity-50 cursor-not-allowed"
+                    : "w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100"
+                }
                 type="button"
                 onClick={(e) => handleAddUser(e)}
               >
-                Sign In
+                {submitted ? "User Added" : "Add User"}
               </button>
+              {submitted && (
+                <button
+                  className="w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100"
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setPassword("");
+                    setPasswordRetype("");
+                    setUsername("");
+                  }}
+                >
+                  Add another user
+                </button>
+              )}
             </div>
           </div>
         </div>
