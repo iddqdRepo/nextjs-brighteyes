@@ -246,7 +246,7 @@ function Index() {
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.data = form;
                                 deleteOrUpdateInfo.current.action = "archive";
-                                isArchive
+                                isArchive === "true"
                                   ? (deleteOrUpdateInfo.current.promptText =
                                       "unArchive")
                                   : (deleteOrUpdateInfo.current.promptText =

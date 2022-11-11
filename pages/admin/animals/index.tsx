@@ -53,7 +53,11 @@ function Index() {
     setHidden(true);
   };
   const handleArchive = () => {
-    deleteOrUpdateInfo.current.data.adopted = "Yes";
+    if (deleteOrUpdateInfo.current.data.adopted === "Yes") {
+      deleteOrUpdateInfo.current.data.adopted = "No";
+    } else {
+      deleteOrUpdateInfo.current.data.adopted = "Yes";
+    }
     updatePetMutation.mutate(deleteOrUpdateInfo.current.data);
     setHidden(true);
   };
@@ -182,7 +186,7 @@ function Index() {
                                       deleteOrUpdateInfo.current.data = pet;
                                       deleteOrUpdateInfo.current.action =
                                         "archive";
-                                      isArchive
+                                      isArchive === "true"
                                         ? (deleteOrUpdateInfo.current.promptText =
                                             "unArchive")
                                         : (deleteOrUpdateInfo.current.promptText =
