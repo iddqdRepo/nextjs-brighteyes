@@ -4,6 +4,7 @@ import {
   AdoptionCardSection,
   AdoptionCriteriaSection,
 } from "../../components/LayoutComponents/AdoptionLayout/AdoptionLayout";
+import NavbarComponent from "../../components/Navbar/NavbarComponent";
 import petModel from "../../models/petModel";
 import dbConnect from "../../utils/dbConnect";
 
@@ -12,6 +13,8 @@ function Adoption(props: any) {
 
   return (
     <>
+      <NavbarComponent />
+
       <AdoptionCriteriaSection />
       <AdoptionCardSection pets={props.data} />
       <FooterSection />

@@ -14,6 +14,7 @@ import { AdoptionInitialValuesInterface } from "../../../interfaces/adoptionInit
 import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
 import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
 import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionInitialValues";
+import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -60,113 +61,120 @@ function Index({ type }: { type: string }) {
   }, []);
 
   return (
-    <form className="flex flex-col items-center justify-center ">
-      <FormPageTitle title={` Adopt a ${type} Form`} />
-      <Formik
-        initialValues={newAdoptionInitialValues}
-        validationSchema={AdoptionSchema}
-        onSubmit={(data) => console.log(data)}
-      >
-        {({ values, errors, touched }) => (
-          <FormikFormContainer>
-            <FieldSet id="About-you" legendText="About you">
-              <QuestionsMap
-                getUseState={toShow}
-                setUseState={setToShow}
-                type={"adoption"}
-                category={"aboutQuestions"}
-                values={values}
-                touch={touched}
-                err={errors}
-              />
-            </FieldSet>
-            <FieldSet
-              id={type + "-matching-questions"}
-              legendText={type + " Matching Questions"}
-            >
-              {type === "Dog" ? (
+    <>
+      <NavbarComponent />
+
+      <form className="flex flex-col items-center justify-center ">
+        <FormPageTitle title={` Adopt a ${type} Form`} />
+        <Formik
+          initialValues={newAdoptionInitialValues}
+          validationSchema={AdoptionSchema}
+          onSubmit={(data) => console.log(data)}
+        >
+          {({ values, errors, touched }) => (
+            <FormikFormContainer>
+              <FieldSet id="About-you" legendText="About you">
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
                   type={"adoption"}
-                  category={"dogMatchingQuestions"}
+                  category={"aboutQuestions"}
                   values={values}
                   touch={touched}
                   err={errors}
                 />
-              ) : (
+              </FieldSet>
+              <FieldSet
+                id={type + "-matching-questions"}
+                legendText={type + " Matching Questions"}
+              >
+                {type === "Dog" ? (
+                  <QuestionsMap
+                    getUseState={toShow}
+                    setUseState={setToShow}
+                    type={"adoption"}
+                    category={"dogMatchingQuestions"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
+                ) : (
+                  <QuestionsMap
+                    getUseState={toShow}
+                    setUseState={setToShow}
+                    type={"adoption"}
+                    category={"catMatchingQuestions"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
+                )}
+              </FieldSet>
+              <FieldSet id="Home-Questions" legendText="Home Questions">
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
                   type={"adoption"}
-                  category={"catMatchingQuestions"}
-                  values={values}
-                  touch={touched}
-                  err={errors}
-                />
-              )}
-            </FieldSet>
-            <FieldSet id="Home-Questions" legendText="Home Questions">
-              <QuestionsMap
-                getUseState={toShow}
-                setUseState={setToShow}
-                type={"adoption"}
-                category={"homeQuestions"}
-                values={values}
-                err={errors}
-                touch={touched}
-              />
-              {toShow!.homeQuestions ? (
-                <CheckboxPlanningFormik stateField={toShow} />
-              ) : (
-                <></>
-              )}
-            </FieldSet>
-            <FieldSet id={type + "-questions"} legendText={type + " Questions"}>
-              {type === "Dog" ? (
-                <QuestionsMap
-                  getUseState={toShow}
-                  setUseState={setToShow}
-                  type={"adoption"}
-                  category={"dogQuestions"}
+                  category={"homeQuestions"}
                   values={values}
                   err={errors}
                   touch={touched}
                 />
-              ) : (
-                <QuestionsMap
-                  getUseState={toShow}
-                  setUseState={setToShow}
-                  type={"adoption"}
-                  category={"catQuestions"}
-                  values={values}
-                  err={errors}
-                  touch={touched}
-                />
-              )}
-            </FieldSet>
-            <LegalAgreementSection type={type} />
-            <FieldSet
-              id="Hear-About-Us"
-              legendText={"How Did you hear about us?"}
-            >
-              <div className="flex ">
-                <QuestionsMap
-                  getUseState={toShow}
-                  setUseState={setToShow}
-                  type={"adoption"}
-                  category={"hearAboutUsInfo"}
-                  values={values}
-                  touch={touched}
-                  err={errors}
-                />
-              </div>
-            </FieldSet>
-            <pre>{JSON.stringify(values, null, 2)}</pre>
-          </FormikFormContainer>
-        )}
-      </Formik>
-    </form>
+                {toShow!.homeQuestions ? (
+                  <CheckboxPlanningFormik stateField={toShow} />
+                ) : (
+                  <></>
+                )}
+              </FieldSet>
+              <FieldSet
+                id={type + "-questions"}
+                legendText={type + " Questions"}
+              >
+                {type === "Dog" ? (
+                  <QuestionsMap
+                    getUseState={toShow}
+                    setUseState={setToShow}
+                    type={"adoption"}
+                    category={"dogQuestions"}
+                    values={values}
+                    err={errors}
+                    touch={touched}
+                  />
+                ) : (
+                  <QuestionsMap
+                    getUseState={toShow}
+                    setUseState={setToShow}
+                    type={"adoption"}
+                    category={"catQuestions"}
+                    values={values}
+                    err={errors}
+                    touch={touched}
+                  />
+                )}
+              </FieldSet>
+              <LegalAgreementSection type={type} />
+              <FieldSet
+                id="Hear-About-Us"
+                legendText={"How Did you hear about us?"}
+              >
+                <div className="flex ">
+                  <QuestionsMap
+                    getUseState={toShow}
+                    setUseState={setToShow}
+                    type={"adoption"}
+                    category={"hearAboutUsInfo"}
+                    values={values}
+                    touch={touched}
+                    err={errors}
+                  />
+                </div>
+              </FieldSet>
+              <pre>{JSON.stringify(values, null, 2)}</pre>
+            </FormikFormContainer>
+          )}
+        </Formik>
+      </form>
+    </>
   );
 }
 
