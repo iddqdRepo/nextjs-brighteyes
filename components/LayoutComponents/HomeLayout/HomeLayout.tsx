@@ -23,18 +23,21 @@ export const HeroSection = () => {
       </div>
 
       <div className="absolute flex top-1/4 left-5 xl:left-20">
-        <span className="text-3xl font-semibold font-poppins sm:text-5xl">
+        <div className="text-3xl font-semibold font-poppins sm:text-5xl">
           Don&apos;t buy, &nbsp;
-          <RoughNotation
-            iterations={5}
-            type="circle"
-            show={true}
-            color="#8b3479"
-            strokeWidth={1}
-          >
-            adopt!
-          </RoughNotation>
-        </span>
+          <span>
+            <RoughNotation
+              iterations={5}
+              type="circle"
+              show={true}
+              color="#8b3479"
+              strokeWidth={2}
+              animationDelay={1000}
+            >
+              adopt!
+            </RoughNotation>
+          </span>
+        </div>
         <div className="absolute flex flex-col mt-14 sm:mt-20 ">
           <span className="text-lg font-normal sm:text-xl font-poppins">
             Take a look at some of the wonderful animals we have at <br />
