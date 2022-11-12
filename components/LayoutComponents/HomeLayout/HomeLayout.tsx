@@ -31,8 +31,8 @@ export const HeroSection = () => {
               type="circle"
               show={true}
               color="#8b3479"
-              strokeWidth={2}
-              animationDelay={1000}
+              strokeWidth={1}
+              animationDelay={300}
             >
               adopt!
             </RoughNotation>
@@ -43,7 +43,7 @@ export const HeroSection = () => {
             Take a look at some of the wonderful animals we have at <br />
             Bright Eyes Animal Sanctuary.
           </span>
-          <Button text="View Animals" />
+          <Button text="View Animals" link="" />
         </div>
       </div>
     </div>

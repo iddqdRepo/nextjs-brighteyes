@@ -94,7 +94,7 @@ export const Button = ({
 }: {
   text: string;
   iconStr?: string;
-  link?: string;
+  link: string;
 }) => {
   return (
     <Link href={`${link}`}>
@@ -167,7 +167,7 @@ export const DonationComponent = () => {
             animal welfare and help us continue to rescue more animals that need
             us.
           </span>
-          <Button text="Donate" iconStr="ant-design:heart-filled" />
+          <Button text="Donate" iconStr="ant-design:heart-filled" link="" />
         </div>
       </div>
     </div>
