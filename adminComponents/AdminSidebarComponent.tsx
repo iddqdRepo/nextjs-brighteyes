@@ -33,7 +33,7 @@ function AdminSidebarComponent(props: any) {
         }
       >
         <Link href={"/admin" + link}>
-          <div className="flex flex-row items-center justify-center w-3/5 md:justify-start">
+          <div className="flex flex-row items-center justify-center w-3/5 lg:justify-start">
             <Icon
               className={
                 toggleSelected === toggle
@@ -88,7 +88,7 @@ function AdminSidebarComponent(props: any) {
 
   return (
     <div className="flex flex-col min-w-screen md:flex-row">
-      <div className="flex min-w-screen md:flex-col md:items-center md:w-20 md:min-h-screen lg:w-72 bg-white]">
+      <div className="flex min-w-screen ml-1 mt-1 md:flex-col md:items-center md:w-20 md:min-h-screen lg:w-72 bg-white]">
         <div className="flex flex-col items-center py-6 text-base font-extrabold md:mb-10">
           <Link href={"/admin"}>
             <a>
@@ -113,17 +113,18 @@ function AdminSidebarComponent(props: any) {
           icon={"mdi:paw-outline"}
           text={"Animals"}
         />
-        <AdminNavLink
-          toggle={"Forms"}
-          link={"/forms?archive=false"}
-          icon={"carbon:folder"}
-          text={"Forms"}
-        />
+
         <AdminNavLink
           toggle={"AnimalArchive"}
           link={"/animals?archive=true"}
           icon={"mdi:paw-off-outline"}
           text={"Animal Archive"}
+        />
+        <AdminNavLink
+          toggle={"Forms"}
+          link={"/forms?archive=false"}
+          icon={"carbon:folder"}
+          text={"Forms"}
         />
         <AdminNavLink
           toggle={"FormArchive"}
