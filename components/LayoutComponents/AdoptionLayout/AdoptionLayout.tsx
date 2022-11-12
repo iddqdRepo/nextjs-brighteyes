@@ -147,7 +147,7 @@ export const AdoptionCriteriaSection = () => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full mb-10">
-        <Button text={"Adoption Form"} />
+        <Button text={"Adoption Form"} link="" />
       </div>
     </>
   );

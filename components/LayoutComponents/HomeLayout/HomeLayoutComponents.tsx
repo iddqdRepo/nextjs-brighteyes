@@ -50,7 +50,7 @@ export const AboutCard = ({
           {title}
         </span>
         {text}
-        <Button text={buttonText} />
+        <Button text={buttonText} link="" />
       </div>
     </div>
   );
