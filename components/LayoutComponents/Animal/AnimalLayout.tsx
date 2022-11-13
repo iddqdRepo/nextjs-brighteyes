@@ -7,6 +7,7 @@ import {
   AdoptionIconContainer,
   IconText,
 } from "../AdoptionLayout/AdoptionLayoutComponents";
+import { server } from "../../../config";
 
 export const HeroBannerSection = ({ name }: { name: string }) => {
   return (
@@ -102,7 +103,12 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
               </div>
             </div>
             <div className="pt-10 text-xl font-light font-poppins">{desc}</div>
-            <Button text={"View Form"} link="" />
+            <Button
+              text={"View Form"}
+              link={`${server}/forms/adoptionForm?type=${
+                breed === "Cat" ? "Cat" : "Dog"
+              }`}
+            />
           </div>
         </div>
       </div>

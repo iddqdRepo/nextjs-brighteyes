@@ -34,11 +34,13 @@ export const AboutCard = ({
   text,
   icon,
   buttonText,
+  link,
 }: {
   title: string;
   text: string;
   icon: string;
   buttonText: string;
+  link: string;
 }) => {
   return (
     <div className="flex flex-col w-80 h-100 bg-[url('../public/CardImage.png')] bg-no-repeat bg-center bg-cover mb-5 sm:mb-0 sm:mr-10">
@@ -50,7 +52,7 @@ export const AboutCard = ({
           {title}
         </span>
         {text}
-        <Button text={buttonText} link="" />
+        <Button text={buttonText} link={link} />
       </div>
     </div>
   );

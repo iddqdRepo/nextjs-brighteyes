@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import Link from "next/link";
 
 import React from "react";
+import { server } from "../../config";
 export const DashedTitle = ({ text }: { text: string }) => {
   return (
     <div className="flex flex-col items-center ">
@@ -167,7 +168,11 @@ export const DonationComponent = () => {
             animal welfare and help us continue to rescue more animals that need
             us.
           </span>
-          <Button text="Donate" iconStr="ant-design:heart-filled" link="" />
+          <Button
+            text="Donate"
+            iconStr="ant-design:heart-filled"
+            link={`${server}/adoption`}
+          />
         </div>
       </div>
     </div>

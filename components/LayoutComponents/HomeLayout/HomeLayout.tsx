@@ -4,6 +4,7 @@ import { InfoCard, AboutCard } from "../HomeLayout/HomeLayoutComponents";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import { RoughNotation } from "react-rough-notation";
 import { Icon } from "@iconify/react";
+import { server } from "../../../config";
 export const HeroSection = () => {
   return (
     <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DogHero4.png')]">
@@ -43,7 +44,8 @@ export const HeroSection = () => {
             Take a look at some of the wonderful animals we have at <br />
             Bright Eyes Animal Sanctuary.
           </span>
-          <Button text="View Animals" link="" />
+          {/* <Button text="View Animals" link={`${server}/adoption`} /> */}
+          <Button text="View Animals" link={`${server}/adoption`} />
         </div>
       </div>
     </div>
@@ -165,20 +167,23 @@ export const GetInvolvedSection = () => {
             text=" Take a look at our pets for Adoption. Join the 2000+ other
             people and find the perfect pet for your home!"
             buttonText="View Animals"
+            link={`${server}/adoption`}
           />
           <AboutCard
             icon="bx:donate-heart"
             title="Donate"
             text="We receive no government funding and rely purely on the
             generosity of the public to help us continue our work."
-            buttonText="More Info"
+            buttonText="Donate"
+            link={`${server}/donate`}
           />
           <AboutCard
             icon="carbon:person-favorite"
             title="Volunteer"
             text=" Our fantastic volunteers are the backbone of Bright Eyes. Want
             to help care for the animals and earn some valuable experience?"
-            buttonText="View Animals"
+            buttonText="View Form"
+            link={`${server}/forms/volunteerForm`}
           />
         </div>
       </div>

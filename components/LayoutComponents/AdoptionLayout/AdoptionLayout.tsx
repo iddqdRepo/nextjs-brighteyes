@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { server } from "../../../config";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import {
   AdoptionCard,
@@ -147,7 +148,7 @@ export const AdoptionCriteriaSection = () => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full mb-10">
-        <Button text={"Adoption Form"} link="" />
+        <Button text={"Adoption Form"} link={`${server}/forms`} />
       </div>
     </>
   );
