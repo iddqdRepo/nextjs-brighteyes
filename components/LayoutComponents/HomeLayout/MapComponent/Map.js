@@ -190,12 +190,12 @@ const options = {
   styles,
   disableDefaultUI: true,
 };
-
+const libraries = ["geometry", "drawing"];
 function Map() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.MAPS_API,
-    libraries: ["geometry", "drawing"],
+    libraries,
   });
   return (
     <>
