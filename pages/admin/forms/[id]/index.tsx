@@ -74,7 +74,7 @@ function Index({
                 fieldSetTitle !== "archive" &&
                 fieldSetTitle !== "date" &&
                 fieldSetTitle !== "__v" && (
-                  <FieldSet legendText={fieldSetTitle}>
+                  <FieldSet key={fieldSetTitle} legendText={fieldSetTitle}>
                     {Object.entries(fieldSetContent).map(
                       ([question, answer]) => {
                         if (
@@ -103,7 +103,7 @@ function Index({
 
                             answer !== "" && (
                               <FieldAndAnswer
-                                key={fieldSetTitle}
+                                key={question}
                                 labelText={question}
                                 answer={answer as string}
                               />
