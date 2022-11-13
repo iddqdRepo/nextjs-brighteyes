@@ -78,6 +78,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           get("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
           get("volunteer", formModels.FormVolunteerModel);
+        } else if (type === "contactus") {
+          get("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)
@@ -98,6 +100,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           put("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
           put("volunteer", formModels.FormVolunteerModel);
+        } else if (type === "contactus") {
+          put("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)
@@ -118,6 +122,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           del("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
           del("volunteer", formModels.FormVolunteerModel);
+        } else if (type === "contactus") {
+          del("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)

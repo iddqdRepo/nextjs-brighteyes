@@ -15,12 +15,15 @@ import {
   getPetForms,
   getGiftAidForms,
   getVolunteerForms,
+  getContactUsForms,
   deletePetForm,
   deleteGiftAidForm,
   deleteVolunteerForm,
+  deleteContactUsForm,
   udpateGiftAidForm,
   udpatePetForm,
   udpateVolunteerForm,
+  udpateContactUsForm,
 } from "../../../routes/formRoutes";
 import { useRouter } from "next/router";
 import {
@@ -31,6 +34,7 @@ import {
   GiftaidFormInterface,
   PetAdoptionFormInterface,
   VolunteerFormInterface,
+  ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
 import Link from "next/link";
 
@@ -60,7 +64,13 @@ function Index() {
   const [petTextFilter, setPetTextFilter] = useState("");
   const [volunteerTextFilter, setVolunteerTextFilter] = useState("");
   const [giftAidTextFilter, setGiftAidTextFilter] = useState("");
-  const tabsMapList = ["Adoption Forms", "GiftAid Forms", "Volunteer Forms"];
+  const [contactUsTextFilter, setContactUsTextFilter] = useState("");
+  const tabsMapList = [
+    "Adoption Forms",
+    "GiftAid Forms",
+    "Volunteer Forms",
+    "Contact Forms",
+  ];
   useEffect(() => {
     setPetTextFilter("");
     setVolunteerTextFilter("");
@@ -80,6 +90,10 @@ function Index() {
     "volunteerForms",
     getVolunteerForms
   );
+  const { isLoading: contactLoading, data: contactForms } = useQuery(
+    "contactForms",
+    getContactUsForms
+  );
 
   const deletePetFormMutation = useMutation(deletePetForm, {
     onSuccess: async () => {
@@ -92,9 +106,15 @@ function Index() {
       await queryClient.invalidateQueries("giftAidForms");
     },
   });
+
   const deleteVolunteerFormMutation = useMutation(deleteVolunteerForm, {
     onSuccess: async () => {
       await queryClient.invalidateQueries("volunteerForms");
+    },
+  });
+  const deleteContactUsFormMutation = useMutation(deleteContactUsForm, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("contactForms");
     },
   });
 
@@ -113,6 +133,11 @@ function Index() {
       await queryClient.invalidateQueries("volunteerForms");
     },
   });
+  const archiveContactUsFormMutation = useMutation(udpateContactUsForm, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("contactForms");
+    },
+  });
 
   const handleDelete = () => {
     if (deleteOrUpdateInfo.current.type === "pet") {
@@ -122,6 +147,8 @@ function Index() {
       deleteGiftAidFormMutation.mutate(deleteOrUpdateInfo.current.id);
     } else if (deleteOrUpdateInfo.current.type === "volunteer") {
       deleteVolunteerFormMutation.mutate(deleteOrUpdateInfo.current.id);
+    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
+      deleteContactUsFormMutation.mutate(deleteOrUpdateInfo.current.id);
     }
     setHidden(true);
   };
@@ -145,6 +172,9 @@ function Index() {
     } else if (deleteOrUpdateInfo.current.type === "volunteer") {
       dataToMutate = deleteOrUpdateInfo.current.data as VolunteerFormInterface;
       archiveVolunteerFormMutation.mutate(dataToMutate);
+    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
+      dataToMutate = deleteOrUpdateInfo.current.data as ContactUsFormInterface;
+      archiveContactUsFormMutation.mutate(dataToMutate);
     }
     setHidden(true);
   };
@@ -159,6 +189,9 @@ function Index() {
     }
     if (type === "giftAid") {
       filterType = giftAidTextFilter;
+    }
+    if (type === "contactUs") {
+      filterType = contactUsTextFilter;
     }
     return (
       <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-full">
@@ -201,6 +234,7 @@ function Index() {
                       | GiftaidFormInterface
                       | PetAdoptionFormInterface
                       | VolunteerFormInterface
+                      | ContactUsFormInterface
                   ) => {
                     return (
                       <tr key={form._id} className="h-20">
@@ -373,6 +407,21 @@ function Index() {
               <div className="lg:mr-20 lg:ml-20">
                 {!volunteerLoading && (
                   <FormList list={volunteerForms.data} type="volunteer" />
+                )}
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="flex flex-col items-center mt-3">
+                <SearchInput
+                  id={"contactUsTextFilter"}
+                  change={setContactUsTextFilter}
+                  val={contactUsTextFilter}
+                  placehold={"Search by name"}
+                />
+              </div>
+              <div className="lg:mr-20 lg:ml-20">
+                {!contactLoading && (
+                  <FormList list={contactForms.data} type="contactUs" />
                 )}
               </div>
             </TabPanel>

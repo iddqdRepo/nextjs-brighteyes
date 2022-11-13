@@ -6,6 +6,7 @@ import {
   getPetForms,
   getGiftAidForms,
   getVolunteerForms,
+  getContactUsForms,
 } from "../../routes/formRoutes";
 import { getPets } from "../../routes/petRoutes";
 import { Icon } from "@iconify/react";
@@ -25,6 +26,10 @@ function Index() {
     "volunteerForms",
     getVolunteerForms
   );
+  const { isLoading: isContactUsFormsLoading, data: contactUsForms } = useQuery(
+    "contactUsForms",
+    getContactUsForms
+  );
 
   const [dogActiveCount, setDogActiveCount] = useState(0);
   const [dogArchiveCount, setDogArchiveCount] = useState(0);
@@ -33,7 +38,7 @@ function Index() {
   const [adoptionFormPendingCount, setAdoptionFormPendingCount] = useState(0);
   const [giftAidFormPendingCount, setGiftAidFormPendingCount] = useState(0);
   const [volunteerFormPendingCount, setVolunteerFormPendingCount] = useState(0);
-  useState(0);
+  const [contactUsFormPendingCount, setContactUsFormPendingCount] = useState(0);
 
   useEffect(() => {
     if (!isPetLoading) {
@@ -76,6 +81,13 @@ function Index() {
     if (!isVolunteerFormsLoading) {
       setVolunteerFormPendingCount(
         volunteerForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
+    }
+    if (!isContactUsFormsLoading) {
+      setContactUsFormPendingCount(
+        contactUsForms.data.filter((form: { archive: string }) => {
           return form.archive === "No";
         }).length
       );
@@ -144,6 +156,16 @@ function Index() {
           <div className="border-t-2 border-[#8B3479] w-full "></div>
           <div className="flex flex-col items-center w-full mt-3 ">
             <div className="flex flex-wrap justify-center w-full mb-4 md:justify-center">
+              <BigCard
+                header="Unread Messages"
+                data={
+                  contactUsFormPendingCount ? (
+                    contactUsFormPendingCount
+                  ) : (
+                    <LoadingSpinner />
+                  )
+                }
+              />
               <BigCard
                 header="Adoption Forms"
                 data={

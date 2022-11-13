@@ -40,6 +40,19 @@ export interface GiftaidFormInterface {
   archive: string;
   __v: 0;
 }
+export interface ContactUsFormInterface {
+  aboutQuestions: {
+    name: string;
+    email: string;
+  };
+  message: string;
+  type: string;
+  _id: string;
+  date: string;
+  updatedAt: string;
+  archive: string;
+  __v: 0;
+}
 
 export interface PetAdoptionFormInterface {
   aboutQuestions: {

@@ -202,6 +202,24 @@ const formVolunteerSchema = new Schema({
   archive: String,
 });
 
+const formContactUsSchema = new Schema({
+  type: String,
+  aboutQuestions: {
+    name: String,
+    email: String,
+  },
+  date: {
+    type: Date,
+    default: new Date(),
+  },
+  message: String,
+  updatedAt: {
+    type: Date,
+    default: new Date(),
+  },
+  archive: String,
+});
+
 const FormPetAdoptionModel =
   mongoose.models.PetAdoptionForm ||
   mongoose.model("PetAdoptionForm", formPetAdoptionSchema);
@@ -211,11 +229,15 @@ const FormGiftAidModel =
 const FormVolunteerModel =
   mongoose.models.VolunteerForm ||
   mongoose.model("VolunteerForm", formVolunteerSchema);
+const FormContactUsModel =
+  mongoose.models.ContactUsForm ||
+  mongoose.model("ContactUsForm", formContactUsSchema);
 
 let modelExport = {
   FormPetAdoptionModel,
   FormGiftAidModel,
   FormVolunteerModel,
+  FormContactUsModel,
 };
 
 export default modelExport;
