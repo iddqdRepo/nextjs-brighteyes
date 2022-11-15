@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { FormPageTitle } from "../../../../components/IndividualFormLayout/CommonFormComponents";
+import {
+  ErrorFormik,
+  FormPageTitle,
+} from "../../../../components/IndividualFormLayout/CommonFormComponents";
 import { PageContainerComponent } from "../../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../../adminComponents/AdminSidebarComponent";
 import { AnimalSchema } from "../../../../utils/yup/animalYupSchema";
 import {
   InputOrTextArea,
-  AddOrEditAnimalErrorFormik,
   DropdownField,
   ChooseFile,
   ShowButtonTextOnSubmit,
@@ -64,11 +66,7 @@ function Index() {
               <div className="flex justify-center w-full">
                 <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
                   <InputOrTextArea labelText={"Name"} labelHForAndName={"name"}>
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"name"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"name"} />
                   </InputOrTextArea>
 
                   <DropdownField
@@ -76,11 +74,7 @@ function Index() {
                     labelHForAndName={"type"}
                     valueArray={["Dog", "Cat"]}
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"type"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"type"} />
                   </DropdownField>
 
                   <div className="flex">
@@ -90,11 +84,7 @@ function Index() {
                       labelClassN="w-12"
                       fieldClassN="w-12"
                     >
-                      <AddOrEditAnimalErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"age"}
-                      />
+                      <ErrorFormik err={errors} touch={touched} field={"age"} />
                     </InputOrTextArea>
 
                     <DropdownField
@@ -104,7 +94,7 @@ function Index() {
                       labelClassN="w-28"
                       fieldClassN="w-28"
                     >
-                      <AddOrEditAnimalErrorFormik
+                      <ErrorFormik
                         err={errors}
                         touch={touched}
                         field={"yearsOrMonths"}
@@ -115,22 +105,14 @@ function Index() {
                     labelText={"Breed"}
                     labelHForAndName={"breed"}
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"breed"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"breed"} />
                   </InputOrTextArea>
                   <DropdownField
                     labelText={"Sex"}
                     labelHForAndName={"sex"}
                     valueArray={["Male", "Female"]}
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"sex"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"sex"} />
                   </DropdownField>
 
                   <DropdownField
@@ -138,11 +120,7 @@ function Index() {
                     labelHForAndName={"size"}
                     valueArray={["Small", "Medium", "Large", "Giant"]}
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"size"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"size"} />
                   </DropdownField>
 
                   <DropdownField
@@ -150,7 +128,7 @@ function Index() {
                     labelHForAndName={"suitableForChildren"}
                     valueArray={["Yes", "No"]}
                   >
-                    <AddOrEditAnimalErrorFormik
+                    <ErrorFormik
                       err={errors}
                       touch={touched}
                       field={"suitableForChildren"}
@@ -161,7 +139,7 @@ function Index() {
                     labelHForAndName={"suitableForAnimals"}
                     valueArray={["Yes", "No"]}
                   >
-                    <AddOrEditAnimalErrorFormik
+                    <ErrorFormik
                       err={errors}
                       touch={touched}
                       field={"suitableForAnimals"}
@@ -173,7 +151,7 @@ function Index() {
                     labelHForAndName={"adopted"}
                     valueArray={["Yes", "No"]}
                   >
-                    <AddOrEditAnimalErrorFormik
+                    <ErrorFormik
                       err={errors}
                       touch={touched}
                       field={"adopted"}
@@ -185,22 +163,14 @@ function Index() {
                     fieldClassN="w-64 h-32"
                     fieldAs="textarea"
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"desc"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"desc"} />
                   </InputOrTextArea>
                   <ChooseFile
                     labelHForAndName="image"
                     setter={setResizedImage}
                     values={values}
                   >
-                    <AddOrEditAnimalErrorFormik
-                      err={errors}
-                      touch={touched}
-                      field={"desc"}
-                    />
+                    <ErrorFormik err={errors} touch={touched} field={"desc"} />
                   </ChooseFile>
                   <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
                     <div
