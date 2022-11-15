@@ -412,6 +412,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
             Yes: [
               "ownOtherDogsCurrentInfo>otherCurrentDogBreed",
               "ownOtherDogsCurrentInfo>otherCurrentDogNeutered",
+              "ownOtherDogsCurrentInfo>otherCurrentDogTime",
             ],
             No: ["ownOtherDogsPastInfo>ownOtherPastDogs"],
           },
@@ -742,8 +743,7 @@ export const adoptionFormBuilder: AdoptionFormBuilderInterface = {
         title: "We'd love to know where you heard of us!",
         type: "text",
         hidden: true,
-        placeholder:
-          "It lets us know how to advertise ourselves and help more animals!",
+        placeholder: "",
       },
     ],
   },
