@@ -26,27 +26,6 @@ let onFileResize = (file: Blob, setter: any) => {
   });
 };
 
-export const AddOrEditAnimalErrorFormik = ({
-  err,
-  touch,
-  field,
-}: {
-  err: any;
-  touch: any;
-  field: keyof PetInterface;
-}) => {
-  return (
-    <>
-      {err?.[field] && touch?.[field] ? (
-        <div id={"err" + field} className="text-xs text-red-600">
-          {err?.[field]}
-        </div>
-      ) : (
-        <div id={"err" + field} className="mt-4"></div>
-      )}
-    </>
-  );
-};
 export const InputOrTextArea = ({
   labelText,
   labelHForAndName,
@@ -279,6 +258,7 @@ export const ShowButtonTextOnSubmit = ({
       type="submit"
       className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
       onClick={(e) => {
+        console.log("clicked");
         e.preventDefault();
         submitHandler();
       }}

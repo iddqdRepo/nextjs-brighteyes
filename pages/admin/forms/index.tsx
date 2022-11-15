@@ -250,7 +250,7 @@ function Index() {
                         </TableData>
                         <TableData>
                           <div className="text-xs text-center md:text-lg font-roboto">
-                            {form.updatedAt.slice(0, 10)}
+                            {form.updatedAt && form.updatedAt.slice(0, 10)}
                           </div>
                         </TableData>
                         <TableData>
@@ -276,7 +276,9 @@ function Index() {
                               onClick={() => {
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
-                                deleteOrUpdateInfo.current.id = form._id;
+                                if (form._id) {
+                                  deleteOrUpdateInfo.current.id = form._id;
+                                }
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.data = form;
                                 deleteOrUpdateInfo.current.action = "archive";
@@ -298,7 +300,9 @@ function Index() {
                               onClick={() => {
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
-                                deleteOrUpdateInfo.current.id = form._id;
+                                if (form._id) {
+                                  deleteOrUpdateInfo.current.id = form._id;
+                                }
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.action = "delete";
                                 deleteOrUpdateInfo.current.promptText =

@@ -21,6 +21,10 @@ import {
   ivOffenderInfoInterface,
   VolunteerInitialValuesInterface,
 } from "../../interfaces/volunteerInitialValuesInterface";
+import {
+  ContactUsFormInterface,
+  PetInterface,
+} from "../../interfaces/interfaces";
 
 export const FormPageTitle = ({ title }: { title: string }) => {
   return (
@@ -57,10 +61,11 @@ export const Label = ({
   return (
     <label
       htmlFor={hFor}
-      className={clsx(
-        "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900",
+      className={
         classN
-      )}
+          ? classN
+          : "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900"
+      }
     >
       {text}
     </label>
@@ -90,6 +95,8 @@ export const InputTextFormik = ({
   labelText,
   forNameId,
   val,
+  labelClassN,
+  labelLeftAligned,
   classN,
   type,
   children,
@@ -99,13 +106,21 @@ export const InputTextFormik = ({
   val: string;
   forNameId: string;
   classN?: string;
+  labelClassN?: string;
   type?: string;
   children: React.ReactNode;
   placeholder?: string;
+  labelLeftAligned?: boolean;
 }) => {
   return (
-    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-      <Label text={labelText} hFor={val} />
+    <div
+      className={
+        labelLeftAligned
+          ? "flex flex-col items-left justify-end mb-4 ml-1 mr-1"
+          : "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
+      }
+    >
+      <Label text={labelText} hFor={val} classN={labelClassN} />
 
       <Field
         className={clsx(
@@ -124,29 +139,32 @@ export const InputTextAreaFormik = ({
   labelText,
   forNameId,
   val,
-  classN,
+  labelclassN,
+  fieldclassN,
   children,
 }: {
   labelText: string;
   val: string;
   forNameId: string;
-  classN?: string;
+  labelclassN?: string;
+  fieldclassN?: string;
   children: React.ReactNode;
 }) => {
   return (
-    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
-      <Label text={labelText} hFor={val} />
+    <>
+      <Label text={labelText} hFor={val} classN={labelclassN} />
 
       <Field
-        className={clsx(
-          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
-          classN
-        )}
+        className={
+          fieldclassN
+            ? fieldclassN
+            : "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
+        }
         name={forNameId}
         as="textarea"
       />
       {children}
-    </div>
+    </>
   );
 };
 
@@ -172,21 +190,33 @@ export const ErrorFormik = ({
     | keyof ivHealthInfoInterface
     | keyof ivVolunteeringInfoInterface
     | keyof ivRefereeInfoInterface
-    | keyof ivOffenderInfoInterface;
-  parent:
+    | keyof ivOffenderInfoInterface
+    | keyof ContactUsFormInterface
+    | keyof PetInterface;
+  parent?:
     | keyof AdoptionInitialValuesInterface
     | keyof GiftAidInitialValuesInterface
     | keyof VolunteerInitialValuesInterface;
   id?: string;
 }) => {
+  //If there is a parent (aboutQuestions) && field (name)
+  // then use err.aboutquestions.name else just use err.name
   return (
     <>
-      {err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
-        <div id={id} className="text-xs text-red-600">
-          {err?.[parent]?.[field]}
+      {parent ? (
+        err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
+          <div id={id} className="text-xs text-red-600">
+            {err?.[parent]?.[field]}
+          </div>
+        ) : (
+          <div id={id} className="mt-4"></div>
+        )
+      ) : err?.[field] && touch?.[field] ? (
+        <div id={"err" + field} className="text-xs text-red-600">
+          {err?.[field]}
         </div>
       ) : (
-        <div id={id} className="mt-4"></div>
+        <div id={"err" + field} className="mt-4"></div>
       )}
     </>
   );
@@ -452,9 +482,9 @@ export const QuestionsMap = ({
           : entry[1].type === "select"
           ? !entry[1].hidden && (
               <DropdownFormik
+                key={entry[0] as Key}
                 getState={getUseState}
                 setState={setUseState}
-                key={entry[0] as Key}
                 labelText={title}
                 forNameId={`${category}.${entry[0]}`}
                 selectArray={entry[1].values}
@@ -474,20 +504,27 @@ export const QuestionsMap = ({
             )
           : entry[1].type === "textarea" &&
             !entry[1].hidden && (
-              <InputTextAreaFormik
-                key={entry[0] as Key}
-                labelText={title}
-                val={values[category][field]}
-                forNameId={`${category}.${entry[0]}`}
+              <div
+                className={
+                  "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
+                }
+                key={entry[0] + entry[1].type}
               >
-                <ErrorFormik
-                  err={err}
-                  touch={touch}
-                  field={field}
-                  parent={category}
-                  id={"err-" + entry[0]}
-                />
-              </InputTextAreaFormik>
+                <InputTextAreaFormik
+                  key={entry[0] as Key}
+                  labelText={title}
+                  val={values[category][field]}
+                  forNameId={`${category}.${entry[0]}`}
+                >
+                  <ErrorFormik
+                    err={err}
+                    touch={touch}
+                    field={field}
+                    parent={category}
+                    id={"err-" + entry[0]}
+                  />
+                </InputTextAreaFormik>
+              </div>
             );
       })}
     </>
