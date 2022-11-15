@@ -34,7 +34,10 @@ describe("Dog Adoption Form", () => {
   it("shows correct error messages all input fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
-        const optional = { "dogMatchingQuestions.dogName": true };
+        const optional = {
+          "dogMatchingQuestions.dogName": true,
+          "homeQuestions.childrenAges": true,
+        };
         if ($el[0].children[1].type === "email") {
           let input = cy.wrap($el[0]).find("input");
           input.click().blur();
@@ -115,6 +118,7 @@ describe("Dog Adoption Form", () => {
     //dogQuestions.ownOtherDogsCurrentInfo>ownOtherCurrentDogs - Yes
     cy.contains("Dog Breeds?").should("not.exist");
     cy.contains("Neutered?").should("not.exist");
+    cy.contains("How long have you had them?").should("not.exist");
 
     //dogQuestions.ownOtherDogsCurrentInfo>ownOtherCurrentDogs - No
     cy.contains("Have you owned a dog before?").should("not.exist");
@@ -140,6 +144,7 @@ describe("Dog Adoption Form", () => {
     //^ Exposes:
     cy.contains("Dog Breeds?");
     cy.contains("Neutered?");
+    cy.contains("How long have you had them?");
 
     //^ Select: dogQuestions.ownOtherDogsCurrentInfo>ownOtherCurrentDogs - No
     cy.get(

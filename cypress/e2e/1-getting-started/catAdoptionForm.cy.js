@@ -28,7 +28,10 @@ describe("Cat Adoption Form", () => {
   it("shows correct error messages all input fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
-        const optional = { "catMatchingQuestions.catName": true };
+        const optional = {
+          "catMatchingQuestions.catName": true,
+          "homeQuestions.childrenAges": true,
+        };
         if ($el[0].children[1].type === "email") {
           let input = cy.wrap($el[0]).find("input");
           input.click().blur();
