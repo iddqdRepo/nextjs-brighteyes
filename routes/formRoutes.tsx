@@ -39,11 +39,11 @@ export const postPetForm = async (data: PetAdoptionFormInterface) => {
   return petform.data.success;
 };
 export const postGiftAidForm = async (data: GiftaidFormInterface) => {
-  const volunteerform = await axios.post(
+  const giftaidForm = await axios.post(
     `http://localhost:3000/api/forms?type=giftaid`,
     data
   );
-  return volunteerform.data.success;
+  return giftaidForm.data.success;
 };
 export const postVolunteerForm = async (data: VolunteerFormInterface) => {
   const volunteerform = await axios.post(
