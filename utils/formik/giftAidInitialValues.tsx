@@ -1,5 +1,5 @@
 export const giftAidInitialValues = {
-  type: "GiftAid",
+  type: "giftAid",
   archive: "No",
   giftAidFuture: "",
   giftAidPast: "",
