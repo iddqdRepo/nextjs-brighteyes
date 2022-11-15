@@ -6,23 +6,32 @@ import {
   FormPageTitle,
   QuestionsMap,
 } from "../../../components/IndividualFormLayout/CommonFormComponents";
-import { AdoptionSchema } from "../../../utils/yup/adoptionYupSchema";
+import {
+  CatAdoptionSchema,
+  DogAdoptionSchema,
+} from "../../../utils/yup/adoptionYupSchema";
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
-// import { adoptionInitialValues } from "../../../utils/formik/adoptionInitialValues";
 import { AdoptionFormBuilderInterface } from "../../../interfaces/adoptionFormBuilderInterface";
 import { AdoptionInitialValuesInterface } from "../../../interfaces/adoptionInitialValuesInterface";
 import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
 import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
 import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionInitialValues";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
+import { postPetForm } from "../../../routes/formRoutes";
+import { ShowButtonTextOnSubmit } from "../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [buttonText, setButtonText] = useState("Submit Form");
 
   interface tempObjInterface {
     [key: string]: string;
   }
   useEffect(() => {
+    newAdoptionInitialValues.type = type;
+
     /*
     ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
     ^ Flattened with the following recursive function instead of manually to keep the object path
@@ -56,7 +65,7 @@ function Index({ type }: { type: string }) {
     for (const [key, value] of Object.entries(adoptionFormBuilder)) {
       tempObj[key] = flattenObj(value);
     }
-
+    console.log("tempObj", tempObj);
     setToShow({ ...tempObj });
   }, []);
 
@@ -68,10 +77,27 @@ function Index({ type }: { type: string }) {
         <FormPageTitle title={` Adopt a ${type} Form`} />
         <Formik
           initialValues={newAdoptionInitialValues}
-          validationSchema={AdoptionSchema}
-          onSubmit={(data) => console.log(data)}
+          validationSchema={
+            type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
+          }
+          onSubmit={async (data) => {
+            console.log("handlingSubmit");
+            console.log("data", data);
+            setLoading(true);
+            //convert back into normal object structure before passing
+            //to postPetForm to remove error?
+            let successful = await postPetForm(data as any);
+            if (successful) {
+              setLoading(false);
+              setIsSuccess(true);
+            } else {
+              setLoading(false);
+              setIsSuccess(false);
+              setButtonText("ERROR, try again");
+            }
+          }}
         >
-          {({ values, errors, touched }) => (
+          {({ values, errors, touched, handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet id="About-you" legendText="About you">
                 <QuestionsMap
@@ -155,7 +181,7 @@ function Index({ type }: { type: string }) {
               <LegalAgreementSection type={type} />
               <FieldSet
                 id="Hear-About-Us"
-                legendText={"How Did you hear about us?"}
+                legendText={"How did you hear about us?"}
               >
                 <div className="flex ">
                   <QuestionsMap
@@ -169,6 +195,23 @@ function Index({ type }: { type: string }) {
                   />
                 </div>
               </FieldSet>
+              <ShowButtonTextOnSubmit
+                loading={loading}
+                isSuccess={isSuccess}
+                buttonText={buttonText}
+                submitHandler={handleSubmit}
+                animalName={"message"}
+              />
+              {/* <button
+                type="submit"
+                onClick={(e) => {
+                  console.log("clicked");
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
+                submit
+              </button> */}
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikFormContainer>
           )}
