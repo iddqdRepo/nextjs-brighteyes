@@ -5,6 +5,7 @@ import {
   PetAdoptionFormInterface,
   VolunteerFormInterface,
 } from "../interfaces/interfaces";
+//^-----------------GET ROUTES-----------------
 
 export const getPetForms = async () => {
   const petforms = await axios.get("http://localhost:3000/api/forms?type=pet");
@@ -29,19 +30,37 @@ export const getContactUsForms = async () => {
   return contactUsforms.data;
 };
 
-export const deletePetForm = async (id: string) => {
-  await axios.delete(`http://localhost:3000/api/forms/${id}?type=pet`);
+//^-----------------POST ROUTES-----------------
+export const postPetForm = async (data: PetAdoptionFormInterface) => {
+  const petform = await axios.post(
+    `http://localhost:3000/api/forms?type=pet`,
+    data
+  );
+  return petform.data.success;
 };
-export const deleteGiftAidForm = async (id: string) => {
-  await axios.delete(`http://localhost:3000/api/forms/${id}?type=giftaid`);
+export const postGiftAidForm = async (data: GiftaidFormInterface) => {
+  const volunteerform = await axios.post(
+    `http://localhost:3000/api/forms?type=giftaid`,
+    data
+  );
+  return volunteerform.data.success;
 };
-export const deleteVolunteerForm = async (id: string) => {
-  await axios.delete(`http://localhost:3000/api/forms/${id}?type=volunteer`);
+export const postVolunteerForm = async (data: VolunteerFormInterface) => {
+  const volunteerform = await axios.post(
+    `http://localhost:3000/api/forms?type=volunteer`,
+    data
+  );
+  return volunteerform.data.success;
 };
-export const deleteContactUsForm = async (id: string) => {
-  await axios.delete(`http://localhost:3000/api/forms/${id}?type=contactus`);
+export const postContactUsForm = async (data: ContactUsFormInterface) => {
+  const contactUsform = await axios.post(
+    `http://localhost:3000/api/forms?type=contactus`,
+    data
+  );
+  return contactUsform.data.success;
 };
 
+//^-----------------UPDATE ROUTES-----------------
 export const udpatePetForm = async (data: PetAdoptionFormInterface) => {
   await axios.put(`http://localhost:3000/api/forms/${data._id}?type=pet`, data);
 };
@@ -63,4 +82,19 @@ export const udpateContactUsForm = async (data: ContactUsFormInterface) => {
     `http://localhost:3000/api/forms/${data._id}?type=contactus`,
     data
   );
+};
+
+//^-----------------DELETE ROUTES-----------------
+
+export const deletePetForm = async (id: string) => {
+  await axios.delete(`http://localhost:3000/api/forms/${id}?type=pet`);
+};
+export const deleteGiftAidForm = async (id: string) => {
+  await axios.delete(`http://localhost:3000/api/forms/${id}?type=giftaid`);
+};
+export const deleteVolunteerForm = async (id: string) => {
+  await axios.delete(`http://localhost:3000/api/forms/${id}?type=volunteer`);
+};
+export const deleteContactUsForm = async (id: string) => {
+  await axios.delete(`http://localhost:3000/api/forms/${id}?type=contactus`);
 };

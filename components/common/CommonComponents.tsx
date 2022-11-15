@@ -3,8 +3,16 @@ import { Icon } from "@iconify/react";
 import { Formik } from "formik";
 import Link from "next/link";
 
-import React from "react";
+import React, { useState } from "react";
+import { ShowButtonTextOnSubmit } from "../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 import { server } from "../../config";
+import { postContactUsForm } from "../../routes/formRoutes";
+import { ContactUsYupSchema } from "../../utils/yup/ContactUsYupSchema";
+import {
+  ErrorFormik,
+  InputTextAreaFormik,
+  InputTextFormik,
+} from "../IndividualFormLayout/CommonFormComponents";
 export const DashedTitle = ({ text }: { text: string }) => {
   return (
     <div className="flex flex-col items-center ">
@@ -178,12 +186,22 @@ export const DonationComponent = () => {
     </div>
   );
 };
+
 export const ContactUsSection = () => {
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [buttonText, setButtonText] = useState("Send Message");
+
   const initialValues = {
-    name: "",
-    email: "",
+    aboutQuestions: {
+      name: "",
+      email: "",
+    },
     message: "",
+    type: "contactUs",
+    archive: "No",
   };
+
   return (
     <>
       <DashedTitle text="Contact Us" />
@@ -192,62 +210,76 @@ export const ContactUsSection = () => {
         <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
           <Formik
             initialValues={initialValues}
-            onSubmit={(data) => console.log(data)}
+            validationSchema={ContactUsYupSchema}
+            onSubmit={async (data) => {
+              setLoading(true);
+              let successful = await postContactUsForm(data);
+              if (successful) {
+                setLoading(false);
+                setIsSuccess(true);
+              } else {
+                setLoading(false);
+                setIsSuccess(false);
+                setButtonText("ERROR, try again");
+              }
+            }}
           >
-            {({ values, handleChange }) => (
+            {({ errors, touched, handleSubmit }) => (
               <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
                 <div className="flex">
-                  <div className="flex flex-col mr-4 lg:mr-20">
-                    <label
-                      htmlFor="name"
-                      className={"block mb-2 text-lg font-normal font-poppins"}
-                    >
-                      Name
-                    </label>
-                    <input
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                      }
-                      type="text"
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
+                  <InputTextFormik
+                    labelText={"Name"}
+                    val={"aboutQuestions.name"}
+                    forNameId={"aboutQuestions.name"}
+                    labelLeftAligned={true}
+                    labelClassN="block mb-2 text-lg font-normal font-poppins"
+                  >
+                    <ErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field="name"
+                      parent={"aboutQuestions"}
+                      id={"err-name"}
                     />
-                  </div>
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="email"
-                      className={"block mb-2 text-lg font-normal font-poppins"}
-                    >
-                      Email
-                    </label>
-                    <input
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                      }
-                      type="text"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
+                  </InputTextFormik>
+                  <InputTextFormik
+                    labelText={"Email"}
+                    val={"aboutQuestions.email"}
+                    forNameId={"aboutQuestions.email"}
+                    labelLeftAligned={true}
+                    labelClassN="block mb-2 text-lg font-normal font-poppins"
+                  >
+                    <ErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field="email"
+                      parent={"aboutQuestions"}
+                      id={"err-email"}
                     />
-                  </div>
+                  </InputTextFormik>
                 </div>
-                <label
-                  htmlFor="message"
-                  className={"block mb-2 text-lg font-normal font-poppins"}
+
+                <InputTextAreaFormik
+                  labelText={"Message"}
+                  val={"message"}
+                  forNameId={"message"}
+                  fieldclassN="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-52 p-2.5 mb-4"
+                  labelclassN="block mb-2 text-lg font-normal font-poppins text-left"
                 >
-                  Message
-                </label>
-                <textarea
-                  className={
-                    "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                  }
-                  rows={14}
-                  name="message"
-                  value={values.message}
-                  onChange={handleChange}
+                  <ErrorFormik
+                    err={errors}
+                    touch={touched}
+                    field="message"
+                    id={"err-message"}
+                  />
+                </InputTextAreaFormik>
+                <ShowButtonTextOnSubmit
+                  loading={loading}
+                  isSuccess={isSuccess}
+                  buttonText={buttonText}
+                  submitHandler={handleSubmit}
+                  animalName={"message"}
                 />
-                <pre>{JSON.stringify(values, null, 2)}</pre>
               </div>
             )}
           </Formik>
