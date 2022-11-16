@@ -38,7 +38,7 @@ const Index = () => {
             console.log("data", data);
             setLoading(true);
             let successful = await postGiftAidForm(data);
-            if (successful) {
+            if (successful.success) {
               setLoading(false);
               setIsSuccess(true);
             } else {
@@ -62,7 +62,7 @@ const Index = () => {
                 isSuccess={isSuccess}
                 buttonText={buttonText}
                 submitHandler={handleSubmit}
-                animalName={"message"}
+                animalName={"form"}
               />
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikFormContainer>

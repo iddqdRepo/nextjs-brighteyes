@@ -140,12 +140,18 @@ function Index() {
   });
 
   const handleDelete = () => {
-    if (deleteOrUpdateInfo.current.type === "pet") {
+    if (
+      deleteOrUpdateInfo.current.type === "Dog" ||
+      deleteOrUpdateInfo.current.type === "Cat"
+    ) {
       deletePetFormMutation.mutate(deleteOrUpdateInfo.current.id);
     } else if (deleteOrUpdateInfo.current.type === "giftAid") {
       console.log("DELETING GIFT AID");
       deleteGiftAidFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "volunteer") {
+    } else if (
+      deleteOrUpdateInfo.current.type === "volunteer" ||
+      deleteOrUpdateInfo.current.type === "Volunteer"
+    ) {
       deleteVolunteerFormMutation.mutate(deleteOrUpdateInfo.current.id);
     } else if (deleteOrUpdateInfo.current.type === "contactUs") {
       deleteContactUsFormMutation.mutate(deleteOrUpdateInfo.current.id);
@@ -298,6 +304,8 @@ function Index() {
                               className="w-auto h-6 cursor-pointer"
                               icon="fluent:delete-20-filled"
                               onClick={() => {
+                                console.log("formtype", form.type);
+
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
                                 if (form._id) {

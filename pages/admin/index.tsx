@@ -159,7 +159,7 @@ function Index() {
               <BigCard
                 header="Unread Messages"
                 data={
-                  contactUsFormPendingCount ? (
+                  !isContactUsFormsLoading ? (
                     contactUsFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -169,7 +169,7 @@ function Index() {
               <BigCard
                 header="Adoption Forms"
                 data={
-                  adoptionFormPendingCount ? (
+                  !isAdoptionFormsLoading ? (
                     adoptionFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -179,7 +179,7 @@ function Index() {
               <BigCard
                 header="GiftAid Forms"
                 data={
-                  giftAidFormPendingCount ? (
+                  !isGiftAidFormsLoading ? (
                     giftAidFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -189,7 +189,7 @@ function Index() {
               <BigCard
                 header="Volunteer Forms"
                 data={
-                  volunteerFormPendingCount ? (
+                  !isVolunteerFormsLoading ? (
                     volunteerFormPendingCount
                   ) : (
                     <LoadingSpinner />
