@@ -2,7 +2,10 @@
 import React from "react";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
-import { FooterSection } from "../../../components/common/CommonComponents";
+import {
+  DonationComponent,
+  FooterSection,
+} from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
 import {
   AdoptionRulesSection,
@@ -20,6 +23,7 @@ function Animal({ animal }: { animal: [PetInterface] }) {
       <HeroBannerSection name={animal[0].name} />
       <AnimalDetailSection animal={animal[0]} />
       <Divider />
+      <DonationComponent />
       <AdoptionRulesSection />
       <FooterSection />
     </>

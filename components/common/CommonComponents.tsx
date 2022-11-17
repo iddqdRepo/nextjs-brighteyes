@@ -179,7 +179,7 @@ export const DonationComponent = () => {
           <Button
             text="Donate"
             iconStr="ant-design:heart-filled"
-            link={`${server}/adoption`}
+            link={`${server}/donate`}
           />
         </div>
       </div>
