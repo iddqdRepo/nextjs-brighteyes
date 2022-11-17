@@ -207,6 +207,13 @@ function Index() {
 
             <tbody className="bg-white dark:bg-slate-800">
               {list
+                .sort(function (a: any, b: any) {
+                  // Show the newest first
+                  return (
+                    new Date(b.updatedAt).getTime() -
+                    new Date(a.updatedAt).getTime()
+                  );
+                })
                 .filter((archiveFilter: { archive: string }) => {
                   if (isArchive === "false") {
                     return archiveFilter.archive === "No";
