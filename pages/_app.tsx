@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen />
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );

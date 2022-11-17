@@ -8,7 +8,7 @@ const aboutQuestionsSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
-export const ContactUsYupSchema = Yup.object().shape({
+export const ContactUsSchema = Yup.object().shape({
   aboutQuestions: aboutQuestionsSchema,
   message: Yup.string().min(2, "Too Short!").required("Required"),
 });

@@ -31,33 +31,34 @@ export const getContactUsForms = async () => {
 };
 
 //^-----------------POST ROUTES-----------------
+
 export const postPetForm = async (data: PetAdoptionFormInterface) => {
   const petform = await axios.post(
     `http://localhost:3000/api/forms?type=pet`,
     data
   );
-  return petform.data.success;
+  return petform.data;
 };
 export const postGiftAidForm = async (data: GiftaidFormInterface) => {
   const giftaidForm = await axios.post(
     `http://localhost:3000/api/forms?type=giftaid`,
     data
   );
-  return giftaidForm.data.success;
+  return giftaidForm.data;
 };
 export const postVolunteerForm = async (data: VolunteerFormInterface) => {
   const volunteerform = await axios.post(
     `http://localhost:3000/api/forms?type=volunteer`,
     data
   );
-  return volunteerform.data.success;
+  return volunteerform.data;
 };
 export const postContactUsForm = async (data: ContactUsFormInterface) => {
   const contactUsform = await axios.post(
     `http://localhost:3000/api/forms?type=contactus`,
     data
   );
-  return contactUsform.data.success;
+  return contactUsform.data;
 };
 
 //^-----------------UPDATE ROUTES-----------------

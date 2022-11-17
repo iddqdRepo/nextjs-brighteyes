@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { ShowButtonTextOnSubmit } from "../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 import { server } from "../../config";
 import { postContactUsForm } from "../../routes/formRoutes";
-import { ContactUsYupSchema } from "../../utils/yup/ContactUsYupSchema";
+import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
 import {
   ErrorFormik,
   InputTextAreaFormik,
@@ -210,7 +210,7 @@ export const ContactUsSection = () => {
         <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
           <Formik
             initialValues={initialValues}
-            validationSchema={ContactUsYupSchema}
+            validationSchema={ContactUsSchema}
             onSubmit={async (data) => {
               setLoading(true);
               let successful = await postContactUsForm(data);

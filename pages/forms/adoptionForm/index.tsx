@@ -69,6 +69,33 @@ function Index({ type }: { type: string }) {
     setToShow({ ...tempObj });
   }, []);
 
+  const revertDataObjectsBackToOriginalFormat = (
+    dataToRevert: any,
+    type: string
+  ) => {
+    let explodedObject: any = {};
+    for (const [key, value] of Object.entries(dataToRevert)) {
+      if (typeof value === "object" && !Array.isArray(value)) {
+        for (const [jkey, jvalue] of Object.entries(value as any)) {
+          if (jkey.includes(">")) {
+            let keyToSplit = jkey.split(">");
+            let expandedMainKey = keyToSplit[0];
+            let expandedInnerKey = keyToSplit[1];
+            let expandedInnerValue = jvalue;
+            explodedObject[expandedMainKey] = {
+              ...explodedObject[expandedMainKey],
+              [expandedInnerKey]: expandedInnerValue,
+            };
+          } else {
+            explodedObject[key] = { ...explodedObject[key], [jkey]: jvalue };
+          }
+        }
+      }
+    }
+
+    return { ...explodedObject, type, archive: "No" };
+  };
+
   return (
     <>
       <NavbarComponent />
@@ -81,12 +108,32 @@ function Index({ type }: { type: string }) {
             type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
           }
           onSubmit={async (data) => {
-            console.log("handlingSubmit");
-            console.log("data", data);
             setLoading(true);
-            //convert back into normal object structure before passing
-            //to postPetForm to remove error?
-            let successful = await postPetForm(data as any);
+            if (data.homeQuestions["planning>baby"]) {
+              data.homeQuestions["planning>baby"] =
+                data.homeQuestions["planning>baby"][0];
+            }
+            if (data.homeQuestions["planning>moving"]) {
+              data.homeQuestions["planning>moving"] =
+                data.homeQuestions["planning>moving"][0];
+            }
+            if (data.homeQuestions["planning>workHoursChange"]) {
+              data.homeQuestions["planning>workHoursChange"] =
+                data.homeQuestions["planning>workHoursChange"][0];
+            }
+            if (data.homeQuestions["planning>holiday"]) {
+              data.homeQuestions["planning>holiday"] =
+                data.homeQuestions["planning>holiday"][0];
+            }
+
+            //TODO HERE, rchive bit back in after reverting
+            let newData = await revertDataObjectsBackToOriginalFormat(
+              data,
+              type
+            );
+            console.log("newdata =", newData);
+            let successful = await postPetForm(newData);
+            console.log("successful", successful);
             if (successful) {
               setLoading(false);
               setIsSuccess(true);
@@ -200,18 +247,9 @@ function Index({ type }: { type: string }) {
                 isSuccess={isSuccess}
                 buttonText={buttonText}
                 submitHandler={handleSubmit}
-                animalName={"message"}
+                animalName={"form"}
               />
-              {/* <button
-                type="submit"
-                onClick={(e) => {
-                  console.log("clicked");
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-              >
-                submit
-              </button> */}
+
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikFormContainer>
           )}

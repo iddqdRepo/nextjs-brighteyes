@@ -245,14 +245,20 @@ const catQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  "catHomeAloneInfo>catHomeAloneHours": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  "catHomeAloneInfo>catHomeAloneFrequency": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+  "catHomeAloneInfo>catHomeAloneHours": Yup.string().when(
+    ["catHomeAloneInfo>catHomeAlone"],
+    {
+      is: "Yes",
+      then: Yup.string().required("Required"),
+    }
+  ),
+  "catHomeAloneInfo>catHomeAloneFrequency": Yup.string().when(
+    ["catHomeAloneInfo>catHomeAlone"],
+    {
+      is: "Yes",
+      then: Yup.string().required("Required"),
+    }
+  ),
   catSleepLocation: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -261,35 +267,43 @@ const catQuestionsSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  "ownOtherCatsPastInfo>ownOtherPastCats": Yup.string().when(
+    ["ownOtherCatsCurrentInfo>ownOtherCurrentCats"],
+    {
+      is: "No",
+      then: Yup.string().required("Required"),
+    }
+  ),
+  "ownOtherCatsPastInfo>otherPastCatTime": Yup.string().when(
+    ["ownOtherCatsPastInfo>ownOtherPastCats"],
+    {
+      is: (val: string) => val === "As a Child" || val === "As an Adult",
+      then: Yup.string().required("Required"),
+    }
+  ),
+  "ownOtherCatsPastInfo>otherCatFate": Yup.string().when(
+    ["ownOtherCatsPastInfo>ownOtherPastCats"],
+    {
+      is: (val: string) => val === "As a Child" || val === "As an Adult",
+      then: Yup.string().required("Required"),
+    }
+  ),
   "ownOtherPetsCurrentInfo>ownOtherCurrentPets": Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  "ownOtherPetsCurrentInfo>otherCurrentPetTypes": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  "ownOtherCatsPastInfo>ownOtherPastCats": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  "ownOtherCatsPastInfo>otherPastCatTime": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  "ownOtherCatsPastInfo>otherCatFate": Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+  "ownOtherPetsCurrentInfo>otherCurrentPetTypes": Yup.string().when(
+    ["ownOtherPetsCurrentInfo>ownOtherCurrentPets"],
+    {
+      is: "Yes",
+      then: Yup.string().required("Required"),
+    }
+  ),
   catAwareOfCostsAndLegal: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
   catHowSoon: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  catFurtherInfo: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),

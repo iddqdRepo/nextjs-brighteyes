@@ -467,7 +467,7 @@ export const QuestionsMap = ({
                 labelText={title}
                 val={values[category][field]}
                 forNameId={`${category}.${entry[0]}`}
-                type={entry[0] === "email" ? "email" : ""}
+                type={entry[0].toLowerCase().includes("email") ? "email" : ""}
                 placeholder={entry[1].placeholder}
               >
                 <ErrorFormik

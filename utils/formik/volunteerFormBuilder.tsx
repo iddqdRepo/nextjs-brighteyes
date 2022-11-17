@@ -23,7 +23,15 @@ export const volunteerFormBuilder: VolunteerFormBuilderInterface = {
     mobile: { title: "Mobile", type: "text" },
     email: { title: "Email", type: "text" },
     occupation: { title: "Occupation", type: "text" },
-    overSixteen: { title: "I am over 16", type: "checkbox" },
+    overSixteen: {
+      title: "I am over 16",
+      type: "select",
+      values: [
+        ["Select", ""],
+        ["Yes", "Yes"],
+        ["No", "No"],
+      ],
+    },
   },
   emergencyContactInfo: {
     emergencyContactTitle: { title: "Title", type: "text" },

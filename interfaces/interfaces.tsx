@@ -215,12 +215,12 @@ export interface VolunteerFormInterface {
     offender: string;
     offenderDetails: string;
   };
-  _id: string;
+  _id?: string;
   type: string;
   date?: string;
   updatedAt?: string;
   archive: string;
-  __v: number;
+  __v?: number;
 }
 
 export interface TitleMapInterface {
