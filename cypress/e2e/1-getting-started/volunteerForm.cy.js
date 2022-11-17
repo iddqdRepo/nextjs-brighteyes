@@ -17,21 +17,19 @@ describe("Volunteer Form", () => {
         };
         if ($el[0].children[1].type === "email") {
           let input = cy.wrap($el[0]).find("input");
-          input.click().blur();
-          cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
-          input.type("h").blur();
-          cy.wrap($el[0])
-            .find("[id^=err-]")
-            .should("have.text", "Invalid email");
+          if (!optional[$el.children()[1].name]) {
+            input.click().blur();
+            cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
+            input.type("h").blur();
+            cy.wrap($el[0])
+              .find("[id^=err-]")
+              .should("have.text", "Invalid email");
+          }
         }
 
         if ($el[0].children[1].type === "text") {
           let input = cy.wrap($el[0]).find("input");
           if (!optional[$el.children()[1].name]) {
-            console.log(
-              "!optional[$el.children()[1].name]",
-              $el.children()[1].name
-            );
             input.click().blur();
             cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
             input.type("h").blur();

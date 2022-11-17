@@ -5,7 +5,7 @@ describe("Dog Adoption Form", () => {
   //   cy.visit("http://localhost:3000/forms/adoptionForm?type=Dog");
   // });
 
-  it("shows correct dog specific fields", () => {
+  it.skip("shows correct dog specific fields", () => {
     cy.visit("http://localhost:3000/forms/adoptionForm?type=Dog");
 
     cy.contains("Adopt a Dog Form");
@@ -31,7 +31,7 @@ describe("Dog Adoption Form", () => {
     cy.contains("A MINIMUM REHOMING DONATION OF £125 IS REQUESTED");
   });
 
-  it("shows correct error messages all input fields", () => {
+  it.skip("shows correct error messages all input fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
         const optional = {
@@ -67,7 +67,7 @@ describe("Dog Adoption Form", () => {
     );
   });
 
-  it("shows correct error messages all select fields", () => {
+  it.skip("shows correct error messages all select fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
         const optional = { "hearAboutUsInfo.hearAboutUs": true };
@@ -82,7 +82,7 @@ describe("Dog Adoption Form", () => {
     );
   });
 
-  it("exposes correct fields on selecting specific values - Home Questions", () => {
+  it.skip("exposes correct fields on selecting specific values - Home Questions", () => {
     cy.contains("Please estimate the size of your garden/yard?").should(
       "not.exist"
     );
@@ -110,7 +110,7 @@ describe("Dog Adoption Form", () => {
     cy.contains("How often do they visit?");
   });
 
-  it("exposes correct fields on selecting specific values - How did you hear about us", () => {
+  it.skip("exposes correct fields on selecting specific values - How did you hear about us", () => {
     cy.contains("We'd love to know where you heard of us!").should("not.exist");
     cy.get('select[name="hearAboutUsInfo.hearAboutUs"]').select("Other");
     cy.contains("We'd love to know where you heard of us!");
@@ -119,18 +119,18 @@ describe("Dog Adoption Form", () => {
   it("selects all required fields and submits form", () => {
     cy.visit("http://localhost:3000/forms/adoptionForm?type=Dog");
 
-    // cy.intercept(
-    //   {
-    //     method: "POST",
-    //     url: "**/api/forms?type=pet",
-    //   },
-    //   {
-    //     statusCode: 201,
-    //     body: { success: true }, // stub returns above message
-    //     headers: { "access-control-allow-origin": "*" },
-    //     delayMs: 500,
-    //   }
-    // ).as("addForm");
+    cy.intercept(
+      {
+        method: "POST",
+        url: "**/api/forms?type=pet",
+      },
+      {
+        statusCode: 201,
+        body: { success: true }, // stub returns above message
+        headers: { "access-control-allow-origin": "*" },
+        delayMs: 500,
+      }
+    ).as("addForm");
 
     //^Select all the dropdown fields so they are not "reqired"
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
@@ -177,7 +177,7 @@ describe("Dog Adoption Form", () => {
       }
     );
     cy.get("button[type=submit]").click();
-    // cy.wait("@addForm");
-    // cy.contains("Submitted form");
+    cy.wait("@addForm");
+    cy.contains("Submitted form");
   });
 });
