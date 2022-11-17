@@ -82,8 +82,8 @@ function Index({ type }: { type: string }) {
             let expandedMainKey = keyToSplit[0];
             let expandedInnerKey = keyToSplit[1];
             let expandedInnerValue = jvalue;
-            explodedObject[expandedMainKey] = {
-              ...explodedObject[expandedMainKey],
+            explodedObject[key][expandedMainKey] = {
+              ...explodedObject[key][expandedMainKey],
               [expandedInnerKey]: expandedInnerValue,
             };
           } else {
