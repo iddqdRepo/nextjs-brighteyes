@@ -57,9 +57,13 @@ function Index({
             {form[0].type + " Form for " + form[0].aboutQuestions.name}
           </PageHeader>
           {Object.entries(form[0]).map(([fieldSetTitle, fieldSetContent]) => {
-            if (fieldSetTitle === "message") {
+            if (
+              fieldSetTitle === "message" ||
+              fieldSetTitle === "giftAidFuture" ||
+              fieldSetTitle === "giftAidPast"
+            ) {
               return (
-                <FieldSet key={fieldSetTitle} legendText={"message"}>
+                <FieldSet key={fieldSetTitle} legendText={fieldSetTitle}>
                   <FieldAndAnswer
                     labelText={"fieldSetTitle"}
                     answer={fieldSetContent}
@@ -89,7 +93,7 @@ function Index({
                                 //Dont show blank answers
                                 nestedAnswer && (
                                   <FieldAndAnswer
-                                    key={question}
+                                    key={nestedQuestion}
                                     labelText={nestedQuestion}
                                     answer={nestedAnswer}
                                   />
@@ -100,7 +104,6 @@ function Index({
                         } else {
                           return (
                             //Dont show blank answers
-
                             answer !== "" && (
                               <FieldAndAnswer
                                 key={question}
