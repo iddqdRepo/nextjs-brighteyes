@@ -76,11 +76,13 @@ function NavbarComponent() {
     <>
       <nav className="flex items-center justify-between w-full h-20">
         <div className="flex flex-col justify-end">
-          <img
-            className="object-cover w-full h-16 "
-            src="/logo-nav.png"
-            alt=""
-          />
+          <Link href="/">
+            <img
+              className="object-cover w-full h-16 cursor-pointer "
+              src="/logo-nav.png"
+              alt=""
+            />
+          </Link>
         </div>
         <div className="hidden lg:flex">
           <ul className="flex flex-wrap justify-center">
@@ -250,7 +252,7 @@ function NavbarComponent() {
           className="absolute flex-col hidden w-full bg-white lg:hidden"
         >
           <ul ref={defaultNavRef} className="">
-            <MobileNavListItem text={"Home"} path={"/"} />
+            <MobileNavListItem text={"Home"} path={""} />
             <MobileNavListItem text={"About"} path={"about"} />
             <MobileNavListItem text={"Adoption"} path={"adoption"} />
             <MobileNavListItem text={"Donate"} path={"donate"} />
