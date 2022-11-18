@@ -78,20 +78,24 @@ export const FooterSection = () => {
         </div>
       </div>
       <div className="flex items-center justify-center pb-2 mt-10">
-        <Icon
-          className="mr-2"
-          icon="akar-icons:facebook-fill"
-          color="#8b3479"
-          width="30"
-          height="30"
-        />
-        <Icon
-          className="mr-2"
-          icon="akar-icons:instagram-fill"
-          color="#8b3479"
-          width="30"
-          height="30"
-        />
+        <Link href={"https://www.facebook.com/brighteyes.a.s/"}>
+          <Icon
+            className="mr-2 cursor-pointer"
+            icon="akar-icons:facebook-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+        </Link>
+        <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
+          <Icon
+            className="mr-2 cursor-pointer"
+            icon="akar-icons:instagram-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+        </a>
       </div>
     </div>
   );
