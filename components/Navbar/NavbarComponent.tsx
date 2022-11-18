@@ -34,7 +34,7 @@ function NavbarComponent() {
         className="flex py-4 mx-4 text-lg font-medium text-black font-poppins justify-left"
         onClick={hideMobileNav}
       >
-        <Link href={path}>
+        <Link href={"/" + path}>
           <a className="text-lg font-normal leading-6 text-black" href="#">
             {text}
           </a>

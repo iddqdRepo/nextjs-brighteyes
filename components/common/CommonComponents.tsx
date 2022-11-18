@@ -76,7 +76,7 @@ export const FooterSection = () => {
           </FooterIconText>
         </div>
       </div>
-      <div className="flex items-center justify-center mt-10">
+      <div className="flex items-center justify-center pb-2 mt-10">
         <Icon
           className="mr-2"
           icon="akar-icons:facebook-fill"
