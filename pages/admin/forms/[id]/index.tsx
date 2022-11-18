@@ -40,7 +40,7 @@ function Index({
         <Label
           text={titleMap[labelText as keyof TitleMapInterface]}
           hFor={"val"}
-          classN=" text-xs"
+          classN="text-center text-xs"
         />
 
         <div className="text-center text-wrap h-fit text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60  p-2.5 ">

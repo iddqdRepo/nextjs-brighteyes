@@ -149,7 +149,7 @@ export const DonateUsesSection = () => {
                 icon={"healthicons:emergency-post-outline"}
                 text="Emergencies"
               />
-              <IconText icon={"wpf:maintenance"} text="Maintenance" />
+              <IconText icon={"mdi:toy-brick-plus"} text="Toys" />
             </DonateIconContainer>
             <DonateIconContainer>
               <IconText icon={"mdi:needle"} text="Vaccinations" />
@@ -157,7 +157,7 @@ export const DonateUsesSection = () => {
                 icon={"icon-park-outline:oil-industry"}
                 text="Heating"
               />
-              <IconText icon={"ep:more-filled"} text="And More" />
+              <IconText icon={"wpf:maintenance"} text="Maintenance" />
             </DonateIconContainer>
             <DonateIconContainer>
               <IconText icon={"ic:sharp-model-training"} text="Training" />
@@ -165,7 +165,7 @@ export const DonateUsesSection = () => {
                 icon={"pepicons:electricity-print"}
                 text="Electricity"
               />
-              <IconText icon={"mdi:toy-brick-plus"} text="Toys" />
+              <IconText icon={"ep:more-filled"} text="And More" />
             </DonateIconContainer>
           </div>
         </div>
