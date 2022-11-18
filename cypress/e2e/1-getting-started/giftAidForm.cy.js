@@ -3,7 +3,7 @@
 describe("GiftAid Form", () => {
   it("shows correct GiftAid fields", () => {
     cy.visit("http://localhost:3000/forms/giftAidForm");
-    cy.contains("GiftAid Form");
+    cy.contains("Gift Aid Form");
     cy.contains("Name");
     cy.contains("Address");
     cy.contains("Postcode");
