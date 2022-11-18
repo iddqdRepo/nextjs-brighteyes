@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import Head from "next/head";
 
 export function PageContainerComponent({
   children,
@@ -102,5 +103,24 @@ export const PageHeader = ({ children }: { children: React.ReactNode }) => {
     <div className="flex justify-center mt-20 text-lg font-poppins">
       {children}
     </div>
+  );
+};
+
+export const AdminHeadTag = ({
+  title,
+  metaContent,
+  linkHref,
+}: {
+  title: string;
+  metaContent: string;
+  linkHref: string;
+}) => {
+  return (
+    <Head>
+      <title>{title}</title>
+      <meta name="description" content={metaContent} />
+      <meta name="robots" content="noindex" />
+      <link rel="canonical" href={linkHref} />
+    </Head>
   );
 };

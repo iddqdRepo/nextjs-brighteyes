@@ -1,5 +1,6 @@
 import AdminSidebarComponent from "../../../../adminComponents/AdminSidebarComponent";
 import {
+  AdminHeadTag,
   PageContainerComponent,
   PageHeader,
 } from "../../../../adminComponents/commonAdminComponents";
@@ -51,6 +52,11 @@ function Index({
   };
   return (
     <>
+      <AdminHeadTag
+        title={"View Form"}
+        metaContent={"Admin View Form, Bright Eyes"}
+        linkHref={"/admin/forms/"}
+      />
       <AdminSidebarComponent highlighted="">
         <PageContainerComponent>
           <PageHeader>

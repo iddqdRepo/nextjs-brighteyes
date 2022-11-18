@@ -19,6 +19,7 @@ import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionIniti
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postPetForm } from "../../../routes/formRoutes";
 import { ShowButtonTextOnSubmit } from "../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
+import { HeadTag } from "../../../components/common/CommonComponents";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -98,8 +99,14 @@ function Index({ type }: { type: string }) {
 
   return (
     <>
+      <HeadTag
+        title={"Animal Application Form"}
+        metaContent={
+          "Apply to re-home a dog or cat from Bright Eyes Animal Santuary, Fermanagh."
+        }
+        linkHref={"/forms/adoptionForm?type=dog"}
+      />
       <NavbarComponent />
-
       <form className="flex flex-col items-center justify-center ">
         <FormPageTitle title={` Adopt a ${type} Form`} />
         <Formik

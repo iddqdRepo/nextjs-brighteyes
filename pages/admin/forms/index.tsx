@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
+  AdminHeadTag,
   PageContainerComponent,
   PageHeader,
   SearchInput,
@@ -338,115 +339,122 @@ function Index() {
   };
 
   return (
-    <AdminSidebarComponent highlighted={highlighted}>
-      {!hidden && (
-        <Popup
-          name={deleteOrUpdateInfo.current.name}
-          deleteHandler={handleDelete}
-          setHideState={setHidden}
-          archiveHandler={handleArchive}
-          action={deleteOrUpdateInfo.current.action}
-          promptText={deleteOrUpdateInfo.current.promptText}
-        />
-      )}
-      <PageContainerComponent>
-        <PageHeader>
-          {isArchive === "true" ? "Archived Forms" : "Active Forms"}
-        </PageHeader>
-        <div className="flex flex-col items-center mt-14">
-          <Tabs>
-            <TabList className="flex justify-center">
-              {tabsMapList.map((tab) => {
-                return (
-                  <Tab
-                    key={tab}
-                    selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                    className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+    <>
+      <AdminHeadTag
+        title={"Forms"}
+        metaContent={"Admin Forms, Bright Eyes"}
+        linkHref={"/admin/forms"}
+      />
+      <AdminSidebarComponent highlighted={highlighted}>
+        {!hidden && (
+          <Popup
+            name={deleteOrUpdateInfo.current.name}
+            deleteHandler={handleDelete}
+            setHideState={setHidden}
+            archiveHandler={handleArchive}
+            action={deleteOrUpdateInfo.current.action}
+            promptText={deleteOrUpdateInfo.current.promptText}
+          />
+        )}
+        <PageContainerComponent>
+          <PageHeader>
+            {isArchive === "true" ? "Archived Forms" : "Active Forms"}
+          </PageHeader>
+          <div className="flex flex-col items-center mt-14">
+            <Tabs>
+              <TabList className="flex justify-center">
+                {tabsMapList.map((tab) => {
+                  return (
+                    <Tab
+                      key={tab}
+                      selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
+                      className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+                    >
+                      {tab}
+                    </Tab>
+                  );
+                })}
+              </TabList>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"petFilter"}
+                    change={setPetTextFilter}
+                    val={petTextFilter}
+                    placehold={"Search by name"}
+                  />
+                  <select
+                    className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
+                    name="type"
+                    id="type"
+                    onChange={(e) => setPetFilter(e.target.value)}
                   >
-                    {tab}
-                  </Tab>
-                );
-              })}
-            </TabList>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"petFilter"}
-                  change={setPetTextFilter}
-                  val={petTextFilter}
-                  placehold={"Search by name"}
-                />
-                <select
-                  className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                  name="type"
-                  id="type"
-                  onChange={(e) => setPetFilter(e.target.value)}
-                >
-                  <option value="">All</option>
-                  <option value="Dog">Dog Forms</option>
-                  <option value="Cat">Cat Forms</option>
-                </select>
-              </div>
+                    <option value="">All</option>
+                    <option value="Dog">Dog Forms</option>
+                    <option value="Cat">Cat Forms</option>
+                  </select>
+                </div>
 
-              <div className="lg:mr-20 lg:ml-20">
-                {!petFormsLoading ? (
-                  <FormList list={petForms.data} type="pet" />
-                ) : (
-                  <div className="flex justify-center">
-                    <LoadingIcon />
-                  </div>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"giftAidTextFilter"}
-                  change={setGiftAidTextFilter}
-                  val={giftAidTextFilter}
-                  placehold={"Search by name"}
-                />
-              </div>
-              <div className="lg:mr-20 lg:ml-20">
-                {!giftAidLoading && (
-                  <FormList list={giftAidForms.data} type="giftAid" />
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"volunteerTextFilter"}
-                  change={setVolunteerTextFilter}
-                  val={volunteerTextFilter}
-                  placehold={"Search by name"}
-                />
-              </div>
-              <div className="lg:mr-20 lg:ml-20">
-                {!volunteerLoading && (
-                  <FormList list={volunteerForms.data} type="volunteer" />
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"contactUsTextFilter"}
-                  change={setContactUsTextFilter}
-                  val={contactUsTextFilter}
-                  placehold={"Search by name"}
-                />
-              </div>
-              <div className="lg:mr-20 lg:ml-20">
-                {!contactLoading && (
-                  <FormList list={contactForms.data} type="contactUs" />
-                )}
-              </div>
-            </TabPanel>
-          </Tabs>
-        </div>
-      </PageContainerComponent>
-    </AdminSidebarComponent>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!petFormsLoading ? (
+                    <FormList list={petForms.data} type="pet" />
+                  ) : (
+                    <div className="flex justify-center">
+                      <LoadingIcon />
+                    </div>
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"giftAidTextFilter"}
+                    change={setGiftAidTextFilter}
+                    val={giftAidTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!giftAidLoading && (
+                    <FormList list={giftAidForms.data} type="giftAid" />
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"volunteerTextFilter"}
+                    change={setVolunteerTextFilter}
+                    val={volunteerTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!volunteerLoading && (
+                    <FormList list={volunteerForms.data} type="volunteer" />
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"contactUsTextFilter"}
+                    change={setContactUsTextFilter}
+                    val={contactUsTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!contactLoading && (
+                    <FormList list={contactForms.data} type="contactUs" />
+                  )}
+                </div>
+              </TabPanel>
+            </Tabs>
+          </div>
+        </PageContainerComponent>
+      </AdminSidebarComponent>
+    </>
   );
 }
 

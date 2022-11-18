@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AdminSidebarComponent from "../../adminComponents/AdminSidebarComponent";
-import { PageContainerComponent } from "../../adminComponents/commonAdminComponents";
+import {
+  AdminHeadTag,
+  PageContainerComponent,
+} from "../../adminComponents/commonAdminComponents";
 import {
   getPetForms,
   getGiftAidForms,
@@ -148,6 +151,12 @@ function Index() {
 
   return (
     <>
+      <AdminHeadTag
+        title={"Dashboard"}
+        metaContent={"Admin add a new animal, Bright Eyes"}
+        linkHref={"/admin"}
+      />
+
       <AdminSidebarComponent highlighted="Dashboard">
         <PageContainerComponent>
           <div className="flex items-center py-3 pl-5 text-lg font-semibold">

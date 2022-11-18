@@ -7,6 +7,7 @@ import {
   PageContainerComponent,
   PageHeader,
   TableHeadMap,
+  AdminHeadTag,
 } from "../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import { useRouter } from "next/router";
@@ -65,6 +66,11 @@ function Index() {
 
   return (
     <>
+      <AdminHeadTag
+        title={"Animals"}
+        metaContent={"Animals, Bright Eyes"}
+        linkHref={"/admin/animals"}
+      />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
           <Popup

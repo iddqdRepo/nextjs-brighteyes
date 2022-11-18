@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import { Formik } from "formik";
+import Head from "next/head";
 import Link from "next/link";
 
 import React, { useState } from "react";
@@ -154,6 +155,23 @@ export const ButtonWithQuery = ({
         </div>
       </button>
     </Link>
+  );
+};
+export const HeadTag = ({
+  title,
+  metaContent,
+  linkHref,
+}: {
+  title: string;
+  metaContent: string;
+  linkHref: string;
+}) => {
+  return (
+    <Head>
+      <title>{title}</title>
+      <meta name="description" content={metaContent} />
+      <link rel="canonical" href={linkHref} />
+    </Head>
   );
 };
 

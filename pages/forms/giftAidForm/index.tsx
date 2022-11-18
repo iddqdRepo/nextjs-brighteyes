@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { ShowButtonTextOnSubmit } from "../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
+import { HeadTag } from "../../../components/common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,
@@ -22,9 +23,14 @@ const Index = () => {
   const [buttonText, setButtonText] = useState("Submit Form");
   return (
     <>
+      <HeadTag
+        title={"Gift Aid Form"}
+        metaContent={"Gift Aid form for Bright Eyes Animal Sanctuary."}
+        linkHref={"/forms/giftAidForm"}
+      />
       <NavbarComponent />
       <form className="flex flex-col items-center justify-center ">
-        <FormPageTitle title="GiftAid Form" />
+        <FormPageTitle title="Gift Aid Form" />
         <Formik
           initialValues={giftAidInitialValues}
           validationSchema={GiftAidSchema}
