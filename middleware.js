@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import * as jose from "jose";
+import { server } from "./config";
 const secret = process.env.SECRET;
 
 export default async function middleware(req) {
@@ -7,10 +8,9 @@ export default async function middleware(req) {
   const url = req.url;
 
   if (url.includes("/admin")) {
-    // console.log("Url contains admin");
     if (jwt === undefined) {
       console.log("jwt is undefined");
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect(`${server}/login`);
     }
 
     try {
@@ -21,7 +21,7 @@ export default async function middleware(req) {
       return NextResponse.next();
     } catch (error) {
       console.log("error", error);
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect(`${server}/login`);
     }
   }
 
