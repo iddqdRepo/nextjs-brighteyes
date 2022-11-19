@@ -248,7 +248,7 @@ export const ContactUsSection = () => {
           >
             {({ errors, touched, handleSubmit }) => (
               <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
-                <div className="flex-col md:flex">
+                <div className="flex flex-col md:flex-row">
                   <InputTextFormik
                     labelText={"Name"}
                     val={"aboutQuestions.name"}
