@@ -109,7 +109,10 @@ function Index() {
               </select>
               {isArchive === "false" ? (
                 <Link href={"/admin/animals/addAnimal"}>
-                  <button className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]">
+                  <button
+                    id="AddAnimal"
+                    className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+                  >
                     + Add Animal
                   </button>
                 </Link>

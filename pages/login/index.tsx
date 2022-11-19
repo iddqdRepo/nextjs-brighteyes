@@ -76,6 +76,7 @@ function Index() {
             <button
               className="w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100"
               type="button"
+              id="LoginButton"
               onClick={(e) => handleLogin(e)}
             >
               Sign In

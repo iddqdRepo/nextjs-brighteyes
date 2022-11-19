@@ -12,6 +12,7 @@ interface animalInterface {
   type: string;
   name: string;
   age: string;
+  sex?: string;
   yearsOrMonths: string;
   breed: string;
   size: string;
@@ -105,7 +106,7 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
                   name={pet.name}
                   type={pet.breed}
                   age={`${pet.age} ${pet.yearsOrMonths}`}
-                  sex={"temp"}
+                  sex={pet.sex ? pet.sex : "N/A"}
                   image={pet.image}
                 />
               );
