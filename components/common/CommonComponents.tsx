@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import React, { useState } from "react";
 import { ShowButtonTextOnSubmit } from "../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
-import { server } from "../../config";
+// import { server } from "../../config";
 import { postContactUsForm } from "../../routes/formRoutes";
 import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
 import {
@@ -201,7 +201,7 @@ export const DonationComponent = () => {
           <Button
             text="Donate"
             iconStr="ant-design:heart-filled"
-            link={`${server}/donate`}
+            link={`/donate`}
           />
         </div>
       </div>

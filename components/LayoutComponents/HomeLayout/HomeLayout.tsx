@@ -44,8 +44,7 @@ export const HeroSection = () => {
             Take a look at some of the wonderful animals we have at <br />
             Bright Eyes Animal Sanctuary.
           </span>
-          {/* <Button text="View Animals" link={`${server}/adoption`} /> */}
-          <Button text="View Animals" link={`${server}/adoption`} />
+          <Button text="View Animals" link={`/adoption`} />
         </div>
       </div>
     </div>

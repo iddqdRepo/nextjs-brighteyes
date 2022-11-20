@@ -138,7 +138,7 @@ function Index() {
                     <DropdownField
                       labelText={"Sex"}
                       labelHForAndName={"sex"}
-                      valueArray={["Male", "Female"]}
+                      valueArray={["Male", "Female", "Mixed"]}
                     >
                       <ErrorFormik err={errors} touch={touched} field={"sex"} />
                     </DropdownField>
