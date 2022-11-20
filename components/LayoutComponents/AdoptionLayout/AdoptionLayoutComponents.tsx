@@ -8,12 +8,14 @@ export const AdoptionCard = ({
   age,
   sex,
   image,
+  id,
 }: {
   name: string;
   type: string;
   age: string;
   sex: string;
   image?: string;
+  id: string;
 }) => {
   return (
     <>
@@ -25,7 +27,7 @@ export const AdoptionCard = ({
             backgroundImage: `url("${image}")`,
           }}
         ></div>
-        <Link href={`/adoption/${name}`}>
+        <Link href={`/adoption/${id}`}>
           <a className="flex justify-center w-full -mt-14">
             <div className="flex flex-col w-11/12 bg-white border border-gray-300 rounded-md">
               <span className="pt-3 pb-2 pl-6 pr-6 text-xl font-semibold font-poppins">

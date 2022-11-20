@@ -102,12 +102,13 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
             .map((pet) => {
               return (
                 <AdoptionCard
-                  key={pet.name + pet.breed}
+                  key={pet._id + pet.breed}
                   name={pet.name}
                   type={pet.breed}
                   age={`${pet.age} ${pet.yearsOrMonths}`}
                   sex={pet.sex ? pet.sex : "N/A"}
                   image={pet.image}
+                  id={pet._id}
                 />
               );
             })}

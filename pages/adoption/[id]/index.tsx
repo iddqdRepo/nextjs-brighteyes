@@ -37,10 +37,10 @@ export async function getStaticPaths() {
   const data = await petModel.find({ adopted: "No" });
   //mapping through to create an array of the paths
   const paths = data.map((obj) => {
-    // console.log(obj.name);
+    console.log(obj._id.toString());
     return {
       params: {
-        animal: obj.name.toString().trim(),
+        id: obj._id.toString(),
       },
     };
   });
@@ -51,16 +51,16 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context: { params: { animal: any } }) {
+export async function getStaticProps(context: { params: { id: any } }) {
   dbConnect();
-  const animals = context.params.animal;
+  const ids = context.params.id;
   // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
-  const dataTemp = await petModel.find({ name: animals }).lean();
+  const dataTemp = await petModel.find({ _id: ids }).lean();
   const data = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
-    if (doc.name) {
-      doc.name = doc.name.trim();
-    }
+    // if (doc.name) {
+    //   doc.name = doc.name.trim();
+    // }
     if (doc.createdAt) {
       doc.createdAt = doc.createdAt.toString();
     }
@@ -77,3 +77,48 @@ export async function getStaticProps(context: { params: { animal: any } }) {
     revalidate: 10, // In seconds
   };
 }
+// export async function getStaticPaths() {
+//   dbConnect();
+//   const data = await petModel.find({ adopted: "No" });
+//   //mapping through to create an array of the paths
+//   const paths = data.map((obj) => {
+//     // console.log(obj.name);
+//     return {
+//       params: {
+//         animal: obj.name.toString().trim(),
+//       },
+//     };
+//   });
+
+//   return {
+//     paths, //paths which is the same as paths:paths
+//     fallback: false, // false = if a user tries to visit a route that doesnt exist, it shows a 404 page
+//   };
+// }
+
+// export async function getStaticProps(context: { params: { animal: any } }) {
+//   dbConnect();
+//   const animals = context.params.animal;
+//   // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
+//   const dataTemp = await petModel.find({ name: animals }).lean();
+//   const data = dataTemp.map((doc) => {
+//     doc._id = doc._id.toString();
+//     if (doc.name) {
+//       doc.name = doc.name.trim();
+//     }
+//     if (doc.createdAt) {
+//       doc.createdAt = doc.createdAt.toString();
+//     }
+//     if (doc.updatedAt) {
+//       doc.updatedAt = doc.updatedAt.toString();
+//     }
+//     return doc;
+//   });
+
+//   return {
+//     props: {
+//       animal: data,
+//     },
+//     revalidate: 10, // In seconds
+//   };
+// }
