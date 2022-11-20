@@ -25,7 +25,7 @@ import { ShowButtonTextOnSubmit } from "../../../../components/common/CommonComp
 function Index({ animal }: { animal: PetInterface[] }) {
   const [resizedImage, setResizedImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [buttonText, setButtonText] = useState("Add Animal");
+  const [buttonText, setButtonText] = useState(`Make Edit`);
   const [isSuccess, setIsSuccess] = useState(false);
 
   return (

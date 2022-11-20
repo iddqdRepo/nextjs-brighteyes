@@ -101,7 +101,9 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
                 </div>
               </div>
             </div>
-            <div className="pt-10 text-xl font-light font-poppins">{desc}</div>
+            <pre className="pt-10 text-xl font-light whitespace-pre-wrap font-poppins">
+              {desc}
+            </pre>
             <Button
               text={"View Form"}
               link={`/forms/adoptionForm?type=${
