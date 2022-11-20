@@ -17,8 +17,7 @@ export const updatePet = async (data: PetInterface) => {
 };
 export const postPet = async (data: PetInterface) => {
   console.log("in postPet (routes), data =", data);
-  // const addPet = await axios.post(`${server}/api/pets`, data);
-  const addPet = await axios.post("http://localhost:3000/api/pets", data);
+  const addPet = await axios.post(`${server}/api/pets`, data);
   console.log("addPet (routes)", addPet);
   return addPet.data.success;
 };

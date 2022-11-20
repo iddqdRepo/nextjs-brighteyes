@@ -15,6 +15,5 @@ export const sanitizeInput = (data: PetInterface) => {
     }
     sanitizedData[key as keyof PetInterface] = newValue as string;
   });
-  console.log("data sanitized", sanitizedData);
   return sanitizedData;
 };

@@ -17,13 +17,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
     case "POST":
       try {
-        console.log("posting pet in api");
         const pets = await petModel.create(req.body);
-        console.log("pets", pets);
-        res.status(201).json({ success: true });
+        res.status(201).json({ success: true, data: pets });
       } catch (error: any) {
         res.status(404).json({ success: false, message: error });
-        console.log("ERROR in api");
       }
       break;
     default:
