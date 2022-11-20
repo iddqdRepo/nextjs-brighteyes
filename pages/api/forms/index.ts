@@ -51,6 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           );
           res.status(201).json({ success: true, data: volunteerForm });
         } else if (query.type === "contactus") {
+          console.log("API");
           const contactUsForm = await formModels.FormContactUsModel.create(
             req.body
           );
