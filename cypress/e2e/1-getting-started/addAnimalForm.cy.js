@@ -5,8 +5,8 @@
 describe("Add Animal Form", () => {
   it("Log in navigate to Add Animal", () => {
     cy.visit("http://localhost:3000/admin");
-    cy.get("#username").type("a");
-    cy.get("#password").type("a");
+    cy.get("#username").should("be.visible").type("a");
+    cy.get("#password").should("be.visible").type("a");
     cy.get("#LoginButton").click();
     cy.get("#icon-Animals").should("be.visible").click({ force: true });
     cy.wait(2000);
