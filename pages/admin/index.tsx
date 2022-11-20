@@ -33,15 +33,24 @@ function Index() {
     "contactUsForms",
     getContactUsForms
   );
+  const LoadingSpinner = () => {
+    return (
+      <div className="w-10 h-10 border-8 border-[#8B3479] border-solid rounded-full animate-ping mt-5"></div>
+    );
+  };
 
   const [dogActiveCount, setDogActiveCount] = useState(0);
   const [dogArchiveCount, setDogArchiveCount] = useState(0);
   const [catActiveCount, setCatActiveCount] = useState(0);
   const [catArchiveCount, setCatArchiveCount] = useState(0);
-  const [adoptionFormPendingCount, setAdoptionFormPendingCount] = useState(0);
-  const [giftAidFormPendingCount, setGiftAidFormPendingCount] = useState(0);
-  const [volunteerFormPendingCount, setVolunteerFormPendingCount] = useState(0);
-  const [contactUsFormPendingCount, setContactUsFormPendingCount] = useState(0);
+  const [adoptionFormPendingCount, setAdoptionFormPendingCount] =
+    useState(LoadingSpinner);
+  const [giftAidFormPendingCount, setGiftAidFormPendingCount] =
+    useState(LoadingSpinner);
+  const [volunteerFormPendingCount, setVolunteerFormPendingCount] =
+    useState(LoadingSpinner);
+  const [contactUsFormPendingCount, setContactUsFormPendingCount] =
+    useState(LoadingSpinner);
 
   useEffect(() => {
     if (!isPetLoading) {
@@ -143,11 +152,6 @@ function Index() {
       </div>
     );
   };
-  const LoadingSpinner = () => {
-    return (
-      <div className="w-10 h-10 border-8 border-[#8B3479] border-solid rounded-full animate-ping mt-5"></div>
-    );
-  };
 
   return (
     <>
@@ -169,6 +173,7 @@ function Index() {
                 header="Unread Messages"
                 data={
                   !isContactUsFormsLoading ? (
+                    // contactUsFormPendingCount !== undefined &&
                     contactUsFormPendingCount
                   ) : (
                     <LoadingSpinner />
