@@ -3,6 +3,11 @@ import * as jose from "jose";
 import { server } from "./config";
 const secret = process.env.SECRET;
 
+//Workaround to fix known issue https://github.com/vercel/next.js/issues/39262
+export const config = {
+  matcher: ["/", "/((?!api/).*)"],
+};
+
 export default async function middleware(req) {
   const jwt = req.cookies.get("BrightEyesJWTToken");
   const url = req.url;
