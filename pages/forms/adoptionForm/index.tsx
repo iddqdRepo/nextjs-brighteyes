@@ -18,8 +18,10 @@ import { LegalAgreementSection } from "../../../components/IndividualFormLayout/
 import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionInitialValues";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postPetForm } from "../../../routes/formRoutes";
-import { ShowButtonTextOnSubmit } from "../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
-import { HeadTag } from "../../../components/common/CommonComponents";
+import {
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);

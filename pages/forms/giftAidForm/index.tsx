@@ -1,7 +1,9 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { ShowButtonTextOnSubmit } from "../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
-import { HeadTag } from "../../../components/common/CommonComponents";
+import {
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,

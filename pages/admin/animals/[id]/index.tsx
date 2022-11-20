@@ -16,11 +16,11 @@ import { AnimalSchema } from "../../../../utils/yup/animalYupSchema";
 import {
   InputOrTextArea,
   DropdownField,
-  ShowButtonTextOnSubmit,
   ChooseFile,
 } from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 import { sanitizeInput } from "../../../../utils/sanitizeData";
 import { updatePet } from "../../../../routes/petRoutes";
+import { ShowButtonTextOnSubmit } from "../../../../components/common/CommonComponents";
 
 function Index({ animal }: { animal: PetInterface[] }) {
   const [resizedImage, setResizedImage] = useState("");

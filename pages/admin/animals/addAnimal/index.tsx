@@ -14,12 +14,12 @@ import {
   InputOrTextArea,
   DropdownField,
   ChooseFile,
-  ShowButtonTextOnSubmit,
 } from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 
 import { postPet } from "../../../../routes/petRoutes";
 import { PetInterface } from "../../../../interfaces/interfaces";
 import { sanitizeInput } from "../../../../utils/sanitizeData";
+import { ShowButtonTextOnSubmit } from "../../../../components/common/CommonComponents";
 
 function Index() {
   const [resizedImage, setResizedImage] = useState("");
