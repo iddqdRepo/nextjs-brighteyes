@@ -73,7 +73,7 @@ function Index() {
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
           <Popup
-            name={deleteOrUpdateInfo.current.id}
+            name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}
             archiveHandler={handleArchive}
@@ -184,6 +184,7 @@ function Index() {
                                     className="w-auto h-6 cursor-pointer"
                                     icon="fluent:tray-item-remove-24-filled"
                                     onClick={() => {
+                                      console.log("pet", pet);
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
                                       if (pet._id) {

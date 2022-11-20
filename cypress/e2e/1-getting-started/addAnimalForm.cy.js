@@ -3,7 +3,7 @@
 //^ Fix for cypress bug "unexpected token <>>"
 
 describe("Add Animal Form", () => {
-  it("Log in navigate to Add Animal", () => {
+  it.skip("Log in navigate to Add Animal", () => {
     cy.visit("http://localhost:3000/admin");
     cy.get("#username").should("be.visible").type("a");
     cy.get("#password").should("be.visible").type("a");
@@ -18,7 +18,7 @@ describe("Add Animal Form", () => {
     console.log("err is", err);
     return false;
   });
-  it("Fill in animal form and submit", () => {
+  it.skip("Fill in animal form and submit", () => {
     cy.intercept(
       {
         method: "POST",
