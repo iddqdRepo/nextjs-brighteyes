@@ -18,7 +18,6 @@ import {
   Popup,
 } from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
-import { server } from "../../../config";
 
 function Index() {
   const [filter, setFilter] = useState("");
@@ -171,9 +170,7 @@ function Index() {
 
                               <TableData>
                                 <div className="flex flex-row items-center justify-center">
-                                  <Link
-                                    href={`${server}/admin/animals/${pet._id}`}
-                                  >
+                                  <Link href={`/admin/animals/${pet._id}`}>
                                     <Icon
                                       className="w-auto h-6 cursor-pointer"
                                       icon="bxs:edit"

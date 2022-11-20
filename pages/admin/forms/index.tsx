@@ -38,7 +38,6 @@ import {
   ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
 import Link from "next/link";
-import { server } from "../../../config";
 
 function Index() {
   const router = useRouter();
@@ -269,7 +268,7 @@ function Index() {
                           </div>
                         </TableData>
                         <TableData>
-                          <Link href={`${server}/admin/forms/${form._id}`}>
+                          <Link href={`/admin/forms/${form._id}`}>
                             <div className="flex flex-row items-center justify-center">
                               <Icon
                                 className="w-auto h-6 cursor-pointer"
