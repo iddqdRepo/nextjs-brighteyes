@@ -432,7 +432,7 @@ export const ShowButtonTextOnSubmit = ({
         e.preventDefault();
       }}
     >
-      {`Submitted ${animalName}`}
+      {animalName ? `Submitted ${animalName}` : ""}
     </button>
   ) : (
     <button
