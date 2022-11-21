@@ -1,6 +1,8 @@
 import axios from "axios";
 import { UserInterface } from "../interfaces/interfaces";
 
+import { server } from "../config";
+
 export const getUsers = async () => {
   const users = await axios.get(`/api/users`);
   return users.data;
@@ -8,7 +10,7 @@ export const getUsers = async () => {
 
 export const getUserByUsername = async (username: string) => {
   console.log("getUserByUsername username=", username);
-  const users = await axios.get(`/api/users/${username}`);
+  const users = await axios.get(`${server}/api/users/${username}`);
   // console.log("userRoutes getUserByUsername", users.data);
   return users.data;
 };

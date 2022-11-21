@@ -8,13 +8,19 @@ export const config = {
 };
 
 export default async function middleware(req) {
+  const { pathname, origin } = req.nextUrl;
+  console.log("pathname", pathname);
+  console.log("origin", origin);
+
   const jwt = req.cookies.get("BrightEyesJWTToken");
   const url = req.url;
+  console.log("url", url);
 
   if (url.includes("/admin")) {
     if (jwt === undefined) {
       console.log("jwt is undefined");
-      return NextResponse.redirect(`/login`);
+      return NextResponse.redirect(`${origin}/login`);
+      // return NextResponse.redirect(`/login`);
     }
 
     try {
@@ -25,7 +31,8 @@ export default async function middleware(req) {
       return NextResponse.next();
     } catch (error) {
       console.log("error", error);
-      return NextResponse.redirect(`/login`);
+      return NextResponse.redirect(`${origin}/login`);
+      // return NextResponse.redirect(`/login`);
     }
   }
 
