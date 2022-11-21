@@ -11,11 +11,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       try {
         console.log("IN GET pets");
-        const pets = await petModel
+        await petModel
           .find()
-          .then(() => console.log("pets retrieved"));
+          .then((data) => res.status(200).json({ success: true, data }));
 
-        res.status(200).json({ success: true, data: pets });
+        // res.status(200).json({ success: true, data: pets });
       } catch (error: any) {
         res.status(404).json({ message: error.message });
       }
