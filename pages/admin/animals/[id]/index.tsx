@@ -233,7 +233,7 @@ export default Index;
 
 export async function getStaticPaths() {
   dbConnect();
-  const data = await petModel.find();
+  const data = await petModel.find({}, { image: 0 });
   //mapping through to create an array of the paths
   const paths = data.map((obj) => {
     return {
@@ -272,6 +272,6 @@ export async function getStaticProps(context: { params: { id: any } }) {
     props: {
       animal,
     },
-    revalidate: 10, // In seconds
+    revalidate: 1,
   };
 }

@@ -25,6 +25,4 @@ module.exports = {
   images: {
     domains: ["www.paypal.com"],
   },
-  // swcMinify: false,
 };
-// module.exports = nextConfig;
