@@ -9,28 +9,19 @@ export const config = {
 
 export default async function middleware(req) {
   const { origin } = req.nextUrl;
-  // console.log("pathname", pathname);
-  // console.log("origin", origin);
-
   const jwt = req.cookies.get("BrightEyesJWTToken");
   const url = req.url;
-  console.log("url", url);
 
   if (url.includes("/admin")) {
     if (jwt === undefined) {
-      console.log("jwt is undefined");
       return NextResponse.redirect(`${origin}/login`);
       // return NextResponse.redirect(`/login`);
     }
 
     try {
-      console.log("trying to verify jwt");
-      await jose
-        .jwtVerify(jwt, new TextEncoder().encode(`${secret}`))
-        .then(console.log("jwt verified"));
+      await jose.jwtVerify(jwt, new TextEncoder().encode(`${secret}`));
       return NextResponse.next();
     } catch (error) {
-      console.log("error", error);
       return NextResponse.redirect(`${origin}/login`);
       // return NextResponse.redirect(`/login`);
     }

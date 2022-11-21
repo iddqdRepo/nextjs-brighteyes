@@ -19,10 +19,8 @@ function Index() {
     e.preventDefault();
     if (username && password && passwordRetype) {
       if (password === passwordRetype) {
-        console.log("Match");
         if (!submitted) {
           const addUser = await postUser({ username, password });
-          console.log("addUser", addUser);
           setSubmitted(addUser);
           setErrorMessage("");
         }

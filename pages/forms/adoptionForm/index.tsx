@@ -68,7 +68,6 @@ function Index({ type }: { type: string }) {
     for (const [key, value] of Object.entries(adoptionFormBuilder)) {
       tempObj[key] = flattenObj(value);
     }
-    console.log("tempObj", tempObj);
     setToShow({ ...tempObj });
   }, []);
 
@@ -140,9 +139,7 @@ function Index({ type }: { type: string }) {
               data,
               type
             );
-            console.log("newdata =", newData);
             let successful = await postPetForm(newData);
-            console.log("successful", successful);
             if (successful) {
               setLoading(false);
               setIsSuccess(true);

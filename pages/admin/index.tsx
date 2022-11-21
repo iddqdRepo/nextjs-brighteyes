@@ -77,16 +77,11 @@ function Index() {
     }
 
     if (!isAdoptionFormsLoading) {
-      console.log("AdoptionForm not loading");
-      const pendingAdoption = adoptionForms.data.filter(
-        (form: { archive: string }) => {
-          console.log("filtering Adoption Form");
+      setAdoptionFormPendingCount(
+        adoptionForms.data.filter((form: { archive: string }) => {
           return form.archive === "No";
-        }
-      ).length;
-
-      setAdoptionFormPendingCount(pendingAdoption);
-      console.log("setAdoptionFormPendingCount");
+        }).length
+      );
     }
     if (!isGiftAidFormsLoading) {
       setGiftAidFormPendingCount(
@@ -109,7 +104,13 @@ function Index() {
         }).length
       );
     }
-  }, [isPetLoading]);
+  }, [
+    isPetLoading,
+    isAdoptionFormsLoading,
+    isGiftAidFormsLoading,
+    isVolunteerFormsLoading,
+    isContactUsFormsLoading,
+  ]);
 
   const BigCard = ({
     header,
