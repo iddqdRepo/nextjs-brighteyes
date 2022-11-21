@@ -273,6 +273,5 @@ export async function getStaticProps(context: { params: { id: any } }) {
     props: {
       animal,
     },
-    revalidate: 10, // In seconds
   };
 }

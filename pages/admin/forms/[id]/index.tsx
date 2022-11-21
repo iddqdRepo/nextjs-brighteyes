@@ -222,6 +222,5 @@ export async function getStaticProps(context: {
     props: {
       form,
     },
-    revalidate: 10, // In seconds
   };
 }
