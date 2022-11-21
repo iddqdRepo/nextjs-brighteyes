@@ -77,11 +77,16 @@ function Index() {
     }
 
     if (!isAdoptionFormsLoading) {
-      setAdoptionFormPendingCount(
-        adoptionForms.data.filter((form: { archive: string }) => {
+      console.log("AdoptionForm not loading");
+      const pendingAdoption = adoptionForms.data.filter(
+        (form: { archive: string }) => {
+          console.log("filtering Adoption Form");
           return form.archive === "No";
-        }).length
-      );
+        }
+      ).length;
+
+      setAdoptionFormPendingCount(pendingAdoption);
+      console.log("setAdoptionFormPendingCount");
     }
     if (!isGiftAidFormsLoading) {
       setGiftAidFormPendingCount(
