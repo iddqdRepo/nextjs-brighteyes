@@ -10,12 +10,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case "GET":
       try {
-        console.log("IN GET pets");
-        await petModel
-          .find()
-          .then((data) => res.status(200).json({ success: true, data }));
+        //^ Had to exclude image as the res exceeded 4mb so vercel returned err 500
+        const pets = await petModel.find({}, { image: 0 });
 
-        // res.status(200).json({ success: true, data: pets });
+        res.status(200).json({ success: true, data: pets });
       } catch (error: any) {
         res.status(404).json({ message: error.message });
       }
