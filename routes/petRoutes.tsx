@@ -1,9 +1,8 @@
 import axios from "axios";
 import { PetInterface } from "../interfaces/interfaces";
-import { server } from "../config";
 
 export const getPets = async () => {
-  const pets = await axios.get(`${server}/api/pets`);
+  const pets = await axios.get(`/api/pets`);
   return pets.data;
 };
 
