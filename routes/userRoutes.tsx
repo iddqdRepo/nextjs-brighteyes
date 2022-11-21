@@ -4,8 +4,12 @@ import { UserInterface } from "../interfaces/interfaces";
 import { server } from "../config";
 
 export const getUsers = async () => {
-  const users = await axios.get(`/api/users`);
-  return users.data;
+  try {
+    const users = await axios.get(`/api/users`);
+    return users.data;
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
 export const getUserByUsername = async (username: string) => {

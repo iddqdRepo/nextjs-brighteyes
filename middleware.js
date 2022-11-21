@@ -8,9 +8,9 @@ export const config = {
 };
 
 export default async function middleware(req) {
-  const { pathname, origin } = req.nextUrl;
-  console.log("pathname", pathname);
-  console.log("origin", origin);
+  const { origin } = req.nextUrl;
+  // console.log("pathname", pathname);
+  // console.log("origin", origin);
 
   const jwt = req.cookies.get("BrightEyesJWTToken");
   const url = req.url;

@@ -6,10 +6,15 @@ dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
+  console.log("method", method);
   switch (method) {
     case "GET":
       try {
-        const pets = await petModel.find();
+        console.log("IN GET pets");
+        const pets = await petModel
+          .find()
+          .then(() => console.log("pets retrieved"));
+
         res.status(200).json({ success: true, data: pets });
       } catch (error: any) {
         res.status(404).json({ message: error.message });
