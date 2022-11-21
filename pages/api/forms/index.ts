@@ -29,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("error retrieving products in api/forms.ts");
+        // console.log("error retrieving products in api/forms.ts");
         res.status(404).json({ message: error.message });
       }
       break;
@@ -51,7 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           );
           res.status(201).json({ success: true, data: volunteerForm });
         } else if (query.type === "contactus") {
-          console.log("API");
+          // console.log("API");
           const contactUsForm = await formModels.FormContactUsModel.create(
             req.body
           );

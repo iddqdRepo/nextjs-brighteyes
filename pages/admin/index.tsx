@@ -104,7 +104,13 @@ function Index() {
         }).length
       );
     }
-  }, [isPetLoading]);
+  }, [
+    isPetLoading,
+    isAdoptionFormsLoading,
+    isGiftAidFormsLoading,
+    isVolunteerFormsLoading,
+    isContactUsFormsLoading,
+  ]);
 
   const BigCard = ({
     header,

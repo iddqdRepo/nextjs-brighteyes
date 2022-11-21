@@ -30,7 +30,7 @@ function Index() {
     action: "",
     promptText: "",
   });
-  const tableHeaderArray = ["Image", "Name", "Edit", "Archive", "Delete"];
+  const tableHeaderArray = ["Name", "Edit", "Archive", "Delete"];
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -153,15 +153,6 @@ function Index() {
                         .map((pet: PetInterface) => {
                           return (
                             <tr className="h-20" key={pet._id}>
-                              <TableData className="flex flex-row items-center justify-center p-4 border-b border-slate-100 text-slate-500">
-                                <div
-                                  className="w-24 h-20 bg-center bg-no-repeat bg-cover rounded-xl fit"
-                                  style={{
-                                    backgroundImage: `url("${pet.image}")`,
-                                  }}
-                                ></div>
-                              </TableData>
-
                               <TableData>
                                 <div className="text-lg text-center font-roboto">
                                   {pet.name}
@@ -184,7 +175,6 @@ function Index() {
                                     className="w-auto h-6 cursor-pointer"
                                     icon="fluent:tray-item-remove-24-filled"
                                     onClick={() => {
-                                      console.log("pet", pet);
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
                                       if (pet._id) {

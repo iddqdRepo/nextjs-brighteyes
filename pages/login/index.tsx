@@ -2,25 +2,32 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { AdminHeadTag } from "../../adminComponents/commonAdminComponents";
+import { ShowButtonTextOnSubmit } from "../../components/common/CommonComponents";
 
 function Index() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [buttonText, setButtonText] = useState(`Log in`);
+  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     const credentials = { username, password };
-    console.log("username", username);
     if (username && password && username != "admin") {
+      setLoading(true);
+
       const user = await axios.post("/api/auth/login", credentials);
+
       if (user.data.success) {
+        setLoading(false);
+        setIsSuccess(true);
         router.push("/admin");
       } else {
-        console.log("setting Response");
+        setLoading(false);
+        setIsSuccess(false);
+        setButtonText("ERROR, try again");
         setResponse(user.data.message);
       }
     } else {
@@ -73,14 +80,21 @@ function Index() {
           </div>
           <div className="flex justify-center text-red-600">{response}</div>
           <div className="flex flex-col items-center justify-between">
-            <button
+            {/* <button
               className="w-5/6 px-4 py-4 font-sans font-bold rounded hover:bg-blue-dark text-blue hover:bg-gray-100"
               type="button"
               id="LoginButton"
               onClick={(e) => handleLogin(e)}
             >
               Sign In
-            </button>
+            </button> */}
+            <ShowButtonTextOnSubmit
+              loading={loading}
+              isSuccess={isSuccess}
+              buttonText={buttonText}
+              submitHandler={() => handleLogin()}
+              animalName={""}
+            />
           </div>
         </div>
       </div>

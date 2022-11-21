@@ -62,8 +62,6 @@ function AdminSidebarComponent(props: any) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
-
-    console.log("AWAITING LOGOUT, handlelogout");
     const user = await axios.post("/api/auth/logout");
     if (user.data.message) {
       router.push("/admin");

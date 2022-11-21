@@ -6,10 +6,13 @@ dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
+  console.log("method", method);
   switch (method) {
     case "GET":
       try {
-        const pets = await petModel.find();
+        //^ Had to exclude image as the res exceeded 4mb so vercel returned err 500
+        const pets = await petModel.find({}, { image: 0 });
+
         res.status(200).json({ success: true, data: pets });
       } catch (error: any) {
         res.status(404).json({ message: error.message });

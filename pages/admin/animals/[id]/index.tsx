@@ -236,14 +236,12 @@ export async function getStaticPaths() {
   const data = await petModel.find();
   //mapping through to create an array of the paths
   const paths = data.map((obj) => {
-    console.log(obj._id.toString());
     return {
       params: {
         id: obj._id.toString().trim(),
       },
     };
   });
-  console.log("paths =", paths);
   return {
     paths, //paths which is the same as paths:paths
     fallback: false, // false = if a user tries to visit a route that doesnt exist, it shows a 404 page

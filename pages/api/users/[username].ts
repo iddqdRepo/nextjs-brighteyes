@@ -7,8 +7,6 @@ dbConnect();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const passedInUser = query.username;
-  console.log("query", query);
-  console.log("method", method);
 
   switch (method) {
     case "GET":

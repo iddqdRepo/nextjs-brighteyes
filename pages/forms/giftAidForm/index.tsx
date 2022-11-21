@@ -43,7 +43,6 @@ const Index = () => {
             if (data.giftAidPast) {
               data.giftAidPast = data.giftAidPast[0];
             }
-            console.log("data", data);
             setLoading(true);
             let successful = await postGiftAidForm(data);
             if (successful.success) {

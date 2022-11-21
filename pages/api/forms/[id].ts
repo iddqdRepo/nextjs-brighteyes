@@ -9,8 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const id = query.id;
   const type = query.type;
-  console.log("query = ", query);
-  console.log("type = ", type);
 
   async function get(type: string, model: Model<any, {}, {}, {}, any>) {
     const form = await model.findById(id);
@@ -72,7 +70,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       try {
         if (type === "pet") {
-          console.log("GET");
           get("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
           get("giftaid", formModels.FormGiftAidModel);
@@ -88,7 +85,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("IN CATCH");
         res.status(404).json({ message: error.message });
       }
       break;

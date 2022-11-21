@@ -324,7 +324,6 @@ export const handleExposeAndHideFields = (
   for (const [key, value] of Object.entries(exposes)) {
     if (ev.target.value === key) {
       value.forEach((val) => {
-        console.log("exposing", category, val);
         exposeOrHideFields(getState, setState, category, val, "expose", form);
       });
     } else {
