@@ -9,14 +9,15 @@ function Index() {
   const [response, setResponse] = useState("");
   const router = useRouter();
 
+  console.log();
   const handleLogin = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     const credentials = { username, password };
-    console.log("username", username);
     if (username && password && username != "admin") {
       const user = await axios.post("/api/auth/login", credentials);
+      console.log("user.data.success", user.data);
       if (user.data.success) {
         router.push("/admin");
       } else {
