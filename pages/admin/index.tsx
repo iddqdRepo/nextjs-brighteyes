@@ -39,10 +39,10 @@ function Index() {
     );
   };
 
-  const [dogActiveCount, setDogActiveCount] = useState(0);
-  const [dogArchiveCount, setDogArchiveCount] = useState(0);
-  const [catActiveCount, setCatActiveCount] = useState(0);
-  const [catArchiveCount, setCatArchiveCount] = useState(0);
+  const [dogActiveCount, setDogActiveCount] = useState(LoadingSpinner);
+  const [dogArchiveCount, setDogArchiveCount] = useState(LoadingSpinner);
+  const [catActiveCount, setCatActiveCount] = useState(LoadingSpinner);
+  const [catArchiveCount, setCatArchiveCount] = useState(LoadingSpinner);
   const [adoptionFormPendingCount, setAdoptionFormPendingCount] =
     useState(LoadingSpinner);
   const [giftAidFormPendingCount, setGiftAidFormPendingCount] =
@@ -173,7 +173,6 @@ function Index() {
                 header="Unread Messages"
                 data={
                   !isContactUsFormsLoading ? (
-                    // contactUsFormPendingCount !== undefined &&
                     contactUsFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -220,13 +219,11 @@ function Index() {
                 <div className="flex flex-col lg:flex-row">
                   <SmallCard
                     header="Active Dogs"
-                    data={dogActiveCount ? dogActiveCount : <LoadingSpinner />}
+                    data={!isPetLoading ? dogActiveCount : <LoadingSpinner />}
                   />
                   <SmallCard
                     header="Adopted Dogs"
-                    data={
-                      dogArchiveCount ? dogArchiveCount : <LoadingSpinner />
-                    }
+                    data={!isPetLoading ? dogArchiveCount : <LoadingSpinner />}
                   />
                 </div>
               </Container>
@@ -238,13 +235,11 @@ function Index() {
                 <div className="flex flex-col lg:flex-row">
                   <SmallCard
                     header="Active Cats"
-                    data={catActiveCount ? catActiveCount : <LoadingSpinner />}
+                    data={!isPetLoading ? catActiveCount : <LoadingSpinner />}
                   />
                   <SmallCard
                     header="Adopted Cats"
-                    data={
-                      catArchiveCount ? catArchiveCount : <LoadingSpinner />
-                    }
+                    data={!isPetLoading ? catArchiveCount : <LoadingSpinner />}
                   />
                 </div>
               </Container>
