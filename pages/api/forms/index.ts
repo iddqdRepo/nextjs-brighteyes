@@ -18,6 +18,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         } else if (query.type === "volunteer") {
           const volunteerForm = await formModels.FormVolunteerModel.find();
           res.status(200).json({ success: true, data: volunteerForm });
+        } else if (query.type === "contactus") {
+          const contactUsForm = await formModels.FormContactUsModel.find();
+          res.status(200).json({ success: true, data: contactUsForm });
         } else {
           res
             .status(404)
@@ -47,6 +50,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             req.body
           );
           res.status(201).json({ success: true, data: volunteerForm });
+        } else if (query.type === "contactus") {
+          console.log("API");
+          const contactUsForm = await formModels.FormContactUsModel.create(
+            req.body
+          );
+          res.status(201).json({ success: true, data: contactUsForm });
         } else {
           res
             .status(404)

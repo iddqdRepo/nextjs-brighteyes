@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import * as jose from "jose";
+import { server } from "./config";
 const secret = process.env.SECRET;
+
+//Workaround to fix known issue https://github.com/vercel/next.js/issues/39262
+export const config = {
+  matcher: ["/", "/((?!api/).*)"],
+};
 
 export default async function middleware(req) {
   const jwt = req.cookies.get("BrightEyesJWTToken");
   const url = req.url;
 
   if (url.includes("/admin")) {
-    // console.log("Url contains admin");
     if (jwt === undefined) {
       console.log("jwt is undefined");
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect(`${server}/login`);
     }
 
     try {
@@ -21,7 +26,7 @@ export default async function middleware(req) {
       return NextResponse.next();
     } catch (error) {
       console.log("error", error);
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect(`${server}/login`);
     }
   }
 

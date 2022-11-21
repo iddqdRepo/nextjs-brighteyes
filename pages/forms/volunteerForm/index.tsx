@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
+import { ShowButtonTextOnSubmit } from "../../../components/common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,
@@ -8,6 +9,7 @@ import {
 import { FieldSet } from "../../../components/IndividualFormLayout/CommonFormComponents";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { VolunteerInitialValuesInterface } from "../../../interfaces/volunteerInitialValuesInterface";
+import { postVolunteerForm } from "../../../routes/formRoutes";
 import { volunteerFormBuilder } from "../../../utils/formik/volunteerFormBuilder";
 import { volunteerInitialValues } from "../../../utils/formik/volunteerInitialValues";
 import { VolunteerSchema } from "../../../utils/yup/volunteerYupSchema";
@@ -16,7 +18,9 @@ function Index() {
   const [toShow, setToShow] = useState(
     volunteerFormBuilder as VolunteerInitialValuesInterface
   );
-
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [buttonText, setButtonText] = useState("Submit Form");
   return (
     <>
       <NavbarComponent />
@@ -25,9 +29,20 @@ function Index() {
         <Formik
           initialValues={volunteerInitialValues}
           validationSchema={VolunteerSchema}
-          onSubmit={(data) => console.log(data)}
+          onSubmit={async (data) => {
+            setLoading(true);
+            let successful = await postVolunteerForm(data);
+            if (successful) {
+              setLoading(false);
+              setIsSuccess(true);
+            } else {
+              setLoading(false);
+              setIsSuccess(false);
+              setButtonText("ERROR, try again");
+            }
+          }}
         >
-          {({ values, errors, touched }) => (
+          {({ values, errors, touched, handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet legendText="About you">
                 <QuestionsMap
@@ -98,7 +113,14 @@ function Index() {
                   />
                 </div>
               </FieldSet>
-              <pre>{JSON.stringify(values, null, 2)}</pre>
+              <ShowButtonTextOnSubmit
+                loading={loading}
+                isSuccess={isSuccess}
+                buttonText={buttonText}
+                submitHandler={handleSubmit}
+                animalName={"form"}
+              />
+              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
             </FormikFormContainer>
           )}
         </Formik>

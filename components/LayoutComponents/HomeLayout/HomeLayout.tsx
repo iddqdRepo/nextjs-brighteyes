@@ -23,24 +23,27 @@ export const HeroSection = () => {
       </div>
 
       <div className="absolute flex top-1/4 left-5 xl:left-20">
-        <span className="text-3xl font-semibold font-poppins sm:text-5xl">
+        <div className="text-3xl font-semibold font-poppins sm:text-5xl">
           Don&apos;t buy, &nbsp;
-          <RoughNotation
-            iterations={5}
-            type="circle"
-            show={true}
-            color="#8b3479"
-            strokeWidth={1}
-          >
-            adopt!
-          </RoughNotation>
-        </span>
+          <span>
+            <RoughNotation
+              iterations={5}
+              type="circle"
+              show={true}
+              color="#8b3479"
+              strokeWidth={1}
+              animationDelay={300}
+            >
+              adopt!
+            </RoughNotation>
+          </span>
+        </div>
         <div className="absolute flex flex-col mt-14 sm:mt-20 ">
           <span className="text-lg font-normal sm:text-xl font-poppins">
             Take a look at some of the wonderful animals we have at <br />
             Bright Eyes Animal Sanctuary.
           </span>
-          <Button text="View Animals" />
+          <Button text="View Animals" link={`/adoption`} />
         </div>
       </div>
     </div>
@@ -162,20 +165,23 @@ export const GetInvolvedSection = () => {
             text=" Take a look at our pets for Adoption. Join the 2000+ other
             people and find the perfect pet for your home!"
             buttonText="View Animals"
+            link={`/adoption`}
           />
           <AboutCard
             icon="bx:donate-heart"
             title="Donate"
             text="We receive no government funding and rely purely on the
             generosity of the public to help us continue our work."
-            buttonText="More Info"
+            buttonText="Donate"
+            link={`/donate`}
           />
           <AboutCard
             icon="carbon:person-favorite"
             title="Volunteer"
             text=" Our fantastic volunteers are the backbone of Bright Eyes. Want
             to help care for the animals and earn some valuable experience?"
-            buttonText="View Animals"
+            buttonText="View Form"
+            link={`/forms/volunteerForm`}
           />
         </div>
       </div>

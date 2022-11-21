@@ -7,6 +7,7 @@ import {
   PageContainerComponent,
   PageHeader,
   TableHeadMap,
+  AdminHeadTag,
 } from "../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import { useRouter } from "next/router";
@@ -64,10 +65,15 @@ function Index() {
 
   return (
     <>
+      <AdminHeadTag
+        title={"Animals"}
+        metaContent={"Animals, Bright Eyes"}
+        linkHref={"/admin/animals"}
+      />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
           <Popup
-            name={deleteOrUpdateInfo.current.id}
+            name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}
             archiveHandler={handleArchive}
@@ -102,7 +108,10 @@ function Index() {
               </select>
               {isArchive === "false" ? (
                 <Link href={"/admin/animals/addAnimal"}>
-                  <button className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]">
+                  <button
+                    id="AddAnimal"
+                    className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+                  >
                     + Add Animal
                   </button>
                 </Link>
@@ -161,9 +170,7 @@ function Index() {
 
                               <TableData>
                                 <div className="flex flex-row items-center justify-center">
-                                  <Link
-                                    href={`http://localhost:3000/admin/animals/${pet._id}`}
-                                  >
+                                  <Link href={`/admin/animals/${pet._id}`}>
                                     <Icon
                                       className="w-auto h-6 cursor-pointer"
                                       icon="bxs:edit"
@@ -177,6 +184,7 @@ function Index() {
                                     className="w-auto h-6 cursor-pointer"
                                     icon="fluent:tray-item-remove-24-filled"
                                     onClick={() => {
+                                      console.log("pet", pet);
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
                                       if (pet._id) {

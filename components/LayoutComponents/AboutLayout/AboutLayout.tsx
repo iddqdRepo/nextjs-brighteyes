@@ -72,7 +72,7 @@ export const AboutBrightEyesSection = () => {
     <div className="flex flex-col h-fit relative mt-32 pb-20 bg-[#c8a9c0] overflow-visible after:w-full after:h-full after:absolute after:bg-inherit after:-z-10 after:bottom-0 after:origin-top-right after:skew-y-2 ">
       <DashedTitle text={"About Bright Eyes"} />
       <div className="flex flex-col items-center">
-        <div className="flex flex-col items-center justify-center w-full xl:flex-row h-2/4">
+        <div className="flex flex-col items-center justify-center w-full pl-4 xl:pl-0 xl:flex-row h-2/4">
           <div className=" basis-2/3">
             <div className=" pb-7 pt-3  text-[#8b3479] font-normal font-poppins text-4xl">
               Bright Eyes Animal Sanctuary

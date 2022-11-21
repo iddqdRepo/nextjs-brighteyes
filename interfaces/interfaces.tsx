@@ -31,14 +31,27 @@ export interface GiftaidFormInterface {
     postcode: string;
     phone: string;
   };
-  _id: string;
+  _id?: string;
   type: string;
-  date: string;
+  date?: string;
   giftAidFuture: string;
   giftAidPast: string;
-  updatedAt: string;
+  updatedAt?: string;
   archive: string;
-  __v: 0;
+  __v?: 0;
+}
+export interface ContactUsFormInterface {
+  aboutQuestions: {
+    name: string;
+    email: string;
+  };
+  message: string;
+  type: string;
+  _id?: string;
+  date?: string;
+  updatedAt?: string;
+  archive: string;
+  __v?: 0;
 }
 
 export interface PetAdoptionFormInterface {
@@ -150,11 +163,11 @@ export interface PetAdoptionFormInterface {
     hearAboutUs: string;
     other: string;
   };
-  _id: string;
+  _id?: string;
   type: string;
-  updatedAt: string;
+  updatedAt?: string;
   archive: string;
-  __v: number;
+  __v?: number;
 }
 export interface VolunteerFormInterface {
   aboutQuestions: {
@@ -202,17 +215,17 @@ export interface VolunteerFormInterface {
     offender: string;
     offenderDetails: string;
   };
-  _id: string;
+  _id?: string;
   type: string;
-  date: string;
-  updatedAt: string;
+  date?: string;
+  updatedAt?: string;
   archive: string;
-  __v: number;
+  __v?: number;
 }
 
 export interface TitleMapInterface {
   _id: string;
-  updatedAt: string;
+  updatedAt?: string;
   title: string;
   name: string;
   address: string;
@@ -287,7 +300,7 @@ export interface TitleMapInterface {
   catAwareOfCostsAndLegal: string;
   catHowSoon: string;
   catFurtherInfo: string;
-  date: string;
+  date?: string;
   hearAboutUs: string;
   other: string;
   followUp: string;

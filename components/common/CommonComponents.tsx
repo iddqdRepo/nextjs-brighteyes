@@ -1,9 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import { Formik } from "formik";
+import Head from "next/head";
 import Link from "next/link";
-
-import React from "react";
+import React, { useState } from "react";
+import { postContactUsForm } from "../../routes/formRoutes";
+import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
+import {
+  ErrorFormik,
+  InputTextAreaFormik,
+  InputTextFormik,
+} from "../IndividualFormLayout/CommonFormComponents";
 export const DashedTitle = ({ text }: { text: string }) => {
   return (
     <div className="flex flex-col items-center ">
@@ -67,21 +74,25 @@ export const FooterSection = () => {
           </FooterIconText>
         </div>
       </div>
-      <div className="flex items-center justify-center mt-10">
-        <Icon
-          className="mr-2"
-          icon="akar-icons:facebook-fill"
-          color="#8b3479"
-          width="30"
-          height="30"
-        />
-        <Icon
-          className="mr-2"
-          icon="akar-icons:instagram-fill"
-          color="#8b3479"
-          width="30"
-          height="30"
-        />
+      <div className="flex items-center justify-center pb-2 mt-10">
+        <Link href={"https://www.facebook.com/brighteyes.a.s/"}>
+          <Icon
+            className="mr-2 cursor-pointer"
+            icon="akar-icons:facebook-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+        </Link>
+        <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
+          <Icon
+            className="mr-2 cursor-pointer"
+            icon="akar-icons:instagram-fill"
+            color="#8b3479"
+            width="30"
+            height="30"
+          />
+        </a>
       </div>
     </div>
   );
@@ -94,7 +105,7 @@ export const Button = ({
 }: {
   text: string;
   iconStr?: string;
-  link?: string;
+  link: string;
 }) => {
   return (
     <Link href={`${link}`}>
@@ -147,6 +158,23 @@ export const ButtonWithQuery = ({
     </Link>
   );
 };
+export const HeadTag = ({
+  title,
+  metaContent,
+  linkHref,
+}: {
+  title: string;
+  metaContent: string;
+  linkHref: string;
+}) => {
+  return (
+    <Head>
+      <title>{title}</title>
+      <meta name="description" content={metaContent} />
+      <link rel="canonical" href={linkHref} />
+    </Head>
+  );
+};
 
 export const DonationComponent = () => {
   return (
@@ -167,18 +195,32 @@ export const DonationComponent = () => {
             animal welfare and help us continue to rescue more animals that need
             us.
           </span>
-          <Button text="Donate" iconStr="ant-design:heart-filled" />
+          <Button
+            text="Donate"
+            iconStr="ant-design:heart-filled"
+            link={`/donate`}
+          />
         </div>
       </div>
     </div>
   );
 };
+
 export const ContactUsSection = () => {
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [buttonText, setButtonText] = useState("Send Message");
+
   const initialValues = {
-    name: "",
-    email: "",
+    aboutQuestions: {
+      name: "",
+      email: "",
+    },
     message: "",
+    type: "contactUs",
+    archive: "No",
   };
+
   return (
     <>
       <DashedTitle text="Contact Us" />
@@ -187,62 +229,76 @@ export const ContactUsSection = () => {
         <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
           <Formik
             initialValues={initialValues}
-            onSubmit={(data) => console.log(data)}
+            validationSchema={ContactUsSchema}
+            onSubmit={async (data) => {
+              setLoading(true);
+              let successful = await postContactUsForm(data);
+              if (successful) {
+                setLoading(false);
+                setIsSuccess(true);
+              } else {
+                setLoading(false);
+                setIsSuccess(false);
+                setButtonText("ERROR, try again");
+              }
+            }}
           >
-            {({ values, handleChange }) => (
+            {({ errors, touched, handleSubmit }) => (
               <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
-                <div className="flex">
-                  <div className="flex flex-col mr-4 lg:mr-20">
-                    <label
-                      htmlFor="name"
-                      className={"block mb-2 text-lg font-normal font-poppins"}
-                    >
-                      Name
-                    </label>
-                    <input
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                      }
-                      type="text"
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
+                <div className="flex flex-col md:flex-row">
+                  <InputTextFormik
+                    labelText={"Name"}
+                    val={"aboutQuestions.name"}
+                    forNameId={"aboutQuestions.name"}
+                    labelLeftAligned={true}
+                    labelClassN="block mb-2 text-lg font-normal font-poppins"
+                  >
+                    <ErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field="name"
+                      parent={"aboutQuestions"}
+                      id={"err-name"}
                     />
-                  </div>
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="email"
-                      className={"block mb-2 text-lg font-normal font-poppins"}
-                    >
-                      Email
-                    </label>
-                    <input
-                      className={
-                        "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                      }
-                      type="text"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
+                  </InputTextFormik>
+                  <InputTextFormik
+                    labelText={"Email"}
+                    val={"aboutQuestions.email"}
+                    forNameId={"aboutQuestions.email"}
+                    labelLeftAligned={true}
+                    labelClassN="block mb-2 text-lg font-normal font-poppins"
+                  >
+                    <ErrorFormik
+                      err={errors}
+                      touch={touched}
+                      field="email"
+                      parent={"aboutQuestions"}
+                      id={"err-email"}
                     />
-                  </div>
+                  </InputTextFormik>
                 </div>
-                <label
-                  htmlFor="message"
-                  className={"block mb-2 text-lg font-normal font-poppins"}
+
+                <InputTextAreaFormik
+                  labelText={"Message"}
+                  val={"message"}
+                  forNameId={"message"}
+                  fieldclassN="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-52 p-2.5 mb-4"
+                  labelclassN="block mb-2 text-lg font-normal font-poppins text-left"
                 >
-                  Message
-                </label>
-                <textarea
-                  className={
-                    "border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4"
-                  }
-                  rows={14}
-                  name="message"
-                  value={values.message}
-                  onChange={handleChange}
+                  <ErrorFormik
+                    err={errors}
+                    touch={touched}
+                    field="message"
+                    id={"err-message"}
+                  />
+                </InputTextAreaFormik>
+                <ShowButtonTextOnSubmit
+                  loading={loading}
+                  isSuccess={isSuccess}
+                  buttonText={buttonText}
+                  submitHandler={handleSubmit}
+                  animalName={"message"}
                 />
-                <pre>{JSON.stringify(values, null, 2)}</pre>
               </div>
             )}
           </Formik>
@@ -256,6 +312,140 @@ export const ContactUsSection = () => {
         </div>
       </div>
     </>
+  );
+};
+export let submittingButtonIcon = () => {
+  return (
+    <div
+      aria-label="Loading..."
+      role="status"
+      className="flex items-center space-x-2"
+    >
+      <svg className="w-6 h-6 animate-spin stroke-white" viewBox="0 0 256 256">
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="24"
+        ></line>
+      </svg>
+      <span className="text-xs font-medium text-white-500">Submitting...</span>
+    </div>
+  );
+};
+
+export const ShowButtonTextOnSubmit = ({
+  loading,
+  isSuccess,
+  buttonText,
+  submitHandler,
+  animalName,
+}: {
+  loading: boolean;
+  isSuccess: boolean;
+  buttonText: string;
+  submitHandler: any;
+  animalName: string;
+}) => {
+  return loading ? (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        console.log("clicked");
+        e.preventDefault();
+        submitHandler();
+      }}
+    >
+      {submittingButtonIcon()}
+    </button>
+  ) : isSuccess ? (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] opacity-50 cursor-not-allowed text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
+      {`Submitted ${animalName}`}
+    </button>
+  ) : (
+    <button
+      type="submit"
+      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      onClick={(e) => {
+        e.preventDefault();
+        submitHandler();
+      }}
+    >
+      {buttonText}
+    </button>
   );
 };
 

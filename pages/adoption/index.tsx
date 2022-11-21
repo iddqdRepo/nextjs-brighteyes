@@ -1,5 +1,8 @@
 import React from "react";
-import { FooterSection } from "../../components/common/CommonComponents";
+import {
+  FooterSection,
+  HeadTag,
+} from "../../components/common/CommonComponents";
 import {
   AdoptionCardSection,
   AdoptionCriteriaSection,
@@ -9,10 +12,15 @@ import petModel from "../../models/petModel";
 import dbConnect from "../../utils/dbConnect";
 
 function Adoption(props: any) {
-  // console.log("props =", props.data);
-
   return (
     <>
+      <HeadTag
+        title={"Adoption"}
+        linkHref={
+          "View our animals up for adoption and find your perfect companion."
+        }
+        metaContent={"/adoption"}
+      />
       <NavbarComponent />
 
       <AdoptionCriteriaSection />

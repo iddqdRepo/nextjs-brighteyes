@@ -1,5 +1,6 @@
 export interface VolunteerInitialValuesInterface {
   type: string;
+  archive: string;
   aboutQuestions: ivAboutQuestionsVolunteerInterface;
   emergencyContactInfo: ivEmergencyContactInfoInterface;
   healthInfo: ivHealthInfoInterface;

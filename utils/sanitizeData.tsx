@@ -3,7 +3,6 @@ import { PetInterface } from "../interfaces/interfaces";
 export const sanitizeInput = (data: PetInterface) => {
   let sanitizedData: PetInterface = { ...data };
   Object.entries(data).forEach(([key, value]) => {
-    console.log("key, value", key, value);
     let newValue: string = value;
     if (
       key != "image" &&

@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AdminSidebarComponent from "../../adminComponents/AdminSidebarComponent";
-import { PageContainerComponent } from "../../adminComponents/commonAdminComponents";
+import {
+  AdminHeadTag,
+  PageContainerComponent,
+} from "../../adminComponents/commonAdminComponents";
 import {
   getPetForms,
   getGiftAidForms,
   getVolunteerForms,
+  getContactUsForms,
 } from "../../routes/formRoutes";
 import { getPets } from "../../routes/petRoutes";
 import { Icon } from "@iconify/react";
@@ -25,15 +29,28 @@ function Index() {
     "volunteerForms",
     getVolunteerForms
   );
+  const { isLoading: isContactUsFormsLoading, data: contactUsForms } = useQuery(
+    "contactUsForms",
+    getContactUsForms
+  );
+  const LoadingSpinner = () => {
+    return (
+      <div className="w-10 h-10 border-8 border-[#8B3479] border-solid rounded-full animate-ping mt-5"></div>
+    );
+  };
 
-  const [dogActiveCount, setDogActiveCount] = useState(0);
-  const [dogArchiveCount, setDogArchiveCount] = useState(0);
-  const [catActiveCount, setCatActiveCount] = useState(0);
-  const [catArchiveCount, setCatArchiveCount] = useState(0);
-  const [adoptionFormPendingCount, setAdoptionFormPendingCount] = useState(0);
-  const [giftAidFormPendingCount, setGiftAidFormPendingCount] = useState(0);
-  const [volunteerFormPendingCount, setVolunteerFormPendingCount] = useState(0);
-  useState(0);
+  const [dogActiveCount, setDogActiveCount] = useState(LoadingSpinner);
+  const [dogArchiveCount, setDogArchiveCount] = useState(LoadingSpinner);
+  const [catActiveCount, setCatActiveCount] = useState(LoadingSpinner);
+  const [catArchiveCount, setCatArchiveCount] = useState(LoadingSpinner);
+  const [adoptionFormPendingCount, setAdoptionFormPendingCount] =
+    useState(LoadingSpinner);
+  const [giftAidFormPendingCount, setGiftAidFormPendingCount] =
+    useState(LoadingSpinner);
+  const [volunteerFormPendingCount, setVolunteerFormPendingCount] =
+    useState(LoadingSpinner);
+  const [contactUsFormPendingCount, setContactUsFormPendingCount] =
+    useState(LoadingSpinner);
 
   useEffect(() => {
     if (!isPetLoading) {
@@ -76,6 +93,13 @@ function Index() {
     if (!isVolunteerFormsLoading) {
       setVolunteerFormPendingCount(
         volunteerForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
+    }
+    if (!isContactUsFormsLoading) {
+      setContactUsFormPendingCount(
+        contactUsForms.data.filter((form: { archive: string }) => {
           return form.archive === "No";
         }).length
       );
@@ -128,14 +152,15 @@ function Index() {
       </div>
     );
   };
-  const LoadingSpinner = () => {
-    return (
-      <div className="w-10 h-10 border-8 border-[#8B3479] border-solid rounded-full animate-ping mt-5"></div>
-    );
-  };
 
   return (
     <>
+      <AdminHeadTag
+        title={"Dashboard"}
+        metaContent={"Admin add a new animal, Bright Eyes"}
+        linkHref={"/admin"}
+      />
+
       <AdminSidebarComponent highlighted="Dashboard">
         <PageContainerComponent>
           <div className="flex items-center py-3 pl-5 text-lg font-semibold">
@@ -145,9 +170,19 @@ function Index() {
           <div className="flex flex-col items-center w-full mt-3 ">
             <div className="flex flex-wrap justify-center w-full mb-4 md:justify-center">
               <BigCard
+                header="Unread Messages"
+                data={
+                  !isContactUsFormsLoading ? (
+                    contactUsFormPendingCount
+                  ) : (
+                    <LoadingSpinner />
+                  )
+                }
+              />
+              <BigCard
                 header="Adoption Forms"
                 data={
-                  adoptionFormPendingCount ? (
+                  !isAdoptionFormsLoading ? (
                     adoptionFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -157,7 +192,7 @@ function Index() {
               <BigCard
                 header="GiftAid Forms"
                 data={
-                  giftAidFormPendingCount ? (
+                  !isGiftAidFormsLoading ? (
                     giftAidFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -167,7 +202,7 @@ function Index() {
               <BigCard
                 header="Volunteer Forms"
                 data={
-                  volunteerFormPendingCount ? (
+                  !isVolunteerFormsLoading ? (
                     volunteerFormPendingCount
                   ) : (
                     <LoadingSpinner />
@@ -184,13 +219,11 @@ function Index() {
                 <div className="flex flex-col lg:flex-row">
                   <SmallCard
                     header="Active Dogs"
-                    data={dogActiveCount ? dogActiveCount : <LoadingSpinner />}
+                    data={!isPetLoading ? dogActiveCount : <LoadingSpinner />}
                   />
                   <SmallCard
                     header="Adopted Dogs"
-                    data={
-                      dogArchiveCount ? dogArchiveCount : <LoadingSpinner />
-                    }
+                    data={!isPetLoading ? dogArchiveCount : <LoadingSpinner />}
                   />
                 </div>
               </Container>
@@ -202,13 +235,11 @@ function Index() {
                 <div className="flex flex-col lg:flex-row">
                   <SmallCard
                     header="Active Cats"
-                    data={catActiveCount ? catActiveCount : <LoadingSpinner />}
+                    data={!isPetLoading ? catActiveCount : <LoadingSpinner />}
                   />
                   <SmallCard
                     header="Adopted Cats"
-                    data={
-                      catArchiveCount ? catArchiveCount : <LoadingSpinner />
-                    }
+                    data={!isPetLoading ? catArchiveCount : <LoadingSpinner />}
                   />
                 </div>
               </Container>

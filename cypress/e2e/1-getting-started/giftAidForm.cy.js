@@ -3,7 +3,7 @@
 describe("GiftAid Form", () => {
   it("shows correct GiftAid fields", () => {
     cy.visit("http://localhost:3000/forms/giftAidForm");
-    cy.contains("GiftAid Form");
+    cy.contains("Gift Aid Form");
     cy.contains("Name");
     cy.contains("Address");
     cy.contains("Postcode");
@@ -29,5 +29,33 @@ describe("GiftAid Form", () => {
         }
       }
     );
+  });
+  it("should allow form submit the form when all inputs are entered", () => {
+    cy.visit("http://localhost:3000/forms/giftAidForm");
+    cy.intercept(
+      {
+        method: "POST",
+        url: "**/api/forms?type=giftaid",
+      },
+      {
+        statusCode: 201,
+        body: { success: true }, // stub returns above message
+        headers: { "access-control-allow-origin": "*" },
+        delayMs: 500,
+      }
+    ).as("addForm");
+
+    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
+      ($el) => {
+        if ($el[0].children[1].type === "text") {
+          let input = cy.wrap($el[0]).find("input");
+          input.click().type("hi").blur();
+        }
+      }
+    );
+
+    cy.get("button[type=submit]").click();
+    cy.wait("@addForm");
+    cy.contains("Submitted form");
   });
 });

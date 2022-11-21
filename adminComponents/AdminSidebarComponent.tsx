@@ -31,10 +31,12 @@ function AdminSidebarComponent(props: any) {
             ? "flex flex-col font-poppins text-sm items-center mb-4 justify-center py-2 rounded-lg w-4/5 bg-[#8b3479] hover:cursor-pointer hover:rounded-md"
             : "flex flex-col font-poppins text-sm items-center mb-4 justify-center py-2 rounded-sm w-4/5 hover:cursor-pointer"
         }
+        id={toggle}
       >
         <Link href={"/admin" + link}>
           <div className="flex flex-row items-center justify-center w-3/5 lg:justify-start">
             <Icon
+              id={`icon-${toggle}`}
               className={
                 toggleSelected === toggle
                   ? "w-auto h-6 text-white group-hover:text-white"

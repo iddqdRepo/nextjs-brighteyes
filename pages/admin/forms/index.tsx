@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
+  AdminHeadTag,
   PageContainerComponent,
   PageHeader,
   SearchInput,
@@ -15,12 +16,15 @@ import {
   getPetForms,
   getGiftAidForms,
   getVolunteerForms,
+  getContactUsForms,
   deletePetForm,
   deleteGiftAidForm,
   deleteVolunteerForm,
+  deleteContactUsForm,
   udpateGiftAidForm,
   udpatePetForm,
   udpateVolunteerForm,
+  udpateContactUsForm,
 } from "../../../routes/formRoutes";
 import { useRouter } from "next/router";
 import {
@@ -31,6 +35,7 @@ import {
   GiftaidFormInterface,
   PetAdoptionFormInterface,
   VolunteerFormInterface,
+  ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
 import Link from "next/link";
 
@@ -60,7 +65,13 @@ function Index() {
   const [petTextFilter, setPetTextFilter] = useState("");
   const [volunteerTextFilter, setVolunteerTextFilter] = useState("");
   const [giftAidTextFilter, setGiftAidTextFilter] = useState("");
-  const tabsMapList = ["Adoption Forms", "GiftAid Forms", "Volunteer Forms"];
+  const [contactUsTextFilter, setContactUsTextFilter] = useState("");
+  const tabsMapList = [
+    "Adoption Forms",
+    "GiftAid Forms",
+    "Volunteer Forms",
+    "Contact Forms",
+  ];
   useEffect(() => {
     setPetTextFilter("");
     setVolunteerTextFilter("");
@@ -80,6 +91,10 @@ function Index() {
     "volunteerForms",
     getVolunteerForms
   );
+  const { isLoading: contactLoading, data: contactForms } = useQuery(
+    "contactForms",
+    getContactUsForms
+  );
 
   const deletePetFormMutation = useMutation(deletePetForm, {
     onSuccess: async () => {
@@ -92,9 +107,15 @@ function Index() {
       await queryClient.invalidateQueries("giftAidForms");
     },
   });
+
   const deleteVolunteerFormMutation = useMutation(deleteVolunteerForm, {
     onSuccess: async () => {
       await queryClient.invalidateQueries("volunteerForms");
+    },
+  });
+  const deleteContactUsFormMutation = useMutation(deleteContactUsForm, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("contactForms");
     },
   });
 
@@ -113,15 +134,28 @@ function Index() {
       await queryClient.invalidateQueries("volunteerForms");
     },
   });
+  const archiveContactUsFormMutation = useMutation(udpateContactUsForm, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("contactForms");
+    },
+  });
 
   const handleDelete = () => {
-    if (deleteOrUpdateInfo.current.type === "pet") {
+    if (
+      deleteOrUpdateInfo.current.type === "Dog" ||
+      deleteOrUpdateInfo.current.type === "Cat"
+    ) {
       deletePetFormMutation.mutate(deleteOrUpdateInfo.current.id);
     } else if (deleteOrUpdateInfo.current.type === "giftAid") {
       console.log("DELETING GIFT AID");
       deleteGiftAidFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "volunteer") {
+    } else if (
+      deleteOrUpdateInfo.current.type === "volunteer" ||
+      deleteOrUpdateInfo.current.type === "Volunteer"
+    ) {
       deleteVolunteerFormMutation.mutate(deleteOrUpdateInfo.current.id);
+    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
+      deleteContactUsFormMutation.mutate(deleteOrUpdateInfo.current.id);
     }
     setHidden(true);
   };
@@ -145,6 +179,9 @@ function Index() {
     } else if (deleteOrUpdateInfo.current.type === "volunteer") {
       dataToMutate = deleteOrUpdateInfo.current.data as VolunteerFormInterface;
       archiveVolunteerFormMutation.mutate(dataToMutate);
+    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
+      dataToMutate = deleteOrUpdateInfo.current.data as ContactUsFormInterface;
+      archiveContactUsFormMutation.mutate(dataToMutate);
     }
     setHidden(true);
   };
@@ -160,6 +197,9 @@ function Index() {
     if (type === "giftAid") {
       filterType = giftAidTextFilter;
     }
+    if (type === "contactUs") {
+      filterType = contactUsTextFilter;
+    }
     return (
       <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-full">
         <div className="mt-3 mb-8 overflow-hidden shadow-sm">
@@ -168,6 +208,13 @@ function Index() {
 
             <tbody className="bg-white dark:bg-slate-800">
               {list
+                .sort(function (a: any, b: any) {
+                  // Show the newest first
+                  return (
+                    new Date(b.updatedAt).getTime() -
+                    new Date(a.updatedAt).getTime()
+                  );
+                })
                 .filter((archiveFilter: { archive: string }) => {
                   if (isArchive === "false") {
                     return archiveFilter.archive === "No";
@@ -201,6 +248,7 @@ function Index() {
                       | GiftaidFormInterface
                       | PetAdoptionFormInterface
                       | VolunteerFormInterface
+                      | ContactUsFormInterface
                   ) => {
                     return (
                       <tr key={form._id} className="h-20">
@@ -216,13 +264,11 @@ function Index() {
                         </TableData>
                         <TableData>
                           <div className="text-xs text-center md:text-lg font-roboto">
-                            {form.updatedAt.slice(0, 10)}
+                            {form.updatedAt && form.updatedAt.slice(0, 10)}
                           </div>
                         </TableData>
                         <TableData>
-                          <Link
-                            href={`http://localhost:3000/admin/forms/${form._id}`}
-                          >
+                          <Link href={`/admin/forms/${form._id}`}>
                             <div className="flex flex-row items-center justify-center">
                               <Icon
                                 className="w-auto h-6 cursor-pointer"
@@ -242,7 +288,9 @@ function Index() {
                               onClick={() => {
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
-                                deleteOrUpdateInfo.current.id = form._id;
+                                if (form._id) {
+                                  deleteOrUpdateInfo.current.id = form._id;
+                                }
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.data = form;
                                 deleteOrUpdateInfo.current.action = "archive";
@@ -262,9 +310,13 @@ function Index() {
                               className="w-auto h-6 cursor-pointer"
                               icon="fluent:delete-20-filled"
                               onClick={() => {
+                                console.log("formtype", form.type);
+
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
-                                deleteOrUpdateInfo.current.id = form._id;
+                                if (form._id) {
+                                  deleteOrUpdateInfo.current.id = form._id;
+                                }
                                 deleteOrUpdateInfo.current.type = form.type;
                                 deleteOrUpdateInfo.current.action = "delete";
                                 deleteOrUpdateInfo.current.promptText =
@@ -286,100 +338,122 @@ function Index() {
   };
 
   return (
-    <AdminSidebarComponent highlighted={highlighted}>
-      {!hidden && (
-        <Popup
-          name={deleteOrUpdateInfo.current.name}
-          deleteHandler={handleDelete}
-          setHideState={setHidden}
-          archiveHandler={handleArchive}
-          action={deleteOrUpdateInfo.current.action}
-          promptText={deleteOrUpdateInfo.current.promptText}
-        />
-      )}
-      <PageContainerComponent>
-        <PageHeader>
-          {isArchive === "true" ? "Archived Forms" : "Active Forms"}
-        </PageHeader>
-        <div className="flex flex-col items-center mt-14">
-          <Tabs>
-            <TabList className="flex justify-center">
-              {tabsMapList.map((tab) => {
-                return (
-                  <Tab
-                    key={tab}
-                    selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                    className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+    <>
+      <AdminHeadTag
+        title={"Forms"}
+        metaContent={"Admin Forms, Bright Eyes"}
+        linkHref={"/admin/forms"}
+      />
+      <AdminSidebarComponent highlighted={highlighted}>
+        {!hidden && (
+          <Popup
+            name={deleteOrUpdateInfo.current.name}
+            deleteHandler={handleDelete}
+            setHideState={setHidden}
+            archiveHandler={handleArchive}
+            action={deleteOrUpdateInfo.current.action}
+            promptText={deleteOrUpdateInfo.current.promptText}
+          />
+        )}
+        <PageContainerComponent>
+          <PageHeader>
+            {isArchive === "true" ? "Archived Forms" : "Active Forms"}
+          </PageHeader>
+          <div className="flex flex-col items-center mt-14">
+            <Tabs>
+              <TabList className="flex justify-center">
+                {tabsMapList.map((tab) => {
+                  return (
+                    <Tab
+                      key={tab}
+                      selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
+                      className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+                    >
+                      {tab}
+                    </Tab>
+                  );
+                })}
+              </TabList>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"petFilter"}
+                    change={setPetTextFilter}
+                    val={petTextFilter}
+                    placehold={"Search by name"}
+                  />
+                  <select
+                    className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
+                    name="type"
+                    id="type"
+                    onChange={(e) => setPetFilter(e.target.value)}
                   >
-                    {tab}
-                  </Tab>
-                );
-              })}
-            </TabList>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"petFilter"}
-                  change={setPetTextFilter}
-                  val={petTextFilter}
-                  placehold={"Search by name"}
-                />
-                <select
-                  className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                  name="type"
-                  id="type"
-                  onChange={(e) => setPetFilter(e.target.value)}
-                >
-                  <option value="">All</option>
-                  <option value="Dog">Dog Forms</option>
-                  <option value="Cat">Cat Forms</option>
-                </select>
-              </div>
+                    <option value="">All</option>
+                    <option value="Dog">Dog Forms</option>
+                    <option value="Cat">Cat Forms</option>
+                  </select>
+                </div>
 
-              <div className="lg:mr-20 lg:ml-20">
-                {!petFormsLoading ? (
-                  <FormList list={petForms.data} type="pet" />
-                ) : (
-                  <div className="flex justify-center">
-                    <LoadingIcon />
-                  </div>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"giftAidTextFilter"}
-                  change={setGiftAidTextFilter}
-                  val={giftAidTextFilter}
-                  placehold={"Search by name"}
-                />
-              </div>
-              <div className="lg:mr-20 lg:ml-20">
-                {!giftAidLoading && (
-                  <FormList list={giftAidForms.data} type="giftAid" />
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="flex flex-col items-center mt-3">
-                <SearchInput
-                  id={"volunteerTextFilter"}
-                  change={setVolunteerTextFilter}
-                  val={volunteerTextFilter}
-                  placehold={"Search by name"}
-                />
-              </div>
-              <div className="lg:mr-20 lg:ml-20">
-                {!volunteerLoading && (
-                  <FormList list={volunteerForms.data} type="volunteer" />
-                )}
-              </div>
-            </TabPanel>
-          </Tabs>
-        </div>
-      </PageContainerComponent>
-    </AdminSidebarComponent>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!petFormsLoading ? (
+                    <FormList list={petForms.data} type="pet" />
+                  ) : (
+                    <div className="flex justify-center">
+                      <LoadingIcon />
+                    </div>
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"giftAidTextFilter"}
+                    change={setGiftAidTextFilter}
+                    val={giftAidTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!giftAidLoading && (
+                    <FormList list={giftAidForms.data} type="giftAid" />
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"volunteerTextFilter"}
+                    change={setVolunteerTextFilter}
+                    val={volunteerTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!volunteerLoading && (
+                    <FormList list={volunteerForms.data} type="volunteer" />
+                  )}
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className="flex flex-col items-center mt-3">
+                  <SearchInput
+                    id={"contactUsTextFilter"}
+                    change={setContactUsTextFilter}
+                    val={contactUsTextFilter}
+                    placehold={"Search by name"}
+                  />
+                </div>
+                <div className="lg:mr-20 lg:ml-20">
+                  {!contactLoading && (
+                    <FormList list={contactForms.data} type="contactUs" />
+                  )}
+                </div>
+              </TabPanel>
+            </Tabs>
+          </div>
+        </PageContainerComponent>
+      </AdminSidebarComponent>
+    </>
   );
 }
 

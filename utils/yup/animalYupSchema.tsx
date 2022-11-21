@@ -1,14 +1,15 @@
 import * as Yup from "yup";
 export const AnimalSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
+  name: Yup.string().min(2, "Too Short!").max(50, "Too Long!"),
   type: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
   age: Yup.number().required("Required").typeError("Must be a number"),
+  breed: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
   yearsOrMonths: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
@@ -33,5 +34,6 @@ export const AnimalSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  image: Yup.string().required("Required"),
   desc: Yup.string().min(2, "Too Short!").required("Required"),
 });

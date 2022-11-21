@@ -67,9 +67,13 @@ const healthInfoSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  healthConditionSpecialNeedsDetails: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!"),
+  healthConditionSpecialNeedsDetails: Yup.string().when(
+    ["healthConditionSpecialNeeds"],
+    {
+      is: "Yes",
+      then: Yup.string().required("Required"),
+    }
+  ),
 });
 const volunteeringInfoSchema = Yup.object().shape({
   workInterestedIn: Yup.string()
@@ -127,7 +131,10 @@ const offenderInfoSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
-  offenderDetails: Yup.string().min(2, "Too Short!").max(50, "Too Long!"),
+  offenderDetails: Yup.string().when(["offender"], {
+    is: "Yes",
+    then: Yup.string().required("Required"),
+  }),
 });
 
 export const VolunteerSchema = Yup.object().shape({

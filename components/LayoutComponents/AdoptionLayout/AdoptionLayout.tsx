@@ -11,6 +11,7 @@ interface animalInterface {
   type: string;
   name: string;
   age: string;
+  sex?: string;
   yearsOrMonths: string;
   breed: string;
   size: string;
@@ -100,12 +101,13 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
             .map((pet) => {
               return (
                 <AdoptionCard
-                  key={pet.name + pet.breed}
+                  key={pet._id + pet.breed}
                   name={pet.name}
                   type={pet.breed}
                   age={`${pet.age} ${pet.yearsOrMonths}`}
-                  sex={"temp"}
+                  sex={pet.sex ? pet.sex : "N/A"}
                   image={pet.image}
+                  id={pet._id}
                 />
               );
             })}
@@ -147,7 +149,7 @@ export const AdoptionCriteriaSection = () => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full mb-10">
-        <Button text={"Adoption Form"} />
+        <Button text={"Adoption Form"} link={`/forms`} />
       </div>
     </>
   );
