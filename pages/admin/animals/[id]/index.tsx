@@ -244,7 +244,6 @@ export async function getStaticPaths() {
   });
   return {
     paths, //paths which is the same as paths:paths
-
     fallback: "blocking",
   };
 }
@@ -273,6 +272,6 @@ export async function getStaticProps(context: { params: { id: any } }) {
     props: {
       animal,
     },
-    revalidate: 10,
+    revalidate: 10, // In seconds
   };
 }
