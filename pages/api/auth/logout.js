@@ -3,7 +3,6 @@ import { serialize } from "cookie";
 export default async function logout(req, res) {
   const { cookies } = req;
   const jwt = cookies.BrightEyesJWTToken;
-  console.log("logout jwt = ", jwt);
 
   if (!jwt) {
     return res.json({ message: "You are already not logged in" });

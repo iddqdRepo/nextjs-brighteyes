@@ -41,7 +41,6 @@ export const AdoptionCardSection = () => {
     }
   );
 
-  console.log("availablePets", availablePets);
   const filterAnimals = (filter: string) => {
     const selected =
       "mr-5 flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 shadow:2xl";

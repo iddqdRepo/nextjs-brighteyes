@@ -192,7 +192,7 @@ export async function getStaticProps(context: {
 }) {
   dbConnect();
   const id = context.params.id;
-  console.log("id = ", context.params.id);
+  // console.log("id = ", context.params.id);
   let form:
     | PetAdoptionFormInterface[]
     | GiftaidFormInterface[]
