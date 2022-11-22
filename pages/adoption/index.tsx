@@ -32,7 +32,7 @@ function Adoption(props: any) {
 
 export default Adoption;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   await dbConnect();
 
   const result = await petModel.find({ adopted: "No" }).lean();
