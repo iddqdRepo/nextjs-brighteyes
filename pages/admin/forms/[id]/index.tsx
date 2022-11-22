@@ -183,7 +183,7 @@ export async function getStaticPaths() {
   ];
   return {
     paths: newPaths,
-    fallback: false, // false = if a user tries to visit a route that doesnt exist, it shows a 404 page
+    fallback: "blocking", // false = if a user tries to visit a route that doesnt exist, it shows a 404 page
   };
 }
 
@@ -222,6 +222,6 @@ export async function getStaticProps(context: {
     props: {
       form,
     },
-    revalidate: 10, // In seconds
+    revalidate: 10,
   };
 }

@@ -26,4 +26,3 @@ module.exports = {
     domains: ["www.paypal.com"],
   },
 };
-// module.exports = nextConfig;

@@ -45,7 +45,7 @@ export async function getStaticPaths() {
 
   return {
     paths, //paths which is the same as paths:paths
-    fallback: false, // false = if a user tries to visit a route that doesnt exist, it shows a 404 page
+    fallback: "blocking",
   };
 }
 
