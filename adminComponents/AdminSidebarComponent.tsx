@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import axios from "axios";
-import router from "next/router";
+import { useRouter } from "next/router";
 
 function AdminSidebarComponent(props: any) {
   const [toggleSelected, setToggleSelected] = useState();
-
+  const router = useRouter();
   useEffect(() => {
     setToggleSelected(props.highlighted);
   }, [props]);
@@ -64,7 +64,7 @@ function AdminSidebarComponent(props: any) {
     e.preventDefault();
     const user = await axios.post("/api/auth/logout");
     if (user.data.message) {
-      router.push("/admin");
+      router.push("/login");
     }
   };
   const LogoutButton = () => {

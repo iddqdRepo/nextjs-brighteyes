@@ -251,8 +251,7 @@ export async function getStaticPaths() {
 export async function getStaticProps(context: { params: { id: any } }) {
   dbConnect();
   const id = context.params.id;
-  console.log("id = ", context.params.id);
-  // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
+  // console.log("id = ", context.params.id);
   const dataTemp = await petModel.find({ _id: id }).lean();
   const animal = dataTemp.map((doc) => {
     doc._id = doc._id.toString();

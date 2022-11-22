@@ -106,7 +106,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("error posting products in api/forms.ts");
+        console.log("error posting pet in api/forms.ts");
         res.status(404).json({ success: false, message: error });
       }
       break;
@@ -128,7 +128,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             );
         }
       } catch (error: any) {
-        console.log("error posting products in api/forms.ts");
+        console.log("error posting pet in api/forms.ts");
         res.status(404).json({ success: false, message: error });
       }
       break;
