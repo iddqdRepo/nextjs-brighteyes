@@ -1,5 +1,9 @@
 import { useState, useRef } from "react";
-import { Button, DashedTitle } from "../../common/CommonComponents";
+import {
+  Button,
+  DashedTitle,
+  LoadingIcon,
+} from "../../common/CommonComponents";
 import {
   AdoptionCard,
   AdoptionIconContainer,
@@ -22,7 +26,11 @@ interface animalInterface {
   desc: string;
 }
 
-export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
+export const AdoptionCardSection = ({
+  pets,
+}: {
+  pets: animalInterface[] | undefined;
+}) => {
   const [filter, setFilter] = useState("");
   const dogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -89,28 +97,32 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
       </div>
 
       <div className="flex justify-center w-full">
-        <div className="flex flex-wrap justify-center w-full lg:w-11/12 2xl:w-9/12">
-          {pets
-            .filter((animal) => {
-              if (filter) {
-                return animal.type === filter;
-              } else {
-                return animal;
-              }
-            })
-            .map((pet) => {
-              return (
-                <AdoptionCard
-                  key={pet._id + pet.breed}
-                  name={pet.name}
-                  type={pet.breed}
-                  age={`${pet.age} ${pet.yearsOrMonths}`}
-                  sex={pet.sex ? pet.sex : "N/A"}
-                  image={pet.image}
-                  id={pet._id}
-                />
-              );
-            })}
+        <div className="flex flex-wrap justify-center w-full mb-10 lg:w-11/12 2xl:w-9/12">
+          {pets ? (
+            pets
+              .filter((animal) => {
+                if (filter) {
+                  return animal.type === filter;
+                } else {
+                  return animal;
+                }
+              })
+              .map((pet) => {
+                return (
+                  <AdoptionCard
+                    key={pet._id + pet.breed}
+                    name={pet.name}
+                    type={pet.breed}
+                    age={`${pet.age} ${pet.yearsOrMonths}`}
+                    sex={pet.sex ? pet.sex : "N/A"}
+                    image={pet.image}
+                    id={pet._id}
+                  />
+                );
+              })
+          ) : (
+            <LoadingIcon />
+          )}
         </div>
       </div>
     </>

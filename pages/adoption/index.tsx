@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FooterSection,
   HeadTag,
@@ -8,10 +8,24 @@ import {
   AdoptionCriteriaSection,
 } from "../../components/LayoutComponents/AdoptionLayout/AdoptionLayout";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
-import petModel from "../../models/petModel";
-import dbConnect from "../../utils/dbConnect";
+import { getAvailablePets } from "../../routes/petRoutes";
 
-function Adoption(props: any) {
+function Adoption() {
+  const [pets, setPets] = useState(undefined);
+
+  useEffect(() => {
+    const getPetsFromDB = async () => {
+      let pets = await getAvailablePets();
+      let allPets = pets.data.filter((item: any) => {
+        return item.adopted === "No";
+      });
+
+      setPets(allPets);
+    };
+
+    getPetsFromDB();
+  }, []);
+
   return (
     <>
       <HeadTag
@@ -22,35 +36,22 @@ function Adoption(props: any) {
         metaContent={"/adoption"}
       />
       <NavbarComponent />
-
       <AdoptionCriteriaSection />
-      <AdoptionCardSection pets={props.data} />
+      <AdoptionCardSection pets={pets} />
+
+      {/* {pets ? (
+        <AdoptionCardSection pets={pets} />
+      ) : (
+        <>
+          <div className="flex justify-center">
+            <LoadingIcon />
+          </div>
+        </>
+      )} */}
+
       <FooterSection />
     </>
   );
 }
 
 export default Adoption;
-
-export async function getServerSideProps() {
-  await dbConnect();
-
-  const result = await petModel.find({ adopted: "No" }).lean();
-
-  const pets = result.map((pet) => {
-    pet._id = pet._id.toString();
-    if (pet.createdAt) {
-      pet.createdAt = pet.createdAt.toString();
-    }
-    if (pet.updatedAt) {
-      pet.updatedAt = pet.updatedAt.toString();
-    }
-    return pet;
-  });
-
-  return {
-    props: {
-      data: pets,
-    },
-  };
-}
