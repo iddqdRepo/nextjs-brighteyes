@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { getAvailablePets } from "../../../routes/petRoutes";
 import {
   Button,
   DashedTitle,
@@ -9,6 +10,7 @@ import {
   AdoptionIconContainer,
   IconText,
 } from "./AdoptionLayoutComponents";
+import { useQuery } from "react-query";
 
 interface animalInterface {
   _id: string;
@@ -26,16 +28,20 @@ interface animalInterface {
   desc: string;
 }
 
-export const AdoptionCardSection = ({
-  pets,
-}: {
-  pets: animalInterface[] | undefined;
-}) => {
+export const AdoptionCardSection = () => {
   const [filter, setFilter] = useState("");
   const dogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catButtonRef = useRef<HTMLButtonElement | null>(null);
   const allButtonRef = useRef<HTMLButtonElement | null>(null);
+  const { isLoading: isPetLoading, data: availablePets } = useQuery(
+    "availablePets",
+    getAvailablePets,
+    {
+      staleTime: 10000, // only eligible to refetch after 10 seconds
+    }
+  );
 
+  console.log("availablePets", availablePets);
   const filterAnimals = (filter: string) => {
     const selected =
       "mr-5 flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 shadow:2xl";
@@ -98,16 +104,16 @@ export const AdoptionCardSection = ({
 
       <div className="flex justify-center w-full">
         <div className="flex flex-wrap justify-center w-full mb-10 lg:w-11/12 2xl:w-9/12">
-          {pets ? (
-            pets
-              .filter((animal) => {
+          {!isPetLoading ? (
+            availablePets.data
+              .filter((animal: { type: string }) => {
                 if (filter) {
                   return animal.type === filter;
                 } else {
                   return animal;
                 }
               })
-              .map((pet) => {
+              .map((pet: animalInterface) => {
                 return (
                   <AdoptionCard
                     key={pet._id + pet.breed}

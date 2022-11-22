@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   FooterSection,
   HeadTag,
@@ -8,24 +8,8 @@ import {
   AdoptionCriteriaSection,
 } from "../../components/LayoutComponents/AdoptionLayout/AdoptionLayout";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
-import { getAvailablePets } from "../../routes/petRoutes";
 
 function Adoption() {
-  const [pets, setPets] = useState(undefined);
-
-  useEffect(() => {
-    const getPetsFromDB = async () => {
-      let pets = await getAvailablePets();
-      let allPets = pets.data.filter((item: any) => {
-        return item.adopted === "No";
-      });
-
-      setPets(allPets);
-    };
-
-    getPetsFromDB();
-  }, []);
-
   return (
     <>
       <HeadTag
@@ -37,18 +21,7 @@ function Adoption() {
       />
       <NavbarComponent />
       <AdoptionCriteriaSection />
-      <AdoptionCardSection pets={pets} />
-
-      {/* {pets ? (
-        <AdoptionCardSection pets={pets} />
-      ) : (
-        <>
-          <div className="flex justify-center">
-            <LoadingIcon />
-          </div>
-        </>
-      )} */}
-
+      <AdoptionCardSection />
       <FooterSection />
     </>
   );
