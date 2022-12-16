@@ -35,20 +35,22 @@ function Index({ type }: { type: string }) {
   useEffect(() => {
     newAdoptionInitialValues.type = type;
 
-    /*
-    ^ FormBuilder needs flattened, legacy (how the db was set up with nested objects)
-    ^ Flattened with the following recursive function instead of manually to keep the object path
-    * e.g."gardenOrYardInfo>gardenOrYardSize" so it can be stored in the correct place in the db
-   */
     let tempObj: any = {};
-    const flattenObj = (objToFlatten: keyof AdoptionFormBuilderInterface) => {
+    const flattenNestedAdoptionObjectForFormBuilder = (
+      objToFlatten: keyof AdoptionFormBuilderInterface
+    ) => {
+      //^ Flattening formBuilder because it's easier to flatten > build forms and receive input > explode than
+      //^ handle all the multi nesting currently present in the legacy layout for the db
       let result = {} as tempObjInterface;
 
-      for (const [i, v] of Object.entries(objToFlatten)) {
-        if (typeof v === "object" && !Array.isArray(v)) {
-          const tempFlatten = flattenObj(v);
+      for (const [key, value] of Object.entries(objToFlatten)) {
+        if (typeof value === "object" && !Array.isArray(value)) {
+          //if value is an object, recurse before looping an storing in result
+          const tempFlatten = flattenNestedAdoptionObjectForFormBuilder(value);
 
-          for (const [j, jValue] of Object.entries(tempFlatten)) {
+          for (const [keyToCombine, valueToCombine] of Object.entries(
+            tempFlatten
+          )) {
             /*
              * result needs to be joined with ">" because formik splits on "."
              * which makes flattening pointless as it's rebuilt in initialValues
@@ -56,17 +58,17 @@ function Index({ type }: { type: string }) {
              * this causes bugs on expose() etc
              */
 
-            result[i + ">" + j] = jValue;
+            result[key + ">" + keyToCombine] = valueToCombine;
           }
         } else {
-          result[i] = v[0];
+          result[key] = value[0];
         }
       }
       return result;
     };
 
     for (const [key, value] of Object.entries(adoptionFormBuilder)) {
-      tempObj[key] = flattenObj(value);
+      tempObj[key] = flattenNestedAdoptionObjectForFormBuilder(value);
     }
     setToShow({ ...tempObj });
   }, []);
