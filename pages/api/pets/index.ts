@@ -5,15 +5,21 @@ import dbConnect from "../../../utils/dbConnect";
 dbConnect();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { method } = req;
-  console.log("method", method);
+  // const { method } = req;
+  const { method, query } = req;
+  const NotAdopted = query.adopted;
   switch (method) {
     case "GET":
       try {
-        //^ Had to exclude image as the res exceeded 4mb so vercel returned err 500
-        const pets = await petModel.find({}, { image: 0 });
+        if (NotAdopted) {
+          const pets = await petModel.find({ adopted: "No" });
+          res.status(200).json({ success: true, data: pets });
+        } else {
+          //^ Had to exclude image as the res exceeded 4mb so vercel returned err 500
+          const pets = await petModel.find({}, { image: 0 });
 
-        res.status(200).json({ success: true, data: pets });
+          res.status(200).json({ success: true, data: pets });
+        }
       } catch (error: any) {
         res.status(404).json({ message: error.message });
       }

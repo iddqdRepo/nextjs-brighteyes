@@ -103,7 +103,6 @@ function Index() {
   });
   const deleteGiftAidFormMutation = useMutation(deleteGiftAidForm, {
     onSuccess: async () => {
-      console.log("deleteGiftAidFormMutation success");
       await queryClient.invalidateQueries("giftAidForms");
     },
   });
@@ -273,9 +272,6 @@ function Index() {
                               <Icon
                                 className="w-auto h-6 cursor-pointer"
                                 icon="carbon:view-filled"
-                                onClick={() => {
-                                  console.log("view clicked");
-                                }}
                               />
                             </div>
                           </Link>
