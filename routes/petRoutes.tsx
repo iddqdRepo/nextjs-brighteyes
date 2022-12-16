@@ -5,6 +5,10 @@ export const getPets = async () => {
   const pets = await axios.get(`/api/pets`);
   return pets.data;
 };
+export const getAvailablePets = async () => {
+  const pets = await axios.get(`/api/pets?adopted=No`);
+  return pets.data;
+};
 
 export const deletePet = async (id: string) => {
   await axios.delete(`/api/pets/${id}`);

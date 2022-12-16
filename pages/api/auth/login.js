@@ -19,7 +19,6 @@ export default async function login(req, res) {
   }
 
   if (bcryptPasswordHashesMatch) {
-    console.log("HASHES MATCH, Attempting to sign token");
     const token = sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, //30 days
@@ -36,16 +35,6 @@ export default async function login(req, res) {
       maxAge: 60 * 60 * 24 * 30, //when the cookie expires
       path: "/",
     });
-
-    console.log("HELLO");
-    console.log(
-      "checking hash",
-      bcrypt.compareSync(
-        "a",
-        "$2b$10$.AOo.UsKNN0KQ/NM2e.v3.l5y.kzn51xPV/JUok.iTid476JD20Qm"
-      ),
-      "Hello"
-    );
     res.setHeader("Set-Cookie", serialised);
     res.status(200).json({ success: true });
   } else {

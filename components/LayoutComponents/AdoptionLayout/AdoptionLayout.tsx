@@ -1,10 +1,16 @@
 import { useState, useRef } from "react";
-import { Button, DashedTitle } from "../../common/CommonComponents";
+import { getAvailablePets } from "../../../routes/petRoutes";
+import {
+  Button,
+  DashedTitle,
+  LoadingIcon,
+} from "../../common/CommonComponents";
 import {
   AdoptionCard,
   AdoptionIconContainer,
   IconText,
 } from "./AdoptionLayoutComponents";
+import { useQuery } from "react-query";
 
 interface animalInterface {
   _id: string;
@@ -22,11 +28,18 @@ interface animalInterface {
   desc: string;
 }
 
-export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
+export const AdoptionCardSection = () => {
   const [filter, setFilter] = useState("");
   const dogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catButtonRef = useRef<HTMLButtonElement | null>(null);
   const allButtonRef = useRef<HTMLButtonElement | null>(null);
+  const { isLoading: isPetLoading, data: availablePets } = useQuery(
+    "availablePets",
+    getAvailablePets,
+    {
+      staleTime: 10000, // only eligible to refetch after 10 seconds
+    }
+  );
 
   const filterAnimals = (filter: string) => {
     const selected =
@@ -89,28 +102,32 @@ export const AdoptionCardSection = ({ pets }: { pets: animalInterface[] }) => {
       </div>
 
       <div className="flex justify-center w-full">
-        <div className="flex flex-wrap justify-center w-full lg:w-11/12 2xl:w-9/12">
-          {pets
-            .filter((animal) => {
-              if (filter) {
-                return animal.type === filter;
-              } else {
-                return animal;
-              }
-            })
-            .map((pet) => {
-              return (
-                <AdoptionCard
-                  key={pet._id + pet.breed}
-                  name={pet.name}
-                  type={pet.breed}
-                  age={`${pet.age} ${pet.yearsOrMonths}`}
-                  sex={pet.sex ? pet.sex : "N/A"}
-                  image={pet.image}
-                  id={pet._id}
-                />
-              );
-            })}
+        <div className="flex flex-wrap justify-center w-full mb-10 lg:w-11/12 2xl:w-9/12">
+          {!isPetLoading ? (
+            availablePets.data
+              .filter((animal: { type: string }) => {
+                if (filter) {
+                  return animal.type === filter;
+                } else {
+                  return animal;
+                }
+              })
+              .map((pet: animalInterface) => {
+                return (
+                  <AdoptionCard
+                    key={pet._id + pet.breed}
+                    name={pet.name}
+                    type={pet.breed}
+                    age={`${pet.age} ${pet.yearsOrMonths}`}
+                    sex={pet.sex ? pet.sex : "N/A"}
+                    image={pet.image}
+                    id={pet._id}
+                  />
+                );
+              })
+          ) : (
+            <LoadingIcon />
+          )}
         </div>
       </div>
     </>
