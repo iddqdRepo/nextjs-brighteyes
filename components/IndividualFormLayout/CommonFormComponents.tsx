@@ -20,10 +20,10 @@ import {
   ivOffenderInfoInterface,
   VolunteerFormInterface,
 } from "../../interfaces/volunteerFormInterface";
-// import {
-//   ContactUsFormInterface,
-//   PetInterface,
-// } from "../../interfaces/interfaces";
+import {
+  ContactUsFormInterface,
+  PetInterface,
+} from "../../interfaces/interfaces";
 import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
 
 type fieldType =
@@ -39,9 +39,9 @@ type fieldType =
   | keyof ivHomeQuestionsInterface
   | keyof ivDogQuestionsInterface
   | keyof ivCatQuestionsInterface
-  | keyof ivHearAboutUsInfoInterface;
-// | keyof ContactUsFormInterface
-// | keyof PetInterface;
+  | keyof ivHearAboutUsInfoInterface
+  | keyof ContactUsFormInterface
+  | keyof PetInterface;
 
 export const FormPageTitle = ({ title }: { title: string }) => {
   return (
