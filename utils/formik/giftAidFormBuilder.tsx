@@ -1,4 +1,5 @@
-import { GiftAidFormBuilderInterface } from "../../interfaces/giftAidFormBuilderInterface";
+// import { GiftAidFormBuilderInterface } from "../../interfaces/giftAidFormBuilderInterface";
+import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
 
 /* 
 ^ AN OBJECT THAT IS USED TO BUILD THE FORMS. 
@@ -10,7 +11,7 @@ import { GiftAidFormBuilderInterface } from "../../interfaces/giftAidFormBuilder
  * title: name shown on label on form page
  */
 
-export const giftAidFormBuilder: GiftAidFormBuilderInterface = {
+export const giftAidFormBuilder: GiftAidFormInterface = {
   aboutQuestions: {
     name: { title: "Name" },
     address: { title: "Address" },

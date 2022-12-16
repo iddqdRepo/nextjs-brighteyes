@@ -11,7 +11,6 @@ import {
   ivHearAboutUsInfoInterface,
   AdoptionInitialValuesInterface,
 } from "../../interfaces/adoptionInitialValuesInterface";
-import { GiftAidInitialValuesInterface } from "../../interfaces/giftAidInitialValuesInterface";
 import {
   ivAboutQuestionsVolunteerInterface,
   ivEmergencyContactInfoInterface,
@@ -19,12 +18,30 @@ import {
   ivVolunteeringInfoInterface,
   ivRefereeInfoInterface,
   ivOffenderInfoInterface,
-  VolunteerInitialValuesInterface,
-} from "../../interfaces/volunteerInitialValuesInterface";
-import {
-  ContactUsFormInterface,
-  PetInterface,
-} from "../../interfaces/interfaces";
+  VolunteerFormInterface,
+} from "../../interfaces/volunteerFormInterface";
+// import {
+//   ContactUsFormInterface,
+//   PetInterface,
+// } from "../../interfaces/interfaces";
+import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
+
+type fieldType =
+  | keyof ivAboutQuestionsVolunteerInterface
+  | keyof ivEmergencyContactInfoInterface
+  | keyof ivHealthInfoInterface
+  | keyof ivVolunteeringInfoInterface
+  | keyof ivRefereeInfoInterface
+  | keyof ivOffenderInfoInterface
+  | keyof ivAboutQuestionsInterface
+  | keyof ivDogMatchingQuestionsInterface
+  | keyof ivCatMatchingQuestionsInterface
+  | keyof ivHomeQuestionsInterface
+  | keyof ivDogQuestionsInterface
+  | keyof ivCatQuestionsInterface
+  | keyof ivHearAboutUsInfoInterface;
+// | keyof ContactUsFormInterface
+// | keyof PetInterface;
 
 export const FormPageTitle = ({ title }: { title: string }) => {
   return (
@@ -177,26 +194,11 @@ export const ErrorFormik = ({
 }: {
   err: any;
   touch: any;
-  field:
-    | keyof ivAboutQuestionsInterface
-    | keyof ivDogMatchingQuestionsInterface
-    | keyof ivCatMatchingQuestionsInterface
-    | keyof ivHomeQuestionsInterface
-    | keyof ivDogQuestionsInterface
-    | keyof ivCatQuestionsInterface
-    | keyof ivHearAboutUsInfoInterface
-    | keyof ivAboutQuestionsVolunteerInterface
-    | keyof ivEmergencyContactInfoInterface
-    | keyof ivHealthInfoInterface
-    | keyof ivVolunteeringInfoInterface
-    | keyof ivRefereeInfoInterface
-    | keyof ivOffenderInfoInterface
-    | keyof ContactUsFormInterface
-    | keyof PetInterface;
+  field: fieldType;
   parent?:
     | keyof AdoptionInitialValuesInterface
-    | keyof GiftAidInitialValuesInterface
-    | keyof VolunteerInitialValuesInterface;
+    | keyof GiftAidFormInterface
+    | keyof VolunteerFormInterface;
   id?: string;
 }) => {
   //If there is a parent (aboutQuestions) && field (name)
@@ -224,22 +226,14 @@ export const ErrorFormik = ({
 
 export const exposeOrHideFields = (
   //This is a bit of a mess to make typescript happy, needs fix.
-  getState: VolunteerInitialValuesInterface | AdoptionInitialValuesInterface,
+  getState: VolunteerFormInterface | AdoptionInitialValuesInterface,
   setState: any,
-  category:
-    | keyof VolunteerInitialValuesInterface
-    | keyof AdoptionInitialValuesInterface,
-  val:
-    | keyof ivHealthInfoInterface
-    | keyof ivOffenderInfoInterface
-    | keyof ivHomeQuestionsInterface
-    | keyof ivDogQuestionsInterface
-    | keyof ivCatQuestionsInterface
-    | keyof ivHearAboutUsInfoInterface,
+  category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface,
+  val: fieldType,
   hideOrExpose: string,
   volunteerOrAdoption: string
 ) => {
-  let exposeVolunteer = getState as VolunteerInitialValuesInterface;
+  let exposeVolunteer = getState as VolunteerFormInterface;
   let exposeAdoption = getState as AdoptionInitialValuesInterface;
 
   if (category === "healthInfo") {
@@ -304,7 +298,7 @@ export const exposeOrHideFields = (
 };
 
 export const handleExposeAndHideFields = (
-  getState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface,
+  getState: AdoptionInitialValuesInterface | VolunteerFormInterface,
   setState: any,
   ev: { target: any },
   exposes: {
@@ -316,9 +310,7 @@ export const handleExposeAndHideFields = (
       | keyof ivCatQuestionsInterface
     )[];
   },
-  category:
-    | keyof VolunteerInitialValuesInterface
-    | keyof AdoptionInitialValuesInterface,
+  category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface,
   form: string
 ) => {
   for (const [key, value] of Object.entries(exposes)) {
@@ -352,7 +344,7 @@ export const DropdownFormik = ({
   category,
   form,
 }: {
-  getState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface;
+  getState: AdoptionInitialValuesInterface | VolunteerFormInterface;
   setState: any;
   labelText: string;
   selectArray: string[];
@@ -365,9 +357,7 @@ export const DropdownFormik = ({
     )[];
   };
   path?: string;
-  category:
-    | keyof VolunteerInitialValuesInterface
-    | keyof AdoptionInitialValuesInterface;
+  category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface;
   form: string;
 }) => {
   return (
@@ -418,11 +408,9 @@ export const QuestionsMap = ({
   err,
   touch,
 }: {
-  getUseState: AdoptionInitialValuesInterface | VolunteerInitialValuesInterface;
+  getUseState: AdoptionInitialValuesInterface | VolunteerFormInterface;
   setUseState: any;
-  category:
-    | keyof AdoptionInitialValuesInterface
-    | keyof VolunteerInitialValuesInterface;
+  category: keyof AdoptionInitialValuesInterface | keyof VolunteerFormInterface;
   type: string;
   values: any;
   err: any;
@@ -437,28 +425,15 @@ export const QuestionsMap = ({
   }
 
   if (type === "volunteer") {
-    state = getUseState as VolunteerInitialValuesInterface;
-    stateCategory = state[category as keyof VolunteerInitialValuesInterface];
+    state = getUseState as VolunteerFormInterface;
+    stateCategory = state[category as keyof VolunteerFormInterface];
   }
 
   return stateCategory ? (
     <>
       {Object.entries(stateCategory).map((entry) => {
         let title = entry[1].title;
-        let field = entry[0] as
-          | keyof ivAboutQuestionsVolunteerInterface
-          | keyof ivEmergencyContactInfoInterface
-          | keyof ivHealthInfoInterface
-          | keyof ivVolunteeringInfoInterface
-          | keyof ivRefereeInfoInterface
-          | keyof ivOffenderInfoInterface
-          | keyof ivAboutQuestionsInterface
-          | keyof ivDogMatchingQuestionsInterface
-          | keyof ivCatMatchingQuestionsInterface
-          | keyof ivHomeQuestionsInterface
-          | keyof ivDogQuestionsInterface
-          | keyof ivCatQuestionsInterface
-          | keyof ivHearAboutUsInfoInterface;
+        let field = entry[0] as fieldType;
         return entry[1].type === "text"
           ? !entry[1].hidden && (
               <InputTextFormik

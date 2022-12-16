@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import { Key } from "react";
 import { ivAboutQuestionsInterface } from "../../interfaces/adoptionInitialValuesInterface";
-import { GiftAidInitialValuesInterface } from "../../interfaces/giftAidInitialValuesInterface";
+import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
 import { giftAidFormBuilder } from "../../utils/formik/giftAidFormBuilder";
 import { InputTextFormik, ErrorFormik } from "./CommonFormComponents";
 
@@ -11,7 +11,7 @@ export const QuestionsMap = ({
   err,
   touch,
 }: {
-  category: keyof GiftAidInitialValuesInterface;
+  category: keyof GiftAidFormInterface;
   values: any;
   err: any;
   touch: any;

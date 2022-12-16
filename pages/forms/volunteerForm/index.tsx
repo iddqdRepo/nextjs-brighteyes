@@ -8,7 +8,7 @@ import {
 } from "../../../components/IndividualFormLayout/CommonFormComponents";
 import { FieldSet } from "../../../components/IndividualFormLayout/CommonFormComponents";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
-import { VolunteerInitialValuesInterface } from "../../../interfaces/volunteerInitialValuesInterface";
+import { VolunteerFormInterface } from "../../../interfaces/volunteerFormInterface";
 import { postVolunteerForm } from "../../../routes/formRoutes";
 import { volunteerFormBuilder } from "../../../utils/formik/volunteerFormBuilder";
 import { volunteerInitialValues } from "../../../utils/formik/volunteerInitialValues";
@@ -16,7 +16,7 @@ import { VolunteerSchema } from "../../../utils/yup/volunteerYupSchema";
 
 function Index() {
   const [toShow, setToShow] = useState(
-    volunteerFormBuilder as VolunteerInitialValuesInterface
+    volunteerFormBuilder as VolunteerFormInterface
   );
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
