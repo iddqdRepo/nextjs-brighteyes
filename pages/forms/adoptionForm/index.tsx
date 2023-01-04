@@ -136,7 +136,6 @@ function Index({ type }: { type: string }) {
                 data.homeQuestions["planning>holiday"][0];
             }
 
-            //TODO HERE, rchive bit back in after reverting
             let newData = await revertDataObjectsBackToOriginalFormat(
               data,
               type
@@ -152,7 +151,7 @@ function Index({ type }: { type: string }) {
             }
           }}
         >
-          {({ values, errors, touched, handleSubmit }) => (
+          {({ errors, touched, handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet id="About-you" legendText="About you">
                 <QuestionsMap
@@ -160,7 +159,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   type={"adoption"}
                   category={"aboutQuestions"}
-                  values={values}
                   touch={touched}
                   err={errors}
                 />
@@ -175,7 +173,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     type={"adoption"}
                     category={"dogMatchingQuestions"}
-                    values={values}
                     touch={touched}
                     err={errors}
                   />
@@ -185,7 +182,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     type={"adoption"}
                     category={"catMatchingQuestions"}
-                    values={values}
                     touch={touched}
                     err={errors}
                   />
@@ -197,7 +193,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   type={"adoption"}
                   category={"homeQuestions"}
-                  values={values}
                   err={errors}
                   touch={touched}
                 />
@@ -217,7 +212,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     type={"adoption"}
                     category={"dogQuestions"}
-                    values={values}
                     err={errors}
                     touch={touched}
                   />
@@ -227,7 +221,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     type={"adoption"}
                     category={"catQuestions"}
-                    values={values}
                     err={errors}
                     touch={touched}
                   />
@@ -244,7 +237,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     type={"adoption"}
                     category={"hearAboutUsInfo"}
-                    values={values}
                     touch={touched}
                     err={errors}
                   />

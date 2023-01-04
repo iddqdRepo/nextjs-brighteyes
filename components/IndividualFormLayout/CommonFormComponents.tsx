@@ -111,7 +111,6 @@ export function FieldSet({
 export const InputTextFormik = ({
   labelText,
   forNameId,
-  val,
   labelClassN,
   labelLeftAligned,
   classN,
@@ -120,7 +119,6 @@ export const InputTextFormik = ({
   placeholder,
 }: {
   labelText: string;
-  val: string;
   forNameId: string;
   classN?: string;
   labelClassN?: string;
@@ -137,7 +135,7 @@ export const InputTextFormik = ({
           : "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
       }
     >
-      <Label text={labelText} hFor={val} classN={labelClassN} />
+      <Label text={labelText} hFor={forNameId} classN={labelClassN} />
 
       <Field
         className={clsx(
@@ -145,6 +143,7 @@ export const InputTextFormik = ({
           classN
         )}
         name={forNameId}
+        id={forNameId}
         type={type && type}
         placeholder={placeholder && placeholder}
       />
@@ -155,13 +154,11 @@ export const InputTextFormik = ({
 export const InputTextAreaFormik = ({
   labelText,
   forNameId,
-  val,
   labelclassN,
   fieldclassN,
   children,
 }: {
   labelText: string;
-  val: string;
   forNameId: string;
   labelclassN?: string;
   fieldclassN?: string;
@@ -169,7 +166,7 @@ export const InputTextAreaFormik = ({
 }) => {
   return (
     <>
-      <Label text={labelText} hFor={val} classN={labelclassN} />
+      <Label text={labelText} hFor={forNameId} classN={labelclassN} />
 
       <Field
         className={
@@ -178,6 +175,7 @@ export const InputTextAreaFormik = ({
             : "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
         }
         name={forNameId}
+        id={forNameId}
         as="textarea"
       />
       {children}
@@ -403,7 +401,6 @@ export const QuestionsMap = ({
   getUseState,
   setUseState,
   category,
-  values,
   type,
   err,
   touch,
@@ -412,7 +409,6 @@ export const QuestionsMap = ({
   setUseState: any;
   category: keyof AdoptionInitialValuesInterface | keyof VolunteerFormInterface;
   type: string;
-  values: any;
   err: any;
   touch: any;
 }) => {
@@ -439,7 +435,6 @@ export const QuestionsMap = ({
               <InputTextFormik
                 key={entry[0] as Key}
                 labelText={title}
-                val={values[category][field]}
                 forNameId={`${category}.${entry[0]}`}
                 type={entry[0].toLowerCase().includes("email") ? "email" : ""}
                 placeholder={entry[1].placeholder}
@@ -487,7 +482,6 @@ export const QuestionsMap = ({
                 <InputTextAreaFormik
                   key={entry[0] as Key}
                   labelText={title}
-                  val={values[category][field]}
                   forNameId={`${category}.${entry[0]}`}
                 >
                   <ErrorFormik

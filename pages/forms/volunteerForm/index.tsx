@@ -42,7 +42,7 @@ function Index() {
             }
           }}
         >
-          {({ values, errors, touched, handleSubmit }) => (
+          {({ errors, touched, handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet legendText="About you">
                 <QuestionsMap
@@ -50,7 +50,6 @@ function Index() {
                   setUseState={setToShow}
                   type={"volunteer"}
                   category={"aboutQuestions"}
-                  values={values}
                   touch={touched}
                   err={errors}
                 />
@@ -61,7 +60,6 @@ function Index() {
                   setUseState={setToShow}
                   type={"volunteer"}
                   category={"emergencyContactInfo"}
-                  values={values}
                   touch={touched}
                   err={errors}
                 />
@@ -72,7 +70,6 @@ function Index() {
                   setUseState={setToShow}
                   type={"volunteer"}
                   category={"healthInfo"}
-                  values={values}
                   err={errors}
                   touch={touched}
                 />
@@ -83,7 +80,6 @@ function Index() {
                   setUseState={setToShow}
                   type={"volunteer"}
                   category={"volunteeringInfo"}
-                  values={values}
                   err={errors}
                   touch={touched}
                 />
@@ -95,7 +91,6 @@ function Index() {
                   setUseState={setToShow}
                   type={"volunteer"}
                   category={"refereeInfo"}
-                  values={values}
                   touch={touched}
                   err={errors}
                 />
@@ -107,7 +102,6 @@ function Index() {
                     setUseState={setToShow}
                     type={"volunteer"}
                     category={"offenderInfo"}
-                    values={values}
                     touch={touched}
                     err={errors}
                   />

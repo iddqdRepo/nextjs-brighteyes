@@ -7,7 +7,6 @@ import { InputTextFormik, ErrorFormik } from "./CommonFormComponents";
 
 export const QuestionsMap = ({
   category,
-  values,
   err,
   touch,
 }: {
@@ -26,7 +25,6 @@ export const QuestionsMap = ({
           <InputTextFormik
             key={entry[0] as Key}
             labelText={title}
-            val={values[category][field]}
             forNameId={`${category}.${field}`}
             type={entry[0] === "email" ? "email" : ""}
             placeholder={entry[1].placeholder}
