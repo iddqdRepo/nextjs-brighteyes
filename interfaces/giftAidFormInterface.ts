@@ -1,5 +1,5 @@
-export interface GiftAidFormBuilderInterface {
-  aboutQuestions: AboutQuestionsInterface;
+export interface GiftAidFormInterface {
+  aboutQuestions: GiftAidAboutQuestionsInterface;
   giftAidFuture: FieldTemplateInterface;
   giftAidPast: FieldTemplateInterface;
 }
@@ -8,10 +8,12 @@ interface FieldTemplateInterface {
   type?: string;
 }
 
-export interface AboutQuestionsInterface {
+export interface GiftAidAboutQuestionsInterface {
+  title?: FieldTemplateInterface;
   name: FieldTemplateInterface;
   address: FieldTemplateInterface;
   postcode: FieldTemplateInterface;
   phone: FieldTemplateInterface;
   mobile: FieldTemplateInterface;
+  email?: FieldTemplateInterface;
 }

@@ -1,4 +1,4 @@
-import { VolunteerFormBuilderInterface } from "../../interfaces/volunteerFormBuilderInterface";
+import { VolunteerFormInterface } from "../../interfaces/volunteerFormInterface";
 
 /* 
 ^ AN OBJECT THAT IS USED TO BUILD THE FORMS. 
@@ -12,7 +12,7 @@ import { VolunteerFormBuilderInterface } from "../../interfaces/volunteerFormBui
  * type: type of form item e.g. checkbox, select, text
  */
 
-export const volunteerFormBuilder: VolunteerFormBuilderInterface = {
+export const volunteerFormBuilder: VolunteerFormInterface = {
   aboutQuestions: {
     title: { title: "Title", type: "text" },
     name: { title: "Name", type: "text" },

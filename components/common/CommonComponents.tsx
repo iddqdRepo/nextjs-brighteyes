@@ -248,7 +248,6 @@ export const ContactUsSection = () => {
                 <div className="flex flex-col md:flex-row">
                   <InputTextFormik
                     labelText={"Name"}
-                    val={"aboutQuestions.name"}
                     forNameId={"aboutQuestions.name"}
                     labelLeftAligned={true}
                     labelClassN="block mb-2 text-lg font-normal font-poppins"
@@ -261,9 +260,9 @@ export const ContactUsSection = () => {
                       id={"err-name"}
                     />
                   </InputTextFormik>
+
                   <InputTextFormik
                     labelText={"Email"}
-                    val={"aboutQuestions.email"}
                     forNameId={"aboutQuestions.email"}
                     labelLeftAligned={true}
                     labelClassN="block mb-2 text-lg font-normal font-poppins"
@@ -280,7 +279,6 @@ export const ContactUsSection = () => {
 
                 <InputTextAreaFormik
                   labelText={"Message"}
-                  val={"message"}
                   forNameId={"message"}
                   fieldclassN="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-52 p-2.5 mb-4"
                   labelclassN="block mb-2 text-lg font-normal font-poppins text-left"

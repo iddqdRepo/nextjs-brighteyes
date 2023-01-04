@@ -5,7 +5,7 @@ describe("Dog Adoption Form", () => {
   //   cy.visit("http://localhost:3000/forms/adoptionForm?type=Dog");
   // });
 
-  it.skip("shows correct dog specific fields", () => {
+  it("shows correct dog specific fields", () => {
     cy.visit("http://localhost:3000/forms/adoptionForm?type=Dog");
 
     cy.contains("Adopt a Dog Form");
@@ -31,7 +31,7 @@ describe("Dog Adoption Form", () => {
     cy.contains("A MINIMUM REHOMING DONATION OF £125 IS REQUESTED");
   });
 
-  it.skip("shows correct error messages all input fields", () => {
+  it("shows correct error messages all input fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
         const optional = {
@@ -67,7 +67,7 @@ describe("Dog Adoption Form", () => {
     );
   });
 
-  it.skip("shows correct error messages all select fields", () => {
+  it("shows correct error messages all select fields", () => {
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
       ($el) => {
         const optional = { "hearAboutUsInfo.hearAboutUs": true };
@@ -82,7 +82,7 @@ describe("Dog Adoption Form", () => {
     );
   });
 
-  it.skip("exposes correct fields on selecting specific values - Home Questions", () => {
+  it("exposes correct fields on selecting specific values - Home Questions", () => {
     cy.contains("Please estimate the size of your garden/yard?").should(
       "not.exist"
     );
@@ -110,7 +110,7 @@ describe("Dog Adoption Form", () => {
     cy.contains("How often do they visit?");
   });
 
-  it.skip("exposes correct fields on selecting specific values - How did you hear about us", () => {
+  it("exposes correct fields on selecting specific values - How did you hear about us", () => {
     cy.contains("We'd love to know where you heard of us!").should("not.exist");
     cy.get('select[name="hearAboutUsInfo.hearAboutUs"]').select("Other");
     cy.contains("We'd love to know where you heard of us!");
