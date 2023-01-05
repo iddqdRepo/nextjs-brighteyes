@@ -11,7 +11,9 @@ function Forms() {
   return (
     <>
       <HeadTag
-        title={"Forms"}
+        title={
+          "Adoption, Volunteering and Gift Aid forms - Bright Eyes Animal Sanctuary"
+        }
         metaContent={
           "Here are the forms for Dog and Cat Adoption, Volunteering and Gift aid for Bright Eyes"
         }

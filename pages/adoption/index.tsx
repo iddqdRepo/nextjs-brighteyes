@@ -13,7 +13,7 @@ function Adoption() {
   return (
     <>
       <HeadTag
-        title={"Adoption"}
+        title={"Find your perfect companion - Bright Eyes Animal Sanctuary"}
         linkHref={
           "View our animals up for adoption and find your perfect companion."
         }

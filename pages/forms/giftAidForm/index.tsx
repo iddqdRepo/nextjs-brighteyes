@@ -26,7 +26,7 @@ const Index = () => {
   return (
     <>
       <HeadTag
-        title={"Gift Aid Form"}
+        title={"Gift Aid form - Bright Eyes Animal Sanctuary"}
         metaContent={"Gift Aid form for Bright Eyes Animal Sanctuary."}
         linkHref={"/forms/giftAidForm"}
       />

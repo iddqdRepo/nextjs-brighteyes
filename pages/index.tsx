@@ -18,7 +18,7 @@ function Home() {
   return (
     <>
       <HeadTag
-        title={"Home"}
+        title={"Bright Eyes Animal Sanctuary - Don't buy, adopt!"}
         metaContent={
           "Bright Eyes was established in 1989 and is based in Co.Fermanagh, Northern Ireland."
         }

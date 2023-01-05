@@ -1,6 +1,9 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { ShowButtonTextOnSubmit } from "../../../components/common/CommonComponents";
+import {
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,
@@ -23,6 +26,11 @@ function Index() {
   const [buttonText, setButtonText] = useState("Submit Form");
   return (
     <>
+      <HeadTag
+        title={"Volunteer form - Bright Eyes Animal Sanctuary"}
+        metaContent={"Volunteer form for Bright Eyes Animal Sanctuary."}
+        linkHref={"/forms/volunteerForm"}
+      />
       <NavbarComponent />
       <form className="flex flex-col items-center justify-center ">
         <FormPageTitle title={` Volunteer Form`} />

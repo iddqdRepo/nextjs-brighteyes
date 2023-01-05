@@ -86,9 +86,12 @@ function NavbarComponent() {
         </div>
         <div className="hidden lg:flex">
           <ul className="flex flex-wrap justify-center">
-            <li onClick={() => handleNavPaw(navRefs.current.home)}>
+            <li>
               <Link href="/">
-                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                <a
+                  onClick={() => handleNavPaw(navRefs.current.home)}
+                  className="flex items-center mr-5 text-lg font-medium font-poppins"
+                >
                   <div className="w-5">
                     <div
                       ref={(e) => {
@@ -110,9 +113,12 @@ function NavbarComponent() {
                 </a>
               </Link>
             </li>
-            <li onClick={() => handleNavPaw(navRefs.current.about)}>
+            <li>
               <Link href="/about">
-                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                <a
+                  onClick={() => handleNavPaw(navRefs.current.about)}
+                  className="flex items-center mr-5 text-lg font-medium font-poppins"
+                >
                   <div className="w-5">
                     <div
                       ref={(e) => {
@@ -135,9 +141,12 @@ function NavbarComponent() {
               </Link>
             </li>
 
-            <li onClick={() => handleNavPaw(navRefs.current.adoption)}>
+            <li>
               <Link href="/adoption">
-                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                <a
+                  onClick={() => handleNavPaw(navRefs.current.adoption)}
+                  className="flex items-center mr-5 text-lg font-medium font-poppins"
+                >
                   <div className="w-5">
                     <div
                       ref={(e) => {
@@ -159,9 +168,12 @@ function NavbarComponent() {
                 </a>
               </Link>
             </li>
-            <li onClick={() => handleNavPaw(navRefs.current.donate)}>
+            <li>
               <Link href="/donate">
-                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                <a
+                  onClick={() => handleNavPaw(navRefs.current.donate)}
+                  className="flex items-center mr-5 text-lg font-medium font-poppins"
+                >
                   <div className="w-5">
                     <div
                       ref={(e) => {
@@ -184,9 +196,12 @@ function NavbarComponent() {
               </Link>
             </li>
 
-            <li onClick={() => handleNavPaw(navRefs.current.forms)}>
+            <li>
               <Link href="/forms">
-                <a className="flex items-center mr-5 text-lg font-medium font-poppins">
+                <a
+                  onClick={() => handleNavPaw(navRefs.current.forms)}
+                  className="flex items-center mr-5 text-lg font-medium font-poppins"
+                >
                   <div className="w-5">
                     <div
                       ref={(e) => {
