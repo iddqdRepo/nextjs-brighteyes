@@ -14,7 +14,7 @@ function Donate() {
   return (
     <>
       <HeadTag
-        title={"Donate"}
+        title={"Donate, Change a Life Today - Bright Eyes Animal Sanctuary"}
         metaContent={
           "In the past 5 years we have rehomed over 1000 cats and dogs. We receive no government funding, every little helps."
         }
