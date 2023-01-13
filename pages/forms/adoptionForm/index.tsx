@@ -81,7 +81,6 @@ function Index({ type }: { type: string }) {
               data,
               type
             );
-            console.log("newData", newData);
             let successful = await postPetForm(newData);
             if (successful) {
               setLoading(false);
@@ -99,7 +98,7 @@ function Index({ type }: { type: string }) {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"adoption"}
+                  typeOfForm={"adoption"}
                   category={"aboutQuestions"}
                   touch={touched}
                   err={errors}
@@ -113,7 +112,7 @@ function Index({ type }: { type: string }) {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"adoption"}
+                    typeOfForm={"adoption"}
                     category={"dogMatchingQuestions"}
                     touch={touched}
                     err={errors}
@@ -122,7 +121,7 @@ function Index({ type }: { type: string }) {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"adoption"}
+                    typeOfForm={"adoption"}
                     category={"catMatchingQuestions"}
                     touch={touched}
                     err={errors}
@@ -133,7 +132,7 @@ function Index({ type }: { type: string }) {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"adoption"}
+                  typeOfForm={"adoption"}
                   category={"homeQuestions"}
                   err={errors}
                   touch={touched}
@@ -152,7 +151,7 @@ function Index({ type }: { type: string }) {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"adoption"}
+                    typeOfForm={"adoption"}
                     category={"dogQuestions"}
                     err={errors}
                     touch={touched}
@@ -161,7 +160,7 @@ function Index({ type }: { type: string }) {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"adoption"}
+                    typeOfForm={"adoption"}
                     category={"catQuestions"}
                     err={errors}
                     touch={touched}
@@ -177,7 +176,7 @@ function Index({ type }: { type: string }) {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"adoption"}
+                    typeOfForm={"adoption"}
                     category={"hearAboutUsInfo"}
                     touch={touched}
                     err={errors}
@@ -204,8 +203,7 @@ function Index({ type }: { type: string }) {
 export default Index;
 
 export async function getServerSideProps(context: { query: { type: any } }) {
-  // console.log("context =", context.query.type);
-
+  // get the query from the url to decide whether to show Dog or Cat form
   return {
     props: {
       type: context.query.type,

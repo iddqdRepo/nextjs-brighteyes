@@ -9,7 +9,7 @@ import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
 import {
   ErrorFormik,
   InputTextAreaFormik,
-  InputTextFormik,
+  InputTextFieldWithLabelFormik,
 } from "../IndividualFormLayout/CommonFormComponents";
 export const DashedTitle = ({ text }: { text: string }) => {
   return (
@@ -246,7 +246,7 @@ export const ContactUsSection = () => {
             {({ errors, touched, handleSubmit }) => (
               <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
                 <div className="flex flex-col md:flex-row">
-                  <InputTextFormik
+                  <InputTextFieldWithLabelFormik
                     labelText={"Name"}
                     forNameId={"aboutQuestions.name"}
                     labelLeftAligned={true}
@@ -259,9 +259,9 @@ export const ContactUsSection = () => {
                       parent={"aboutQuestions"}
                       id={"err-name"}
                     />
-                  </InputTextFormik>
+                  </InputTextFieldWithLabelFormik>
 
-                  <InputTextFormik
+                  <InputTextFieldWithLabelFormik
                     labelText={"Email"}
                     forNameId={"aboutQuestions.email"}
                     labelLeftAligned={true}
@@ -274,7 +274,7 @@ export const ContactUsSection = () => {
                       parent={"aboutQuestions"}
                       id={"err-email"}
                     />
-                  </InputTextFormik>
+                  </InputTextFieldWithLabelFormik>
                 </div>
 
                 <InputTextAreaFormik

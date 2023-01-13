@@ -3,7 +3,10 @@ import { Key } from "react";
 import { ivAboutQuestionsInterface } from "../../interfaces/adoptionInitialValuesInterface";
 import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
 import { giftAidFormBuilder } from "../../utils/formik/giftAidFormBuilder";
-import { InputTextFormik, ErrorFormik } from "./CommonFormComponents";
+import {
+  InputTextFieldWithLabelFormik,
+  ErrorFormik,
+} from "./CommonFormComponents";
 
 export const QuestionsMap = ({
   category,
@@ -22,7 +25,7 @@ export const QuestionsMap = ({
         let field = entry[0] as keyof ivAboutQuestionsInterface;
 
         return (
-          <InputTextFormik
+          <InputTextFieldWithLabelFormik
             key={entry[0] as Key}
             labelText={title}
             forNameId={`${category}.${field}`}
@@ -36,7 +39,7 @@ export const QuestionsMap = ({
               parent={category}
               id={"err-" + entry[0]}
             />
-          </InputTextFormik>
+          </InputTextFieldWithLabelFormik>
         );
       })}
     </>
