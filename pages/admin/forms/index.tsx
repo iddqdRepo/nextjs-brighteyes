@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
+  AdminConfirmationPopup,
   AdminHeadTag,
   PageContainerComponent,
   PageHeader,
@@ -30,10 +31,7 @@ import {
   ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
 import { useFormsAndPets } from "../../../hooks/useFormAndPets";
-import {
-  FormConfirmationPopup,
-  FormList,
-} from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
+import { FormList } from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
 
 function Index() {
   const router = useRouter();
@@ -175,7 +173,7 @@ function Index() {
       />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
-          <FormConfirmationPopup
+          <AdminConfirmationPopup
             name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}
