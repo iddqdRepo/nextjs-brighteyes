@@ -26,10 +26,7 @@ import {
   udpateContactUsForm,
 } from "../../../routes/formRoutes";
 import { useRouter } from "next/router";
-import {
-  LoadingIcon,
-  Popup,
-} from "../../../components/common/CommonComponents";
+import { LoadingIcon } from "../../../components/common/CommonComponents";
 import {
   GiftaidFormInterface,
   PetAdoptionFormInterface,
@@ -38,6 +35,7 @@ import {
 } from "../../../interfaces/interfaces";
 import Link from "next/link";
 import { useFormsAndPets } from "../../../hooks/useFormAndPets";
+import { FormConfirmationPopup } from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
 
 function Index() {
   const router = useRouter();
@@ -63,10 +61,9 @@ function Index() {
   ];
   const [hidden, setHidden] = useState(true);
   const [petFilter, setPetFilter] = useState("");
-  const [petTextFilter, setPetTextFilter] = useState("");
-  const [volunteerTextFilter, setVolunteerTextFilter] = useState("");
-  const [giftAidTextFilter, setGiftAidTextFilter] = useState("");
-  const [contactUsTextFilter, setContactUsTextFilter] = useState("");
+
+  const [searchText, setSearchText] = useState("");
+
   const tabsMapList = [
     "Adoption Forms",
     "GiftAid Forms",
@@ -74,9 +71,7 @@ function Index() {
     "Contact Forms",
   ];
   useEffect(() => {
-    setPetTextFilter("");
-    setVolunteerTextFilter("");
-    setGiftAidTextFilter("");
+    setSearchText("");
   }, [isArchive]);
 
   const petFormType = ["petForms", getPetForms, udpatePetForm, deletePetForm];
@@ -86,12 +81,23 @@ function Index() {
     deleteFormMutation: deletePetFormMutation,
     archiveFormMutation: archivePetFormMutation,
   } = useFormsAndPets(petFormType);
-
+  const contactFormType = [
+    "contactForms",
+    getContactUsForms,
+    udpateContactUsForm,
+    deleteContactUsForm,
+  ];
   const giftAidFormType = [
     "giftAidForms",
     getGiftAidForms,
     udpateGiftAidForm,
     deleteGiftAidForm,
+  ];
+  const volunteerFormType = [
+    "volunteerForms",
+    getVolunteerForms,
+    udpateVolunteerForm,
+    deleteVolunteerForm,
   ];
   const {
     isLoading: giftAidLoading,
@@ -100,12 +106,6 @@ function Index() {
     archiveFormMutation: archiveGiftAidFormMutation,
   } = useFormsAndPets(giftAidFormType);
 
-  const volunteerFormType = [
-    "volunteerForms",
-    getVolunteerForms,
-    udpateVolunteerForm,
-    deleteVolunteerForm,
-  ];
   const {
     isLoading: volunteerLoading,
     data: volunteerForms,
@@ -113,12 +113,6 @@ function Index() {
     archiveFormMutation: archiveVolunteerFormMutation,
   } = useFormsAndPets(volunteerFormType);
 
-  const contactFormType = [
-    "contactForms",
-    getContactUsForms,
-    udpateContactUsForm,
-    deleteContactUsForm,
-  ];
   const {
     isLoading: contactLoading,
     data: contactForms,
@@ -127,25 +121,23 @@ function Index() {
   } = useFormsAndPets(contactFormType);
 
   const handleDelete = () => {
-    if (
-      deleteOrUpdateInfo.current.type === "Dog" ||
-      deleteOrUpdateInfo.current.type === "Cat"
-    ) {
-      deleteOrUpdateInfo.current.type = "pet";
+    let data = deleteOrUpdateInfo.current;
+    if (data.type === "Dog" || data.type === "Cat") {
+      data.type = "pet";
     }
-    const id = deleteOrUpdateInfo.current.id;
-    switch (deleteOrUpdateInfo.current.type) {
+
+    switch (data.type) {
       case "giftAid":
-        deleteGiftAidFormMutation.mutate(id);
+        deleteGiftAidFormMutation.mutate(data.id);
         break;
       case "pet":
-        deletePetFormMutation.mutate(id);
+        deletePetFormMutation.mutate(data.id);
         break;
       case "volunteer":
-        deleteVolunteerFormMutation.mutate(id);
+        deleteVolunteerFormMutation.mutate(data.id);
         break;
       case "contactUs":
-        deleteContactUsFormMutation.mutate(id);
+        deleteContactUsFormMutation.mutate(data.id);
         break;
       default:
         console.log("Invalid form type");
@@ -154,22 +146,14 @@ function Index() {
   };
 
   const handleArchive = () => {
-    console.log(
-      "deleteOrUpdateInfo.current.data",
-      deleteOrUpdateInfo.current.data
-    );
-    if (
-      deleteOrUpdateInfo.current.type === "Dog" ||
-      deleteOrUpdateInfo.current.type === "Cat"
-    ) {
-      deleteOrUpdateInfo.current.type = "pet";
+    let type = deleteOrUpdateInfo.current.type;
+    let form = deleteOrUpdateInfo.current.data;
+    if (type === "Dog" || type === "Cat") {
+      type = "pet";
     }
-    deleteOrUpdateInfo.current.data.archive =
-      deleteOrUpdateInfo.current.data.archive === "Yes" ? "No" : "Yes";
+    form.archive === "Yes" ? (form.archive = "No") : (form.archive = "Yes");
 
-    const form = deleteOrUpdateInfo.current.data;
-
-    switch (deleteOrUpdateInfo.current.type) {
+    switch (type) {
       case "giftAid":
         archiveGiftAidFormMutation.mutate(form as GiftaidFormInterface);
         break;
@@ -189,19 +173,6 @@ function Index() {
   };
 
   const FormList = ({ list, type }: { list: []; type: string }) => {
-    let filterType: string;
-    if (type === "volunteer") {
-      filterType = volunteerTextFilter;
-    }
-    if (type === "pet") {
-      filterType = petTextFilter;
-    }
-    if (type === "giftAid") {
-      filterType = giftAidTextFilter;
-    }
-    if (type === "contactUs") {
-      filterType = contactUsTextFilter;
-    }
     return (
       <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-full">
         <div className="mt-3 mb-8 overflow-hidden shadow-sm">
@@ -225,10 +196,10 @@ function Index() {
                   }
                 })
                 .filter((text: { aboutQuestions: { name: string } }) => {
-                  if (filterType) {
+                  if (searchText) {
                     return text.aboutQuestions.name
                       .toLowerCase()
-                      .includes(filterType.toLowerCase());
+                      .includes(searchText.toLowerCase());
                   } else {
                     return text;
                   }
@@ -309,8 +280,6 @@ function Index() {
                               className="w-auto h-6 cursor-pointer"
                               icon="fluent:delete-20-filled"
                               onClick={() => {
-                                console.log("formtype", form.type);
-
                                 deleteOrUpdateInfo.current.name =
                                   form.aboutQuestions.name;
                                 if (form._id) {
@@ -345,7 +314,7 @@ function Index() {
       />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
-          <Popup
+          <FormConfirmationPopup
             name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}
@@ -367,6 +336,7 @@ function Index() {
                       key={tab}
                       selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
                       className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+                      onClick={() => setSearchText("")}
                     >
                       {tab}
                     </Tab>
@@ -377,8 +347,8 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"petFilter"}
-                    change={setPetTextFilter}
-                    val={petTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                   <select
@@ -407,8 +377,8 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"giftAidTextFilter"}
-                    change={setGiftAidTextFilter}
-                    val={giftAidTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
@@ -421,12 +391,13 @@ function Index() {
                   )}
                 </div>
               </TabPanel>
+
               <TabPanel>
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"volunteerTextFilter"}
-                    change={setVolunteerTextFilter}
-                    val={volunteerTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
@@ -443,8 +414,8 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"contactUsTextFilter"}
-                    change={setContactUsTextFilter}
-                    val={contactUsTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
