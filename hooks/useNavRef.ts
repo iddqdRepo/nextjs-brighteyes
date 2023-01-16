@@ -14,7 +14,6 @@ function useNavRef() {
   });
 
   useEffect(() => {
-    console.log("useEffect rendered");
     const path = router.pathname === "/" ? "/home" : router.pathname;
     Object.entries(navRefs.current).forEach((element) => {
       if ("/" + element[0] === path) {
