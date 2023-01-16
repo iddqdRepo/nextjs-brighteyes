@@ -108,7 +108,7 @@ export function FieldSet({
     </fieldset>
   );
 }
-export const InputTextFormik = ({
+export const InputTextFieldWithLabelFormik = ({
   labelText,
   forNameId,
   labelClassN,
@@ -331,7 +331,7 @@ export const handleExposeAndHideFields = (
   }
 };
 
-export const DropdownFormik = ({
+export const ExposingDropdownWithLabelFormik = ({
   getState,
   setState,
   labelText,
@@ -358,6 +358,10 @@ export const DropdownFormik = ({
   category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface;
   form: string;
 }) => {
+  // let toShow = form === "adoption" ? useAdoptionShow().toShow : getState;
+  // let setToShow = form === "adoption" ? useAdoptionShow().setToShow : setState;
+  // const { toShow, setToShow } = form === "adoption" ? useAdoptionShow() : ""
+
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
       <Label text={labelText} hFor={forNameId} />
@@ -401,26 +405,26 @@ export const QuestionsMap = ({
   getUseState,
   setUseState,
   category,
-  type,
+  typeOfForm,
   err,
   touch,
 }: {
   getUseState: AdoptionInitialValuesInterface | VolunteerFormInterface;
   setUseState: any;
   category: keyof AdoptionInitialValuesInterface | keyof VolunteerFormInterface;
-  type: string;
+  typeOfForm: string;
   err: any;
   touch: any;
 }) => {
   let state;
   let stateCategory;
 
-  if (type === "adoption") {
+  if (typeOfForm === "adoption") {
     state = getUseState as AdoptionInitialValuesInterface;
     stateCategory = state[category as keyof AdoptionInitialValuesInterface];
   }
 
-  if (type === "volunteer") {
+  if (typeOfForm === "volunteer") {
     state = getUseState as VolunteerFormInterface;
     stateCategory = state[category as keyof VolunteerFormInterface];
   }
@@ -432,7 +436,7 @@ export const QuestionsMap = ({
         let field = entry[0] as fieldType;
         return entry[1].type === "text"
           ? !entry[1].hidden && (
-              <InputTextFormik
+              <InputTextFieldWithLabelFormik
                 key={entry[0] as Key}
                 labelText={title}
                 forNameId={`${category}.${entry[0]}`}
@@ -446,11 +450,11 @@ export const QuestionsMap = ({
                   parent={category}
                   id={"err-" + entry[0]}
                 />
-              </InputTextFormik>
+              </InputTextFieldWithLabelFormik>
             )
           : entry[1].type === "select"
           ? !entry[1].hidden && (
-              <DropdownFormik
+              <ExposingDropdownWithLabelFormik
                 key={entry[0] as Key}
                 getState={getUseState}
                 setState={setUseState}
@@ -460,7 +464,7 @@ export const QuestionsMap = ({
                 exposes={entry[1].exposes ? entry[1].exposes : ""}
                 path={`${category}.${entry[0]}`}
                 category={category}
-                form={type}
+                form={typeOfForm}
               >
                 <ErrorFormik
                   err={err}
@@ -469,7 +473,7 @@ export const QuestionsMap = ({
                   parent={category}
                   id={"err-" + entry[0]}
                 />
-              </DropdownFormik>
+              </ExposingDropdownWithLabelFormik>
             )
           : entry[1].type === "textarea" &&
             !entry[1].hidden && (

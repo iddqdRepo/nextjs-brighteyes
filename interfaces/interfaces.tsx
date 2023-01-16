@@ -345,3 +345,11 @@ export interface TitleMapInterface {
   refereeInfo: string;
   offenderInfo: string;
 }
+
+export interface NavRefInterface {
+  home: HTMLDivElement | null;
+  about: HTMLDivElement | null;
+  adoption: HTMLDivElement | null;
+  donate: HTMLDivElement | null;
+  forms: HTMLDivElement | null;
+}

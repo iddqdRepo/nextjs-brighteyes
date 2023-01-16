@@ -8,15 +8,13 @@ import {
   PageHeader,
   TableHeadMap,
   AdminHeadTag,
+  AdminConfirmationPopup,
 } from "../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import { useRouter } from "next/router";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deletePet, getPets, updatePet } from "../../../routes/petRoutes";
-import {
-  LoadingIcon,
-  Popup,
-} from "../../../components/common/CommonComponents";
+import { LoadingIcon } from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
 
 function Index() {
@@ -72,7 +70,7 @@ function Index() {
       />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
-          <Popup
+          <AdminConfirmationPopup
             name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}

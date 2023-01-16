@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
+  AdminConfirmationPopup,
   AdminHeadTag,
   PageContainerComponent,
   PageHeader,
   SearchInput,
-  TableComponent,
-  TableData,
-  TableHeadMap,
 } from "../../../adminComponents/commonAdminComponents";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Icon } from "@iconify/react";
-import { useQuery, useQueryClient, useMutation } from "react-query";
 import {
   getPetForms,
   getGiftAidForms,
@@ -27,23 +23,23 @@ import {
   udpateContactUsForm,
 } from "../../../routes/formRoutes";
 import { useRouter } from "next/router";
-import {
-  LoadingIcon,
-  Popup,
-} from "../../../components/common/CommonComponents";
+import { LoadingIcon } from "../../../components/common/CommonComponents";
 import {
   GiftaidFormInterface,
   PetAdoptionFormInterface,
   VolunteerFormInterface,
   ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
-import Link from "next/link";
+import { useFormsAndPets } from "../../../hooks/useFormAndPets";
+import { FormList } from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
 
 function Index() {
   const router = useRouter();
   let isArchive = router.query.archive;
-  const highlighted = isArchive === "true" ? "FormArchive" : "Forms";
-  const queryClient = useQueryClient();
+  const [hidden, setHidden] = useState(true);
+  const [petFilter, setPetFilter] = useState("");
+  const [searchText, setSearchText] = useState("");
+
   const deleteOrUpdateInfo = useRef({
     name: "",
     id: "",
@@ -52,6 +48,8 @@ function Index() {
     type: "",
     promptText: "",
   });
+
+  const highlighted = isArchive === "true" ? "FormArchive" : "Forms";
   const tableHeaderArray = [
     "Name",
     "Type",
@@ -60,277 +58,110 @@ function Index() {
     "Archive",
     "Delete",
   ];
-  const [hidden, setHidden] = useState(true);
-  const [petFilter, setPetFilter] = useState("");
-  const [petTextFilter, setPetTextFilter] = useState("");
-  const [volunteerTextFilter, setVolunteerTextFilter] = useState("");
-  const [giftAidTextFilter, setGiftAidTextFilter] = useState("");
-  const [contactUsTextFilter, setContactUsTextFilter] = useState("");
   const tabsMapList = [
     "Adoption Forms",
     "GiftAid Forms",
     "Volunteer Forms",
     "Contact Forms",
   ];
+
   useEffect(() => {
-    setPetTextFilter("");
-    setVolunteerTextFilter("");
-    setGiftAidTextFilter("");
+    setSearchText("");
   }, [isArchive]);
 
-  const { isLoading: petFormsLoading, data: petForms } = useQuery(
-    "petForms",
-    getPetForms
-  );
-  const { isLoading: giftAidLoading, data: giftAidForms } = useQuery(
-    "giftAidForms",
-    getGiftAidForms
-  );
-
-  const { isLoading: volunteerLoading, data: volunteerForms } = useQuery(
-    "volunteerForms",
-    getVolunteerForms
-  );
-  const { isLoading: contactLoading, data: contactForms } = useQuery(
+  const petFormType = ["petForms", getPetForms, udpatePetForm, deletePetForm];
+  const contactFormType = [
     "contactForms",
-    getContactUsForms
-  );
-
-  const deletePetFormMutation = useMutation(deletePetForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("petForms");
-    },
-  });
-  const deleteGiftAidFormMutation = useMutation(deleteGiftAidForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("giftAidForms");
-    },
-  });
-
-  const deleteVolunteerFormMutation = useMutation(deleteVolunteerForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("volunteerForms");
-    },
-  });
-  const deleteContactUsFormMutation = useMutation(deleteContactUsForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("contactForms");
-    },
-  });
-
-  const archiveGiftAidFormMutation = useMutation(udpateGiftAidForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("giftAidForms");
-    },
-  });
-  const archivePetFormMutation = useMutation(udpatePetForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("petForms");
-    },
-  });
-  const archiveVolunteerFormMutation = useMutation(udpateVolunteerForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("volunteerForms");
-    },
-  });
-  const archiveContactUsFormMutation = useMutation(udpateContactUsForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("contactForms");
-    },
-  });
+    getContactUsForms,
+    udpateContactUsForm,
+    deleteContactUsForm,
+  ];
+  const giftAidFormType = [
+    "giftAidForms",
+    getGiftAidForms,
+    udpateGiftAidForm,
+    deleteGiftAidForm,
+  ];
+  const volunteerFormType = [
+    "volunteerForms",
+    getVolunteerForms,
+    udpateVolunteerForm,
+    deleteVolunteerForm,
+  ];
+  const {
+    isLoading: petFormsLoading,
+    data: petForms,
+    deleteFormMutation: deletePetFormMutation,
+    archiveFormMutation: archivePetFormMutation,
+  } = useFormsAndPets(petFormType);
+  const {
+    isLoading: giftAidLoading,
+    data: giftAidForms,
+    deleteFormMutation: deleteGiftAidFormMutation,
+    archiveFormMutation: archiveGiftAidFormMutation,
+  } = useFormsAndPets(giftAidFormType);
+  const {
+    isLoading: volunteerLoading,
+    data: volunteerForms,
+    deleteFormMutation: deleteVolunteerFormMutation,
+    archiveFormMutation: archiveVolunteerFormMutation,
+  } = useFormsAndPets(volunteerFormType);
+  const {
+    isLoading: contactLoading,
+    data: contactForms,
+    deleteFormMutation: deleteContactUsFormMutation,
+    archiveFormMutation: archiveContactUsFormMutation,
+  } = useFormsAndPets(contactFormType);
 
   const handleDelete = () => {
-    if (
-      deleteOrUpdateInfo.current.type === "Dog" ||
-      deleteOrUpdateInfo.current.type === "Cat"
-    ) {
-      deletePetFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "giftAid") {
-      console.log("DELETING GIFT AID");
-      deleteGiftAidFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (
-      deleteOrUpdateInfo.current.type === "volunteer" ||
-      deleteOrUpdateInfo.current.type === "Volunteer"
-    ) {
-      deleteVolunteerFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
-      deleteContactUsFormMutation.mutate(deleteOrUpdateInfo.current.id);
+    let data = deleteOrUpdateInfo.current;
+    if (data.type === "Dog" || data.type === "Cat") {
+      data.type = "pet";
+    }
+    switch (data.type) {
+      case "giftAid":
+        deleteGiftAidFormMutation.mutate(data.id);
+        break;
+      case "pet":
+        deletePetFormMutation.mutate(data.id);
+        break;
+      case "volunteer":
+        deleteVolunteerFormMutation.mutate(data.id);
+        break;
+      case "contactUs":
+        deleteContactUsFormMutation.mutate(data.id);
+        break;
+      default:
+        console.log("Invalid form type");
     }
     setHidden(true);
   };
 
   const handleArchive = () => {
-    let dataToMutate;
-    if (deleteOrUpdateInfo.current.data.archive === "Yes") {
-      deleteOrUpdateInfo.current.data.archive = "No";
-    } else {
-      deleteOrUpdateInfo.current.data.archive = "Yes";
+    let type = deleteOrUpdateInfo.current.type;
+    let form = deleteOrUpdateInfo.current.data;
+    if (type === "Dog" || type === "Cat") {
+      type = "pet";
     }
-    console.log(deleteOrUpdateInfo.current.data);
+    form.archive === "Yes" ? (form.archive = "No") : (form.archive = "Yes");
 
-    if (deleteOrUpdateInfo.current.type === "giftAid") {
-      dataToMutate = deleteOrUpdateInfo.current.data as GiftaidFormInterface;
-      archiveGiftAidFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "pet") {
-      dataToMutate = deleteOrUpdateInfo.current
-        .data as PetAdoptionFormInterface;
-      archivePetFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "volunteer") {
-      dataToMutate = deleteOrUpdateInfo.current.data as VolunteerFormInterface;
-      archiveVolunteerFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
-      dataToMutate = deleteOrUpdateInfo.current.data as ContactUsFormInterface;
-      archiveContactUsFormMutation.mutate(dataToMutate);
+    switch (type) {
+      case "giftAid":
+        archiveGiftAidFormMutation.mutate(form as GiftaidFormInterface);
+        break;
+      case "pet":
+        archivePetFormMutation.mutate(form as PetAdoptionFormInterface);
+        break;
+      case "volunteer":
+        archiveVolunteerFormMutation.mutate(form as VolunteerFormInterface);
+        break;
+      case "contactUs":
+        archiveContactUsFormMutation.mutate(form as ContactUsFormInterface);
+        break;
+      default:
+        console.log("Invalid form type");
     }
     setHidden(true);
-  };
-
-  const FormList = ({ list, type }: { list: []; type: string }) => {
-    let filterType: string;
-    if (type === "volunteer") {
-      filterType = volunteerTextFilter;
-    }
-    if (type === "pet") {
-      filterType = petTextFilter;
-    }
-    if (type === "giftAid") {
-      filterType = giftAidTextFilter;
-    }
-    if (type === "contactUs") {
-      filterType = contactUsTextFilter;
-    }
-    return (
-      <div className="relative w-full mt-10 overflow-auto bg-slate-100 rounded-xl xl:w-full">
-        <div className="mt-3 mb-8 overflow-hidden shadow-sm">
-          <TableComponent>
-            <TableHeadMap ArrayOfHeaderTitles={tableHeaderArray} />
-
-            <tbody className="bg-white dark:bg-slate-800">
-              {list
-                .sort(function (a: any, b: any) {
-                  // Show the newest first
-                  return (
-                    new Date(b.updatedAt).getTime() -
-                    new Date(a.updatedAt).getTime()
-                  );
-                })
-                .filter((archiveFilter: { archive: string }) => {
-                  if (isArchive === "false") {
-                    return archiveFilter.archive === "No";
-                  } else {
-                    return archiveFilter.archive === "Yes";
-                  }
-                })
-                .filter((text: { aboutQuestions: { name: string } }) => {
-                  if (filterType) {
-                    return text.aboutQuestions.name
-                      .toLowerCase()
-                      .includes(filterType.toLowerCase());
-                  } else {
-                    return text;
-                  }
-                })
-                .filter((dropdownType: { type: string }) => {
-                  if (type === "pet") {
-                    if (petFilter) {
-                      return dropdownType.type === petFilter;
-                    } else {
-                      return dropdownType;
-                    }
-                  } else {
-                    return dropdownType;
-                  }
-                })
-                .map(
-                  (
-                    form:
-                      | GiftaidFormInterface
-                      | PetAdoptionFormInterface
-                      | VolunteerFormInterface
-                      | ContactUsFormInterface
-                  ) => {
-                    return (
-                      <tr key={form._id} className="h-20">
-                        <TableData>
-                          <div className="text-xs text-center md:text-lg font-roboto">
-                            {form.aboutQuestions.name}
-                          </div>
-                        </TableData>
-                        <TableData>
-                          <div className="text-xs text-center md:text-lg font-roboto">
-                            {form.type + " form"}
-                          </div>
-                        </TableData>
-                        <TableData>
-                          <div className="text-xs text-center md:text-lg font-roboto">
-                            {form.updatedAt && form.updatedAt.slice(0, 10)}
-                          </div>
-                        </TableData>
-                        <TableData>
-                          <Link href={`/admin/forms/${form._id}`}>
-                            <div className="flex flex-row items-center justify-center">
-                              <Icon
-                                className="w-auto h-6 cursor-pointer"
-                                icon="carbon:view-filled"
-                              />
-                            </div>
-                          </Link>
-                        </TableData>
-                        <TableData>
-                          <div className="flex flex-row items-center justify-center">
-                            <Icon
-                              className="w-auto h-6 cursor-pointer"
-                              icon="fluent:tray-item-remove-24-filled"
-                              onClick={() => {
-                                deleteOrUpdateInfo.current.name =
-                                  form.aboutQuestions.name;
-                                if (form._id) {
-                                  deleteOrUpdateInfo.current.id = form._id;
-                                }
-                                deleteOrUpdateInfo.current.type = form.type;
-                                deleteOrUpdateInfo.current.data = form;
-                                deleteOrUpdateInfo.current.action = "archive";
-                                isArchive === "true"
-                                  ? (deleteOrUpdateInfo.current.promptText =
-                                      "unArchive")
-                                  : (deleteOrUpdateInfo.current.promptText =
-                                      "archive");
-                                setHidden(false);
-                              }}
-                            />
-                          </div>
-                        </TableData>
-                        <TableData>
-                          <div className="flex flex-row items-center justify-center">
-                            <Icon
-                              className="w-auto h-6 cursor-pointer"
-                              icon="fluent:delete-20-filled"
-                              onClick={() => {
-                                console.log("formtype", form.type);
-
-                                deleteOrUpdateInfo.current.name =
-                                  form.aboutQuestions.name;
-                                if (form._id) {
-                                  deleteOrUpdateInfo.current.id = form._id;
-                                }
-                                deleteOrUpdateInfo.current.type = form.type;
-                                deleteOrUpdateInfo.current.action = "delete";
-                                deleteOrUpdateInfo.current.promptText =
-                                  "delete";
-                                setHidden(false);
-                              }}
-                            />
-                          </div>
-                        </TableData>
-                      </tr>
-                    );
-                  }
-                )}
-            </tbody>
-          </TableComponent>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -342,7 +173,7 @@ function Index() {
       />
       <AdminSidebarComponent highlighted={highlighted}>
         {!hidden && (
-          <Popup
+          <AdminConfirmationPopup
             name={deleteOrUpdateInfo.current.name}
             deleteHandler={handleDelete}
             setHideState={setHidden}
@@ -364,6 +195,7 @@ function Index() {
                       key={tab}
                       selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
                       className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+                      onClick={() => setSearchText("")}
                     >
                       {tab}
                     </Tab>
@@ -374,8 +206,8 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"petFilter"}
-                    change={setPetTextFilter}
-                    val={petTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                   <select
@@ -392,7 +224,16 @@ function Index() {
 
                 <div className="lg:mr-20 lg:ml-20">
                   {!petFormsLoading ? (
-                    <FormList list={petForms.data} type="pet" />
+                    <FormList
+                      list={petForms && petForms.data}
+                      type="pet"
+                      isArchive={isArchive}
+                      searchText={searchText}
+                      tableHeaderArray={tableHeaderArray}
+                      deleteOrUpdateInfo={deleteOrUpdateInfo}
+                      petFilter={petFilter}
+                      setHidden={setHidden}
+                    />
                   ) : (
                     <div className="flex justify-center">
                       <LoadingIcon />
@@ -404,14 +245,22 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"giftAidTextFilter"}
-                    change={setGiftAidTextFilter}
-                    val={giftAidTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!giftAidLoading && (
-                    <FormList list={giftAidForms.data} type="giftAid" />
+                    <FormList
+                      list={giftAidForms && giftAidForms.data}
+                      type="giftAid"
+                      isArchive={isArchive}
+                      searchText={searchText}
+                      tableHeaderArray={tableHeaderArray}
+                      deleteOrUpdateInfo={deleteOrUpdateInfo}
+                      setHidden={setHidden}
+                    />
                   )}
                 </div>
               </TabPanel>
@@ -419,14 +268,22 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"volunteerTextFilter"}
-                    change={setVolunteerTextFilter}
-                    val={volunteerTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!volunteerLoading && (
-                    <FormList list={volunteerForms.data} type="volunteer" />
+                    <FormList
+                      list={volunteerForms && volunteerForms.data}
+                      type="volunteer"
+                      isArchive={isArchive}
+                      searchText={searchText}
+                      tableHeaderArray={tableHeaderArray}
+                      deleteOrUpdateInfo={deleteOrUpdateInfo}
+                      setHidden={setHidden}
+                    />
                   )}
                 </div>
               </TabPanel>
@@ -434,14 +291,22 @@ function Index() {
                 <div className="flex flex-col items-center mt-3">
                   <SearchInput
                     id={"contactUsTextFilter"}
-                    change={setContactUsTextFilter}
-                    val={contactUsTextFilter}
+                    change={setSearchText}
+                    val={searchText}
                     placehold={"Search by name"}
                   />
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!contactLoading && (
-                    <FormList list={contactForms.data} type="contactUs" />
+                    <FormList
+                      list={contactForms && contactForms.data}
+                      type="contactUs"
+                      isArchive={isArchive}
+                      searchText={searchText}
+                      tableHeaderArray={tableHeaderArray}
+                      deleteOrUpdateInfo={deleteOrUpdateInfo}
+                      setHidden={setHidden}
+                    />
                   )}
                 </div>
               </TabPanel>

@@ -1,64 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { MobileNavListItem, NavbarListItem } from "./NavbarLayoutComponents";
+import useNavRef from "../../hooks/useNavRef";
+import { NavRefInterface } from "../../interfaces/interfaces";
 
 function NavbarComponent() {
-  const router = useRouter();
-  const mobileNavDropdownRef = useRef<null | HTMLDivElement>(null);
+  const navRefs = useNavRef();
   const defaultNavRef = useRef<null | HTMLUListElement>(null);
+  const mobileNavDropdownRef = useRef<null | HTMLDivElement>(null);
 
   const hideMobileNav = () => {
     if (mobileNavDropdownRef.current !== null) {
       mobileNavDropdownRef.current.classList.toggle("hidden");
     }
   };
-  interface NavRefInterface {
-    home: HTMLDivElement | null;
-    about: HTMLDivElement | null;
-    adoption: HTMLDivElement | null;
-    donate: HTMLDivElement | null;
-    forms: HTMLDivElement | null;
-  }
-
-  const MobileNavListItem = ({
-    text,
-    path,
-  }: {
-    text: string;
-    path: string;
-  }) => {
-    return (
-      <li
-        className="flex py-4 mx-4 text-lg font-medium text-black font-poppins justify-left"
-        onClick={hideMobileNav}
-      >
-        <Link href={"/" + path}>
-          <a className="text-lg font-normal leading-6 text-black" href="#">
-            {text}
-          </a>
-        </Link>
-      </li>
-    );
-  };
-
-  const navRefs = useRef<NavRefInterface>({
-    home: null,
-    about: null,
-    adoption: null,
-    donate: null,
-    forms: null,
-  });
-
-  useEffect(() => {
-    const path = router.pathname === "/" ? "/home" : router.pathname;
-    Object.entries(navRefs.current).forEach((element) => {
-      if ("/" + element[0] === path) {
-        element[1].className = "";
-      }
-    });
-  }, []);
 
   const handleNavPaw = (clickedRef: HTMLDivElement | null) => {
     if (clickedRef) {
@@ -69,6 +26,15 @@ function NavbarComponent() {
           element[1].className = "hidden";
         }
       });
+    }
+  };
+
+  const setRefForElement = (
+    suffix: keyof NavRefInterface,
+    element: HTMLDivElement | null
+  ) => {
+    if (navRefs.current[suffix] === null) {
+      navRefs.current[suffix] = element;
     }
   };
 
@@ -86,145 +52,53 @@ function NavbarComponent() {
         </div>
         <div className="hidden lg:flex">
           <ul className="flex flex-wrap justify-center">
-            <li>
-              <Link href="/">
-                <a
-                  onClick={() => handleNavPaw(navRefs.current.home)}
-                  className="flex items-center mr-5 text-lg font-medium font-poppins"
-                >
-                  <div className="w-5">
-                    <div
-                      ref={(e) => {
-                        if (navRefs.current.home === null) {
-                          navRefs.current.home = e;
-                        }
-                      }}
-                      className="hidden"
-                    >
-                      <Icon
-                        icon="foundation:paw"
-                        color="#8b3479"
-                        width="20"
-                        height="20"
-                      />
-                    </div>
-                  </div>
-                  <span className="cursor-pointer">Home</span>
-                </a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/about">
-                <a
-                  onClick={() => handleNavPaw(navRefs.current.about)}
-                  className="flex items-center mr-5 text-lg font-medium font-poppins"
-                >
-                  <div className="w-5">
-                    <div
-                      ref={(e) => {
-                        if (navRefs.current.about === null) {
-                          navRefs.current.about = e;
-                        }
-                      }}
-                      className="hidden"
-                    >
-                      <Icon
-                        icon="foundation:paw"
-                        color="#8b3479"
-                        width="20"
-                        height="20"
-                      />
-                    </div>
-                  </div>
-                  <span className="cursor-pointer">About</span>
-                </a>
-              </Link>
-            </li>
+            <NavbarListItem
+              path={"/"}
+              text={"Home"}
+              listRef={(e: HTMLDivElement | null) =>
+                setRefForElement("home", e)
+              }
+              onClickFunction={() => handleNavPaw(navRefs.current.home)}
+            />
 
-            <li>
-              <Link href="/adoption">
-                <a
-                  onClick={() => handleNavPaw(navRefs.current.adoption)}
-                  className="flex items-center mr-5 text-lg font-medium font-poppins"
-                >
-                  <div className="w-5">
-                    <div
-                      ref={(e) => {
-                        if (navRefs.current.adoption === null) {
-                          navRefs.current.adoption = e;
-                        }
-                      }}
-                      className="hidden"
-                    >
-                      <Icon
-                        icon="foundation:paw"
-                        color="#8b3479"
-                        width="20"
-                        height="20"
-                      />
-                    </div>
-                  </div>
-                  <span className="cursor-pointer">Adoption</span>
-                </a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/donate">
-                <a
-                  onClick={() => handleNavPaw(navRefs.current.donate)}
-                  className="flex items-center mr-5 text-lg font-medium font-poppins"
-                >
-                  <div className="w-5">
-                    <div
-                      ref={(e) => {
-                        if (navRefs.current.donate === null) {
-                          navRefs.current.donate = e;
-                        }
-                      }}
-                      className="hidden"
-                    >
-                      <Icon
-                        icon="foundation:paw"
-                        color="#8b3479"
-                        width="20"
-                        height="20"
-                      />
-                    </div>
-                  </div>
-                  <span className="cursor-pointer">Donate</span>
-                </a>
-              </Link>
-            </li>
+            <NavbarListItem
+              path={"/about"}
+              text={"About"}
+              listRef={(e: HTMLDivElement | null) =>
+                setRefForElement("about", e)
+              }
+              onClickFunction={() => handleNavPaw(navRefs.current.about)}
+            />
 
-            <li>
-              <Link href="/forms">
-                <a
-                  onClick={() => handleNavPaw(navRefs.current.forms)}
-                  className="flex items-center mr-5 text-lg font-medium font-poppins"
-                >
-                  <div className="w-5">
-                    <div
-                      ref={(e) => {
-                        if (navRefs.current.forms === null) {
-                          navRefs.current.forms = e;
-                        }
-                      }}
-                      className="hidden"
-                    >
-                      <Icon
-                        icon="foundation:paw"
-                        color="#8b3479"
-                        width="20"
-                        height="20"
-                      />
-                    </div>
-                  </div>
-                  <span className="cursor-pointer">Forms</span>
-                </a>
-              </Link>
-            </li>
+            <NavbarListItem
+              path={"/adoption"}
+              text={"Adoption"}
+              listRef={(e: HTMLDivElement | null) =>
+                setRefForElement("adoption", e)
+              }
+              onClickFunction={() => handleNavPaw(navRefs.current.adoption)}
+            />
+
+            <NavbarListItem
+              path={"/donate"}
+              text={"Donate"}
+              listRef={(e: HTMLDivElement | null) =>
+                setRefForElement("donate", e)
+              }
+              onClickFunction={() => handleNavPaw(navRefs.current.donate)}
+            />
+
+            <NavbarListItem
+              path={"/forms"}
+              text={"Forms"}
+              listRef={(e: HTMLDivElement | null) =>
+                setRefForElement("forms", e)
+              }
+              onClickFunction={() => handleNavPaw(navRefs.current.forms)}
+            />
           </ul>
         </div>
+
         <div className="justify-between hidden pr-5 lg:flex">
           <div className="flex items-center justify-center w-48 lg">
             <div className="flex items-center justify-center w-10 h-10 mr-3 border rounded-lg shadow-xl">
@@ -267,11 +141,31 @@ function NavbarComponent() {
           className="absolute flex-col hidden w-full bg-white lg:hidden"
         >
           <ul ref={defaultNavRef} className="">
-            <MobileNavListItem text={"Home"} path={""} />
-            <MobileNavListItem text={"About"} path={"about"} />
-            <MobileNavListItem text={"Adoption"} path={"adoption"} />
-            <MobileNavListItem text={"Donate"} path={"donate"} />
-            <MobileNavListItem text={"Forms"} path={"forms"} />
+            <MobileNavListItem
+              text={"Home"}
+              path={""}
+              onClickFunction={hideMobileNav}
+            />
+            <MobileNavListItem
+              text={"About"}
+              path={"about"}
+              onClickFunction={hideMobileNav}
+            />
+            <MobileNavListItem
+              text={"Adoption"}
+              path={"adoption"}
+              onClickFunction={hideMobileNav}
+            />
+            <MobileNavListItem
+              text={"Donate"}
+              path={"donate"}
+              onClickFunction={hideMobileNav}
+            />
+            <MobileNavListItem
+              text={"Forms"}
+              path={"forms"}
+              onClickFunction={hideMobileNav}
+            />
           </ul>
         </div>
       </div>

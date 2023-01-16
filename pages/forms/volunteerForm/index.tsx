@@ -56,7 +56,7 @@ function Index() {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"volunteer"}
+                  typeOfForm={"volunteer"}
                   category={"aboutQuestions"}
                   touch={touched}
                   err={errors}
@@ -66,7 +66,7 @@ function Index() {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"volunteer"}
+                  typeOfForm={"volunteer"}
                   category={"emergencyContactInfo"}
                   touch={touched}
                   err={errors}
@@ -76,7 +76,7 @@ function Index() {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"volunteer"}
+                  typeOfForm={"volunteer"}
                   category={"healthInfo"}
                   err={errors}
                   touch={touched}
@@ -86,7 +86,7 @@ function Index() {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"volunteer"}
+                  typeOfForm={"volunteer"}
                   category={"volunteeringInfo"}
                   err={errors}
                   touch={touched}
@@ -97,7 +97,7 @@ function Index() {
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
-                  type={"volunteer"}
+                  typeOfForm={"volunteer"}
                   category={"refereeInfo"}
                   touch={touched}
                   err={errors}
@@ -108,7 +108,7 @@ function Index() {
                   <QuestionsMap
                     getUseState={toShow}
                     setUseState={setToShow}
-                    type={"volunteer"}
+                    typeOfForm={"volunteer"}
                     category={"offenderInfo"}
                     touch={touched}
                     err={errors}
