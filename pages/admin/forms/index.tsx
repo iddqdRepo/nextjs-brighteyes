@@ -11,7 +11,6 @@ import {
 } from "../../../adminComponents/commonAdminComponents";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Icon } from "@iconify/react";
-import { useQuery, useQueryClient, useMutation } from "react-query";
 import {
   getPetForms,
   getGiftAidForms,
@@ -38,12 +37,13 @@ import {
   ContactUsFormInterface,
 } from "../../../interfaces/interfaces";
 import Link from "next/link";
+import { useFormsAndPets } from "../../../hooks/useFormAndPets";
 
 function Index() {
   const router = useRouter();
   let isArchive = router.query.archive;
   const highlighted = isArchive === "true" ? "FormArchive" : "Forms";
-  const queryClient = useQueryClient();
+
   const deleteOrUpdateInfo = useRef({
     name: "",
     id: "",
@@ -52,6 +52,7 @@ function Index() {
     type: "",
     promptText: "",
   });
+
   const tableHeaderArray = [
     "Name",
     "Type",
@@ -78,109 +79,111 @@ function Index() {
     setGiftAidTextFilter("");
   }, [isArchive]);
 
-  const { isLoading: petFormsLoading, data: petForms } = useQuery(
-    "petForms",
-    getPetForms
-  );
-  const { isLoading: giftAidLoading, data: giftAidForms } = useQuery(
+  const petFormType = ["petForms", getPetForms, udpatePetForm, deletePetForm];
+  const {
+    isLoading: petFormsLoading,
+    data: petForms,
+    deleteFormMutation: deletePetFormMutation,
+    archiveFormMutation: archivePetFormMutation,
+  } = useFormsAndPets(petFormType);
+
+  const giftAidFormType = [
     "giftAidForms",
-    getGiftAidForms
-  );
+    getGiftAidForms,
+    udpateGiftAidForm,
+    deleteGiftAidForm,
+  ];
+  const {
+    isLoading: giftAidLoading,
+    data: giftAidForms,
+    deleteFormMutation: deleteGiftAidFormMutation,
+    archiveFormMutation: archiveGiftAidFormMutation,
+  } = useFormsAndPets(giftAidFormType);
 
-  const { isLoading: volunteerLoading, data: volunteerForms } = useQuery(
+  const volunteerFormType = [
     "volunteerForms",
-    getVolunteerForms
-  );
-  const { isLoading: contactLoading, data: contactForms } = useQuery(
+    getVolunteerForms,
+    udpateVolunteerForm,
+    deleteVolunteerForm,
+  ];
+  const {
+    isLoading: volunteerLoading,
+    data: volunteerForms,
+    deleteFormMutation: deleteVolunteerFormMutation,
+    archiveFormMutation: archiveVolunteerFormMutation,
+  } = useFormsAndPets(volunteerFormType);
+
+  const contactFormType = [
     "contactForms",
-    getContactUsForms
-  );
-
-  const deletePetFormMutation = useMutation(deletePetForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("petForms");
-    },
-  });
-  const deleteGiftAidFormMutation = useMutation(deleteGiftAidForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("giftAidForms");
-    },
-  });
-
-  const deleteVolunteerFormMutation = useMutation(deleteVolunteerForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("volunteerForms");
-    },
-  });
-  const deleteContactUsFormMutation = useMutation(deleteContactUsForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("contactForms");
-    },
-  });
-
-  const archiveGiftAidFormMutation = useMutation(udpateGiftAidForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("giftAidForms");
-    },
-  });
-  const archivePetFormMutation = useMutation(udpatePetForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("petForms");
-    },
-  });
-  const archiveVolunteerFormMutation = useMutation(udpateVolunteerForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("volunteerForms");
-    },
-  });
-  const archiveContactUsFormMutation = useMutation(udpateContactUsForm, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries("contactForms");
-    },
-  });
+    getContactUsForms,
+    udpateContactUsForm,
+    deleteContactUsForm,
+  ];
+  const {
+    isLoading: contactLoading,
+    data: contactForms,
+    deleteFormMutation: deleteContactUsFormMutation,
+    archiveFormMutation: archiveContactUsFormMutation,
+  } = useFormsAndPets(contactFormType);
 
   const handleDelete = () => {
     if (
       deleteOrUpdateInfo.current.type === "Dog" ||
       deleteOrUpdateInfo.current.type === "Cat"
     ) {
-      deletePetFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "giftAid") {
-      console.log("DELETING GIFT AID");
-      deleteGiftAidFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (
-      deleteOrUpdateInfo.current.type === "volunteer" ||
-      deleteOrUpdateInfo.current.type === "Volunteer"
-    ) {
-      deleteVolunteerFormMutation.mutate(deleteOrUpdateInfo.current.id);
-    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
-      deleteContactUsFormMutation.mutate(deleteOrUpdateInfo.current.id);
+      deleteOrUpdateInfo.current.type = "pet";
+    }
+    const id = deleteOrUpdateInfo.current.id;
+    switch (deleteOrUpdateInfo.current.type) {
+      case "giftAid":
+        deleteGiftAidFormMutation.mutate(id);
+        break;
+      case "pet":
+        deletePetFormMutation.mutate(id);
+        break;
+      case "volunteer":
+        deleteVolunteerFormMutation.mutate(id);
+        break;
+      case "contactUs":
+        deleteContactUsFormMutation.mutate(id);
+        break;
+      default:
+        console.log("Invalid form type");
     }
     setHidden(true);
   };
 
   const handleArchive = () => {
-    let dataToMutate;
-    if (deleteOrUpdateInfo.current.data.archive === "Yes") {
-      deleteOrUpdateInfo.current.data.archive = "No";
-    } else {
-      deleteOrUpdateInfo.current.data.archive = "Yes";
+    console.log(
+      "deleteOrUpdateInfo.current.data",
+      deleteOrUpdateInfo.current.data
+    );
+    if (
+      deleteOrUpdateInfo.current.type === "Dog" ||
+      deleteOrUpdateInfo.current.type === "Cat"
+    ) {
+      deleteOrUpdateInfo.current.type = "pet";
     }
-    console.log(deleteOrUpdateInfo.current.data);
+    deleteOrUpdateInfo.current.data.archive =
+      deleteOrUpdateInfo.current.data.archive === "Yes" ? "No" : "Yes";
 
-    if (deleteOrUpdateInfo.current.type === "giftAid") {
-      dataToMutate = deleteOrUpdateInfo.current.data as GiftaidFormInterface;
-      archiveGiftAidFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "pet") {
-      dataToMutate = deleteOrUpdateInfo.current
-        .data as PetAdoptionFormInterface;
-      archivePetFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "volunteer") {
-      dataToMutate = deleteOrUpdateInfo.current.data as VolunteerFormInterface;
-      archiveVolunteerFormMutation.mutate(dataToMutate);
-    } else if (deleteOrUpdateInfo.current.type === "contactUs") {
-      dataToMutate = deleteOrUpdateInfo.current.data as ContactUsFormInterface;
-      archiveContactUsFormMutation.mutate(dataToMutate);
+    const form = deleteOrUpdateInfo.current.data;
+
+    switch (deleteOrUpdateInfo.current.type) {
+      case "giftAid":
+        archiveGiftAidFormMutation.mutate(form as GiftaidFormInterface);
+        break;
+      case "pet":
+        archivePetFormMutation.mutate(form as PetAdoptionFormInterface);
+        break;
+      case "volunteer":
+        archiveVolunteerFormMutation.mutate(form as VolunteerFormInterface);
+        break;
+      case "contactUs":
+        archiveContactUsFormMutation.mutate(form as ContactUsFormInterface);
+        break;
+      default:
+        console.log("Invalid form type");
     }
     setHidden(true);
   };
@@ -392,7 +395,7 @@ function Index() {
 
                 <div className="lg:mr-20 lg:ml-20">
                   {!petFormsLoading ? (
-                    <FormList list={petForms.data} type="pet" />
+                    <FormList list={petForms && petForms.data} type="pet" />
                   ) : (
                     <div className="flex justify-center">
                       <LoadingIcon />
@@ -411,7 +414,10 @@ function Index() {
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!giftAidLoading && (
-                    <FormList list={giftAidForms.data} type="giftAid" />
+                    <FormList
+                      list={giftAidForms && giftAidForms.data}
+                      type="giftAid"
+                    />
                   )}
                 </div>
               </TabPanel>
@@ -426,7 +432,10 @@ function Index() {
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!volunteerLoading && (
-                    <FormList list={volunteerForms.data} type="volunteer" />
+                    <FormList
+                      list={volunteerForms && volunteerForms.data}
+                      type="volunteer"
+                    />
                   )}
                 </div>
               </TabPanel>
@@ -441,7 +450,10 @@ function Index() {
                 </div>
                 <div className="lg:mr-20 lg:ml-20">
                   {!contactLoading && (
-                    <FormList list={contactForms.data} type="contactUs" />
+                    <FormList
+                      list={contactForms && contactForms.data}
+                      type="contactUs"
+                    />
                   )}
                 </div>
               </TabPanel>
