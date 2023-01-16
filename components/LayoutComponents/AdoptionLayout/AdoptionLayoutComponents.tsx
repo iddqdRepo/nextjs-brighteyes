@@ -40,7 +40,7 @@ export const AdoptionCard = ({
                 <span className="w-10/12 mb-2 border-b border-gray-100"></span>
               </div>
               <div className="flex justify-center text-sm font-normal font-roboto">
-                <div className="flex items-center mr-4">
+                <div className="flex items-center mr-3">
                   <Icon
                     className="mr-2"
                     icon={"akar-icons:cake"}
