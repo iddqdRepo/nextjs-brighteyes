@@ -59,22 +59,20 @@ function Index({ type }: { type: string }) {
             type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
           }
           onSubmit={async (data) => {
+            const checkBox = data.homeQuestions;
             setLoading(true);
-            if (data.homeQuestions["planning>baby"]) {
-              data.homeQuestions["planning>baby"] =
-                data.homeQuestions["planning>baby"][0];
+            if (checkBox["planning>baby"]) {
+              checkBox["planning>baby"] = checkBox["planning>baby"][0];
             }
-            if (data.homeQuestions["planning>moving"]) {
-              data.homeQuestions["planning>moving"] =
-                data.homeQuestions["planning>moving"][0];
+            if (checkBox["planning>moving"]) {
+              checkBox["planning>moving"] = checkBox["planning>moving"][0];
             }
-            if (data.homeQuestions["planning>workHoursChange"]) {
-              data.homeQuestions["planning>workHoursChange"] =
-                data.homeQuestions["planning>workHoursChange"][0];
+            if (checkBox["planning>workHoursChange"]) {
+              checkBox["planning>workHoursChange"] =
+                checkBox["planning>workHoursChange"][0];
             }
-            if (data.homeQuestions["planning>holiday"]) {
-              data.homeQuestions["planning>holiday"] =
-                data.homeQuestions["planning>holiday"][0];
+            if (checkBox["planning>holiday"]) {
+              checkBox["planning>holiday"] = checkBox["planning>holiday"][0];
             }
 
             let newData = await revertDataObjectsBackToOriginalFormat(

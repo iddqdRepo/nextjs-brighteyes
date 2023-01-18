@@ -358,10 +358,6 @@ export const ExposingDropdownWithLabelFormik = ({
   category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface;
   form: string;
 }) => {
-  // let toShow = form === "adoption" ? useAdoptionShow().toShow : getState;
-  // let setToShow = form === "adoption" ? useAdoptionShow().setToShow : setState;
-  // const { toShow, setToShow } = form === "adoption" ? useAdoptionShow() : ""
-
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
       <Label text={labelText} hFor={forNameId} />
@@ -434,13 +430,19 @@ export const QuestionsMap = ({
       {Object.entries(stateCategory).map((entry) => {
         let title = entry[1].title;
         let field = entry[0] as fieldType;
-        return entry[1].type === "text"
-          ? !entry[1].hidden && (
+        let fieldIsVisible = !entry[1].hidden;
+        let isTextField = entry[1].type === "text";
+        let isDropdownField = entry[1].type === "select";
+        let isTextArea = entry[1].type === "textarea";
+
+        if (fieldIsVisible) {
+          if (isTextField) {
+            return (
               <InputTextFieldWithLabelFormik
-                key={entry[0] as Key}
+                key={field as Key}
                 labelText={title}
-                forNameId={`${category}.${entry[0]}`}
-                type={entry[0].toLowerCase().includes("email") ? "email" : ""}
+                forNameId={`${category}.${field}`}
+                type={field.toLowerCase().includes("email") ? "email" : ""}
                 placeholder={entry[1].placeholder}
               >
                 <ErrorFormik
@@ -448,21 +450,23 @@ export const QuestionsMap = ({
                   touch={touch}
                   field={field}
                   parent={category}
-                  id={"err-" + entry[0]}
+                  id={"err-" + field}
                 />
               </InputTextFieldWithLabelFormik>
-            )
-          : entry[1].type === "select"
-          ? !entry[1].hidden && (
+            );
+          }
+
+          if (isDropdownField) {
+            return (
               <ExposingDropdownWithLabelFormik
-                key={entry[0] as Key}
+                key={field as Key}
                 getState={getUseState}
                 setState={setUseState}
                 labelText={title}
-                forNameId={`${category}.${entry[0]}`}
+                forNameId={`${category}.${field}`}
                 selectArray={entry[1].values}
                 exposes={entry[1].exposes ? entry[1].exposes : ""}
-                path={`${category}.${entry[0]}`}
+                path={`${category}.${field}`}
                 category={category}
                 form={typeOfForm}
               >
@@ -471,33 +475,35 @@ export const QuestionsMap = ({
                   touch={touch}
                   field={field}
                   parent={category}
-                  id={"err-" + entry[0]}
+                  id={"err-" + field}
                 />
               </ExposingDropdownWithLabelFormik>
-            )
-          : entry[1].type === "textarea" &&
-            !entry[1].hidden && (
+            );
+          }
+
+          if (isTextArea) {
+            return (
               <div
-                className={
-                  "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
-                }
-                key={entry[0] + entry[1].type}
+                className="flex flex-col items-center justify-end mb-4 ml-1 mr-1"
+                key={field + entry[1].type}
               >
                 <InputTextAreaFormik
-                  key={entry[0] as Key}
+                  key={field as Key}
                   labelText={title}
-                  forNameId={`${category}.${entry[0]}`}
+                  forNameId={`${category}.${field}`}
                 >
                   <ErrorFormik
                     err={err}
                     touch={touch}
                     field={field}
                     parent={category}
-                    id={"err-" + entry[0]}
+                    id={"err-" + field}
                   />
                 </InputTextAreaFormik>
               </div>
             );
+          }
+        }
       })}
     </>
   ) : (
