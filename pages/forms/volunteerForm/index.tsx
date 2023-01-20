@@ -49,9 +49,8 @@ function Index() {
               setButtonText("ERROR, try again");
             }
           }}
-          validateOnBlur={false}
         >
-          {({ errors, touched, handleSubmit }) => (
+          {({ values, errors, touched, handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet legendText="About you">
                 <QuestionsMap
@@ -123,7 +122,7 @@ function Index() {
                 submitHandler={handleSubmit}
                 animalName={"form"}
               />
-              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+              <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikFormContainer>
           )}
         </Formik>
