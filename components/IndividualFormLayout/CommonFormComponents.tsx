@@ -233,7 +233,6 @@ export const exposeOrHideFields = (
 ) => {
   let exposeVolunteer = getState as VolunteerFormInterface;
   let exposeAdoption = getState as AdoptionInitialValuesInterface;
-
   if (category === "healthInfo") {
     if (hideOrExpose === "expose") {
       exposeVolunteer[category][val as keyof ivHealthInfoInterface].hidden =

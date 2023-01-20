@@ -49,6 +49,7 @@ function Index() {
               setButtonText("ERROR, try again");
             }
           }}
+          validateOnBlur={false}
         >
           {({ errors, touched, handleSubmit }) => (
             <FormikFormContainer>
