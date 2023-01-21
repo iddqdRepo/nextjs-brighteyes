@@ -90,7 +90,7 @@ function Index({ type }: { type: string }) {
             }
           }}
         >
-          {({ errors, touched, handleSubmit }) => (
+          {({ handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet id="About-you" legendText="About you">
                 <QuestionsMap
@@ -98,8 +98,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   typeOfForm={"adoption"}
                   category={"aboutQuestions"}
-                  touch={touched}
-                  err={errors}
                 />
               </FieldSet>
               <FieldSet
@@ -112,8 +110,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"dogMatchingQuestions"}
-                    touch={touched}
-                    err={errors}
                   />
                 ) : (
                   <QuestionsMap
@@ -121,8 +117,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"catMatchingQuestions"}
-                    touch={touched}
-                    err={errors}
                   />
                 )}
               </FieldSet>
@@ -132,8 +126,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   typeOfForm={"adoption"}
                   category={"homeQuestions"}
-                  err={errors}
-                  touch={touched}
                 />
                 {toShow!.homeQuestions ? (
                   <CheckboxPlanningFormik stateField={toShow} />
@@ -151,8 +143,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"dogQuestions"}
-                    err={errors}
-                    touch={touched}
                   />
                 ) : (
                   <QuestionsMap
@@ -160,8 +150,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"catQuestions"}
-                    err={errors}
-                    touch={touched}
                   />
                 )}
               </FieldSet>
@@ -176,8 +164,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"hearAboutUsInfo"}
-                    touch={touched}
-                    err={errors}
                   />
                 </div>
               </FieldSet>

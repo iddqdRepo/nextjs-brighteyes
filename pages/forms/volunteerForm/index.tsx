@@ -49,8 +49,9 @@ function Index() {
               setButtonText("ERROR, try again");
             }
           }}
+          validateOnChange={true}
         >
-          {({ values, errors, touched, handleSubmit }) => (
+          {({ handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet legendText="About you">
                 <QuestionsMap
@@ -58,8 +59,6 @@ function Index() {
                   setUseState={setToShow}
                   typeOfForm={"volunteer"}
                   category={"aboutQuestions"}
-                  touch={touched}
-                  err={errors}
                 />
               </FieldSet>
               <FieldSet legendText={"Emergency Contact Infomation"}>
@@ -68,8 +67,6 @@ function Index() {
                   setUseState={setToShow}
                   typeOfForm={"volunteer"}
                   category={"emergencyContactInfo"}
-                  touch={touched}
-                  err={errors}
                 />
               </FieldSet>
               <FieldSet legendText="Health Questions">
@@ -78,8 +75,6 @@ function Index() {
                   setUseState={setToShow}
                   typeOfForm={"volunteer"}
                   category={"healthInfo"}
-                  err={errors}
-                  touch={touched}
                 />
               </FieldSet>
               <FieldSet legendText={"Volunteering Questions"}>
@@ -88,19 +83,14 @@ function Index() {
                   setUseState={setToShow}
                   typeOfForm={"volunteer"}
                   category={"volunteeringInfo"}
-                  err={errors}
-                  touch={touched}
                 />
               </FieldSet>
-              {/* <LegalAgreementSection type={type} /> */}
               <FieldSet legendText={"Referee Information"}>
                 <QuestionsMap
                   getUseState={toShow}
                   setUseState={setToShow}
                   typeOfForm={"volunteer"}
                   category={"refereeInfo"}
-                  touch={touched}
-                  err={errors}
                 />
               </FieldSet>
               <FieldSet legendText={"Rehabilitation of Offenders Act 1974"}>
@@ -110,8 +100,6 @@ function Index() {
                     setUseState={setToShow}
                     typeOfForm={"volunteer"}
                     category={"offenderInfo"}
-                    touch={touched}
-                    err={errors}
                   />
                 </div>
               </FieldSet>
@@ -122,7 +110,7 @@ function Index() {
                 submitHandler={handleSubmit}
                 animalName={"form"}
               />
-              <pre>{JSON.stringify(values, null, 2)}</pre>
+              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
             </FormikFormContainer>
           )}
         </Formik>

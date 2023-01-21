@@ -1,27 +1,14 @@
 import React from "react";
 import { FieldSet } from "./CommonFormComponents";
 import {
-  QuestionsMap,
+  GiftAidQuestionMap,
   CheckboxGiftAidFormik,
 } from "./GiftAidFormLayoutComponents";
 
-export const AboutYouSection = ({
-  values,
-  touched,
-  errors,
-}: {
-  values: any;
-  touched: any;
-  errors: any;
-}) => {
+export const AboutYouSection = ({ values }: { values: any }) => {
   return (
     <FieldSet legendText="About you">
-      <QuestionsMap
-        category={"aboutQuestions"}
-        values={values}
-        touch={touched}
-        err={errors}
-      />
+      <GiftAidQuestionMap category={"aboutQuestions"} values={values} />
     </FieldSet>
   );
 };

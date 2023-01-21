@@ -1,6 +1,6 @@
 import React, { Key } from "react";
 import { clsx } from "clsx";
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
 import {
   ivAboutQuestionsInterface,
   ivDogMatchingQuestionsInterface,
@@ -184,14 +184,10 @@ export const InputTextAreaFormik = ({
 };
 
 export const ErrorFormik = ({
-  err,
-  touch,
   field,
   parent,
   id,
 }: {
-  err: any;
-  touch: any;
   field: fieldType;
   parent?:
     | keyof AdoptionInitialValuesInterface
@@ -201,19 +197,22 @@ export const ErrorFormik = ({
 }) => {
   //If there is a parent (aboutQuestions) && field (name)
   // then use err.aboutquestions.name else just use err.name
+  const formikProps = useFormikContext();
+  let error = formikProps.errors as any;
+  let touched = formikProps.touched as any;
   return (
     <>
       {parent ? (
-        err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
+        error?.[parent]?.[field] && touched?.[parent]?.[field] ? (
           <div id={id} className="text-xs text-red-600">
-            {err?.[parent]?.[field]}
+            {error?.[parent]?.[field]}
           </div>
         ) : (
           <div id={id} className="mt-4"></div>
         )
-      ) : err?.[field] && touch?.[field] ? (
+      ) : error?.[field] && touched?.[field] ? (
         <div id={"err" + field} className="text-xs text-red-600">
-          {err?.[field]}
+          {error?.[field]}
         </div>
       ) : (
         <div id={"err" + field} className="mt-4"></div>
@@ -357,6 +356,8 @@ export const ExposingDropdownWithLabelFormik = ({
   category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface;
   form: string;
 }) => {
+  const formikProps = useFormikContext();
+
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
       <Label text={labelText} hFor={forNameId} />
@@ -366,7 +367,9 @@ export const ExposingDropdownWithLabelFormik = ({
         }
         name={forNameId}
         as="select"
-        onClick={(e: { target: { value: any } }) => {
+        onChange={(e: { target: { value: any } }) => {
+          formikProps.handleChange(e);
+
           if (e.target.value && exposes) {
             handleExposeAndHideFields(
               getState,
@@ -401,19 +404,14 @@ export const QuestionsMap = ({
   setUseState,
   category,
   typeOfForm,
-  err,
-  touch,
 }: {
   getUseState: AdoptionInitialValuesInterface | VolunteerFormInterface;
   setUseState: any;
   category: keyof AdoptionInitialValuesInterface | keyof VolunteerFormInterface;
   typeOfForm: string;
-  err: any;
-  touch: any;
 }) => {
   let state;
   let stateCategory;
-
   if (typeOfForm === "adoption") {
     state = getUseState as AdoptionInitialValuesInterface;
     stateCategory = state[category as keyof AdoptionInitialValuesInterface];
@@ -423,7 +421,6 @@ export const QuestionsMap = ({
     state = getUseState as VolunteerFormInterface;
     stateCategory = state[category as keyof VolunteerFormInterface];
   }
-
   return stateCategory ? (
     <>
       {Object.entries(stateCategory).map((entry) => {
@@ -445,8 +442,6 @@ export const QuestionsMap = ({
                 placeholder={entry[1].placeholder}
               >
                 <ErrorFormik
-                  err={err}
-                  touch={touch}
                   field={field}
                   parent={category}
                   id={"err-" + field}
@@ -470,8 +465,6 @@ export const QuestionsMap = ({
                 form={typeOfForm}
               >
                 <ErrorFormik
-                  err={err}
-                  touch={touch}
                   field={field}
                   parent={category}
                   id={"err-" + field}
@@ -492,8 +485,6 @@ export const QuestionsMap = ({
                   forNameId={`${category}.${field}`}
                 >
                   <ErrorFormik
-                    err={err}
-                    touch={touch}
                     field={field}
                     parent={category}
                     id={"err-" + field}
