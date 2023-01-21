@@ -3,6 +3,10 @@ import { Formik } from "formik";
 import {
   ErrorFormik,
   FormPageTitle,
+  InputTextFieldWithLabelFormik,
+  DropdownFieldFormik,
+  InputTextAreaFormik,
+  ChooseFile,
 } from "../../../../components/IndividualFormLayout/CommonFormComponents";
 import {
   AdminHeadTag,
@@ -10,11 +14,6 @@ import {
 } from "../../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../../adminComponents/AdminSidebarComponent";
 import { AnimalSchema } from "../../../../utils/yup/animalYupSchema";
-import {
-  InputOrTextArea,
-  DropdownField,
-  ChooseFile,
-} from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
 
 import { postPet } from "../../../../routes/petRoutes";
 import { PetInterface } from "../../../../interfaces/interfaces";
@@ -74,31 +73,30 @@ function Index() {
               {({ values, handleSubmit }) => (
                 <div className="flex justify-center w-full">
                   <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
-                    <InputOrTextArea
+                    <InputTextFieldWithLabelFormik
                       labelText={"Name"}
-                      labelHForAndName={"name"}
+                      forNameId={"name"}
                     >
                       <ErrorFormik field={"name"} />
-                    </InputOrTextArea>
-                    <DropdownField
+                    </InputTextFieldWithLabelFormik>
+                    <DropdownFieldFormik
                       labelText={"Type"}
                       labelHForAndName={"type"}
                       valueArray={["Dog", "Cat"]}
                     >
                       <ErrorFormik field={"type"} />
-                    </DropdownField>
+                    </DropdownFieldFormik>
 
                     <div className="flex">
-                      <InputOrTextArea
+                      <InputTextFieldWithLabelFormik
                         labelText={"Age"}
-                        labelHForAndName={"age"}
+                        forNameId={"age"}
                         labelClassN="w-12"
-                        fieldClassN="w-12"
                       >
                         <ErrorFormik field={"age"} />
-                      </InputOrTextArea>
+                      </InputTextFieldWithLabelFormik>
 
-                      <DropdownField
+                      <DropdownFieldFormik
                         labelText={"Years/Months"}
                         labelHForAndName={"yearsOrMonths"}
                         valueArray={["Months", "Years"]}
@@ -106,60 +104,59 @@ function Index() {
                         fieldClassN="w-28"
                       >
                         <ErrorFormik field={"yearsOrMonths"} />
-                      </DropdownField>
+                      </DropdownFieldFormik>
                     </div>
-                    <InputOrTextArea
+                    <InputTextFieldWithLabelFormik
                       labelText={"Breed"}
-                      labelHForAndName={"breed"}
+                      forNameId={"breed"}
                     >
                       <ErrorFormik field={"breed"} />
-                    </InputOrTextArea>
-                    <DropdownField
+                    </InputTextFieldWithLabelFormik>
+                    <DropdownFieldFormik
                       labelText={"Sex"}
                       labelHForAndName={"sex"}
                       valueArray={["Male", "Female", "Mixed"]}
                     >
                       <ErrorFormik field={"sex"} />
-                    </DropdownField>
+                    </DropdownFieldFormik>
 
-                    <DropdownField
+                    <DropdownFieldFormik
                       labelText={"Size"}
                       labelHForAndName={"size"}
                       valueArray={["Small", "Medium", "Large", "Giant"]}
                     >
                       <ErrorFormik field={"size"} />
-                    </DropdownField>
+                    </DropdownFieldFormik>
 
-                    <DropdownField
+                    <DropdownFieldFormik
                       labelText={"Suitable for children"}
                       labelHForAndName={"suitableForChildren"}
                       valueArray={["Yes", "No"]}
                     >
                       <ErrorFormik field={"suitableForChildren"} />
-                    </DropdownField>
-                    <DropdownField
+                    </DropdownFieldFormik>
+                    <DropdownFieldFormik
                       labelText={"Suitable for animals"}
                       labelHForAndName={"suitableForAnimals"}
                       valueArray={["Yes", "No"]}
                     >
                       <ErrorFormik field={"suitableForAnimals"} />
-                    </DropdownField>
+                    </DropdownFieldFormik>
 
-                    <DropdownField
+                    <DropdownFieldFormik
                       labelText={"Adopted"}
                       labelHForAndName={"adopted"}
                       valueArray={["Yes", "No"]}
                     >
                       <ErrorFormik field={"adopted"} />
-                    </DropdownField>
-                    <InputOrTextArea
+                    </DropdownFieldFormik>
+
+                    <InputTextAreaFormik
                       labelText={"Description"}
-                      labelHForAndName="desc"
-                      fieldClassN="w-64 h-32"
-                      fieldAs="textarea"
+                      forNameId="desc"
                     >
                       <ErrorFormik field={"desc"} />
-                    </InputOrTextArea>
+                    </InputTextAreaFormik>
                     <ChooseFile
                       labelHForAndName="image"
                       setter={setResizedImage}
@@ -182,18 +179,7 @@ function Index() {
                       submitHandler={handleSubmit}
                       animalName={values.name}
                     />
-                    {/* <pre>
-                    {JSON.stringify(
-                      values,
-                      (key, value) => {
-                        if (key != "image") {
-                          return value;
-                        }
-                      },
-                      1
-                    )}
-                  </pre> */}
-                    {/* <pre>{JSON.stringify(values, null, 1)}</pre> */}
+                    <pre>{JSON.stringify(values, null, 1)}</pre>
                   </div>
                 </div>
               )}

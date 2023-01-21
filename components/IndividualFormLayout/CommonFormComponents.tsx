@@ -25,6 +25,8 @@ import {
   PetInterface,
 } from "../../interfaces/interfaces";
 import { GiftAidFormInterface } from "../../interfaces/giftAidFormInterface";
+import { onFileResize } from "../../utils/onFileResize";
+import { handleExposeAndHideFields } from "../../utils/handleExposeAndHideFields";
 
 type fieldType =
   | keyof ivAboutQuestionsVolunteerInterface
@@ -293,42 +295,6 @@ export const exposeOrHideFields = (
   }
 };
 
-export const handleExposeAndHideFields = (
-  getState: AdoptionInitialValuesInterface | VolunteerFormInterface,
-  setState: any,
-  ev: { target: any },
-  exposes: {
-    [key: string]: (
-      | keyof ivHealthInfoInterface
-      | keyof ivOffenderInfoInterface
-      | keyof ivHomeQuestionsInterface
-      | keyof ivDogQuestionsInterface
-      | keyof ivCatQuestionsInterface
-    )[];
-  },
-  category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface,
-  form: string
-) => {
-  for (const [key, value] of Object.entries(exposes)) {
-    if (ev.target.value === key) {
-      value.forEach((val) => {
-        exposeOrHideFields(getState, setState, category, val, "expose", form);
-      });
-    } else {
-      if (
-        //^ This added because "As an Adult" and "As a Child" both reveal the same hidden fields,
-        //^ this stops them being hidden if "As an Adult" is selected then switched to "As a Child"
-        ev.target.value !== "As an Adult" &&
-        ev.target.value !== "As a Child"
-      ) {
-        value.forEach((val) => {
-          exposeOrHideFields(getState, setState, category, val, "hide", form);
-        });
-      }
-    }
-  }
-};
-
 export const ExposingDropdownWithLabelFormik = ({
   getState,
   setState,
@@ -498,5 +464,97 @@ export const QuestionsMap = ({
     </>
   ) : (
     <div>loading</div>
+  );
+};
+
+export const DropdownFieldFormik = ({
+  labelText,
+  labelHForAndName,
+  valueArray,
+  children,
+  labelClassN,
+  fieldClassN,
+}: {
+  labelText: string;
+  labelHForAndName: string;
+  valueArray: string[];
+  children: React.ReactNode;
+  labelClassN?: string;
+  fieldClassN?: string;
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
+      <Label
+        text={labelText}
+        hFor={labelHForAndName}
+        classN={labelClassN && labelClassN}
+      />
+
+      <Field
+        className={clsx(
+          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
+          fieldClassN
+        )}
+        name={labelHForAndName}
+        as="select"
+      >
+        <option value={""}>Select</option>
+        {valueArray.map((selectValue) => {
+          return (
+            <option key={selectValue} value={selectValue}>
+              {selectValue}
+            </option>
+          );
+        })}
+      </Field>
+      {children}
+    </div>
+  );
+};
+
+export const ChooseFile = ({
+  labelHForAndName,
+  children,
+  labelClassN,
+  setter,
+  values,
+}: {
+  labelHForAndName: string;
+  children: React.ReactNode;
+  labelClassN?: string;
+  setter: any;
+  values: { [key: string]: string; image: string } | PetInterface;
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
+      <Label
+        text={"Choose a file"}
+        hFor={labelHForAndName}
+        classN={labelClassN && labelClassN}
+      />
+
+      <input
+        type="file"
+        id="file"
+        accept="image/*"
+        name="image"
+        onChange={(e) => {
+          if (e.target.files) {
+            const setImage = async () => {
+              //*setImage() stores the data from the promise returned from
+              //*onFileResize() into values.image, otherwise it just stores {<fulfilled> data:sdfsdf}
+              if (e.target.files)
+                return await onFileResize(e.target.files[0], setter).then(
+                  (data) => {
+                    values.image = data as string;
+                  }
+                );
+            };
+            setImage();
+          }
+        }}
+      />
+      {children}
+    </div>
   );
 };
