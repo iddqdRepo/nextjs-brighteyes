@@ -1,6 +1,6 @@
 import React, { Key } from "react";
 import { clsx } from "clsx";
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
 import {
   ivAboutQuestionsInterface,
   ivDogMatchingQuestionsInterface,
@@ -184,14 +184,10 @@ export const InputTextAreaFormik = ({
 };
 
 export const ErrorFormik = ({
-  err,
-  touch,
   field,
   parent,
   id,
 }: {
-  err: any;
-  touch: any;
   field: fieldType;
   parent?:
     | keyof AdoptionInitialValuesInterface
@@ -201,19 +197,22 @@ export const ErrorFormik = ({
 }) => {
   //If there is a parent (aboutQuestions) && field (name)
   // then use err.aboutquestions.name else just use err.name
+  const formikProps = useFormikContext();
+  let error = formikProps.errors as any;
+  let touched = formikProps.touched as any;
   return (
     <>
       {parent ? (
-        err?.[parent]?.[field] && touch?.[parent]?.[field] ? (
+        error?.[parent]?.[field] && touched?.[parent]?.[field] ? (
           <div id={id} className="text-xs text-red-600">
-            {err?.[parent]?.[field]}
+            {error?.[parent]?.[field]}
           </div>
         ) : (
           <div id={id} className="mt-4"></div>
         )
-      ) : err?.[field] && touch?.[field] ? (
+      ) : error?.[field] && touched?.[field] ? (
         <div id={"err" + field} className="text-xs text-red-600">
-          {err?.[field]}
+          {error?.[field]}
         </div>
       ) : (
         <div id={"err" + field} className="mt-4"></div>
@@ -233,7 +232,6 @@ export const exposeOrHideFields = (
 ) => {
   let exposeVolunteer = getState as VolunteerFormInterface;
   let exposeAdoption = getState as AdoptionInitialValuesInterface;
-
   if (category === "healthInfo") {
     if (hideOrExpose === "expose") {
       exposeVolunteer[category][val as keyof ivHealthInfoInterface].hidden =
@@ -358,9 +356,7 @@ export const ExposingDropdownWithLabelFormik = ({
   category: keyof VolunteerFormInterface | keyof AdoptionInitialValuesInterface;
   form: string;
 }) => {
-  // let toShow = form === "adoption" ? useAdoptionShow().toShow : getState;
-  // let setToShow = form === "adoption" ? useAdoptionShow().setToShow : setState;
-  // const { toShow, setToShow } = form === "adoption" ? useAdoptionShow() : ""
+  const formikProps = useFormikContext();
 
   return (
     <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
@@ -371,7 +367,9 @@ export const ExposingDropdownWithLabelFormik = ({
         }
         name={forNameId}
         as="select"
-        onClick={(e: { target: { value: any } }) => {
+        onChange={(e: { target: { value: any } }) => {
+          formikProps.handleChange(e);
+
           if (e.target.value && exposes) {
             handleExposeAndHideFields(
               getState,
@@ -406,19 +404,14 @@ export const QuestionsMap = ({
   setUseState,
   category,
   typeOfForm,
-  err,
-  touch,
 }: {
   getUseState: AdoptionInitialValuesInterface | VolunteerFormInterface;
   setUseState: any;
   category: keyof AdoptionInitialValuesInterface | keyof VolunteerFormInterface;
   typeOfForm: string;
-  err: any;
-  touch: any;
 }) => {
   let state;
   let stateCategory;
-
   if (typeOfForm === "adoption") {
     state = getUseState as AdoptionInitialValuesInterface;
     stateCategory = state[category as keyof AdoptionInitialValuesInterface];
@@ -428,76 +421,79 @@ export const QuestionsMap = ({
     state = getUseState as VolunteerFormInterface;
     stateCategory = state[category as keyof VolunteerFormInterface];
   }
-
   return stateCategory ? (
     <>
       {Object.entries(stateCategory).map((entry) => {
         let title = entry[1].title;
         let field = entry[0] as fieldType;
-        return entry[1].type === "text"
-          ? !entry[1].hidden && (
+        let fieldIsVisible = !entry[1].hidden;
+        let isTextField = entry[1].type === "text";
+        let isDropdownField = entry[1].type === "select";
+        let isTextArea = entry[1].type === "textarea";
+
+        if (fieldIsVisible) {
+          if (isTextField) {
+            return (
               <InputTextFieldWithLabelFormik
-                key={entry[0] as Key}
+                key={field as Key}
                 labelText={title}
-                forNameId={`${category}.${entry[0]}`}
-                type={entry[0].toLowerCase().includes("email") ? "email" : ""}
+                forNameId={`${category}.${field}`}
+                type={field.toLowerCase().includes("email") ? "email" : ""}
                 placeholder={entry[1].placeholder}
               >
                 <ErrorFormik
-                  err={err}
-                  touch={touch}
                   field={field}
                   parent={category}
-                  id={"err-" + entry[0]}
+                  id={"err-" + field}
                 />
               </InputTextFieldWithLabelFormik>
-            )
-          : entry[1].type === "select"
-          ? !entry[1].hidden && (
+            );
+          }
+
+          if (isDropdownField) {
+            return (
               <ExposingDropdownWithLabelFormik
-                key={entry[0] as Key}
+                key={field as Key}
                 getState={getUseState}
                 setState={setUseState}
                 labelText={title}
-                forNameId={`${category}.${entry[0]}`}
+                forNameId={`${category}.${field}`}
                 selectArray={entry[1].values}
                 exposes={entry[1].exposes ? entry[1].exposes : ""}
-                path={`${category}.${entry[0]}`}
+                path={`${category}.${field}`}
                 category={category}
                 form={typeOfForm}
               >
                 <ErrorFormik
-                  err={err}
-                  touch={touch}
                   field={field}
                   parent={category}
-                  id={"err-" + entry[0]}
+                  id={"err-" + field}
                 />
               </ExposingDropdownWithLabelFormik>
-            )
-          : entry[1].type === "textarea" &&
-            !entry[1].hidden && (
+            );
+          }
+
+          if (isTextArea) {
+            return (
               <div
-                className={
-                  "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
-                }
-                key={entry[0] + entry[1].type}
+                className="flex flex-col items-center justify-end mb-4 ml-1 mr-1"
+                key={field + entry[1].type}
               >
                 <InputTextAreaFormik
-                  key={entry[0] as Key}
+                  key={field as Key}
                   labelText={title}
-                  forNameId={`${category}.${entry[0]}`}
+                  forNameId={`${category}.${field}`}
                 >
                   <ErrorFormik
-                    err={err}
-                    touch={touch}
                     field={field}
                     parent={category}
-                    id={"err-" + entry[0]}
+                    id={"err-" + field}
                   />
                 </InputTextAreaFormik>
               </div>
             );
+          }
+        }
       })}
     </>
   ) : (

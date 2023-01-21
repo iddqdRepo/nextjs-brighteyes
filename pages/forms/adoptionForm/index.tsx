@@ -59,22 +59,20 @@ function Index({ type }: { type: string }) {
             type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
           }
           onSubmit={async (data) => {
+            const checkBox = data.homeQuestions;
             setLoading(true);
-            if (data.homeQuestions["planning>baby"]) {
-              data.homeQuestions["planning>baby"] =
-                data.homeQuestions["planning>baby"][0];
+            if (checkBox["planning>baby"]) {
+              checkBox["planning>baby"] = checkBox["planning>baby"][0];
             }
-            if (data.homeQuestions["planning>moving"]) {
-              data.homeQuestions["planning>moving"] =
-                data.homeQuestions["planning>moving"][0];
+            if (checkBox["planning>moving"]) {
+              checkBox["planning>moving"] = checkBox["planning>moving"][0];
             }
-            if (data.homeQuestions["planning>workHoursChange"]) {
-              data.homeQuestions["planning>workHoursChange"] =
-                data.homeQuestions["planning>workHoursChange"][0];
+            if (checkBox["planning>workHoursChange"]) {
+              checkBox["planning>workHoursChange"] =
+                checkBox["planning>workHoursChange"][0];
             }
-            if (data.homeQuestions["planning>holiday"]) {
-              data.homeQuestions["planning>holiday"] =
-                data.homeQuestions["planning>holiday"][0];
+            if (checkBox["planning>holiday"]) {
+              checkBox["planning>holiday"] = checkBox["planning>holiday"][0];
             }
 
             let newData = await revertDataObjectsBackToOriginalFormat(
@@ -92,7 +90,7 @@ function Index({ type }: { type: string }) {
             }
           }}
         >
-          {({ errors, touched, handleSubmit }) => (
+          {({ handleSubmit }) => (
             <FormikFormContainer>
               <FieldSet id="About-you" legendText="About you">
                 <QuestionsMap
@@ -100,8 +98,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   typeOfForm={"adoption"}
                   category={"aboutQuestions"}
-                  touch={touched}
-                  err={errors}
                 />
               </FieldSet>
               <FieldSet
@@ -114,8 +110,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"dogMatchingQuestions"}
-                    touch={touched}
-                    err={errors}
                   />
                 ) : (
                   <QuestionsMap
@@ -123,8 +117,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"catMatchingQuestions"}
-                    touch={touched}
-                    err={errors}
                   />
                 )}
               </FieldSet>
@@ -134,8 +126,6 @@ function Index({ type }: { type: string }) {
                   setUseState={setToShow}
                   typeOfForm={"adoption"}
                   category={"homeQuestions"}
-                  err={errors}
-                  touch={touched}
                 />
                 {toShow!.homeQuestions ? (
                   <CheckboxPlanningFormik stateField={toShow} />
@@ -153,8 +143,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"dogQuestions"}
-                    err={errors}
-                    touch={touched}
                   />
                 ) : (
                   <QuestionsMap
@@ -162,8 +150,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"catQuestions"}
-                    err={errors}
-                    touch={touched}
                   />
                 )}
               </FieldSet>
@@ -178,8 +164,6 @@ function Index({ type }: { type: string }) {
                     setUseState={setToShow}
                     typeOfForm={"adoption"}
                     category={"hearAboutUsInfo"}
-                    touch={touched}
-                    err={errors}
                   />
                 </div>
               </FieldSet>

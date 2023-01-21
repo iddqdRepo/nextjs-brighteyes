@@ -8,15 +8,11 @@ import {
   ErrorFormik,
 } from "./CommonFormComponents";
 
-export const QuestionsMap = ({
+export const GiftAidQuestionMap = ({
   category,
-  err,
-  touch,
 }: {
   category: keyof GiftAidFormInterface;
   values: any;
-  err: any;
-  touch: any;
 }) => {
   return giftAidFormBuilder[category] ? (
     <>
@@ -33,8 +29,6 @@ export const QuestionsMap = ({
             placeholder={entry[1].placeholder}
           >
             <ErrorFormik
-              err={err}
-              touch={touch}
               field={field}
               parent={category}
               id={"err-" + entry[0]}

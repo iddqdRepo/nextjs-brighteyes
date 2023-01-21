@@ -55,13 +55,9 @@ const Index = () => {
             }
           }}
         >
-          {({ values, errors, touched, handleSubmit }) => (
+          {({ values, handleSubmit }) => (
             <FormikFormContainer>
-              <AboutYouSection
-                values={values}
-                touched={touched}
-                errors={errors}
-              />
+              <AboutYouSection values={values} />
               <GiftAidSection />
               <LegalAgreementSection />
               <ShowButtonTextOnSubmit

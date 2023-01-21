@@ -58,18 +58,14 @@ function Index({ animal }: { animal: PetInterface[] }) {
                 }
               }}
             >
-              {({ values, errors, touched, handleSubmit }) => (
+              {({ values, handleSubmit }) => (
                 <div className="flex justify-center w-full">
                   <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
                     <InputOrTextArea
                       labelText={"Name"}
                       labelHForAndName={"name"}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"name"}
-                      />
+                      <ErrorFormik field={"name"} />
                     </InputOrTextArea>
 
                     <DropdownField
@@ -77,11 +73,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       labelHForAndName={"type"}
                       valueArray={["Dog", "Cat"]}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"type"}
-                      />
+                      <ErrorFormik field={"type"} />
                     </DropdownField>
 
                     <div className="flex">
@@ -91,11 +83,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                         labelClassN="w-12"
                         fieldClassN="w-12"
                       >
-                        <ErrorFormik
-                          err={errors}
-                          touch={touched}
-                          field={"age"}
-                        />
+                        <ErrorFormik field={"age"} />
                       </InputOrTextArea>
 
                       <DropdownField
@@ -105,11 +93,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                         labelClassN="w-28"
                         fieldClassN="w-28"
                       >
-                        <ErrorFormik
-                          err={errors}
-                          touch={touched}
-                          field={"yearsOrMonths"}
-                        />
+                        <ErrorFormik field={"yearsOrMonths"} />
                       </DropdownField>
                     </div>
 
@@ -118,7 +102,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       labelHForAndName={"sex"}
                       valueArray={["Male", "Female"]}
                     >
-                      <ErrorFormik err={errors} touch={touched} field={"sex"} />
+                      <ErrorFormik field={"sex"} />
                     </DropdownField>
 
                     <DropdownField
@@ -126,11 +110,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       labelHForAndName={"size"}
                       valueArray={["Small", "Medium", "Large", "Giant"]}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"size"}
-                      />
+                      <ErrorFormik field={"size"} />
                     </DropdownField>
 
                     <DropdownField
@@ -138,22 +118,14 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       labelHForAndName={"suitableForChildren"}
                       valueArray={["Yes", "No"]}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"suitableForChildren"}
-                      />
+                      <ErrorFormik field={"suitableForChildren"} />
                     </DropdownField>
                     <DropdownField
                       labelText={"Suitable for animals"}
                       labelHForAndName={"suitableForAnimals"}
                       valueArray={["Yes", "No"]}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"suitableForAnimals"}
-                      />
+                      <ErrorFormik field={"suitableForAnimals"} />
                     </DropdownField>
 
                     <DropdownField
@@ -161,11 +133,7 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       labelHForAndName={"adopted"}
                       valueArray={["Yes", "No"]}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"adopted"}
-                      />
+                      <ErrorFormik field={"adopted"} />
                     </DropdownField>
                     <InputOrTextArea
                       labelText={"Description"}
@@ -173,22 +141,14 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       fieldClassN="w-64 h-32"
                       fieldAs="textarea"
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"desc"}
-                      />
+                      <ErrorFormik field={"desc"} />
                     </InputOrTextArea>
                     <ChooseFile
                       labelHForAndName="image"
                       setter={setResizedImage}
                       values={values}
                     >
-                      <ErrorFormik
-                        err={errors}
-                        touch={touched}
-                        field={"desc"}
-                      />
+                      <ErrorFormik field={"desc"} />
                     </ChooseFile>
                     <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
                       <div
@@ -208,16 +168,16 @@ function Index({ animal }: { animal: PetInterface[] }) {
                       animalName={values.name}
                     />
                     {/* <pre>
-                    {JSON.stringify(
-                      values,
-                      (key, value) => {
-                        if (key != "image") {
-                          return value;
-                        }
-                      },
-                      1
-                    )}
-                  </pre> */}
+                      {JSON.stringify(
+                        values,
+                        (key, value) => {
+                          if (key != "image") {
+                            return value;
+                          }
+                        },
+                        1
+                      )}
+                    </pre> */}
                   </div>
                 </div>
               )}

@@ -243,7 +243,7 @@ export const ContactUsSection = () => {
               }
             }}
           >
-            {({ errors, touched, handleSubmit }) => (
+            {({ handleSubmit }) => (
               <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
                 <div className="flex flex-col md:flex-row">
                   <InputTextFieldWithLabelFormik
@@ -253,8 +253,6 @@ export const ContactUsSection = () => {
                     labelClassN="block mb-2 text-lg font-normal font-poppins"
                   >
                     <ErrorFormik
-                      err={errors}
-                      touch={touched}
                       field="name"
                       parent={"aboutQuestions"}
                       id={"err-name"}
@@ -268,8 +266,6 @@ export const ContactUsSection = () => {
                     labelClassN="block mb-2 text-lg font-normal font-poppins"
                   >
                     <ErrorFormik
-                      err={errors}
-                      touch={touched}
                       field="email"
                       parent={"aboutQuestions"}
                       id={"err-email"}
@@ -283,12 +279,7 @@ export const ContactUsSection = () => {
                   fieldclassN="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-52 p-2.5 mb-4"
                   labelclassN="block mb-2 text-lg font-normal font-poppins text-left"
                 >
-                  <ErrorFormik
-                    err={errors}
-                    touch={touched}
-                    field="message"
-                    id={"err-message"}
-                  />
+                  <ErrorFormik field="message" id={"err-message"} />
                 </InputTextAreaFormik>
                 <ShowButtonTextOnSubmit
                   loading={loading}
