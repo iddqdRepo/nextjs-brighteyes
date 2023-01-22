@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 export const useDebounce = (value: string, time: number) => {
   const [debounceValue, setDebounceValue] = useState(value);
 
-  console.log("in useDebounce");
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setDebounceValue(value);

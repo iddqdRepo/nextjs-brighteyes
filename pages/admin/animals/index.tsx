@@ -16,11 +16,21 @@ import { LoadingIcon } from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
 import { useFormsAndPets } from "../../../hooks/useFormAndPets";
 import { deletePet, getPets, updatePet } from "../../../routes/petRoutes";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 function Index() {
+  const router = useRouter();
+  let isArchive = router.query.archive;
+
   const [filter, setFilter] = useState("");
   const [textFilter, setTextFilter] = useState("");
   const [hidden, setHidden] = useState(true);
+
+  const debouncedValue = useDebounce(textFilter, 500);
+  const tableHeaderArray = ["Name", "Edit", "Archive", "Delete"];
+  const highlighted = isArchive === "true" ? "AnimalArchive" : "Animals";
+  const petsData = ["pets", getPets, updatePet, deletePet];
+
   const deleteOrUpdateInfo = useRef({
     name: "",
     id: "",
@@ -28,12 +38,6 @@ function Index() {
     action: "",
     promptText: "",
   });
-  const tableHeaderArray = ["Name", "Edit", "Archive", "Delete"];
-
-  const router = useRouter();
-  let isArchive = router.query.archive;
-  const highlighted = isArchive === "true" ? "AnimalArchive" : "Animals";
-  const petsData = ["pets", getPets, updatePet, deletePet];
 
   const {
     isLoading,
@@ -46,6 +50,7 @@ function Index() {
     deletePetMutation.mutate(deleteOrUpdateInfo.current.id);
     setHidden(true);
   };
+
   const handleArchive = () => {
     if (deleteOrUpdateInfo.current.data.adopted === "Yes") {
       deleteOrUpdateInfo.current.data.adopted = "No";
@@ -87,6 +92,7 @@ function Index() {
                 id="fname"
                 name="fname"
                 placeholder="Search by text"
+                value={textFilter}
                 onChange={(e) => {
                   setTextFilter(e.target.value);
                 }}
@@ -138,10 +144,10 @@ function Index() {
                             }
                           })
                           .filter((text: { type: string; name: string }) => {
-                            if (textFilter) {
+                            if (debouncedValue) {
                               return text.name
                                 .toLowerCase()
-                                .includes(textFilter.toLowerCase());
+                                .includes(debouncedValue.toLowerCase());
                             } else {
                               return text;
                             }
