@@ -107,7 +107,7 @@ export const AddOrEditAnimalFormSection = ({
           setter={setResizedImage}
           values={values}
         >
-          <ErrorFormik field={"desc"} />
+          <ErrorFormik field={"image"} />
         </ChooseFile>
         <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
           <div
