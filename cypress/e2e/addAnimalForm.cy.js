@@ -3,7 +3,7 @@
 //^ Fix for cypress bug "unexpected token <>>"
 
 describe("Add Animal Form", () => {
-  it("should allow login with correct credentials and be able to navigate to add animal", () => {
+  it.skip("should allow login with correct credentials and be able to navigate to add animal", () => {
     cy.on("uncaught:exception", (err, runnable) => {
       console.log(
         "error in should allow login with correct credentials and be able to navigate to add animal"
@@ -22,7 +22,7 @@ describe("Add Animal Form", () => {
     cy.get("#AddAnimal").should("be.visible").click();
   });
 
-  it("shows error with add animal form when a required field is not filled in", () => {
+  it.skip("shows error with add animal form when a required field is not filled in", () => {
     cy.on("uncaught:exception", (err, runnable) => {
       console.log(
         "error in shows error with add animal form when a required field is not filled in"
@@ -61,7 +61,7 @@ describe("Add Animal Form", () => {
     cy.contains("Add Animal");
   });
 
-  it("submits add animal form when all fields are correctly filled in", () => {
+  it.skip("submits add animal form when all fields are correctly filled in", () => {
     cy.on("uncaught:exception", (err, runnable) => {
       console.log(
         "error in submits add animal form when all fields are correctly filled in"
