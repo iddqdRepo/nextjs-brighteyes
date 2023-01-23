@@ -4,6 +4,14 @@
 
 describe("Add Animal Form", () => {
   it("should allow login with correct credentials and be able to navigate to add animal", () => {
+    cy.on("uncaught:exception", (err, runnable) => {
+      console.log(
+        "error in should allow login with correct credentials and be able to navigate to add animal"
+      );
+      console.log(err, runnable);
+      return false;
+    });
+
     cy.visit("http://localhost:3000/admin");
     cy.get("#username").should("be.visible").type("a");
     cy.get("#password").should("be.visible").type("a");
@@ -14,14 +22,15 @@ describe("Add Animal Form", () => {
     cy.get("#AddAnimal").should("be.visible").click();
   });
 
-  Cypress.on("uncaught:exception", (err, runnable) => {
-    console.log("IN ERROR 1");
-    console.log("runnable", runnable);
-    console.log("err is", err);
-    return false;
-  });
-
   it("shows error with add animal form when a required field is not filled in", () => {
+    cy.on("uncaught:exception", (err, runnable) => {
+      console.log(
+        "error in shows error with add animal form when a required field is not filled in"
+      );
+      console.log(err, runnable);
+      return false;
+    });
+
     cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").should(
       "be.visible"
     );
@@ -53,6 +62,13 @@ describe("Add Animal Form", () => {
   });
 
   it("submits add animal form when all fields are correctly filled in", () => {
+    cy.on("uncaught:exception", (err, runnable) => {
+      console.log(
+        "error in submits add animal form when all fields are correctly filled in"
+      );
+      console.log(err, runnable);
+      return false;
+    });
     cy.intercept(
       {
         method: "POST",
