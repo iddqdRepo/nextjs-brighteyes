@@ -10,7 +10,7 @@
     "check-format": "prettier --check",
     "cypress": "cypress open",
     "prepare": "husky install",
-    "jest": "jest"
+    "jest": "jest --silent=false"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.13.1",
@@ -66,5 +66,4 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   }
-
 }
