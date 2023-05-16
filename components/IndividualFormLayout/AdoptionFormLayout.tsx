@@ -64,7 +64,7 @@ export const LegalAgreementSection = ({ type }: { type: string }) => {
           the {type} I am rehoming.
         </li>
         <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 125 : 30} IS
+          A MINIMUM REHOMING DONATION OF £{type === "Dog" ? 150 : 30} IS
           REQUESTED.
         </li>
       </ul>
