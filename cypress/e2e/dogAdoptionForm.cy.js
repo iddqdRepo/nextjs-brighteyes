@@ -28,7 +28,7 @@ describe("Dog Adoption Form", () => {
     cy.contains(
       "Any further information to help us match a dog to your home and lifestyle?"
     );
-    cy.contains("A MINIMUM REHOMING DONATION OF £150 IS REQUESTED");
+    cy.contains("A MINIMUM REHOMING DONATION OF £200 IS REQUESTED");
   });
 
   it("shows correct error messages all input fields", () => {

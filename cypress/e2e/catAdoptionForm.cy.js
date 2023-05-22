@@ -22,7 +22,7 @@ describe("Cat Adoption Form", () => {
     cy.contains(
       "Any further information to help us match a cat to your home and lifestyle?"
     );
-    cy.contains("A MINIMUM REHOMING DONATION OF £30 IS REQUESTED");
+    cy.contains("A MINIMUM REHOMING DONATION OF £50 IS REQUESTED");
   });
 
   it("shows correct error messages all input fields", () => {
