@@ -158,7 +158,6 @@ export const AdoptionCriteriaSection = () => {
               <IconText text="Landlord Permission" />
             </AdoptionIconContainer>
             <AdoptionIconContainer>
-              <IconText text="Children 12+" />
               <IconText text="Home Check" />
               <IconText text="Form Required" />
             </AdoptionIconContainer>
