@@ -11,6 +11,7 @@ export const FormCardSection = () => {
         people and find the perfect pet for your home!"
         buttonText="View Form"
         query="Dog"
+        hasButton={false}
       />
       <FormCard
         icon="cil:cat"
@@ -19,6 +20,7 @@ export const FormCardSection = () => {
         generosity of the public to help us continue our work."
         buttonText="View Form"
         query="Cat"
+        hasButton={false}
       />
       <FormCard
         icon="akar-icons:gift"
