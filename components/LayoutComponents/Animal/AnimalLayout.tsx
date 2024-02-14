@@ -106,9 +106,10 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
             </pre>
             <Button
               text={"View Form"}
-              link={`/forms/adoptionForm?type=${
-                breed === "Cat" ? "Cat" : "Dog"
-              }`}
+              link={`/forms`}
+              // link={`/forms/adoptionForm?type=${
+              //   breed === "Cat" ? "Cat" : "Dog"
+              // }`}
             />
           </div>
         </div>
