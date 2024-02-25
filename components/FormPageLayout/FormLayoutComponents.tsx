@@ -36,8 +36,8 @@ export const FormCard = ({
     return (
       <div className="flex justify-center items-center max-w-fit p-1 ">
         <span className="text-xs font-semibold text-white font-poppins text-[#8b3479] mt-5 mb-5">
-          We are short staffed at the moment, please message us on Facebook or
-          Instagram for adoption.
+          We are short staffed at the moment, the forms are temporarily removed.
+          Please message us on Facebook.
           <div className="flex items-center justify-center pb-2 mt-10">
             <Link href={"https://www.facebook.com/brighteyes.a.s/"}>
               <Icon
@@ -48,7 +48,7 @@ export const FormCard = ({
                 height="30"
               />
             </Link>
-            <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
+            {/* <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
               <Icon
                 className="mr-2 cursor-pointer"
                 icon="akar-icons:instagram-fill"
@@ -56,7 +56,7 @@ export const FormCard = ({
                 width="30"
                 height="30"
               />
-            </a>
+            </a> */}
           </div>
         </span>
       </div>

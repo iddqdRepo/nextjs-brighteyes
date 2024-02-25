@@ -29,6 +29,7 @@ export const FormCardSection = () => {
         to help care for the animals and earn some valuable experience?"
         buttonText="View Form"
         link="giftAidForm"
+        hasButton={false}
       />
       <FormCard
         icon="carbon:person-favorite"
@@ -37,6 +38,7 @@ export const FormCardSection = () => {
           to help care for the animals and earn some valuable experience?"
         buttonText="View Form"
         link="volunteerForm"
+        hasButton={false}
       />
     </FormCardContainer>
   );

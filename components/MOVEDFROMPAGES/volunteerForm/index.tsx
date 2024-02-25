@@ -1,16 +1,13 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import {
-  HeadTag,
-  ShowButtonTextOnSubmit,
-} from "../../../components/common/CommonComponents";
+import { HeadTag, ShowButtonTextOnSubmit } from "../../common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,
   QuestionsMap,
-} from "../../../components/IndividualFormLayout/CommonFormComponents";
-import { FieldSet } from "../../../components/IndividualFormLayout/CommonFormComponents";
-import NavbarComponent from "../../../components/Navbar/NavbarComponent";
+} from "../../IndividualFormLayout/CommonFormComponents";
+import { FieldSet } from "../../IndividualFormLayout/CommonFormComponents";
+import NavbarComponent from "../../Navbar/NavbarComponent";
 import { VolunteerFormInterface } from "../../../interfaces/volunteerFormInterface";
 import { postVolunteerForm } from "../../../routes/formRoutes";
 import { volunteerFormBuilder } from "../../../utils/formik/volunteerFormBuilder";
