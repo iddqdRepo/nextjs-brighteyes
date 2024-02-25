@@ -1,19 +1,16 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import {
-  HeadTag,
-  ShowButtonTextOnSubmit,
-} from "../../../components/common/CommonComponents";
+import { HeadTag, ShowButtonTextOnSubmit } from "../../common/CommonComponents";
 import {
   FormikFormContainer,
   FormPageTitle,
-} from "../../../components/IndividualFormLayout/CommonFormComponents";
+} from "../../IndividualFormLayout/CommonFormComponents";
 import {
   AboutYouSection,
   GiftAidSection,
   LegalAgreementSection,
-} from "../../../components/IndividualFormLayout/GiftAidFormLayout";
-import NavbarComponent from "../../../components/Navbar/NavbarComponent";
+} from "../../IndividualFormLayout/GiftAidFormLayout";
+import NavbarComponent from "../../Navbar/NavbarComponent";
 import { postGiftAidForm } from "../../../routes/formRoutes";
 
 import { giftAidInitialValues } from "../../../utils/formik/giftAidInitialValues";

@@ -160,6 +160,7 @@ export const AdoptionCriteriaSection = () => {
             <AdoptionIconContainer>
               <IconText text="Home Check" />
               <IconText text="Form Required" />
+              <IconText text="Your Pets Must Be Neutered" />
             </AdoptionIconContainer>
           </div>
         </div>
