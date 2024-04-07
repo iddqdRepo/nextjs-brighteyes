@@ -88,16 +88,16 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
                     {age}&nbsp;
                     {yearsOrMonths}
                   </DetailContainer>
-                  <DetailContainer
+                  {/* <DetailContainer
                     text={sex === "Female" ? "Spayed" : "Neutered"}
                   >
                     Yes
-                  </DetailContainer>
+                  </DetailContainer> */}
                 </div>
                 <div className="flex flex-col">
                   <DetailContainer text="Size">{size}</DetailContainer>
                   <DetailContainer text="Adopted">{adopted}</DetailContainer>
-                  <DetailContainer text="Vaccinated">Yes</DetailContainer>
+                  {/* <DetailContainer text="Vaccinated">Yes</DetailContainer> */}
                 </div>
               </div>
             </div>
