@@ -123,7 +123,7 @@ function NavbarComponent() {
               />
             </div>
             <span className="flex text-sm font-medium font-poppins">
-              028 66 388885
+              028 66 720078
             </span>
           </div>
         </div>

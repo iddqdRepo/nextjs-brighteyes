@@ -68,7 +68,7 @@ export const FooterSection = () => {
                 07710607816
               </span>
               <span className="font-medium text-white text-md font-poppins">
-                028 66 388885
+                028 66 720078
               </span>
             </div>
           </FooterIconText>
