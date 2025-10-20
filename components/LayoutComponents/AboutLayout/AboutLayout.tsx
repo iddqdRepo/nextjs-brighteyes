@@ -107,9 +107,9 @@ export const AboutBrightEyesSection = () => {
                 it will have shelter here with us for life. We receive no
                 government funding and rely purely on the generosity of the
                 public to help us continue our work. Rehoming from us All
-                animals rehomed from us are neutered/spayed, vaccinated,
-                microchipped, dewormed and deflead Please see page with animals
-                that need a home and relevant application form.
+                animals rehomed from us are microchipped, dewormed and deflead
+                Please see page with animals that need a home and relevant
+                application form.
               </div>
             </div>
           </div>
