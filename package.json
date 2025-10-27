@@ -9,6 +9,7 @@
     "lint": "next lint",
     "check-format": "prettier --check",
     "cypress": "cypress open",
+    "cypress:headless": "npx cypress run",
     "prepare": "husky install",
     "jest": "jest"
   },
@@ -66,5 +67,4 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   }
-
 }
