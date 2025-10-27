@@ -21,12 +21,14 @@ export const AdoptionCard = ({
     <>
       <div className="flex flex-col mb-10 ml-3 mr-3">
         {/* <img className="" src={image} alt="" /> */}
-        <div
-          className="w-64 bg-no-repeat bg-cover rounded-xl h-80"
-          style={{
-            backgroundImage: `url("${image}")`,
-          }}
-        ></div>
+        <Link href={`/adoption/${id}`}>
+          <div
+            className="w-64 bg-no-repeat bg-cover rounded-xl h-80 cursor-pointer"
+            style={{
+              backgroundImage: `url("${image}")`,
+            }}
+          />
+        </Link>
         <Link href={`/adoption/${id}`}>
           <a className="flex justify-center w-full -mt-14">
             <div className="flex flex-col w-11/12 bg-white border border-gray-300 rounded-md">

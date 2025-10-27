@@ -9,7 +9,7 @@ export interface PetInterface {
   size: string;
   suitableForAnimals: string;
   suitableForChildren: string;
-  type: string;
+  type: "Cat" | "Dog";
   yearsOrMonths: string;
   updatedAt?: string;
   __v?: string | number;

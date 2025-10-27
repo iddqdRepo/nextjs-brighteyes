@@ -5,19 +5,22 @@ import {
   FormikFormContainer,
   FormPageTitle,
   QuestionsMap,
-} from "../../IndividualFormLayout/CommonFormComponents";
+} from "../../../components/IndividualFormLayout/CommonFormComponents";
 import {
   CatAdoptionSchema,
   DogAdoptionSchema,
 } from "../../../utils/yup/adoptionYupSchema";
 import { adoptionFormBuilder } from "../../../utils/formik/adoptionFormBuilder";
 import { AdoptionInitialValuesInterface } from "../../../interfaces/adoptionInitialValuesInterface";
-import { CheckboxPlanningFormik } from "../../IndividualFormLayout/AdoptionFormLayoutComponents";
-import { LegalAgreementSection } from "../../IndividualFormLayout/AdoptionFormLayout";
+import { CheckboxPlanningFormik } from "../../../components/IndividualFormLayout/AdoptionFormLayoutComponents";
+import { LegalAgreementSection } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
 import { newAdoptionInitialValues } from "../../../utils/formik/newAdoptionInitialValues";
-import NavbarComponent from "../../Navbar/NavbarComponent";
+import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postPetForm } from "../../../routes/formRoutes";
-import { HeadTag, ShowButtonTextOnSubmit } from "../../common/CommonComponents";
+import {
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
 import {
   flattenNestedAdoptionObjectForFormBuilder,
   revertDataObjectsBackToOriginalFormat,
