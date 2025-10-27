@@ -1,23 +1,23 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
-import { HeadTag, ShowButtonTextOnSubmit } from "../../common/CommonComponents";
+import { useState } from "react";
 import {
-  FormikFormContainer,
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
+import {
   FormPageTitle,
+  FormikFormContainer,
+  FieldSet,
   QuestionsMap,
-} from "../../IndividualFormLayout/CommonFormComponents";
-import { FieldSet } from "../../IndividualFormLayout/CommonFormComponents";
-import NavbarComponent from "../../Navbar/NavbarComponent";
-import { VolunteerFormInterface } from "../../../interfaces/volunteerFormInterface";
+} from "../../../components/IndividualFormLayout/CommonFormComponents";
+import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postVolunteerForm } from "../../../routes/formRoutes";
 import { volunteerFormBuilder } from "../../../utils/formik/volunteerFormBuilder";
 import { volunteerInitialValues } from "../../../utils/formik/volunteerInitialValues";
 import { VolunteerSchema } from "../../../utils/yup/volunteerYupSchema";
 
 function Index() {
-  const [toShow, setToShow] = useState(
-    volunteerFormBuilder as VolunteerFormInterface
-  );
+  const [toShow, setToShow] = useState(volunteerFormBuilder);
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonText, setButtonText] = useState("Submit Form");

@@ -93,8 +93,8 @@ export const AboutUsSection = () => {
                 <Icon icon="mdi:bone" color="#8b3479" width="30" height="30" />
                 &nbsp;
                 <span>
-                  All animals rehomed from us are neutered/spayed, vaccinated,
-                  microchipped, dewormed and deflead.
+                  All animals rehomed from us are microchipped, dewormed and
+                  deflead.
                 </span>
               </div>
             </div>
