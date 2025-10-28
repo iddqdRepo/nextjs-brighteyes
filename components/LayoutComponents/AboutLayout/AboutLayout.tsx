@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import { DashedTitle } from "../../common/CommonComponents";
 
 export const AboutPatSection = () => {
@@ -106,10 +107,11 @@ export const AboutBrightEyesSection = () => {
                 at Bright Eyes and if an animal for any reason cannot get a home
                 it will have shelter here with us for life. We receive no
                 government funding and rely purely on the generosity of the
-                public to help us continue our work. Rehoming from us All
-                animals rehomed from us are neutered/spayed, vaccinated,
-                microchipped, dewormed and deflead Please see page with animals
-                that need a home and relevant application form.
+                public to help us continue our work. All are microchipped,
+                dewormed and deflead.
+                <br />
+                Please see our <Link href={"/adoption"}>Adoption page</Link> for
+                animals that need a home and the related application form.
               </div>
             </div>
           </div>

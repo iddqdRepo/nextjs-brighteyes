@@ -39,6 +39,7 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
     yearsOrMonths,
     image,
     breed,
+    type,
     size,
     desc,
     suitableForAnimals,
@@ -106,10 +107,9 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
             </pre>
             <Button
               text={"View Form"}
-              link={`/forms`}
-              // link={`/forms/adoptionForm?type=${
-              //   breed === "Cat" ? "Cat" : "Dog"
-              // }`}
+              link={`/forms/adoptionForm?type=${
+                type === "Cat" ? "Cat" : "Dog"
+              }`}
             />
           </div>
         </div>

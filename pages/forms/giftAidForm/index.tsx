@@ -1,18 +1,19 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
-import { HeadTag, ShowButtonTextOnSubmit } from "../../common/CommonComponents";
+import { useState } from "react";
 import {
-  FormikFormContainer,
+  HeadTag,
+  ShowButtonTextOnSubmit,
+} from "../../../components/common/CommonComponents";
+import {
   FormPageTitle,
-} from "../../IndividualFormLayout/CommonFormComponents";
+  FormikFormContainer,
+} from "../../../components/IndividualFormLayout/CommonFormComponents";
 import {
   AboutYouSection,
   GiftAidSection,
-  LegalAgreementSection,
-} from "../../IndividualFormLayout/GiftAidFormLayout";
-import NavbarComponent from "../../Navbar/NavbarComponent";
+} from "../../../components/IndividualFormLayout/GiftAidFormLayout";
+import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postGiftAidForm } from "../../../routes/formRoutes";
-
 import { giftAidInitialValues } from "../../../utils/formik/giftAidInitialValues";
 import { GiftAidSchema } from "../../../utils/yup/giftAidYupSchema";
 
@@ -56,7 +57,6 @@ const Index = () => {
             <FormikFormContainer>
               <AboutYouSection values={values} />
               <GiftAidSection />
-              <LegalAgreementSection />
               <ShowButtonTextOnSubmit
                 loading={loading}
                 isSuccess={isSuccess}
