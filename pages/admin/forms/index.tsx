@@ -32,6 +32,7 @@ import {
 } from "../../../interfaces/interfaces";
 import { useFormsAndPets } from "../../../hooks/useFormAndPets";
 import { FormList } from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 function Index() {
   const router = useRouter();
@@ -39,6 +40,7 @@ function Index() {
   const [hidden, setHidden] = useState(true);
   const [petFilter, setPetFilter] = useState("");
   const [searchText, setSearchText] = useState("");
+  const debouncedValue = useDebounce(searchText, 500);
 
   const deleteOrUpdateInfo = useRef({
     name: "",
@@ -50,6 +52,7 @@ function Index() {
   });
 
   const highlighted = isArchive === "true" ? "FormArchive" : "Forms";
+
   const tableHeaderArray = [
     "Name",
     "Type",
@@ -228,7 +231,7 @@ function Index() {
                       list={petForms && petForms.data}
                       type="pet"
                       isArchive={isArchive}
-                      searchText={searchText}
+                      searchText={debouncedValue}
                       tableHeaderArray={tableHeaderArray}
                       deleteOrUpdateInfo={deleteOrUpdateInfo}
                       petFilter={petFilter}
@@ -256,7 +259,7 @@ function Index() {
                       list={giftAidForms && giftAidForms.data}
                       type="giftAid"
                       isArchive={isArchive}
-                      searchText={searchText}
+                      searchText={debouncedValue}
                       tableHeaderArray={tableHeaderArray}
                       deleteOrUpdateInfo={deleteOrUpdateInfo}
                       setHidden={setHidden}
@@ -279,7 +282,7 @@ function Index() {
                       list={volunteerForms && volunteerForms.data}
                       type="volunteer"
                       isArchive={isArchive}
-                      searchText={searchText}
+                      searchText={debouncedValue}
                       tableHeaderArray={tableHeaderArray}
                       deleteOrUpdateInfo={deleteOrUpdateInfo}
                       setHidden={setHidden}
@@ -302,7 +305,7 @@ function Index() {
                       list={contactForms && contactForms.data}
                       type="contactUs"
                       isArchive={isArchive}
-                      searchText={searchText}
+                      searchText={debouncedValue}
                       tableHeaderArray={tableHeaderArray}
                       deleteOrUpdateInfo={deleteOrUpdateInfo}
                       setHidden={setHidden}
