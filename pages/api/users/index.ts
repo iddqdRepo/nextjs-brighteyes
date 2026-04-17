@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 dbConnect();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   switch (method) {
     case "GET":
@@ -31,3 +31,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 };
+
+export default handler;

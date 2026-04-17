@@ -4,7 +4,7 @@ import dbConnect from "../../../utils/dbConnect";
 
 dbConnect();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   switch (method) {
     case "GET":
@@ -72,3 +72,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 };
+
+export default handler;

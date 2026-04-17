@@ -133,6 +133,12 @@ function AdminSidebarComponent(props: any) {
           text={"Form Archive"}
         />
         <AdminNavLink
+          toggle={"Donations"}
+          link={"/donations"}
+          icon={"carbon:currency-pound"}
+          text={"Donations"}
+        />
+        <AdminNavLink
           toggle={"AddUser"}
           link={"/addUser"}
           icon={"ant-design:user-add-outlined"}
