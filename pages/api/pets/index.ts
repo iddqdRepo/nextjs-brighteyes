@@ -4,7 +4,7 @@ import dbConnect from "../../../utils/dbConnect";
 
 dbConnect();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   // const { method } = req;
   const { method, query } = req;
   const NotAdopted = query.adopted;
@@ -36,4 +36,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(400).json({ success: false });
       break;
   }
-};
+}
+
+export default handler;

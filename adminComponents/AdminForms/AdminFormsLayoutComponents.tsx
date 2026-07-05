@@ -99,13 +99,14 @@ export const FormList = ({
                         </div>
                       </TableData>
                       <TableData>
-                        <Link href={`/admin/forms/${form._id}`}>
-                          <div className="flex flex-row items-center justify-center">
-                            <Icon
-                              className="w-auto h-6 cursor-pointer"
-                              icon="carbon:view-filled"
-                            />
-                          </div>
+                        <Link
+                          href={`/admin/forms/${form._id}`}
+                          className="flex flex-row items-center justify-center"
+                        >
+                          <Icon
+                            className="w-auto h-6 cursor-pointer"
+                            icon="carbon:view-filled"
+                          />
                         </Link>
                       </TableData>
                       <TableData>

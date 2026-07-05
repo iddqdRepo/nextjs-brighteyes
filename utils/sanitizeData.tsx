@@ -10,8 +10,8 @@ export const sanitizeInput = (data: PetInterface) => {
       key !== "__v" &&
       key !== "updatedAt"
     ) {
-      newValue = value.charAt(0).toUpperCase() + value.slice(1);
-      newValue = newValue.trim();
+      const trimmedValue = value.trim();
+      newValue = trimmedValue.charAt(0).toUpperCase() + trimmedValue.slice(1);
     }
     sanitizedData[key as keyof PetInterface] = newValue as string;
   });

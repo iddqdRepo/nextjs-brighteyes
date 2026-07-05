@@ -47,8 +47,8 @@ export const DonationTypesSection = () => {
               className="paypal-donate"
               alt=""
               src="https://www.paypal.com/en_GB/i/scr/pixel.gif"
-              width="1"
-              height="1"
+              width={1}
+              height={1}
             />
           </form>
         </div>

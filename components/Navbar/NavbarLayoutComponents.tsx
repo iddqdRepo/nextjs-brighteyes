@@ -14,23 +14,22 @@ export const NavbarListItem = ({
 }) => {
   return (
     <li>
-      <Link href={path}>
-        <a
-          onClick={onClickFunction}
-          className="flex items-center mr-5 text-lg font-medium font-poppins"
-        >
-          <div className="w-5">
-            <div ref={listRef} className="hidden">
-              <Icon
-                icon="foundation:paw"
-                color="#8b3479"
-                width="20"
-                height="20"
-              />
-            </div>
+      <Link
+        href={path}
+        onClick={onClickFunction}
+        className="mr-5 flex items-center text-lg font-medium font-poppins"
+      >
+        <div className="w-5">
+          <div ref={listRef} className="hidden">
+            <Icon
+              icon="foundation:paw"
+              color="#8b3479"
+              width="20"
+              height="20"
+            />
           </div>
-          <span className="cursor-pointer">{text}</span>
-        </a>
+        </div>
+        <span className="cursor-pointer">{text}</span>
       </Link>
     </li>
   );
@@ -50,10 +49,11 @@ export const MobileNavListItem = ({
       className="flex py-4 mx-4 text-lg font-medium text-black font-poppins justify-left"
       onClick={onClickFunction}
     >
-      <Link href={"/" + path}>
-        <a className="text-lg font-normal leading-6 text-black" href="#">
-          {text}
-        </a>
+      <Link
+        href={path ? `/${path}` : "/"}
+        className="text-lg font-normal leading-6 text-black"
+      >
+        {text}
       </Link>
     </li>
   );

@@ -5,7 +5,7 @@ import dbConnect from "../../../utils/dbConnect";
 
 dbConnect();
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query } = req;
   const id = query.id;
   const type = query.type;
@@ -70,13 +70,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       try {
         if (type === "pet") {
-          get("pet", formModels.FormPetAdoptionModel);
+          await get("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
-          get("giftaid", formModels.FormGiftAidModel);
+          await get("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
-          get("volunteer", formModels.FormVolunteerModel);
+          await get("volunteer", formModels.FormVolunteerModel);
         } else if (type === "contactus") {
-          get("contactus", formModels.FormContactUsModel);
+          await get("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)
@@ -91,13 +91,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       try {
         if (type === "pet") {
-          put("pet", formModels.FormPetAdoptionModel);
+          await put("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
-          put("giftaid", formModels.FormGiftAidModel);
+          await put("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
-          put("volunteer", formModels.FormVolunteerModel);
+          await put("volunteer", formModels.FormVolunteerModel);
         } else if (type === "contactus") {
-          put("contactus", formModels.FormContactUsModel);
+          await put("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)
@@ -113,13 +113,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "DELETE":
       try {
         if (type === "pet") {
-          del("pet", formModels.FormPetAdoptionModel);
+          await del("pet", formModels.FormPetAdoptionModel);
         } else if (type === "giftaid") {
-          del("giftaid", formModels.FormGiftAidModel);
+          await del("giftaid", formModels.FormGiftAidModel);
         } else if (type === "volunteer") {
-          del("volunteer", formModels.FormVolunteerModel);
+          await del("volunteer", formModels.FormVolunteerModel);
         } else if (type === "contactus") {
-          del("contactus", formModels.FormContactUsModel);
+          await del("contactus", formModels.FormContactUsModel);
         } else {
           res
             .status(404)
@@ -136,4 +136,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(400).json({ success: false });
       break;
   }
-};
+}
+
+export default handler;

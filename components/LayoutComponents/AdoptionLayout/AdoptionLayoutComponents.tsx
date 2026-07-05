@@ -21,50 +21,50 @@ export const AdoptionCard = ({
     <>
       <div className="flex flex-col mb-10 ml-3 mr-3">
         {/* <img className="" src={image} alt="" /> */}
-        <Link href={`/adoption/${id}`}>
-          <div
-            className="w-64 bg-no-repeat bg-cover rounded-xl h-80 cursor-pointer"
-            style={{
-              backgroundImage: `url("${image}")`,
-            }}
-          />
-        </Link>
-        <Link href={`/adoption/${id}`}>
-          <a className="flex justify-center w-full -mt-14">
-            <div className="flex flex-col w-11/12 bg-white border border-gray-300 rounded-md">
-              <span className="pt-3 pb-2 pl-6 pr-6 text-xl font-semibold font-poppins">
-                {name}
-              </span>
-              <span className="pb-2 pl-6 pr-6 text-[#8b3479] text-sm font-normal font-roboto">
-                {type}
-              </span>
-              <div className="flex justify-center w-full">
-                <span className="w-10/12 mb-2 border-b border-gray-100"></span>
+        <Link
+          href={`/adoption/${id}`}
+          className="h-80 w-64 cursor-pointer rounded-xl bg-cover bg-no-repeat"
+          style={{
+            backgroundImage: `url("${image}")`,
+          }}
+        />
+        <Link
+          href={`/adoption/${id}`}
+          className="flex w-full justify-center -mt-14"
+        >
+          <div className="flex flex-col w-11/12 bg-white border border-gray-300 rounded-md">
+            <span className="pt-3 pb-2 pl-6 pr-6 text-xl font-semibold font-poppins">
+              {name}
+            </span>
+            <span className="pb-2 pl-6 pr-6 text-[#8b3479] text-sm font-normal font-roboto">
+              {type}
+            </span>
+            <div className="flex justify-center w-full">
+              <span className="w-10/12 mb-2 border-b border-gray-100"></span>
+            </div>
+            <div className="flex justify-center text-sm font-normal font-roboto">
+              <div className="flex items-center mr-3">
+                <Icon
+                  className="mr-2"
+                  icon={"akar-icons:cake"}
+                  inline={true}
+                  color="#8b3479"
+                />
+                <span>Age:&nbsp;</span>
+                <span>{age}</span>
               </div>
-              <div className="flex justify-center text-sm font-normal font-roboto">
-                <div className="flex items-center mr-3">
-                  <Icon
-                    className="mr-2"
-                    icon={"akar-icons:cake"}
-                    inline={true}
-                    color="#8b3479"
-                  />
-                  <span>Age:&nbsp;</span>
-                  <span>{age}</span>
-                </div>
-                <div className="flex items-center">
-                  <Icon
-                    className="mr-2"
-                    icon={"bi:gender-ambiguous"}
-                    inline={true}
-                    color="#8b3479"
-                  />
-                  <span>Sex:&nbsp;</span>
-                  <span>{sex}</span>
-                </div>
+              <div className="flex items-center">
+                <Icon
+                  className="mr-2"
+                  icon={"bi:gender-ambiguous"}
+                  inline={true}
+                  color="#8b3479"
+                />
+                <span>Sex:&nbsp;</span>
+                <span>{sex}</span>
               </div>
             </div>
-          </a>
+          </div>
         </Link>
       </div>
     </>

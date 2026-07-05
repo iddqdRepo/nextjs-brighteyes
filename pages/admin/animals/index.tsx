@@ -105,13 +105,12 @@ function Index() {
                 <option value="Cat">Cats</option>
               </select>
               {isArchive === "false" ? (
-                <Link href={"/admin/animals/addAnimal"}>
-                  <button
-                    id="AddAnimal"
-                    className="flex p-3 border m-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
-                  >
-                    + Add Animal
-                  </button>
+                <Link
+                  href={"/admin/animals/addAnimal"}
+                  id="AddAnimal"
+                  className="m-2 flex w-56 justify-center rounded-lg border bg-[#8B3479] p-3 text-white hover:bg-[#398092]"
+                >
+                  + Add Animal
                 </Link>
               ) : (
                 <></>

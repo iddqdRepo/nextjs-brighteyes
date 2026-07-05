@@ -31,15 +31,15 @@ function Index({ type }: { type: string }) {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonText, setButtonText] = useState("Submit Form");
+  const initialValues = { ...newAdoptionInitialValues, type };
 
   useEffect(() => {
-    newAdoptionInitialValues.type = type;
     let tempObj: any = {};
     for (const [key, value] of Object.entries(adoptionFormBuilder)) {
       tempObj[key] = flattenNestedAdoptionObjectForFormBuilder(value);
     }
     setToShow({ ...tempObj });
-  }, []);
+  }, [type]);
 
   return (
     <>
@@ -54,7 +54,7 @@ function Index({ type }: { type: string }) {
       <form className="flex flex-col items-center justify-center ">
         <FormPageTitle title={` Adopt a ${type} Form`} />
         <Formik
-          initialValues={newAdoptionInitialValues}
+          initialValues={initialValues}
           validationSchema={
             type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
           }

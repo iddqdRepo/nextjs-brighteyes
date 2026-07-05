@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import Map from "../components/LayoutComponents/HomeLayout/MapComponent/Map";
 import {

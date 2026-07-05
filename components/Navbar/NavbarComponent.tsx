@@ -42,7 +42,7 @@ function NavbarComponent() {
     <>
       <nav className="flex items-center justify-between w-full h-20">
         <div className="flex flex-col justify-end">
-          <Link href="/">
+          <Link href="/" className="block">
             <img
               className="object-cover w-full h-16 cursor-pointer "
               src="/logo-nav.png"

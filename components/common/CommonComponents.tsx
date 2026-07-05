@@ -75,7 +75,11 @@ export const FooterSection = () => {
         </div>
       </div>
       <div className="flex items-center justify-center pb-2 mt-10">
-        <Link href={"https://www.facebook.com/brighteyes.a.s/"}>
+        <a
+          href="https://www.facebook.com/brighteyes.a.s/"
+          rel="noreferrer"
+          target="_blank"
+        >
           <Icon
             className="mr-2 cursor-pointer"
             icon="akar-icons:facebook-fill"
@@ -83,8 +87,12 @@ export const FooterSection = () => {
             width="30"
             height="30"
           />
-        </Link>
-        <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
+        </a>
+        <a
+          href="https://www.instagram.com/brighteyesanimalsanctuary"
+          rel="noreferrer"
+          target="_blank"
+        >
           <Icon
             className="mr-2 cursor-pointer"
             icon="akar-icons:instagram-fill"
@@ -108,18 +116,19 @@ export const Button = ({
   link: string;
 }) => {
   return (
-    <Link href={`${link}`}>
-      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
-        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-          <span className="pr-4">{text}</span>
-          <Icon
-            className=""
-            icon={iconStr ? iconStr : "fa:long-arrow-right"}
-            inline={true}
-            color="white"
-          />
-        </div>
-      </button>
+    <Link
+      href={link}
+      className="mt-5 flex max-w-fit items-center justify-center rounded-full bg-[#8b3479] hover:shadow-inner"
+    >
+      <span className="flex items-center justify-center pb-4 pt-4 pl-9 pr-9 text-sm font-normal text-white font-poppins">
+        <span className="pr-4">{text}</span>
+        <Icon
+          className=""
+          icon={iconStr ? iconStr : "fa:long-arrow-right"}
+          inline={true}
+          color="white"
+        />
+      </span>
     </Link>
   );
 };
@@ -143,18 +152,17 @@ export const ButtonWithQuery = ({
           type: query,
         },
       }}
+      className="mt-5 flex max-w-fit items-center justify-center rounded-full bg-[#8b3479] hover:shadow-inner"
     >
-      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
-        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-          <span className="pr-4">{text}</span>
-          <Icon
-            className=""
-            icon={iconStr ? iconStr : "fa:long-arrow-right"}
-            inline={true}
-            color="white"
-          />
-        </div>
-      </button>
+      <span className="flex items-center justify-center pb-4 pt-4 pl-9 pr-9 text-sm font-normal text-white font-poppins">
+        <span className="pr-4">{text}</span>
+        <Icon
+          className=""
+          icon={iconStr ? iconStr : "fa:long-arrow-right"}
+          inline={true}
+          color="white"
+        />
+      </span>
     </Link>
   );
 };

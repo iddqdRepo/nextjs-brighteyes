@@ -42,6 +42,8 @@ export const revertDataObjectsBackToOriginalFormat = (
   let explodedObject: any = {};
   for (const [key, value] of Object.entries(dataToRevert)) {
     if (typeof value === "object" && !Array.isArray(value)) {
+      explodedObject[key] = explodedObject[key] || {};
+
       for (const [jkey, jvalue] of Object.entries(value as any)) {
         if (jkey.includes(">")) {
           let keyToSplit = jkey.split(">");
@@ -49,7 +51,7 @@ export const revertDataObjectsBackToOriginalFormat = (
           let expandedInnerKey = keyToSplit[1];
           let expandedInnerValue = jvalue;
           explodedObject[key][expandedMainKey] = {
-            ...explodedObject[key][expandedMainKey],
+            ...(explodedObject[key][expandedMainKey] || {}),
             [expandedInnerKey]: expandedInnerValue,
           };
         } else {

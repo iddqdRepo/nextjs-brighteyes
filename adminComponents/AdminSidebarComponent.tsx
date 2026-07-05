@@ -33,27 +33,28 @@ function AdminSidebarComponent(props: any) {
         }
         id={toggle}
       >
-        <Link href={"/admin" + link}>
-          <div className="flex flex-row items-center justify-center w-3/5 lg:justify-start">
-            <Icon
-              id={`icon-${toggle}`}
-              className={
-                toggleSelected === toggle
-                  ? "w-auto h-6 text-white group-hover:text-white"
-                  : "w-auto h-6 text-[#B0B0B8] group-hover:text-white"
-              }
-              icon={icon}
-            />
-            <span
-              className={
-                toggleSelected === toggle
-                  ? "hidden text-white lg:pl-2 lg:text-bold lg:flex"
-                  : "hidden text-gray-600 lg:pl-2 lg:text-bold lg:flex"
-              }
-            >
-              {text}
-            </span>
-          </div>
+        <Link
+          href={"/admin" + link}
+          className="flex w-3/5 flex-row items-center justify-center lg:justify-start"
+        >
+          <Icon
+            id={`icon-${toggle}`}
+            className={
+              toggleSelected === toggle
+                ? "h-6 w-auto text-white group-hover:text-white"
+                : "h-6 w-auto text-[#B0B0B8] group-hover:text-white"
+            }
+            icon={icon}
+          />
+          <span
+            className={
+              toggleSelected === toggle
+                ? "hidden text-white lg:flex lg:pl-2 lg:text-bold"
+                : "hidden text-gray-600 lg:flex lg:pl-2 lg:text-bold"
+            }
+          >
+            {text}
+          </span>
         </Link>
       </div>
     );
@@ -90,14 +91,12 @@ function AdminSidebarComponent(props: any) {
     <div className="flex flex-col min-w-screen md:flex-row">
       <div className="flex min-w-screen ml-1 mt-1 md:flex-col md:items-center md:w-20 md:min-h-screen lg:w-72 bg-white]">
         <div className="flex flex-col items-center py-6 text-base font-extrabold md:mb-10">
-          <Link href={"/admin"}>
-            <a>
-              <img
-                className="hidden lg:flex lg:w-auto lg:h-20"
-                src="/logo-nav.png"
-                alt=""
-              />
-            </a>
+          <Link href={"/admin"} className="block">
+            <img
+              className="hidden lg:flex lg:w-auto lg:h-20"
+              src="/logo-nav.png"
+              alt=""
+            />
           </Link>
         </div>
 

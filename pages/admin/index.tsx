@@ -19,6 +19,24 @@ import {
   SmallCard,
 } from "../../adminComponents/DashboardHome/DashboardHomeLayoutComponents";
 
+const countPetsByStatus = (
+  pets: { data: { type: string; adopted: string }[] } | undefined,
+  type: string,
+  adopted: string
+) => {
+  return (
+    pets?.data.filter((pet) => pet.type === type && pet.adopted === adopted)
+      .length ?? 0
+  );
+};
+
+const countFormsByArchive = (
+  forms: { archive: string }[] | undefined,
+  archived: string
+) => {
+  return forms?.filter((form) => form.archive === archived).length ?? 0;
+};
+
 function Index() {
   const petsData = ["pets", getPets];
   const { isLoading: isPetLoading, data: pets } = useFormsAndPets(petsData);
@@ -39,58 +57,68 @@ function Index() {
   const { isLoading: isContactUsFormsLoading, data: contactUsForms } =
     useFormsAndPets(contactFormType);
 
-  const [dogActiveCount, setDogActiveCount] = useState(LoadingSpinner);
-  const [dogArchiveCount, setDogArchiveCount] = useState(LoadingSpinner);
-  const [catActiveCount, setCatActiveCount] = useState(LoadingSpinner);
-  const [catArchiveCount, setCatArchiveCount] = useState(LoadingSpinner);
-  const [adoptionFormPendingCount, setAdoptionFormPendingCount] =
-    useState(LoadingSpinner);
-  const [giftAidFormPendingCount, setGiftAidFormPendingCount] =
-    useState(LoadingSpinner);
-  const [volunteerFormPendingCount, setVolunteerFormPendingCount] =
-    useState(LoadingSpinner);
-  const [contactUsFormPendingCount, setContactUsFormPendingCount] =
-    useState(LoadingSpinner);
+  const [dogActiveCount, setDogActiveCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [dogArchiveCount, setDogArchiveCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [catActiveCount, setCatActiveCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [catArchiveCount, setCatArchiveCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [adoptionFormPendingCount, setAdoptionFormPendingCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [giftAidFormPendingCount, setGiftAidFormPendingCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [volunteerFormPendingCount, setVolunteerFormPendingCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
+  const [contactUsFormPendingCount, setContactUsFormPendingCount] = useState<
+    number | React.ReactElement
+  >(<LoadingSpinner />);
 
-  const filterPets = (type: string, adopted: string) => {
-    return (
-      pets &&
-      pets.data.filter((pet: { type: string; adopted: string }) => {
-        return pet.type === type && pet.adopted === adopted;
-      }).length
-    );
-  };
-  const filterForms = (type: any, archived: string) => {
-    return type.filter((form: { archive: string }) => {
-      return form.archive === archived;
-    }).length;
-  };
   useEffect(() => {
-    if (!isPetLoading) {
-      setDogActiveCount(filterPets("Dog", "No"));
-      setDogArchiveCount(filterPets("Dog", "Yes"));
-      setCatActiveCount(filterPets("Cat", "No"));
-      setCatArchiveCount(filterPets("Cat", "Yes"));
+    if (!isPetLoading && pets) {
+      setDogActiveCount(countPetsByStatus(pets, "Dog", "No"));
+      setDogArchiveCount(countPetsByStatus(pets, "Dog", "Yes"));
+      setCatActiveCount(countPetsByStatus(pets, "Cat", "No"));
+      setCatArchiveCount(countPetsByStatus(pets, "Cat", "Yes"));
     }
 
     if (!isAdoptionFormsLoading && adoptionForms) {
-      setAdoptionFormPendingCount(filterForms(adoptionForms.data, "No"));
+      setAdoptionFormPendingCount(
+        countFormsByArchive(adoptionForms.data, "No")
+      );
     }
     if (!isGiftAidFormsLoading && giftAidForms) {
-      setGiftAidFormPendingCount(filterForms(giftAidForms.data, "No"));
+      setGiftAidFormPendingCount(countFormsByArchive(giftAidForms.data, "No"));
     }
     if (!isVolunteerFormsLoading && volunteerForms) {
-      setVolunteerFormPendingCount(filterForms(volunteerForms.data, "No"));
+      setVolunteerFormPendingCount(
+        countFormsByArchive(volunteerForms.data, "No")
+      );
     }
     if (!isContactUsFormsLoading && contactUsForms) {
-      setContactUsFormPendingCount(filterForms(contactUsForms.data, "No"));
+      setContactUsFormPendingCount(
+        countFormsByArchive(contactUsForms.data, "No")
+      );
     }
   }, [
+    adoptionForms,
+    contactUsForms,
+    giftAidForms,
     isPetLoading,
     isAdoptionFormsLoading,
     isGiftAidFormsLoading,
     isVolunteerFormsLoading,
     isContactUsFormsLoading,
+    pets,
+    volunteerForms,
   ]);
 
   return (
