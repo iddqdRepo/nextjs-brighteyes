@@ -42,7 +42,7 @@ const RegisterPasskey = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-5 m-2 border rounded-lg">
+    <div className="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm">
       <div className="flex items-center mb-2 text-base font-semibold font-poppins">
         <Icon className="w-auto h-6 mr-2" icon="carbon:fingerprint" />
         Fingerprint / Face ID login

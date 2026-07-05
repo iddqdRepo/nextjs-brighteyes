@@ -32,6 +32,8 @@ async function main() {
   await db.collection("users").insertOne({
     username: TEST_ADMIN.username,
     password: bcrypt.hashSync(TEST_ADMIN.password, 10),
+    //Superuser so the e2e specs can exercise every admin area.
+    role: "superuser",
     authenticators: [],
     createdAt: now,
     updatedAt: now,

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
-import { getAuthUser } from "../../../utils/auth";
+import { FORBIDDEN_MESSAGE, getAdminUser } from "../../../utils/auth";
 import { isDataUri, uploadPetImage } from "../../../utils/cloudinary";
 
 //Only these fields may be set via the API, so a client cannot inject arbitrary
@@ -57,10 +57,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       case "PUT": {
-        if (!getAuthUser(req)) {
+        const user = await getAdminUser(req);
+        if (!user) {
           return res
             .status(401)
             .json({ success: false, message: "Unauthorized" });
+        }
+        if (!user.permissions.animals) {
+          return res
+            .status(403)
+            .json({ success: false, message: FORBIDDEN_MESSAGE });
         }
         const update = pickEditableFields(req.body);
         //Inline base64 images go to Cloudinary; Mongo only stores the URL.
@@ -85,10 +91,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       case "DELETE": {
-        if (!getAuthUser(req)) {
+        //Deleting is permanent (archive is the everyday flow), so it is
+        //reserved for superusers.
+        const user = await getAdminUser(req);
+        if (!user) {
           return res
             .status(401)
             .json({ success: false, message: "Unauthorized" });
+        }
+        if (!user.isSuperuser) {
+          return res
+            .status(403)
+            .json({ success: false, message: FORBIDDEN_MESSAGE });
         }
         const pet = await petModel.deleteOne({ _id: id });
         if (!pet.deletedCount) {

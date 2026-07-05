@@ -1,178 +1,138 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { MobileNavListItem, NavbarListItem } from "./NavbarLayoutComponents";
-import useNavRef from "../../hooks/useNavRef";
-import { NavRefInterface } from "../../interfaces/interfaces";
+
+const NAV_LINKS = [
+  { text: "Home", path: "" },
+  { text: "About", path: "about" },
+  { text: "Adoption", path: "adoption" },
+  { text: "Donate", path: "donate" },
+  { text: "Forms", path: "forms" },
+];
 
 function NavbarComponent() {
-  const navRefs = useNavRef();
-  const defaultNavRef = useRef<null | HTMLUListElement>(null);
-  const mobileNavDropdownRef = useRef<null | HTMLDivElement>(null);
+  const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const hideMobileNav = () => {
-    if (mobileNavDropdownRef.current !== null) {
-      mobileNavDropdownRef.current.classList.toggle("hidden");
+  const isActive = (path: string) => {
+    if (path === "") {
+      return router.pathname === "/";
     }
-  };
-
-  const handleNavPaw = (clickedRef: HTMLDivElement | null) => {
-    if (clickedRef) {
-      Object.entries(navRefs.current).forEach((element) => {
-        if (element[1] === clickedRef) {
-          element[1].className = "";
-        } else {
-          element[1].className = "hidden";
-        }
-      });
-    }
-  };
-
-  const setRefForElement = (
-    suffix: keyof NavRefInterface,
-    element: HTMLDivElement | null
-  ) => {
-    if (navRefs.current[suffix] === null) {
-      navRefs.current[suffix] = element;
-    }
+    return router.pathname.startsWith(`/${path}`);
   };
 
   return (
-    <>
-      <nav className="flex items-center justify-between w-full h-20">
-        <div className="flex flex-col justify-end">
-          <Link href="/">
-            <a className="cursor-pointer">
-              <Image
-                src="/logo-nav.png"
-                alt="Bright Eyes Animal Sanctuary"
-                width={70}
-                height={64}
-              />
-            </a>
-          </Link>
-        </div>
-        <div className="hidden lg:flex">
-          <ul className="flex flex-wrap justify-center">
-            <NavbarListItem
-              path={"/"}
-              text={"Home"}
-              listRef={(e: HTMLDivElement | null) =>
-                setRefForElement("home", e)
-              }
-              onClickFunction={() => handleNavPaw(navRefs.current.home)}
+    <header className="sticky top-0 z-50 bg-white/95 shadow-sm backdrop-blur">
+      <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 lg:px-8">
+        <Link href="/">
+          <a className="flex shrink-0 cursor-pointer items-center gap-2.5">
+            <Image
+              src="/logo-nav.png"
+              alt="Bright Eyes Animal Sanctuary"
+              width={54}
+              height={49}
             />
+            <span className="hidden font-poppins sm:block">
+              <span className="block text-lg font-semibold leading-5 tracking-wide text-brand">
+                BRIGHT EYES
+              </span>
+              <span className="block text-[0.6rem] uppercase tracking-[0.28em] text-gray-500">
+                Animal Sanctuary
+              </span>
+            </span>
+          </a>
+        </Link>
 
+        <ul className="hidden items-center gap-6 lg:flex">
+          {NAV_LINKS.map((link) => (
             <NavbarListItem
-              path={"/about"}
-              text={"About"}
-              listRef={(e: HTMLDivElement | null) =>
-                setRefForElement("about", e)
-              }
-              onClickFunction={() => handleNavPaw(navRefs.current.about)}
+              key={link.text}
+              path={`/${link.path}`}
+              text={link.text}
+              active={isActive(link.path)}
             />
+          ))}
+        </ul>
 
-            <NavbarListItem
-              path={"/adoption"}
-              text={"Adoption"}
-              listRef={(e: HTMLDivElement | null) =>
-                setRefForElement("adoption", e)
-              }
-              onClickFunction={() => handleNavPaw(navRefs.current.adoption)}
+        <div className="hidden items-center gap-3 xl:flex">
+          <div className="flex items-center gap-2.5 rounded-2xl border border-gray-200 py-2 pl-2.5 pr-4 shadow-sm">
+            <Icon
+              icon="akar-icons:location"
+              color="#8b3479"
+              width="20"
+              height="20"
             />
-
-            <NavbarListItem
-              path={"/donate"}
-              text={"Donate"}
-              listRef={(e: HTMLDivElement | null) =>
-                setRefForElement("donate", e)
-              }
-              onClickFunction={() => handleNavPaw(navRefs.current.donate)}
-            />
-
-            <NavbarListItem
-              path={"/forms"}
-              text={"Forms"}
-              listRef={(e: HTMLDivElement | null) =>
-                setRefForElement("forms", e)
-              }
-              onClickFunction={() => handleNavPaw(navRefs.current.forms)}
-            />
-          </ul>
-        </div>
-
-        <div className="justify-between hidden pr-5 lg:flex">
-          <div className="flex items-center justify-center w-48 lg">
-            <div className="flex items-center justify-center w-10 h-10 mr-3 border rounded-lg shadow-xl">
-              <Icon
-                icon="akar-icons:location"
-                color="#8b3479"
-                width="25"
-                height="25"
-              />
-            </div>
-            <span className="flex text-xs font-medium font-poppins">
+            <span className="text-xs font-medium leading-4 font-poppins">
               53 Killymittan Road, <br /> BT94 2FW, Ballinamallard
             </span>
           </div>
-          <div className="flex items-center justify-center w-44">
-            <div className="flex items-center justify-center w-10 h-10 mr-3 border rounded-lg shadow-xl">
-              <Icon
-                icon="carbon:phone-voice"
-                color="#8b3479"
-                width="25"
-                height="25"
-              />
-            </div>
-            <span className="flex text-sm font-medium font-poppins">
+          <div className="flex items-center gap-2.5 rounded-2xl border border-gray-200 py-2.5 pl-2.5 pr-4 shadow-sm">
+            <Icon
+              icon="carbon:phone-voice"
+              color="#8b3479"
+              width="20"
+              height="20"
+            />
+            <span className="text-sm font-medium font-poppins">
               028 66 720078
             </span>
           </div>
         </div>
 
-        <div onClick={hideMobileNav} className="flex mr-10 lg:hidden">
-          <button>
-            <Icon icon="fontisto:nav-icon" color="black" />
-          </button>
-        </div>
+        <button
+          className="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 lg:hidden"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen((open) => !open)}
+        >
+          <Icon
+            icon={mobileOpen ? "akar-icons:cross" : "fontisto:nav-icon"}
+            color="#8b3479"
+            width="18"
+            height="18"
+          />
+        </button>
       </nav>
 
-      <div className="relative z-50 flex w-full">
-        <div
-          ref={mobileNavDropdownRef}
-          className="absolute flex-col hidden w-full bg-white lg:hidden"
-        >
-          <ul ref={defaultNavRef} className="">
-            <MobileNavListItem
-              text={"Home"}
-              path={""}
-              onClickFunction={hideMobileNav}
-            />
-            <MobileNavListItem
-              text={"About"}
-              path={"about"}
-              onClickFunction={hideMobileNav}
-            />
-            <MobileNavListItem
-              text={"Adoption"}
-              path={"adoption"}
-              onClickFunction={hideMobileNav}
-            />
-            <MobileNavListItem
-              text={"Donate"}
-              path={"donate"}
-              onClickFunction={hideMobileNav}
-            />
-            <MobileNavListItem
-              text={"Forms"}
-              path={"forms"}
-              onClickFunction={hideMobileNav}
-            />
+      {mobileOpen && (
+        <div className="absolute left-0 top-20 w-full border-t border-gray-100 bg-white shadow-xl lg:hidden">
+          <ul className="flex flex-col gap-1 p-4">
+            {NAV_LINKS.map((link) => (
+              <MobileNavListItem
+                key={link.text}
+                text={link.text}
+                path={link.path}
+                active={isActive(link.path)}
+                onClickFunction={() => setMobileOpen(false)}
+              />
+            ))}
           </ul>
+          <div className="flex flex-col gap-2 border-t border-gray-100 p-4 text-sm text-gray-700 font-poppins">
+            <div className="flex items-center gap-2.5">
+              <Icon
+                icon="akar-icons:location"
+                color="#8b3479"
+                width="18"
+                height="18"
+              />
+              53 Killymittan Road, BT94 2FW, Ballinamallard
+            </div>
+            <div className="flex items-center gap-2.5">
+              <Icon
+                icon="carbon:phone-voice"
+                color="#8b3479"
+                width="18"
+                height="18"
+              />
+              028 66 720078
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      )}
+    </header>
   );
 }
 

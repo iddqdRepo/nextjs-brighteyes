@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import formModels from "../../../models/formModels";
 import dbConnect from "../../../utils/dbConnect";
-import { getAuthUser } from "../../../utils/auth";
+import { FORBIDDEN_MESSAGE, getAdminUser } from "../../../utils/auth";
 import { notifyFormSubmission } from "../../../utils/notifyFormSubmission";
 
 const modelByType = (type: unknown): Model<any> | null => {
@@ -32,11 +32,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (method) {
       case "GET": {
-        //Admin only: submitted forms contain applicants' personal data.
-        if (!getAuthUser(req)) {
+        //Submitted forms contain applicants' personal data, so reading them
+        //needs the forms permission (not just any admin account).
+        const user = await getAdminUser(req);
+        if (!user) {
           return res
             .status(401)
             .json({ success: false, message: "Unauthorized" });
+        }
+        if (!user.permissions.forms) {
+          return res
+            .status(403)
+            .json({ success: false, message: FORBIDDEN_MESSAGE });
         }
         if (!model) {
           return res

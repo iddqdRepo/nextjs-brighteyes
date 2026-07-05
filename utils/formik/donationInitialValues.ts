@@ -12,9 +12,12 @@ export const donationInitialValues: DonationFormValues = {
     townCity: "",
     postcode: "",
   },
+  //Gift Aid starts pre-selected (it costs the donor nothing and most forget
+  //to add it), but the declaration itself is still an unticked checkbox the
+  //donor must actively confirm. giftAidFuture matches the monthly default.
   giftAid: {
-    wantsGiftAid: false,
-    giftAidFuture: false,
+    wantsGiftAid: true,
+    giftAidFuture: true,
     giftAidPast: false,
     declarationAccepted: false,
   },

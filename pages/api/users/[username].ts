@@ -2,22 +2,22 @@ import { NextApiRequest, NextApiResponse } from "next";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
 import bcrypt from "bcrypt";
-import { requireAuth } from "../../../utils/auth";
+import { AdminUser, requireSuperuser, toAdminUser } from "../../../utils/auth";
+import { parseAccessFields } from "../../../utils/userAccess";
 
-//Only username/password may be changed, and a new password is always hashed
-//so a plaintext password can never be written to the database.
-const buildUserUpdate = (body: Record<string, unknown> = {}) => {
-  const update: Record<string, unknown> = {};
-  if (typeof body.username === "string" && body.username) {
-    update.username = body.username;
-  }
-  if (typeof body.password === "string" && body.password) {
-    update.password = bcrypt.hashSync(body.password, 10);
-  }
-  return update;
-};
+//Superusers counted straight from the database; accounts with no role predate
+//roles and have always had full access, so they count too.
+const countSuperusers = () =>
+  userModel.countDocuments({ role: { $ne: "staff" } });
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+//Team management is superuser-only. Everything here guards against the team
+//locking itself out: you cannot remove or demote your own account, nor the
+//last remaining superuser.
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  requester: AdminUser
+) => {
   const { method, query } = req;
   const passedInUser = query.username;
 
@@ -43,7 +43,56 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       case "PUT": {
-        const update = buildUserUpdate(req.body);
+        const body = req.body || {};
+        const update: Record<string, unknown> = {};
+
+        //A new password is always hashed, so a plaintext password can never
+        //be written to the database.
+        if (typeof body.password === "string" && body.password) {
+          update.password = bcrypt.hashSync(body.password, 10);
+        }
+
+        if (body.role !== undefined || body.permissions !== undefined) {
+          const access = parseAccessFields(body);
+          if (!access) {
+            return res.status(400).json({
+              success: false,
+              message: "role must be 'superuser' or 'staff'",
+            });
+          }
+
+          if (access.role === "staff") {
+            if (passedInUser === requester.username) {
+              return res.status(400).json({
+                success: false,
+                message: "You can't remove your own superuser access.",
+              });
+            }
+            const target = await userModel
+              .findOne({ username: passedInUser })
+              .lean<{ username: string; role?: string } | null>();
+            if (
+              target &&
+              toAdminUser(target).isSuperuser &&
+              (await countSuperusers()) <= 1
+            ) {
+              return res.status(400).json({
+                success: false,
+                message: "The team needs at least one superuser.",
+              });
+            }
+            update.permissions = access.permissions;
+          }
+          update.role = access.role;
+        }
+
+        if (Object.keys(update).length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "Nothing to update",
+          });
+        }
+
         const user = await userModel.findOneAndUpdate(
           { username: passedInUser },
           update,
@@ -63,13 +112,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       case "DELETE": {
-        const user = await userModel.deleteOne({ username: passedInUser });
-        if (!user.deletedCount) {
+        if (passedInUser === requester.username) {
+          return res.status(400).json({
+            success: false,
+            message: "You can't remove your own account.",
+          });
+        }
+
+        const target = await userModel
+          .findOne({ username: passedInUser })
+          .lean<{ username: string; role?: string } | null>();
+        if (!target) {
           return res.status(404).json({
             success: false,
             message: `No user with username of ${passedInUser} exists`,
           });
         }
+        if (toAdminUser(target).isSuperuser && (await countSuperusers()) <= 1) {
+          return res.status(400).json({
+            success: false,
+            message: "The team needs at least one superuser.",
+          });
+        }
+
+        await userModel.deleteOne({ username: passedInUser });
         return res.status(200).json({
           success: true,
           message: `user ${passedInUser} successfully deleted`,
@@ -91,4 +157,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default requireAuth(handler);
+export default requireSuperuser(handler);

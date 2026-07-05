@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import formModels from "../../../models/formModels";
 import dbConnect from "../../../utils/dbConnect";
-import { getAuthUser } from "../../../utils/auth";
+import { FORBIDDEN_MESSAGE, getAdminUser } from "../../../utils/auth";
 
 const modelByType = (type: unknown): Model<any> | null => {
   switch (type) {
@@ -49,9 +49,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = query.id;
   const type = query.type;
 
-  //Every operation on a single submission is admin only.
-  if (!getAuthUser(req)) {
+  //Every operation on a single submission needs the forms permission, since
+  //submissions contain applicants' personal data. Deleting is permanent
+  //(archive is the everyday flow), so it is reserved for superusers.
+  const user = await getAdminUser(req);
+  if (!user) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+  if (!user.permissions.forms) {
+    return res.status(403).json({ success: false, message: FORBIDDEN_MESSAGE });
+  }
+  if (method === "DELETE" && !user.isSuperuser) {
+    return res.status(403).json({ success: false, message: FORBIDDEN_MESSAGE });
   }
 
   const model = modelByType(type);

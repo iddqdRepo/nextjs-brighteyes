@@ -2,103 +2,143 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import React from "react";
 
-export const AdoptionCard = ({
-  name,
-  type,
-  age,
-  sex,
-  image,
-  id,
-}: {
-  name: string;
+export interface AnimalCardData {
+  _id: string;
   type: string;
+  name: string;
   age: string;
-  sex: string;
-  image?: string;
-  id: string;
-}) => {
-  return (
-    <>
-      <div className="flex flex-col mb-10 ml-3 mr-3">
-        {/* <img className="" src={image} alt="" /> */}
-        <Link href={`/adoption/${id}`}>
-          <div
-            className="w-64 bg-no-repeat bg-cover rounded-xl h-80 cursor-pointer"
-            style={{
-              backgroundImage: `url("${image}")`,
-            }}
-          />
-        </Link>
-        <Link href={`/adoption/${id}`}>
-          <a className="flex justify-center w-full -mt-14">
-            <div className="flex flex-col w-11/12 bg-white border border-gray-300 rounded-md">
-              <span className="pt-3 pb-2 pl-6 pr-6 text-xl font-semibold font-poppins">
-                {name}
-              </span>
-              <span className="pb-2 pl-6 pr-6 text-[#8b3479] text-sm font-normal font-roboto">
-                {type}
-              </span>
-              <div className="flex justify-center w-full">
-                <span className="w-10/12 mb-2 border-b border-gray-100"></span>
-              </div>
-              <div className="flex justify-center text-sm font-normal font-roboto">
-                <div className="flex items-center mr-3">
-                  <Icon
-                    className="mr-2"
-                    icon={"akar-icons:cake"}
-                    inline={true}
-                    color="#8b3479"
-                  />
-                  <span>Age:&nbsp;</span>
-                  <span>{age}</span>
-                </div>
-                <div className="flex items-center">
-                  <Icon
-                    className="mr-2"
-                    icon={"bi:gender-ambiguous"}
-                    inline={true}
-                    color="#8b3479"
-                  />
-                  <span>Sex:&nbsp;</span>
-                  <span>{sex}</span>
-                </div>
-              </div>
-            </div>
-          </a>
-        </Link>
-      </div>
-    </>
-  );
-};
+  sex?: string;
+  yearsOrMonths: string;
+  breed: string;
+  size: string;
+  image: string;
+  suitableForChildren: string;
+  suitableForAnimals: string;
+  adopted: string;
+  desc: string;
+}
 
-export const AdoptionIconContainer = ({
-  children,
+export const ADOPTION_CRITERIA = [
+  { icon: "mdi:fence", label: "Enclosed Garden" },
+  { icon: "mdi:home-heart", label: "Sleeping Indoors" },
+  { icon: "mdi:home-search-outline", label: "Home Check" },
+  { icon: "mdi:file-document-edit-outline", label: "Form Required" },
+  { icon: "mdi:key-outline", label: "Landlord Permission" },
+  { icon: "mdi:heart-plus-outline", label: "Pets Must Be Neutered" },
+];
+
+export const CriteriaItem = ({
+  icon,
+  label,
 }: {
-  children: React.ReactNode;
+  icon: string;
+  label: string;
 }) => {
   return (
-    <div className="flex flex-col flex-wrap pt-10 sm:flex-nowrap lg:items-start w-fit">
-      {children}
+    <div className="flex flex-col items-center gap-3 px-2 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-brand-200 bg-white">
+        <Icon icon={icon} color="#8b3479" width="30" height="30" />
+      </div>
+      <span className="text-sm font-medium leading-5 text-gray-800 font-poppins">
+        {label}
+      </span>
     </div>
   );
 };
 
-export const IconText = ({ text }: { text: string }) => {
+export const CriteriaTick = ({ label }: { label: string }) => {
   return (
-    <>
-      <div className="flex flex-col flex-wrap items-center justify-center pb-8 pl-2 pr-2 lg:flex-row">
-        <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center">
-          <Icon
-            color="#ffffff"
-            icon="charm:circle-tick"
-            width="40"
-            height="40"
-          />
-        </div>
-        <span className="font-normal sm:pl-6 text-md font-poppins xl:text-2xl">
-          {text}
-        </span>
+    <div className="flex items-center gap-3">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand">
+        <Icon color="#ffffff" icon="charm:circle-tick" width="18" height="18" />
       </div>
-    </>
+      <span className="text-sm font-medium text-gray-800 sm:text-base font-poppins">
+        {label}
+      </span>
+    </div>
+  );
+};
+
+export const FilterChip = ({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-full px-6 py-2.5 text-sm font-medium transition font-poppins ${
+        selected
+          ? "bg-brand text-white shadow-lg shadow-brand/25"
+          : "border border-gray-200 bg-white text-gray-700 hover:border-brand hover:text-brand"
+      }`}
+    >
+      {label}
+    </button>
+  );
+};
+
+// Shows the full photo un-cropped whatever its aspect ratio; a blurred copy
+// of the same photo fills the frame behind it so there are no empty bars.
+// Admin-uploaded photos vary wildly in shape, so never crop with bg-cover.
+export const PetPhoto = ({
+  image,
+  className,
+}: {
+  image: string;
+  className?: string;
+}) => {
+  return (
+    <div className={`relative overflow-hidden ${className ? className : ""}`}>
+      <div
+        className="absolute inset-0 scale-110 bg-cover bg-center blur-lg"
+        style={{ backgroundImage: `url("${image}")` }}
+      />
+      <div
+        className="relative h-full w-full bg-contain bg-center bg-no-repeat"
+        style={{ backgroundImage: `url("${image}")` }}
+      />
+    </div>
+  );
+};
+
+export const AnimalCard = ({ pet }: { pet: AnimalCardData }) => {
+  return (
+    <div className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl">
+      <Link href={`/adoption/${pet._id}`}>
+        <a className="flex h-full flex-col">
+          <PetPhoto image={pet.image} className="h-56 w-full" />
+          <div className="flex grow flex-col p-4">
+            <span className="text-lg font-semibold text-gray-900 font-poppins">
+              {pet.name}
+            </span>
+            <span className="text-sm font-medium text-brand font-poppins">
+              {pet.breed}
+            </span>
+            <div className="mt-3 flex items-center gap-4 border-t border-gray-100 pt-3 text-sm text-gray-600 font-roboto">
+              <span className="flex items-center gap-1.5">
+                <Icon icon="akar-icons:cake" inline={true} color="#8b3479" />
+                {pet.age} {pet.yearsOrMonths}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Icon
+                  icon="bi:gender-ambiguous"
+                  inline={true}
+                  color="#8b3479"
+                />
+                {pet.sex ? pet.sex : "N/A"}
+              </span>
+            </div>
+            <span className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand py-2 text-sm font-medium text-brand transition group-hover:bg-brand group-hover:text-white font-poppins">
+              Meet {pet.name}
+            </span>
+          </div>
+        </a>
+      </Link>
+    </div>
   );
 };

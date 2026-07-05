@@ -2,16 +2,34 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import "@testing-library/jest-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Home from "../../pages/index";
 import * as nextRouter from "next/router";
 import { jest } from "@jest/globals";
 
 nextRouter.useRouter = jest.fn();
-nextRouter.useRouter.mockImplementation(() => ({ route: "/" }));
+nextRouter.useRouter.mockImplementation(() => ({
+  route: "/",
+  pathname: "/",
+  query: {},
+  isReady: true,
+  push: jest.fn(),
+}));
+
+const renderHome = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <Home />
+    </QueryClientProvider>
+  );
+};
 
 describe("Home", () => {
   it("must contain a contact form on the homepage", () => {
-    render(<Home />);
+    renderHome();
     const nameInput = screen.getByRole("textbox", {
       name: /Name/i,
     });

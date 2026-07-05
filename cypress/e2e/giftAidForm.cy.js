@@ -18,17 +18,15 @@ describe("GiftAid Form", () => {
   });
 
   it("shows correct error messages all input fields", () => {
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        if ($el[0].children[1].type === "text") {
-          let input = cy.wrap($el[0]).find("input");
-          input.click().blur();
-          cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
-          input.type("h").blur();
-          cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Too Short!");
-        }
+    cy.get(".form-field").each(($el) => {
+      if ($el[0].children[1].type === "text") {
+        let input = cy.wrap($el[0]).find("input");
+        input.click().blur();
+        cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
+        input.type("h").blur();
+        cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Too Short!");
       }
-    );
+    });
   });
   it("should allow form submit the form when all inputs are entered", () => {
     cy.visit("http://localhost:3000/forms/giftAidForm");
@@ -45,14 +43,12 @@ describe("GiftAid Form", () => {
       }
     ).as("addForm");
 
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        if ($el[0].children[1].type === "text") {
-          let input = cy.wrap($el[0]).find("input");
-          input.click().type("hi").blur();
-        }
+    cy.get(".form-field").each(($el) => {
+      if ($el[0].children[1].type === "text") {
+        let input = cy.wrap($el[0]).find("input");
+        input.click().type("hi").blur();
       }
-    );
+    });
 
     cy.get("button[type=submit]").click();
     cy.wait("@addForm");

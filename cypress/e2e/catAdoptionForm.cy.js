@@ -5,7 +5,7 @@ describe("Cat Adoption Form", () => {
   // });
   it("shows correct cat specific fields", () => {
     cy.visit("http://localhost:3000/forms/adoptionForm?type=Cat");
-    cy.contains("Adopt a Cat Form");
+    cy.contains("Adopt a Cat");
     cy.contains("Cat Questions");
     cy.contains("Name of cat (optional)");
     cy.contains("What AGE of cat are you looking for?");
@@ -25,54 +25,46 @@ describe("Cat Adoption Form", () => {
   });
 
   it("shows correct error messages all input fields", () => {
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        const optional = {
-          "catMatchingQuestions.catName": true,
-          "homeQuestions.childrenAges": true,
-        };
-        if ($el[0].children[1].type === "email") {
-          let input = cy.wrap($el[0]).find("input");
+    cy.get(".form-field").each(($el) => {
+      const optional = {
+        "catMatchingQuestions.catName": true,
+        "homeQuestions.childrenAges": true,
+      };
+      if ($el[0].children[1].type === "email") {
+        let input = cy.wrap($el[0]).find("input");
+        input.click().blur();
+        cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
+        input.type("h").blur();
+        cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Invalid email");
+      }
+
+      if ($el[0].children[1].type === "text") {
+        let input = cy.wrap($el[0]).find("input");
+        if (!optional[$el.children()[1].name]) {
+          console.log(
+            "!optional[$el.children()[1].name]",
+            $el.children()[1].name
+          );
           input.click().blur();
           cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
           input.type("h").blur();
-          cy.wrap($el[0])
-            .find("[id^=err-]")
-            .should("have.text", "Invalid email");
-        }
-
-        if ($el[0].children[1].type === "text") {
-          let input = cy.wrap($el[0]).find("input");
-          if (!optional[$el.children()[1].name]) {
-            console.log(
-              "!optional[$el.children()[1].name]",
-              $el.children()[1].name
-            );
-            input.click().blur();
-            cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
-            input.type("h").blur();
-            cy.wrap($el[0])
-              .find("[id^=err-]")
-              .should("have.text", "Too Short!");
-          }
+          cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Too Short!");
         }
       }
-    );
+    });
   });
 
   it("shows correct error messages all select fields", () => {
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        const optional = { "hearAboutUsInfo.hearAboutUs": true };
+    cy.get(".form-field").each(($el) => {
+      const optional = { "hearAboutUsInfo.hearAboutUs": true };
 
-        if ($el[0].children[1].localName === "select") {
-          if (!optional[$el.children()[1].name]) {
-            cy.wrap($el).find("select").select("Select").blur();
-            cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
-          }
+      if ($el[0].children[1].localName === "select") {
+        if (!optional[$el.children()[1].name]) {
+          cy.wrap($el).find("select").select("Select").blur();
+          cy.wrap($el[0]).find("[id^=err-]").should("have.text", "Required");
         }
       }
-    );
+    });
   });
 
   it("exposes correct fields on selecting specific values - Home Questions", () => {
@@ -176,49 +168,43 @@ describe("Cat Adoption Form", () => {
     ).as("addForm");
 
     //^Select all the dropdown fields so they are not "reqired"
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        if ($el[0].children[1].type === "select-one") {
-          let input = cy.wrap($el[0]).find("select");
-          input.select(1).blur();
-        }
+    cy.get(".form-field").each(($el) => {
+      if ($el[0].children[1].type === "select-one") {
+        let input = cy.wrap($el[0]).find("select");
+        input.select(1).blur();
       }
-    );
+    });
     //^ Above selecton exposes a field, so this is to select the exposed fields
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        if ($el[0].children[1].type === "select-one") {
-          let input = cy.wrap($el[0]).find("select");
-          input.select(1).blur();
-        }
+    cy.get(".form-field").each(($el) => {
+      if ($el[0].children[1].type === "select-one") {
+        let input = cy.wrap($el[0]).find("select");
+        input.select(1).blur();
       }
-    );
+    });
 
     //^Finally type into all the input fields, text boxes and select the final exposed select fields
-    cy.get(".flex.flex-col.items-center.justify-end.mb-4.ml-1.mr-1").each(
-      ($el) => {
-        const optional = {
-          "dogMatchingQuestions.dogName": true,
-          "homeQuestions.childrenAges": true,
-        };
+    cy.get(".form-field").each(($el) => {
+      const optional = {
+        "dogMatchingQuestions.dogName": true,
+        "homeQuestions.childrenAges": true,
+      };
 
-        if ($el[0].children[1].type === "email") {
-          let input = cy.wrap($el[0]).find("input");
-          input.type("hh@hh.com").blur();
-        }
+      if ($el[0].children[1].type === "email") {
+        let input = cy.wrap($el[0]).find("input");
+        input.type("hh@hh.com").blur();
+      }
 
-        if ($el[0].children[1].type === "text") {
-          let input = cy.wrap($el[0]).find("input");
-          if (!optional[$el.children()[1].name]) {
-            input.type("hh").blur();
-          }
-        }
-        if ($el[0].children[1].type === "select-one") {
-          let input = cy.wrap($el[0]).find("select");
-          input.select(1).blur();
+      if ($el[0].children[1].type === "text") {
+        let input = cy.wrap($el[0]).find("input");
+        if (!optional[$el.children()[1].name]) {
+          input.type("hh").blur();
         }
       }
-    );
+      if ($el[0].children[1].type === "select-one") {
+        let input = cy.wrap($el[0]).find("select");
+        input.select(1).blur();
+      }
+    });
     cy.get("button[type=submit]").click();
     cy.wait("@addForm");
     cy.contains("Submitted form");

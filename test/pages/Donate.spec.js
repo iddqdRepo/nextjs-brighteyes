@@ -7,7 +7,13 @@ import Donate from "../../pages/donate";
 import { jest } from "@jest/globals";
 
 nextRouter.useRouter = jest.fn();
-nextRouter.useRouter.mockImplementation(() => ({ route: "/donate" }));
+nextRouter.useRouter.mockImplementation(() => ({
+  route: "/donate",
+  pathname: "/donate",
+  query: {},
+  isReady: true,
+  push: jest.fn(),
+}));
 
 describe("Donate", () => {
   test("donation page shows the secure card payment CTA", () => {

@@ -6,14 +6,16 @@ import {
   ContactUsFormInterface,
 } from "../interfaces/interfaces";
 
-export const useFormsAndPets = (formType: any) => {
+//Pass enabled=false to skip fetching entirely, e.g. when the signed-in admin
+//doesn't have permission for the data and the request would only 403.
+export const useFormsAndPets = (formType: any, enabled: boolean = true) => {
   const queryClient = useQueryClient();
   const [queryKey, getForms, updateForm, deleteForm] = formType;
   const {
     isLoading,
     data,
   }: { isLoading: boolean; data: { success: boolean; data: any } | undefined } =
-    useQuery(queryKey, getForms);
+    useQuery(queryKey, getForms, { enabled });
   const deleteFormMutation = useMutation(
     async (id: string) => {
       await deleteForm(id);

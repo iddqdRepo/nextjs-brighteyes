@@ -19,15 +19,18 @@ import formModels from "../../../../models/formModels";
 import dbConnect from "../../../../utils/dbConnect";
 import titleMap from "../../../../utils/mappingTitles";
 import { stringifyIdsAndDates } from "../../../../utils/stringifyIdsAndDates";
+import { AdminUser, gateAdminPage } from "../../../../utils/auth";
 
 function Index({
   form,
+  currentUser,
 }: {
   form:
     | PetAdoptionFormInterface[]
     | GiftaidFormInterface[]
     | VolunteerFormInterface[]
     | ContactUsFormInterface[];
+  currentUser: AdminUser;
 }) {
   const FieldAndAnswer = ({
     labelText,
@@ -57,7 +60,7 @@ function Index({
         metaContent={"Admin View Form, Bright Eyes"}
         linkHref={"/admin/forms/"}
       />
-      <AdminSidebarComponent highlighted="">
+      <AdminSidebarComponent highlighted="" currentUser={currentUser}>
         <PageContainerComponent>
           <PageHeader>
             {form[0].type + " Form for " + form[0].aboutQuestions.name}
@@ -138,7 +141,17 @@ export default Index;
 //Rendered at request time (never at build time): submitted forms hold
 //applicants' personal data, which must not be baked into build artifacts.
 //The middleware's JWT check still gates every request to /admin pages.
-export async function getServerSideProps(context: { params: { id: string } }) {
+export async function getServerSideProps(context: {
+  params: { id: string };
+  req: { cookies?: Partial<{ [key: string]: string }> };
+}) {
+  //Submitted forms contain applicants' personal data, so viewing one needs
+  //the forms permission.
+  const gate = await gateAdminPage(context.req, "forms");
+  if (gate.redirect) {
+    return gate.redirect;
+  }
+
   await dbConnect();
   const id = context.params.id;
   let form:
@@ -175,6 +188,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
   return {
     props: {
       form,
+      currentUser: gate.user,
     },
   };
 }

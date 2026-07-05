@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { Icon } from "@iconify/react";
 import AdminSidebarComponent from "../../adminComponents/AdminSidebarComponent";
 import {
+  AdminCard,
   AdminHeadTag,
+  AdminStatCard,
   PageContainerComponent,
+  TableComponent,
+  TableData,
+  TableHeadMap,
 } from "../../adminComponents/commonAdminComponents";
 import {
   getPetForms,
@@ -11,205 +19,384 @@ import {
   getContactUsForms,
 } from "../../routes/formRoutes";
 import { getPets } from "../../routes/petRoutes";
-import { Icon } from "@iconify/react";
 import { useFormsAndPets } from "../../hooks/useFormAndPets";
-import {
-  LoadingSpinner,
-  BigCard,
-  SmallCard,
-} from "../../adminComponents/DashboardHome/DashboardHomeLayoutComponents";
+import { LoadingSpinner } from "../../adminComponents/DashboardHome/DashboardHomeLayoutComponents";
 import RegisterPasskey from "../../adminComponents/RegisterPasskey";
+import DonationModel from "../../models/donationModel";
+import dbConnect from "../../utils/dbConnect";
+import { AdminUser, gateAdminPage } from "../../utils/auth";
 
-function Index() {
+const currencyFormatter = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+});
+
+interface DonationSummary {
+  totalAmount: number;
+  monthAmount: number;
+  totalCount: number;
+  giftAidCount: number;
+}
+
+const FORM_TYPE_LABELS: { [key: string]: string } = {
+  Dog: "Dog Adoption",
+  Cat: "Cat Adoption",
+  giftAid: "Gift Aid",
+  volunteer: "Volunteer",
+  contactUs: "Message",
+};
+
+interface RecentForm {
+  _id?: string;
+  type: string;
+  archive: string;
+  updatedAt?: string;
+  aboutQuestions: { name: string };
+}
+
+function Index({
+  donationSummary,
+  currentUser,
+}: {
+  donationSummary: DonationSummary | null;
+  currentUser: AdminUser;
+}) {
+  //Sections the signed-in admin can't access are hidden entirely, and their
+  //data is never requested (the API would refuse it anyway).
+  const canSeeForms = currentUser.permissions.forms;
+  const canSeeDonations = currentUser.permissions.donations;
+
   const petsData = ["pets", getPets];
   const { isLoading: isPetLoading, data: pets } = useFormsAndPets(petsData);
 
   const petFormType = ["petForms", getPetForms];
   const { isLoading: isAdoptionFormsLoading, data: adoptionForms } =
-    useFormsAndPets(petFormType);
+    useFormsAndPets(petFormType, canSeeForms);
 
   const giftAidFormType = ["giftAidForms", getGiftAidForms];
   const { isLoading: isGiftAidFormsLoading, data: giftAidForms } =
-    useFormsAndPets(giftAidFormType);
+    useFormsAndPets(giftAidFormType, canSeeForms);
 
   const volunteerFormType = ["volunteerForms", getVolunteerForms];
   const { isLoading: isVolunteerFormsLoading, data: volunteerForms } =
-    useFormsAndPets(volunteerFormType);
+    useFormsAndPets(volunteerFormType, canSeeForms);
 
   const contactFormType = ["contactForms", getContactUsForms];
   const { isLoading: isContactUsFormsLoading, data: contactUsForms } =
-    useFormsAndPets(contactFormType);
+    useFormsAndPets(contactFormType, canSeeForms);
 
-  const [dogActiveCount, setDogActiveCount] = useState(LoadingSpinner);
-  const [dogArchiveCount, setDogArchiveCount] = useState(LoadingSpinner);
-  const [catActiveCount, setCatActiveCount] = useState(LoadingSpinner);
-  const [catArchiveCount, setCatArchiveCount] = useState(LoadingSpinner);
-  const [adoptionFormPendingCount, setAdoptionFormPendingCount] =
-    useState(LoadingSpinner);
-  const [giftAidFormPendingCount, setGiftAidFormPendingCount] =
-    useState(LoadingSpinner);
-  const [volunteerFormPendingCount, setVolunteerFormPendingCount] =
-    useState(LoadingSpinner);
-  const [contactUsFormPendingCount, setContactUsFormPendingCount] =
-    useState(LoadingSpinner);
+  const countPets = (type: string, adopted: string) =>
+    pets?.data
+      ? pets.data.filter(
+          (pet: { type: string; adopted: string }) =>
+            pet.type === type && pet.adopted === adopted
+        ).length
+      : 0;
 
-  useEffect(() => {
-    if (!isPetLoading && pets?.data) {
-      setDogActiveCount(
-        pets.data.filter((pet: { type: string; adopted: string }) => {
-          return pet.type === "Dog" && pet.adopted === "No";
-        }).length
-      );
-      setDogArchiveCount(
-        pets.data.filter((pet: { type: string; adopted: string }) => {
-          return pet.type === "Dog" && pet.adopted === "Yes";
-        }).length
-      );
-      setCatActiveCount(
-        pets.data.filter((pet: { type: string; adopted: string }) => {
-          return pet.type === "Cat" && pet.adopted === "No";
-        }).length
-      );
-      setCatArchiveCount(
-        pets.data.filter((pet: { type: string; adopted: string }) => {
-          return pet.type === "Cat" && pet.adopted === "Yes";
-        }).length
-      );
-    }
+  const countPending = (forms: any) =>
+    forms?.data
+      ? forms.data.filter((form: { archive: string }) => form.archive === "No")
+          .length
+      : 0;
 
-    if (!isAdoptionFormsLoading && adoptionForms) {
-      setAdoptionFormPendingCount(
-        adoptionForms.data.filter((form: { archive: string }) => {
-          return form.archive === "No";
-        }).length
-      );
-    }
-    if (!isGiftAidFormsLoading && giftAidForms) {
-      setGiftAidFormPendingCount(
-        giftAidForms.data.filter((form: { archive: string }) => {
-          return form.archive === "No";
-        }).length
-      );
-    }
-    if (!isVolunteerFormsLoading && volunteerForms) {
-      setVolunteerFormPendingCount(
-        volunteerForms.data.filter((form: { archive: string }) => {
-          return form.archive === "No";
-        }).length
-      );
-    }
-    if (!isContactUsFormsLoading && contactUsForms) {
-      setContactUsFormPendingCount(
-        contactUsForms.data.filter((form: { archive: string }) => {
-          return form.archive === "No";
-        }).length
-      );
-    }
-  }, [
-    pets,
-    isPetLoading,
-    adoptionForms,
-    isAdoptionFormsLoading,
-    giftAidForms,
-    isGiftAidFormsLoading,
-    volunteerForms,
-    isVolunteerFormsLoading,
-    contactUsForms,
-    isContactUsFormsLoading,
-  ]);
+  const recentForms: RecentForm[] = [
+    ...(adoptionForms?.data ?? []),
+    ...(giftAidForms?.data ?? []),
+    ...(volunteerForms?.data ?? []),
+    ...(contactUsForms?.data ?? []),
+  ]
+    .filter((form: RecentForm) => form.archive === "No")
+    .sort(
+      (a: RecentForm, b: RecentForm) =>
+        new Date(b.updatedAt ?? 0).getTime() -
+        new Date(a.updatedAt ?? 0).getTime()
+    )
+    .slice(0, 6);
+
+  const anyFormsLoading =
+    isAdoptionFormsLoading ||
+    isGiftAidFormsLoading ||
+    isVolunteerFormsLoading ||
+    isContactUsFormsLoading;
 
   return (
     <>
       <AdminHeadTag
         title={"Dashboard"}
-        metaContent={"Admin add a new animal, Bright Eyes"}
+        metaContent={"Admin dashboard, Bright Eyes"}
         linkHref={"/admin"}
       />
 
-      <AdminSidebarComponent highlighted="Dashboard">
+      <AdminSidebarComponent highlighted="Dashboard" currentUser={currentUser}>
         <PageContainerComponent>
-          <div className="flex items-center py-3 pl-5 text-lg font-semibold">
-            Bright Eyes Dashboard
+          <div className="pt-6">
+            <div className="flex items-center gap-2 text-2xl font-semibold text-gray-900 sm:text-3xl font-poppins">
+              Welcome back
+              <Icon
+                icon="foundation:paw"
+                color="#8b3479"
+                width="20"
+                height="20"
+              />
+            </div>
+            <p className="mt-1 text-sm text-gray-500 font-poppins">
+              Here&apos;s what&apos;s happening at Bright Eyes today.
+            </p>
           </div>
-          <div className="border-t-2 border-[#8B3479] w-full "></div>
-          <div className="flex flex-col items-center w-full mt-3 ">
-            <div className="flex flex-wrap justify-center w-full mb-4 md:justify-center">
-              <BigCard
-                header="Unread Messages"
-                data={
+
+          {canSeeForms && (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <AdminStatCard
+                icon="carbon:chat"
+                label="Unread Messages"
+                value={
                   !isContactUsFormsLoading ? (
-                    contactUsFormPendingCount
+                    countPending(contactUsForms)
                   ) : (
                     <LoadingSpinner />
                   )
                 }
+                link="/admin/forms?archive=false"
+                linkText="View messages"
               />
-              <BigCard
-                header="Adoption Forms"
-                data={
+              <AdminStatCard
+                icon="carbon:document"
+                label="Pending Adoption Forms"
+                value={
                   !isAdoptionFormsLoading ? (
-                    adoptionFormPendingCount
+                    countPending(adoptionForms)
                   ) : (
                     <LoadingSpinner />
                   )
                 }
+                link="/admin/forms?archive=false"
+                linkText="View adoption forms"
               />
-              <BigCard
-                header="GiftAid Forms"
-                data={
+              <AdminStatCard
+                icon="akar-icons:gift"
+                label="Pending Gift Aid Forms"
+                value={
                   !isGiftAidFormsLoading ? (
-                    giftAidFormPendingCount
+                    countPending(giftAidForms)
                   ) : (
                     <LoadingSpinner />
                   )
                 }
+                link="/admin/forms?archive=false"
+                linkText="View gift aid forms"
               />
-              <BigCard
-                header="Volunteer Forms"
-                data={
+              <AdminStatCard
+                icon="carbon:person-favorite"
+                label="Pending Volunteer Forms"
+                value={
                   !isVolunteerFormsLoading ? (
-                    volunteerFormPendingCount
+                    countPending(volunteerForms)
                   ) : (
                     <LoadingSpinner />
                   )
                 }
+                link="/admin/forms?archive=false"
+                linkText="View volunteer forms"
               />
             </div>
-            <div className="flex flex-col items-center w-full mb-10 md:justify-center">
-              <div className="flex flex-col items-center p-5 mb-2 rounded-lg xl:flex-col">
-                <Icon
-                  className="w-auto h-20 mb-3 text-[#B0B0B8] group-hover:text-white"
-                  icon="cil:dog"
-                />
-                <div className="flex flex-col lg:flex-row">
-                  <SmallCard
-                    header="Active Dogs"
-                    data={!isPetLoading ? dogActiveCount : <LoadingSpinner />}
-                  />
-                  <SmallCard
-                    header="Adopted Dogs"
-                    data={!isPetLoading ? dogArchiveCount : <LoadingSpinner />}
-                  />
+          )}
+
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <AdminStatCard
+              tint="cream"
+              icon="cil:dog"
+              label="Active Dogs"
+              value={
+                !isPetLoading ? countPets("Dog", "No") : <LoadingSpinner />
+              }
+              link="/admin/animals?archive=false"
+              linkText="View all dogs"
+            />
+            <AdminStatCard
+              tint="blush"
+              icon="mdi:paw"
+              label="Adopted Dogs"
+              value={
+                !isPetLoading ? countPets("Dog", "Yes") : <LoadingSpinner />
+              }
+              link="/admin/animals?archive=true"
+              linkText="View adopted dogs"
+            />
+            <AdminStatCard
+              tint="cream"
+              icon="cil:cat"
+              label="Active Cats"
+              value={
+                !isPetLoading ? countPets("Cat", "No") : <LoadingSpinner />
+              }
+              link="/admin/animals?archive=false"
+              linkText="View all cats"
+            />
+            <AdminStatCard
+              tint="blush"
+              icon="mdi:paw"
+              label="Adopted Cats"
+              value={
+                !isPetLoading ? countPets("Cat", "Yes") : <LoadingSpinner />
+              }
+              link="/admin/animals?archive=true"
+              linkText="View adopted cats"
+            />
+          </div>
+
+          <div
+            className={
+              canSeeDonations && canSeeForms
+                ? "mt-4 grid items-start gap-4 xl:grid-cols-[0.9fr,1.4fr,0.9fr]"
+                : "mt-4 grid items-start gap-4 xl:grid-cols-2"
+            }
+          >
+            {canSeeDonations && donationSummary && (
+              <AdminCard
+                title="Donations Overview"
+                action={
+                  <Link href="/admin/donations">
+                    <a className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins">
+                      View all
+                      <Icon icon="fa:long-arrow-right" width="11" />
+                    </a>
+                  </Link>
+                }
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-2xl font-semibold text-gray-900 font-poppins">
+                      {currencyFormatter.format(donationSummary.totalAmount)}
+                    </div>
+                    <div className="text-xs text-gray-500 font-poppins">
+                      Total paid &amp; active
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-semibold text-gray-900 font-poppins">
+                      {currencyFormatter.format(donationSummary.monthAmount)}
+                    </div>
+                    <div className="text-xs text-gray-500 font-poppins">
+                      This month
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-semibold text-gray-900 font-poppins">
+                      {donationSummary.totalCount}
+                    </div>
+                    <div className="text-xs text-gray-500 font-poppins">
+                      Donations recorded
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-semibold text-gray-900 font-poppins">
+                      {donationSummary.giftAidCount}
+                    </div>
+                    <div className="text-xs text-gray-500 font-poppins">
+                      With Gift Aid
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col items-center p-5 mb-2 rounded-lg xl:flex-col">
-                <Icon
-                  className="w-auto h-20 mb-3 text-[#B0B0B8] group-hover:text-white"
-                  icon="cil:cat"
-                />
-                <div className="flex flex-col lg:flex-row">
-                  <SmallCard
-                    header="Active Cats"
-                    data={!isPetLoading ? catActiveCount : <LoadingSpinner />}
-                  />
-                  <SmallCard
-                    header="Adopted Cats"
-                    data={!isPetLoading ? catArchiveCount : <LoadingSpinner />}
-                  />
-                </div>
-              </div>
-              <RegisterPasskey />
-            </div>
+              </AdminCard>
+            )}
+
+            {canSeeForms && (
+              <AdminCard
+                title="Recent Form Submissions"
+                action={
+                  <Link href="/admin/forms?archive=false">
+                    <a className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins">
+                      Go to Forms
+                      <Icon icon="fa:long-arrow-right" width="11" />
+                    </a>
+                  </Link>
+                }
+              >
+                {anyFormsLoading ? (
+                  <div className="flex justify-center py-6">
+                    <LoadingSpinner />
+                  </div>
+                ) : recentForms.length ? (
+                  <>
+                    {/* Desktop: table. Mobile: compact list below. */}
+                    <div className="hidden overflow-x-auto md:block">
+                      <TableComponent>
+                        <TableHeadMap
+                          ArrayOfHeaderTitles={[
+                            "Name",
+                            "Type",
+                            "Submitted",
+                            "View",
+                          ]}
+                        />
+                        <tbody className="bg-white">
+                          {recentForms.map((form) => (
+                            <tr key={form._id}>
+                              <TableData>
+                                <div className="text-center text-sm font-medium text-gray-800 font-poppins">
+                                  {form.aboutQuestions?.name}
+                                </div>
+                              </TableData>
+                              <TableData>
+                                <div className="text-center text-sm font-poppins">
+                                  {FORM_TYPE_LABELS[form.type] ?? form.type}
+                                </div>
+                              </TableData>
+                              <TableData>
+                                <div className="text-center text-sm font-poppins">
+                                  {form.updatedAt &&
+                                    form.updatedAt.slice(0, 10)}
+                                </div>
+                              </TableData>
+                              <TableData>
+                                <Link href={`/admin/forms/${form._id}`}>
+                                  <a className="flex justify-center">
+                                    <Icon
+                                      className="h-5 w-auto cursor-pointer text-gray-500 hover:text-brand"
+                                      icon="carbon:view-filled"
+                                    />
+                                  </a>
+                                </Link>
+                              </TableData>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </TableComponent>
+                    </div>
+
+                    <div className="divide-y divide-gray-100 md:hidden">
+                      {recentForms.map((form) => (
+                        <Link key={form._id} href={`/admin/forms/${form._id}`}>
+                          <a className="flex items-center gap-3 py-3">
+                            <div className="min-w-0 grow font-poppins">
+                              <div className="truncate text-sm font-semibold text-gray-900">
+                                {form.aboutQuestions?.name}
+                              </div>
+                              <div className="mt-0.5 text-xs text-gray-500">
+                                {FORM_TYPE_LABELS[form.type] ?? form.type}{" "}
+                                &middot;{" "}
+                                {form.updatedAt && form.updatedAt.slice(0, 10)}
+                              </div>
+                            </div>
+                            <Icon
+                              className="shrink-0 text-gray-400"
+                              icon="akar-icons:chevron-right"
+                              width="16"
+                            />
+                          </a>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="py-6 text-center text-sm text-gray-500 font-poppins">
+                    No active form submissions right now.
+                  </div>
+                )}
+              </AdminCard>
+            )}
+
+            <RegisterPasskey />
           </div>
         </PageContainerComponent>
       </AdminSidebarComponent>
@@ -218,3 +405,56 @@ function Index() {
 }
 
 export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const gate = await gateAdminPage(context.req);
+  if (gate.redirect) {
+    return gate.redirect;
+  }
+
+  //Donation figures are only fetched (and rendered) for admins with the
+  //donations permission.
+  if (!gate.user.permissions.donations) {
+    return {
+      props: { donationSummary: null, currentUser: gate.user },
+    };
+  }
+
+  await dbConnect();
+
+  const donations = await DonationModel.find(
+    {},
+    { amount: 1, status: 1, createdAt: 1, "giftAid.wantsGiftAid": 1 }
+  ).lean();
+
+  const paidStatuses = ["paid", "active"];
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const summary: DonationSummary = {
+    totalAmount: 0,
+    monthAmount: 0,
+    totalCount: donations.length,
+    giftAidCount: 0,
+  };
+
+  donations.forEach((donation: any) => {
+    const amount = Number(donation.amount) || 0;
+    if (paidStatuses.includes(donation.status)) {
+      summary.totalAmount += amount;
+      if (donation.createdAt && new Date(donation.createdAt) >= monthStart) {
+        summary.monthAmount += amount;
+      }
+    }
+    if (donation.giftAid?.wantsGiftAid) {
+      summary.giftAidCount += 1;
+    }
+  });
+
+  return {
+    props: {
+      donationSummary: summary,
+      currentUser: gate.user,
+    },
+  };
+};

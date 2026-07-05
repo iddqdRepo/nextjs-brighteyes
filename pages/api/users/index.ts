@@ -2,8 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
 import bcrypt from "bcrypt";
-import { requireAuth } from "../../../utils/auth";
+import { requireSuperuser } from "../../../utils/auth";
+import { parseAccessFields } from "../../../utils/userAccess";
 
+//Team management is superuser-only: staff accounts can neither list the
+//other accounts nor create new ones.
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
 
@@ -29,11 +32,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             message: "username and password are required",
           });
         }
+
+        const access = parseAccessFields(req.body);
+        if (!access) {
+          return res.status(400).json({
+            success: false,
+            message: "role must be 'superuser' or 'staff'",
+          });
+        }
+
+        const existing = await userModel.findOne({ username }).lean();
+        if (existing) {
+          return res.status(409).json({
+            success: false,
+            message: `A user called ${username} already exists`,
+          });
+        }
+
         const hash = bcrypt.hashSync(password, 10);
-        const user = await userModel.create({ username, password: hash });
+        const user = await userModel.create({
+          username,
+          password: hash,
+          ...access,
+        });
         return res.status(201).json({
           success: true,
-          data: { _id: user._id, username: user.username },
+          data: { _id: user._id, username: user.username, role: user.role },
         });
       }
 
@@ -51,4 +75,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default requireAuth(handler);
+export default requireSuperuser(handler);

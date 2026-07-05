@@ -24,6 +24,15 @@ jest.mock("../../models/formModels", () => ({
   },
 }));
 
+//Reading submissions resolves the requester's account from the database to
+//check the forms permission.
+const mockUserFindOne = jest.fn();
+
+jest.mock("../../models/userModel", () => ({
+  __esModule: true,
+  default: { findOne: (...args) => mockUserFindOne(...args) },
+}));
+
 // eslint-disable-next-line import/first
 import formsHandler from "../../pages/api/forms/index";
 // eslint-disable-next-line import/first
@@ -39,9 +48,16 @@ afterAll(() => {
   process.env = OLD_ENV;
 });
 
+const requesterInDb = (user) => {
+  mockUserFindOne.mockReturnValue({ lean: () => Promise.resolve(user) });
+};
+
 beforeEach(() => {
   mockFind.mockReset().mockResolvedValue([]);
   mockCreate.mockReset().mockResolvedValue({ _id: "1" });
+  //Default requester: an account created before roles existed (full access).
+  mockUserFindOne.mockReset();
+  requesterInDb({ username: "admin" });
 });
 
 const makeRes = () => {
@@ -80,6 +96,61 @@ describe("GET /api/forms (reading submissions)", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(mockFind).toHaveBeenCalledTimes(1);
+  });
+
+  it("allows staff who have been given the forms permission", async () => {
+    requesterInDb({
+      username: "admin",
+      role: "staff",
+      permissions: { forms: true },
+    });
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "GET",
+        query: { type: "contactus" },
+        cookies: { [AUTH_COOKIE]: validToken() },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+
+  it("refuses staff without the forms permission with 403", async () => {
+    requesterInDb({
+      username: "admin",
+      role: "staff",
+      permissions: { animals: true },
+    });
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "GET",
+        query: { type: "contactus" },
+        cookies: { [AUTH_COOKIE]: validToken() },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(mockFind).not.toHaveBeenCalled();
+  });
+
+  it("refuses a deleted account even with a valid cookie", async () => {
+    requesterInDb(null);
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "GET",
+        query: { type: "contactus" },
+        cookies: { [AUTH_COOKIE]: validToken() },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(mockFind).not.toHaveBeenCalled();
   });
 });
 

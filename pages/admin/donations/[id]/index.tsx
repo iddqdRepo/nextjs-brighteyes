@@ -10,6 +10,7 @@ import { SerializedDonation } from "../../../../interfaces/donation";
 import DonationModel from "../../../../models/donationModel";
 import dbConnect from "../../../../utils/dbConnect";
 import { serializeDonation } from "../../../../utils/donationRecords";
+import { AdminUser, gateAdminPage } from "../../../../utils/auth";
 
 const currencyFormatter = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -40,7 +41,13 @@ const DetailItem = ({ label, value }: { label: string; value: string }) => {
   );
 };
 
-function DonationDetailPage({ donation }: { donation: SerializedDonation }) {
+function DonationDetailPage({
+  donation,
+  currentUser,
+}: {
+  donation: SerializedDonation;
+  currentUser: AdminUser;
+}) {
   return (
     <>
       <AdminHeadTag
@@ -48,7 +55,7 @@ function DonationDetailPage({ donation }: { donation: SerializedDonation }) {
         metaContent={"Admin donation detail, Bright Eyes"}
         linkHref={`/admin/donations/${donation.id}`}
       />
-      <AdminSidebarComponent highlighted="Donations">
+      <AdminSidebarComponent highlighted="Donations" currentUser={currentUser}>
         <PageContainerComponent>
           <PageHeader>
             Donation for {donation.donor.fullName || donation.donor.email}
@@ -200,6 +207,11 @@ function DonationDetailPage({ donation }: { donation: SerializedDonation }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const gate = await gateAdminPage(context.req, "donations");
+  if (gate.redirect) {
+    return gate.redirect;
+  }
+
   await dbConnect();
 
   const donation = await DonationModel.findById(context.params?.id).lean();
@@ -213,6 +225,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       donation: serializeDonation(donation),
+      currentUser: gate.user,
     },
   };
 };

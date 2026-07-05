@@ -4,8 +4,8 @@ import {
   HeadTag,
 } from "../../components/common/CommonComponents";
 import {
-  DonateHeroSection,
-  DonationFormSection,
+  DonateSection,
+  DonateQuoteSection,
   DonateUsesSection,
 } from "../../components/LayoutComponents/DonateLayout/DonateLayout";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
@@ -21,10 +21,14 @@ function Donate() {
         linkHref={"/donate"}
       />
       <NavbarComponent />
-      <DonateHeroSection />
-      <DonationFormSection />
+      <DonateSection />
       <DonateUsesSection />
-      <ContactUsSection />
+      <DonateQuoteSection />
+      <ContactUsSection
+        eyebrow="Questions about donating?"
+        title="We're here to help"
+        text="If you have any questions about your donation or need assistance, please get in touch with our team."
+      />
       <FooterSection />
     </>
   );

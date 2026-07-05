@@ -1,7 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
-import { getAuthUser } from "../../../utils/auth";
+import {
+  FORBIDDEN_MESSAGE,
+  getAdminUser,
+  getAuthUser,
+} from "../../../utils/auth";
 import { isDataUri, uploadPetImage } from "../../../utils/cloudinary";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -19,22 +23,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           return res.status(200).json({ success: true, data: pets });
         }
 
-        //Admin only: the full list including adopted animals.
-        //^ Image excluded as the res exceeded 4mb so vercel returned err 500
+        //Admin only: the full list including adopted animals. Images are
+        //Cloudinary URLs (migrated 2026), so including them stays well under
+        //Vercel's 4mb response limit that base64 images used to exceed.
         if (!getAuthUser(req)) {
           return res
             .status(401)
             .json({ success: false, message: "Unauthorized" });
         }
-        const pets = await petModel.find({}, { image: 0 });
+        const pets = await petModel.find({});
         return res.status(200).json({ success: true, data: pets });
       }
 
       case "POST": {
-        if (!getAuthUser(req)) {
+        const user = await getAdminUser(req);
+        if (!user) {
           return res
             .status(401)
             .json({ success: false, message: "Unauthorized" });
+        }
+        if (!user.permissions.animals) {
+          return res
+            .status(403)
+            .json({ success: false, message: FORBIDDEN_MESSAGE });
         }
         const body = { ...req.body };
         //Inline base64 images go to Cloudinary; Mongo only stores the URL.

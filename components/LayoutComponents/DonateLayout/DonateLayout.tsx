@@ -1,14 +1,18 @@
 import { clsx } from "clsx";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
+import { Icon } from "@iconify/react";
 import { DonationFormValues } from "../../../interfaces/donation";
 import { donationInitialValues } from "../../../utils/formik/donationInitialValues";
 import {
   DONATION_PRESET_AMOUNTS,
   GIFT_AID_DECLARATION_TEXT,
+  MIN_DONATION_AMOUNT,
 } from "../../../utils/donationConstants";
 import { DonationSchema } from "../../../utils/yup/donationYupSchema";
+import { SectionEyebrow } from "../../common/CommonComponents";
 
 const FormFieldError = ({ name }: { name: string }) => {
   return (
@@ -37,7 +41,7 @@ const DonationInput = ({
     <div className="flex flex-col">
       <label
         htmlFor={name}
-        className="mb-2 text-sm font-medium text-slate-700 font-poppins"
+        className="mb-1.5 text-sm font-medium text-gray-800 font-poppins"
       >
         {label}
       </label>
@@ -47,107 +51,67 @@ const DonationInput = ({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="h-12 rounded-2xl border border-slate-300 px-4 text-sm font-poppins text-slate-900 outline-none transition focus:border-[#8b3479] focus:ring-2 focus:ring-[#8b3479]/20"
+        className="h-11 rounded-xl border border-gray-300 bg-white px-4 text-sm font-poppins text-gray-900 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30"
       />
       <FormFieldError name={name} />
     </div>
   );
 };
 
-const SectionTitle = ({
-  eyebrow,
-  title,
-  text,
-}: {
-  eyebrow: string;
-  title: string;
-  text: string;
-}) => {
+const StepLabel = ({ text }: { text: string }) => {
   return (
-    <div className="max-w-2xl">
-      <div className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#8b3479]">
-        {eyebrow}
-      </div>
-      <h2 className="mb-4 text-3xl font-semibold text-slate-900 font-poppins md:text-4xl">
-        {title}
-      </h2>
-      <p className="text-base leading-7 text-slate-600 font-poppins">{text}</p>
+    <div className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-brand font-poppins">
+      {text}
     </div>
   );
 };
 
-export const DonateHeroSection = () => {
+const HeroBullet = ({
+  icon,
+  title,
+  text,
+}: {
+  icon: string;
+  title: string;
+  text: string;
+}) => {
   return (
-    <section className="bg-[radial-gradient(circle_at_top_left,_rgba(139,52,121,0.18),_transparent_40%),linear-gradient(135deg,_#fef2f7,_#ffffff_55%,_#f8fafc)]">
-      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-16 lg:grid-cols-[1.05fr,0.95fr] lg:py-20">
-        <div className="flex flex-col justify-center">
-          <span className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#8b3479]">
-            Card Donations
-          </span>
-          <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-slate-900 font-poppins md:text-6xl">
-            Give securely online and add Gift Aid in the same flow.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 font-poppins">
-            Support Bright Eyes with a one-off card donation or a monthly gift.
-            The website collects donor details and any Gift Aid declaration
-            first, then hands the payment step to Stripe Checkout.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href="#donation-form"
-              className="rounded-full bg-[#8b3479] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#742c67]"
-            >
-              Start donating
-            </a>
-            <Link href="/forms/giftAidForm">
-              <a className="rounded-full border border-slate-300 px-7 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white">
-                Standalone Gift Aid form
-              </a>
-            </Link>
-          </div>
-        </div>
-
-        <div className="grid gap-4 rounded-[2rem] bg-slate-900 p-6 text-white shadow-2xl shadow-[#8b3479]/10 lg:p-8">
-          <div className="rounded-[1.5rem] bg-white/10 p-6 backdrop-blur">
-            <div className="text-sm uppercase tracking-[0.25em] text-white/70">
-              Monthly support
-            </div>
-            <div className="mt-3 text-4xl font-semibold font-poppins">
-              &pound;10
-            </div>
-            <p className="mt-3 text-sm leading-6 text-white/80 font-poppins">
-              could help cover food, heating, and day-to-day care for animals
-              waiting to be rehomed.
-            </p>
-          </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            <div className="rounded-[1.5rem] bg-white/10 p-5">
-              <div className="text-sm font-semibold font-poppins">One-off</div>
-              <p className="mt-2 text-sm text-white/80 font-poppins">
-                Fast hosted card payment through Stripe Checkout.
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] bg-white/10 p-5">
-              <div className="text-sm font-semibold font-poppins">Monthly</div>
-              <p className="mt-2 text-sm text-white/80 font-poppins">
-                Subscription-based giving with webhooks tracking status changes.
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] bg-white/10 p-5">
-              <div className="text-sm font-semibold font-poppins">Gift Aid</div>
-              <p className="mt-2 text-sm text-white/80 font-poppins">
-                Declaration stored in Mongo before the user reaches Stripe.
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="flex items-start gap-4">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand">
+        <Icon icon={icon} color="#ffffff" width="22" height="22" />
       </div>
-    </section>
+      <div>
+        <div className="text-base font-semibold text-gray-900 font-poppins">
+          {title}
+        </div>
+        <p className="mt-1 max-w-sm text-sm leading-6 text-gray-600 font-poppins">
+          {text}
+        </p>
+      </div>
+    </div>
   );
 };
 
-export const DonationFormSection = () => {
+const DonationFormCard = () => {
+  const router = useRouter();
   const [submitError, setSubmitError] = useState("");
+
+  const initialValues: DonationFormValues = useMemo(() => {
+    const queryAmount = Number(router.query.amount);
+    const queryType = router.query.type;
+    return {
+      ...donationInitialValues,
+      amount:
+        !isNaN(queryAmount) && queryAmount >= MIN_DONATION_AMOUNT
+          ? queryAmount
+          : donationInitialValues.amount,
+      donationType:
+        queryType === "one_off" || queryType === "monthly"
+          ? queryType
+          : donationInitialValues.donationType,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
 
   const handleSubmit = async (
     values: DonationFormValues,
@@ -187,268 +151,311 @@ export const DonationFormSection = () => {
   };
 
   return (
-    <section id="donation-form" className="bg-white py-16">
-      <div className="mx-auto grid w-11/12 max-w-6xl gap-12 lg:grid-cols-[0.9fr,1.1fr]">
-        <SectionTitle
-          eyebrow="Online Donations"
-          title="Donate online with card and Gift Aid"
-          text="Donation details and any Gift Aid declaration are captured on the website before the donor is redirected to Stripe Checkout for the secure card payment."
-        />
+    <div
+      id="donation-form"
+      className="rounded-3xl border border-gray-100 bg-white p-6 shadow-2xl shadow-brand/10 lg:p-8"
+    >
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        validationSchema={DonationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting, setFieldValue, values }) => (
+          <Form className="space-y-8">
+            <div>
+              <StepLabel text="1. Choose your donation" />
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { value: "monthly", label: "Monthly Support" },
+                  { value: "one_off", label: "One-off Gift" },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={clsx(
+                      "rounded-2xl border px-5 py-4 text-left transition",
+                      values.donationType === option.value
+                        ? "border-brand bg-brand text-white shadow-lg shadow-brand/20"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-brand"
+                    )}
+                    onClick={() => {
+                      setFieldValue("donationType", option.value);
+                      if (
+                        option.value === "monthly" &&
+                        values.giftAid.wantsGiftAid
+                      ) {
+                        setFieldValue("giftAid.giftAidFuture", true);
+                      }
 
-        <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-6 shadow-xl shadow-slate-200/50 lg:p-8">
-          <Formik
-            initialValues={donationInitialValues}
-            validationSchema={DonationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting, setFieldValue, values }) => (
-              <Form className="space-y-10">
-                <div>
-                  <div className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
-                    1. Choose your donation
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {[
-                      { value: "monthly", label: "Monthly gift" },
-                      { value: "one_off", label: "One-off gift" },
-                    ].map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        className={clsx(
-                          "rounded-[1.5rem] border px-5 py-4 text-left transition",
-                          values.donationType === option.value
-                            ? "border-[#8b3479] bg-[#8b3479] text-white shadow-lg shadow-[#8b3479]/20"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                        )}
-                        onClick={() => {
-                          setFieldValue("donationType", option.value);
-                          if (
-                            option.value === "monthly" &&
-                            values.giftAid.wantsGiftAid
-                          ) {
-                            setFieldValue("giftAid.giftAidFuture", true);
-                          }
-
-                          if (option.value === "one_off") {
-                            setFieldValue("giftAid.giftAidFuture", false);
-                          }
-                        }}
-                      >
-                        <div className="text-lg font-semibold font-poppins">
-                          {option.label}
-                        </div>
-                        <div
-                          className={clsx(
-                            "mt-2 text-sm font-poppins",
-                            values.donationType === option.value
-                              ? "text-white/80"
-                              : "text-slate-500"
-                          )}
-                        >
-                          {option.value === "monthly"
-                            ? "Recurring monthly support via Stripe subscriptions."
-                            : "Single secure card payment via Stripe Checkout."}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  <FormFieldError name="donationType" />
-                </div>
-
-                <div>
-                  <div className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
-                    2. Select an amount
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {DONATION_PRESET_AMOUNTS.map((amount) => (
-                      <button
-                        key={amount}
-                        type="button"
-                        className={clsx(
-                          "rounded-2xl border px-4 py-4 text-center text-lg font-semibold transition font-poppins",
-                          Number(values.amount) === amount
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                        )}
-                        onClick={() => setFieldValue("amount", amount)}
-                      >
-                        &pound;{amount}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="mt-4">
-                    <DonationInput
-                      label="Or enter a custom amount"
-                      name="amount"
-                      type="number"
-                      placeholder="25"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
-                    3. Your details
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <DonationInput
-                      label="Full name"
-                      name="donor.fullName"
-                      autoComplete="name"
-                    />
-                    <DonationInput
-                      label="Email address"
-                      name="donor.email"
-                      type="email"
-                      autoComplete="email"
-                    />
-                    <DonationInput
-                      label="Phone number"
-                      name="donor.phone"
-                      autoComplete="tel"
-                    />
-                    <div className="hidden md:block"></div>
-                    <div className="md:col-span-2">
-                      <DonationInput
-                        label="Address line 1"
-                        name="donor.addressLine1"
-                        autoComplete="address-line1"
-                      />
+                      if (option.value === "one_off") {
+                        setFieldValue("giftAid.giftAidFuture", false);
+                      }
+                    }}
+                  >
+                    <div className="text-base font-semibold font-poppins">
+                      {option.label}
                     </div>
-                    <div className="md:col-span-2">
-                      <DonationInput
-                        label="Address line 2"
-                        name="donor.addressLine2"
-                        autoComplete="address-line2"
-                      />
-                    </div>
-                    <DonationInput
-                      label="Town or city"
-                      name="donor.townCity"
-                      autoComplete="address-level2"
-                    />
-                    <DonationInput
-                      label="Postcode"
-                      name="donor.postcode"
-                      autoComplete="postal-code"
-                    />
-                  </div>
-                </div>
-
-                <div className="rounded-[1.75rem] bg-white p-5">
-                  <div className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
-                    4. Gift Aid
-                  </div>
-                  <p className="mb-4 text-sm leading-6 text-slate-600 font-poppins">
-                    Gift Aid lets Bright Eyes reclaim 25p for every &pound;1
-                    donated by eligible UK taxpayers. The declaration is saved
-                    on the website before you are sent to Stripe.
-                  </p>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {[
-                      { value: true, label: "Yes, add Gift Aid" },
-                      { value: false, label: "No Gift Aid" },
-                    ].map((option) => (
-                      <button
-                        key={String(option.value)}
-                        type="button"
-                        className={clsx(
-                          "rounded-2xl border px-4 py-4 text-left transition",
-                          values.giftAid.wantsGiftAid === option.value
-                            ? "border-[#8b3479] bg-[#8b3479] text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                        )}
-                        onClick={() => {
-                          setFieldValue("giftAid.wantsGiftAid", option.value);
-
-                          if (!option.value) {
-                            setFieldValue("giftAid.giftAidFuture", false);
-                            setFieldValue("giftAid.giftAidPast", false);
-                            setFieldValue("giftAid.declarationAccepted", false);
-                          } else if (values.donationType === "monthly") {
-                            setFieldValue("giftAid.giftAidFuture", true);
-                          } else {
-                            setFieldValue("giftAid.giftAidFuture", false);
-                          }
-                        }}
-                      >
-                        <div className="text-lg font-semibold font-poppins">
-                          {option.label}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-
-                  {values.giftAid.wantsGiftAid ? (
-                    <div className="mt-6 space-y-4 rounded-[1.5rem] border border-[#8b3479]/20 bg-[#fdf3fa] p-5">
-                      {values.donationType === "monthly" ? (
-                        <div className="rounded-2xl border border-[#8b3479]/10 bg-white px-4 py-4 text-sm leading-6 text-slate-700 font-poppins">
-                          Because this is a monthly donation, your Gift Aid
-                          declaration will apply to future donations until you
-                          notify Bright Eyes otherwise.
-                        </div>
-                      ) : (
-                        <label className="flex items-start gap-3 text-sm leading-6 text-slate-700 font-poppins">
-                          <Field
-                            type="checkbox"
-                            name="giftAid.giftAidFuture"
-                            className="mt-1 h-4 w-4 rounded border-slate-300 text-[#8b3479] focus:ring-[#8b3479]"
-                          />
-                          <span>
-                            Apply this declaration to future donations until I
-                            notify Bright Eyes otherwise.
-                          </span>
-                        </label>
+                    <div
+                      className={clsx(
+                        "mt-1 text-xs leading-5 font-poppins",
+                        values.donationType === option.value
+                          ? "text-white/80"
+                          : "text-gray-500"
                       )}
-                      <FormFieldError name="giftAid.giftAidFuture" />
-
-                      <label className="flex items-start gap-3 text-sm leading-6 text-slate-700 font-poppins">
-                        <Field
-                          type="checkbox"
-                          name="giftAid.giftAidPast"
-                          className="mt-1 h-4 w-4 rounded border-slate-300 text-[#8b3479] focus:ring-[#8b3479]"
-                        />
-                        <span>
-                          Apply Gift Aid to donations made in the current tax
-                          year and the previous four tax years.
-                        </span>
-                      </label>
-
-                      <label className="flex items-start gap-3 text-sm leading-6 text-slate-700 font-poppins">
-                        <Field
-                          type="checkbox"
-                          name="giftAid.declarationAccepted"
-                          className="mt-1 h-4 w-4 rounded border-slate-300 text-[#8b3479] focus:ring-[#8b3479]"
-                        />
-                        <span>{GIFT_AID_DECLARATION_TEXT}</span>
-                      </label>
-                      <FormFieldError name="giftAid.declarationAccepted" />
+                    >
+                      {option.value === "monthly"
+                        ? "Recurring monthly support via Stripe subscriptions."
+                        : "Single secure card payment via Stripe Checkout."}
                     </div>
-                  ) : null}
+                  </button>
+                ))}
+              </div>
+              <FormFieldError name="donationType" />
+            </div>
+
+            <div>
+              <StepLabel text="2. Select an amount" />
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {DONATION_PRESET_AMOUNTS.map((amount) => (
+                  <button
+                    key={amount}
+                    type="button"
+                    className={clsx(
+                      "rounded-xl border px-4 py-3.5 text-center text-base font-semibold transition font-poppins",
+                      Number(values.amount) === amount
+                        ? "border-brand bg-brand text-white shadow-lg shadow-brand/20"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-brand"
+                    )}
+                    onClick={() => setFieldValue("amount", amount)}
+                  >
+                    &pound;{amount}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-4">
+                <DonationInput
+                  label="Or enter a custom amount"
+                  name="amount"
+                  type="number"
+                  placeholder="25"
+                />
+              </div>
+            </div>
+
+            <div>
+              <StepLabel text="3. Your details" />
+              <div className="grid gap-x-4 md:grid-cols-2">
+                <DonationInput
+                  label="Full name"
+                  name="donor.fullName"
+                  autoComplete="name"
+                />
+                <DonationInput
+                  label="Email address"
+                  name="donor.email"
+                  type="email"
+                  autoComplete="email"
+                />
+                <DonationInput
+                  label="Phone number"
+                  name="donor.phone"
+                  autoComplete="tel"
+                />
+                <div className="hidden md:block"></div>
+                <div className="md:col-span-2">
+                  <DonationInput
+                    label="Address line 1"
+                    name="donor.addressLine1"
+                    autoComplete="address-line1"
+                  />
                 </div>
+                <div className="md:col-span-2">
+                  <DonationInput
+                    label="Address line 2 (optional)"
+                    name="donor.addressLine2"
+                    autoComplete="address-line2"
+                  />
+                </div>
+                <DonationInput
+                  label="Town or city"
+                  name="donor.townCity"
+                  autoComplete="address-level2"
+                />
+                <DonationInput
+                  label="Postcode"
+                  name="donor.postcode"
+                  autoComplete="postal-code"
+                />
+              </div>
+            </div>
 
-                {submitError ? (
-                  <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    {submitError}
-                  </div>
-                ) : null}
+            <div className="rounded-2xl bg-brand-50 p-5">
+              <StepLabel text="4. Gift Aid" />
+              <p className="mb-4 text-sm leading-6 text-gray-600 font-poppins">
+                Gift Aid lets Bright Eyes reclaim 25p for every &pound;1 donated
+                by eligible UK taxpayers, at no extra cost to you. The
+                declaration is saved on this website before you are sent to
+                Stripe.
+              </p>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex w-full items-center justify-center rounded-full bg-slate-900 px-6 py-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {isSubmitting
-                    ? "Starting secure checkout..."
-                    : "Continue to secure card payment"}
-                </button>
-              </Form>
-            )}
-          </Formik>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { value: true, label: "Yes, add Gift Aid" },
+                  { value: false, label: "No Gift Aid" },
+                ].map((option) => (
+                  <button
+                    key={String(option.value)}
+                    type="button"
+                    className={clsx(
+                      "rounded-2xl border px-4 py-3.5 text-left transition",
+                      values.giftAid.wantsGiftAid === option.value
+                        ? "border-brand bg-brand text-white shadow-lg shadow-brand/20"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-brand"
+                    )}
+                    onClick={() => {
+                      setFieldValue("giftAid.wantsGiftAid", option.value);
+
+                      if (!option.value) {
+                        setFieldValue("giftAid.giftAidFuture", false);
+                        setFieldValue("giftAid.giftAidPast", false);
+                        setFieldValue("giftAid.declarationAccepted", false);
+                      } else if (values.donationType === "monthly") {
+                        setFieldValue("giftAid.giftAidFuture", true);
+                      } else {
+                        setFieldValue("giftAid.giftAidFuture", false);
+                      }
+                    }}
+                  >
+                    <div className="text-base font-semibold font-poppins">
+                      {option.label}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {values.giftAid.wantsGiftAid ? (
+                <div className="mt-5 space-y-4 rounded-2xl border border-brand/20 bg-white p-5">
+                  {values.donationType === "monthly" ? (
+                    <div className="rounded-xl bg-brand-50 px-4 py-4 text-sm leading-6 text-gray-700 font-poppins">
+                      Because this is a monthly donation, your Gift Aid
+                      declaration will apply to future donations until you
+                      notify Bright Eyes otherwise.
+                    </div>
+                  ) : (
+                    <label className="flex items-start gap-3 text-sm leading-6 text-gray-700 font-poppins">
+                      <Field
+                        type="checkbox"
+                        name="giftAid.giftAidFuture"
+                        className="mt-1 h-4 w-4 rounded border-gray-300 accent-brand"
+                      />
+                      <span>
+                        Apply this declaration to future donations until I
+                        notify Bright Eyes otherwise.
+                      </span>
+                    </label>
+                  )}
+                  <FormFieldError name="giftAid.giftAidFuture" />
+
+                  <label className="flex items-start gap-3 text-sm leading-6 text-gray-700 font-poppins">
+                    <Field
+                      type="checkbox"
+                      name="giftAid.giftAidPast"
+                      className="mt-1 h-4 w-4 rounded border-gray-300 accent-brand"
+                    />
+                    <span>
+                      Apply Gift Aid to donations made in the current tax year
+                      and the previous four tax years.
+                    </span>
+                  </label>
+
+                  <label className="flex items-start gap-3 text-sm leading-6 text-gray-700 font-poppins">
+                    <Field
+                      type="checkbox"
+                      name="giftAid.declarationAccepted"
+                      className="mt-1 h-4 w-4 rounded border-gray-300 accent-brand"
+                    />
+                    <span>{GIFT_AID_DECLARATION_TEXT}</span>
+                  </label>
+                  <FormFieldError name="giftAid.declarationAccepted" />
+                </div>
+              ) : null}
+            </div>
+
+            {submitError ? (
+              <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {submitError}
+              </div>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-4 text-sm font-medium text-white shadow-lg shadow-brand/25 transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-70 font-poppins"
+            >
+              <Icon icon="akar-icons:lock-on" color="white" width="16" />
+              {isSubmitting
+                ? "Starting secure checkout..."
+                : "Continue to secure card payment"}
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export const DonateSection = () => {
+  return (
+    <section className="overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
+      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-12 lg:grid-cols-[0.9fr,1.1fr] lg:py-16">
+        <div>
+          <SectionEyebrow text="Card donations" />
+          <h1 className="text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl font-poppins">
+            Give securely online and{" "}
+            <span className="text-brand">
+              change lives.{" "}
+              <Icon
+                className="inline"
+                icon="foundation:paw"
+                color="#8b3479"
+                width="32"
+                height="32"
+                inline={true}
+              />
+            </span>
+          </h1>
+          <p className="mt-5 max-w-xl text-base leading-7 text-gray-600 sm:text-lg font-poppins">
+            Support Bright Eyes with a one-off card donation or a monthly gift.
+            Your kindness helps provide food, medical care and safe homes for
+            animals who need us most.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-6">
+            <HeroBullet
+              icon="akar-icons:lock-on"
+              title="Secure payments"
+              text="All card donations are processed securely via Stripe."
+            />
+            <HeroBullet
+              icon="akar-icons:heart"
+              title="Every gift helps"
+              text="We receive no government funding and rely purely on the generosity of the public to continue our work."
+            />
+          </div>
+
+          <div className="relative mt-8 hidden h-64 overflow-hidden rounded-[2rem] shadow-2xl shadow-brand/10 lg:block">
+            <Image
+              src="/HeroDogCat.jpg"
+              alt="A dog and cat together at Bright Eyes Animal Sanctuary"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
         </div>
+
+        <DonationFormCard />
       </div>
     </section>
   );
@@ -457,41 +464,77 @@ export const DonationFormSection = () => {
 export const DonateUsesSection = () => {
   const items = [
     {
-      title: "Daily care",
-      text: "Food, heating, bedding, and the basics that keep rescues safe while they wait for a home.",
+      icon: "mdi:food-drumstick-outline",
+      title: "Daily Care",
+      text: "Food, bedding, cleaning and enrichment to keep our animals safe and comfortable every day.",
     },
     {
-      title: "Vet treatment",
-      text: "Vaccinations, urgent check-ups, and follow-up care for animals who arrive needing medical support.",
+      icon: "healthicons:stethoscope-outline",
+      title: "Vet Treatment",
+      text: "Vaccinations, urgent check-ups and follow-up care for rescues in need of medical support.",
     },
     {
-      title: "Longer-term rescue work",
-      text: "Reliable monthly income helps the sanctuary plan ahead instead of relying only on one-off appeals.",
+      icon: "mdi:home-heart",
+      title: "Long-term Rescue",
+      text: "Rehoming, training and long-term care for animals who deserve a second chance.",
     },
   ];
 
   return (
-    <section className="bg-slate-900 py-16 text-white">
+    <section className="bg-cream py-14">
       <div className="mx-auto w-11/12 max-w-6xl">
-        <SectionTitle
-          eyebrow="Why it matters"
-          title="What this donation flow supports"
-          text="This donation flow gives the sanctuary the operational pieces it needs: secure card payments, recurring donations, and a Gift Aid record connected to each donation."
-        />
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
+        <SectionEyebrow text="Why it matters" />
+        <h2 className="flex items-center gap-3 text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
+          Your support makes every day possible.
+          <Icon
+            className="hidden shrink-0 sm:block"
+            icon="foundation:paw"
+            color="#8b3479"
+            width="26"
+            height="26"
+          />
+        </h2>
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6"
-            >
-              <h3 className="text-xl font-semibold font-poppins">
-                {item.title}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-white/75 font-poppins">
-                {item.text}
-              </p>
+            <div key={item.title} className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-100">
+                <Icon icon={item.icon} color="#8b3479" width="26" height="26" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 font-poppins">
+                  {item.title}
+                </h3>
+                <p className="mt-1 text-sm leading-6 text-gray-600 font-poppins">
+                  {item.text}
+                </p>
+              </div>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export const DonateQuoteSection = () => {
+  return (
+    <section className="bg-brand-100 py-14">
+      <div className="mx-auto flex w-11/12 max-w-4xl flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
+        <Icon
+          className="shrink-0"
+          icon="akar-icons:heart"
+          color="#8b3479"
+          width="64"
+          height="64"
+        />
+        <div>
+          <p className="text-xl font-medium leading-9 text-gray-800 sm:text-2xl font-poppins">
+            &ldquo;We couldn&apos;t do what we do without people like you. Thank
+            you for giving animals a brighter tomorrow.&rdquo;
+          </p>
+          <p className="mt-3 text-sm font-semibold text-brand font-poppins">
+            &#8212; The Bright Eyes Team
+          </p>
         </div>
       </div>
     </section>

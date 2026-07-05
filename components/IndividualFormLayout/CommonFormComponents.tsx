@@ -46,7 +46,7 @@ type fieldType =
 export const FormPageTitle = ({ title }: { title: string }) => {
   return (
     <div className="flex justify-center w-10/12 lg:w-3/6 ">
-      <div className="m-3 mt-10 text-2xl font-medium text-center text-gray-900 font-poppins">
+      <div className="m-3 mt-10 text-3xl font-semibold text-center text-gray-900 sm:text-4xl font-poppins">
         {title}
       </div>
     </div>
@@ -59,7 +59,7 @@ export const FormikFormContainer = ({
 }) => {
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
+      <div className="flex flex-col items-center w-full p-4 bg-white border border-gray-100 shadow-xl shadow-gray-200/60 rounded-3xl sm:p-8">
         {children}
       </div>
     </div>
@@ -81,7 +81,7 @@ export const Label = ({
       className={
         classN
           ? classN
-          : "block mb-2 w-48 text-center h-fit text-sm font-medium font-poppins text-gray-900"
+          : "block mb-1.5 h-fit text-sm font-medium font-poppins text-gray-800 text-left"
       }
     >
       {text}
@@ -101,10 +101,12 @@ export function FieldSet({
   return (
     <fieldset
       id={id}
-      className="flex flex-col items-center w-full p-3 mb-10 border border-gray-300 border-solid"
+      className="flex flex-col items-start w-full p-4 mb-8 border border-gray-200 border-solid rounded-2xl sm:p-6"
     >
-      <legend className="text-sm">{legendText}</legend>
-      <div className="flex flex-wrap justify-center w-full">{children}</div>
+      <legend className="px-2 text-base font-semibold text-brand font-poppins">
+        {legendText}
+      </legend>
+      <div className="flex flex-wrap w-full gap-x-4">{children}</div>
     </fieldset>
   );
 }
@@ -114,6 +116,7 @@ export const InputTextFieldWithLabelFormik = ({
   labelClassN,
   labelLeftAligned,
   classN,
+  wrapperClassN,
   type,
   children,
   placeholder,
@@ -122,6 +125,7 @@ export const InputTextFieldWithLabelFormik = ({
   forNameId: string;
   classN?: string;
   labelClassN?: string;
+  wrapperClassN?: string;
   type?: string;
   children: React.ReactNode;
   placeholder?: string;
@@ -129,17 +133,18 @@ export const InputTextFieldWithLabelFormik = ({
 }) => {
   return (
     <div
-      className={
-        labelLeftAligned
-          ? "flex flex-col items-left justify-end mb-4 ml-1 mr-1"
-          : "flex flex-col items-center justify-end mb-4 ml-1 mr-1"
-      }
+      className={clsx(
+        wrapperClassN
+          ? wrapperClassN
+          : "form-field flex flex-col justify-end mb-4 w-full sm:w-56",
+        labelLeftAligned ? "items-start" : ""
+      )}
     >
       <Label text={labelText} hFor={forNameId} classN={labelClassN} />
 
       <Field
         className={clsx(
-          "border border-gray-300 text-gray-900 text-xs font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 ",
+          "border border-gray-300 bg-white text-gray-900 text-sm font-poppins rounded-xl focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none block w-full h-11 p-2.5 ",
           classN
         )}
         name={forNameId}
@@ -172,7 +177,7 @@ export const InputTextAreaFormik = ({
         className={
           fieldclassN
             ? fieldclassN
-            : "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
+            : "border border-gray-300 bg-white text-gray-900 text-sm font-poppins rounded-xl focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none block w-full min-h-[5.5rem] p-2.5 "
         }
         name={forNameId}
         id={forNameId}
@@ -359,11 +364,11 @@ export const ExposingDropdownWithLabelFormik = ({
   const formikProps = useFormikContext();
 
   return (
-    <div className="flex flex-col items-center justify-end mb-4 ml-1 mr-1">
+    <div className="form-field flex flex-col justify-end mb-4 w-full sm:w-56">
       <Label text={labelText} hFor={forNameId} />
       <Field
         className={
-          "border border-gray-300 text-gray-900 text-sm font-poppins rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 h-11 p-2.5 "
+          "border border-gray-300 bg-white text-gray-900 text-sm font-poppins rounded-xl focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none block w-full h-11 p-2.5 "
         }
         name={forNameId}
         as="select"
@@ -476,7 +481,7 @@ export const QuestionsMap = ({
           if (isTextArea) {
             return (
               <div
-                className="flex flex-col items-center justify-end mb-4 ml-1 mr-1"
+                className="form-field flex flex-col justify-end mb-4 w-full sm:w-[29rem]"
                 key={field + entry[1].type}
               >
                 <InputTextAreaFormik

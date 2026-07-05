@@ -11,112 +11,212 @@ import {
   InputTextAreaFormik,
   InputTextFieldWithLabelFormik,
 } from "../IndividualFormLayout/CommonFormComponents";
-export const DashedTitle = ({ text }: { text: string }) => {
+
+export const SectionEyebrow = ({
+  text,
+  centered,
+}: {
+  text: string;
+  centered?: boolean;
+}) => {
   return (
-    <div className="flex flex-col items-center ">
-      <div className="flex w-5/6 mt-16 mb-10 text-xl font-semibold font-poppins">
-        <div className="flex items-center">
-          <div className="mr-2 border-b-4 border-[#8b3479] w-7"></div>
-        </div>
-        {text}
-      </div>
+    <div
+      className={`mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-brand font-poppins ${
+        centered ? "text-center" : ""
+      }`}
+    >
+      {text}
     </div>
   );
 };
+
+export const DashedTitle = ({ text }: { text: string }) => {
+  return (
+    <div className="flex items-center justify-center gap-4 mt-16 mb-10">
+      <div className="w-10 border-b-2 border-brand"></div>
+      <div className="flex items-center gap-2 text-2xl font-semibold text-gray-900 sm:text-3xl font-poppins">
+        {text}
+        <Icon icon="foundation:paw" color="#8b3479" width="24" height="24" />
+      </div>
+      <div className="w-10 border-b-2 border-brand"></div>
+    </div>
+  );
+};
+
 export const FooterSection = () => {
-  const FooterIconText = ({
+  const FooterHeading = ({ text }: { text: string }) => (
+    <div className="mb-4 text-base font-semibold text-white font-poppins">
+      {text}
+    </div>
+  );
+
+  const FooterRow = ({
     icon,
     children,
   }: {
     icon: string;
     children: React.ReactNode;
-  }) => {
-    return (
-      <div className="flex items-center justify-start h-20 mt-8 xl:justify-center w-80">
-        <div className="flex rounded-full bg-[#8b3479] h-20 w-20 items-center justify-center mr-2">
-          <Icon color="#ffffff" icon={icon} width="40" height="40" />
-        </div>
-
-        <span className="font-medium text-white text-md font-poppins">
-          {children}
-        </span>
-      </div>
-    );
-  };
-  return (
-    <div className="pt-4 bg-black h-fit">
-      <div className="flex items-center justify-center">
-        <Image src="/logo-nav.png" alt="" width={128} height={128} />
-      </div>
-      <div className="flex items-center justify-center w-full">
-        <div className="flex flex-wrap items-center justify-center w-full 2xl:w-5/6">
-          <FooterIconText icon="akar-icons:location">
-            53 Killymittan Road, <br /> BT94 2FW <br />
-            Ballinamallard
-          </FooterIconText>
-          <FooterIconText icon="clarity:alarm-clock-line">
-            Mon &#8211; Sun: 12:00 &#8211; 15:00
-          </FooterIconText>
-          <FooterIconText icon="akar-icons:envelope">
-            brighteyes.sanctuary@
-            <br />
-            btinternet.com
-          </FooterIconText>
-          <FooterIconText icon="carbon:phone-voice">
-            <div className="flex flex-col">
-              <span className="font-medium text-white text-md font-poppins">
-                07710607816
-              </span>
-              <span className="font-medium text-white text-md font-poppins">
-                028 66 720078
-              </span>
-            </div>
-          </FooterIconText>
-        </div>
-      </div>
-      <div className="flex items-center justify-center pb-2 mt-10">
-        <Link href={"https://www.facebook.com/brighteyes.a.s/"}>
-          <Icon
-            className="mr-2 cursor-pointer"
-            icon="akar-icons:facebook-fill"
-            color="#8b3479"
-            width="30"
-            height="30"
-          />
-        </Link>
-        <a href={"https://www.instagram.com/brighteyesanimalsanctuary"}>
-          <Icon
-            className="mr-2 cursor-pointer"
-            icon="akar-icons:instagram-fill"
-            color="#8b3479"
-            width="30"
-            height="30"
-          />
-        </a>
-      </div>
+  }) => (
+    <div className="flex items-start gap-3 mb-3 text-sm leading-6 text-white/75 font-poppins">
+      <Icon
+        className="mt-1 shrink-0"
+        color="#b05a9d"
+        icon={icon}
+        width="18"
+        height="18"
+      />
+      <span>{children}</span>
     </div>
   );
+
+  const FooterLink = ({ text, href }: { text: string; href: string }) => (
+    <li className="mb-2">
+      <Link href={href}>
+        <a className="text-sm text-white/75 transition hover:text-white font-poppins">
+          {text}
+        </a>
+      </Link>
+    </li>
+  );
+
+  return (
+    <footer className="bg-night">
+      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr,1fr,1fr,0.8fr]">
+        <div>
+          <div className="flex items-center gap-3">
+            <Image src="/logo-nav.png" alt="" width={56} height={51} />
+            <div className="font-poppins">
+              <div className="text-lg font-semibold tracking-wide text-white">
+                BRIGHT EYES
+              </div>
+              <div className="text-xs tracking-[0.3em] text-white/60 uppercase">
+                Animal Sanctuary
+              </div>
+            </div>
+          </div>
+          <p className="mt-5 max-w-xs text-sm leading-6 text-white/75 font-poppins">
+            Rescue. Rehabilitate. Rehome. Giving animals the second chance they
+            deserve since 1989.
+          </p>
+          <div className="flex items-center gap-3 mt-6">
+            <a
+              href="https://www.facebook.com/brighteyes.a.s/"
+              aria-label="Bright Eyes on Facebook"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-brand"
+            >
+              <Icon
+                icon="akar-icons:facebook-fill"
+                color="#ffffff"
+                width="18"
+                height="18"
+              />
+            </a>
+            <a
+              href="https://www.instagram.com/brighteyesanimalsanctuary"
+              aria-label="Bright Eyes on Instagram"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-brand"
+            >
+              <Icon
+                icon="akar-icons:instagram-fill"
+                color="#ffffff"
+                width="18"
+                height="18"
+              />
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <FooterHeading text="Contact Us" />
+          <FooterRow icon="akar-icons:location">
+            53 Killymittan Road, <br />
+            BT94 2FW, Ballinamallard
+          </FooterRow>
+          <FooterRow icon="carbon:phone-voice">
+            028 66 720078 <br /> 07710607816
+          </FooterRow>
+          <FooterRow icon="akar-icons:envelope">
+            brighteyes.sanctuary
+            <wbr />
+            @btinternet.com
+          </FooterRow>
+        </div>
+
+        <div>
+          <FooterHeading text="Opening Hours" />
+          <FooterRow icon="clarity:alarm-clock-line">
+            Mon &#8211; Sun: <br />
+            12:00 &#8211; 15:00
+          </FooterRow>
+        </div>
+
+        <div>
+          <FooterHeading text="Quick Links" />
+          <ul>
+            <FooterLink text="About Us" href="/about" />
+            <FooterLink text="Adoption" href="/adoption" />
+            <FooterLink text="Donate" href="/donate" />
+            <FooterLink text="Forms" href="/forms" />
+            <FooterLink text="Contact" href="/#contact" />
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex w-11/12 max-w-6xl flex-col items-center justify-between gap-2 py-5 text-center text-xs text-white/55 font-poppins sm:flex-row sm:text-left">
+          <span>
+            &copy; {new Date().getFullYear()} Bright Eyes Animal Sanctuary. All
+            rights reserved.
+          </span>
+          <span className="flex items-center gap-2">
+            <Icon
+              icon="foundation:paw"
+              color="#b05a9d"
+              width="14"
+              height="14"
+            />
+            Registered with the Charity Commission for Northern Ireland
+          </span>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+const buttonStyles = {
+  primary:
+    "flex rounded-full justify-center items-center bg-brand max-w-fit mt-5 transition hover:bg-brand-dark shadow-lg shadow-brand/20",
+  outline:
+    "flex rounded-full justify-center items-center border-2 border-brand bg-white max-w-fit mt-5 transition hover:bg-brand-50",
+};
+
+const buttonInnerStyles = {
+  primary:
+    "flex items-center justify-center pt-3.5 pb-3.5 text-sm font-medium text-white pr-8 pl-8 font-poppins",
+  outline:
+    "flex items-center justify-center pt-3.5 pb-3.5 text-sm font-medium text-brand pr-8 pl-8 font-poppins",
 };
 
 export const Button = ({
   text,
   iconStr,
   link,
+  variant = "primary",
 }: {
   text: string;
   iconStr?: string;
   link: string;
+  variant?: "primary" | "outline";
 }) => {
   return (
     <Link href={`${link}`}>
-      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
-        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-          <span className="pr-4">{text}</span>
+      <button className={buttonStyles[variant]}>
+        <div className={buttonInnerStyles[variant]}>
+          <span className="pr-3">{text}</span>
           <Icon
-            className=""
             icon={iconStr ? iconStr : "fa:long-arrow-right"}
             inline={true}
-            color="white"
+            color={variant === "primary" ? "white" : "#8b3479"}
           />
         </div>
       </button>
@@ -129,11 +229,13 @@ export const ButtonWithQuery = ({
   iconStr,
   link,
   query,
+  variant = "primary",
 }: {
   text: string;
   iconStr?: string;
   link: string;
   query: string;
+  variant?: "primary" | "outline";
 }) => {
   return (
     <Link
@@ -144,20 +246,20 @@ export const ButtonWithQuery = ({
         },
       }}
     >
-      <button className="flex rounded-full justify-center items-center bg-[#8b3479] max-w-fit mt-5 hover:shadow-inner">
-        <div className="flex items-center justify-center pt-4 pb-4 text-sm font-normal text-white pr-9 pl-9 font-poppins">
-          <span className="pr-4">{text}</span>
+      <button className={buttonStyles[variant]}>
+        <div className={buttonInnerStyles[variant]}>
+          <span className="pr-3">{text}</span>
           <Icon
-            className=""
             icon={iconStr ? iconStr : "fa:long-arrow-right"}
             inline={true}
-            color="white"
+            color={variant === "primary" ? "white" : "#8b3479"}
           />
         </div>
       </button>
     </Link>
   );
 };
+
 export const HeadTag = ({
   title,
   metaContent,
@@ -176,37 +278,52 @@ export const HeadTag = ({
   );
 };
 
-export const DonationComponent = () => {
+export const DonationComponent = ({ petName }: { petName?: string }) => {
   return (
-    <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DonationBanner.png')]">
-      <div className="h-100"></div>
-
-      <div className="absolute flex w-10/12 top-10 md:w-3/6 left-5 xl:left-20">
-        <div className="absolute flex flex-col md:mt-5 lg:mt-14 ">
-          <span className="mb-4 text-3xl font-normal font-poppins">
-            Want to make a donation?
-          </span>
-          <span className="w-full text-sm font-normal sm:text-base font-poppins">
-            In the past 5 years we have rehomed over 1,000 Cats and Dogs. We
-            receive no government funding and rely purely on the generosity of
-            the public to help us continue our work. We would be grateful if you
-            would like to set up a standing order each month or leave a legacy
-            in your will, your contribution will make a huge difference to
-            animal welfare and help us continue to rescue more animals that need
-            us.
-          </span>
+    <section className="mx-auto w-11/12 max-w-6xl py-10">
+      <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-brand-100 p-8 sm:p-10 lg:grid-cols-[auto,1fr,auto]">
+        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-brand">
+          <Icon icon="bx:donate-heart" color="#ffffff" width="48" height="48" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-semibold text-brand-deep sm:text-3xl font-poppins">
+            {petName
+              ? `Help more animals like ${petName}`
+              : "Want to make a donation?"}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-700 sm:text-base font-poppins">
+            Your donation helps us provide food, shelter, medical care and love
+            to animals in need. We receive no government funding and rely purely
+            on the generosity of the public to continue our work.
+          </p>
           <Button
-            text="Donate"
+            text="Donate Now"
             iconStr="ant-design:heart-filled"
             link={`/donate`}
           />
         </div>
+        <div className="relative hidden h-48 w-48 overflow-hidden rounded-full lg:block">
+          <Image
+            src="/TabbyCatBlanket.jpg"
+            alt=""
+            layout="fill"
+            objectFit="cover"
+          />
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export const ContactUsSection = () => {
+export const ContactUsSection = ({
+  eyebrow = "Get in touch",
+  title = "We'd love to hear from you",
+  text = "Have a question or want to get involved? Send us a message and we'll get back to you.",
+}: {
+  eyebrow?: string;
+  title?: string;
+  text?: string;
+}) => {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonText, setButtonText] = useState("Send Message");
@@ -222,90 +339,127 @@ export const ContactUsSection = () => {
   };
 
   return (
-    <>
-      <DashedTitle text="Contact Us" />
+    <section id="contact" className="bg-gray-50 py-16">
+      <div className="mx-auto grid w-11/12 max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr,1.1fr]">
+        <div>
+          <SectionEyebrow text={eyebrow} />
+          <h2 className="text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
+            {title.split(" ").slice(0, -2).join(" ")}{" "}
+            <span className="text-brand">
+              {title.split(" ").slice(-2).join(" ")}
+            </span>
+          </h2>
+          <p className="mt-4 max-w-md text-base leading-7 text-gray-600 font-poppins">
+            {text}
+          </p>
 
-      <div className="flex items-center justify-center mb-20">
-        <div className="flex flex-col-reverse items-center justify-center w-full lg:flex-row xl:w-2/3">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={ContactUsSchema}
-            onSubmit={async (data) => {
-              setLoading(true);
-              let successful = await postContactUsForm(data);
-              if (successful) {
-                setLoading(false);
-                setIsSuccess(true);
-              } else {
-                setLoading(false);
-                setIsSuccess(false);
-                setButtonText("ERROR, try again");
-              }
-            }}
-          >
-            {({ handleSubmit }) => (
-              <div className="flex flex-col items-start w-5/6 p-8 bg-white border rounded-md shadow-md ">
-                <div className="flex flex-col md:flex-row">
-                  <InputTextFieldWithLabelFormik
-                    labelText={"Name"}
-                    forNameId={"aboutQuestions.name"}
-                    labelLeftAligned={true}
-                    labelClassN="block mb-2 text-lg font-normal font-poppins"
-                  >
-                    <ErrorFormik
-                      field="name"
-                      parent={"aboutQuestions"}
-                      id={"err-name"}
-                    />
-                  </InputTextFieldWithLabelFormik>
+          <div className="mt-8 flex flex-col gap-4 text-sm text-gray-700 font-poppins">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100">
+                <Icon icon="akar-icons:envelope" color="#8b3479" width="18" />
+              </span>
+              brighteyes.sanctuary@btinternet.com
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100">
+                <Icon icon="carbon:phone-voice" color="#8b3479" width="18" />
+              </span>
+              028 66 720078
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100">
+                <Icon icon="akar-icons:location" color="#8b3479" width="18" />
+              </span>
+              53 Killymittan Road, BT94 2FW, Ballinamallard
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100">
+                <Icon
+                  icon="clarity:alarm-clock-line"
+                  color="#8b3479"
+                  width="18"
+                />
+              </span>
+              Mon &#8211; Sun: 12:00 &#8211; 15:00
+            </div>
+          </div>
 
-                  <InputTextFieldWithLabelFormik
-                    labelText={"Email"}
-                    forNameId={"aboutQuestions.email"}
-                    labelLeftAligned={true}
-                    labelClassN="block mb-2 text-lg font-normal font-poppins"
-                  >
-                    <ErrorFormik
-                      field="email"
-                      parent={"aboutQuestions"}
-                      id={"err-email"}
-                    />
-                  </InputTextFieldWithLabelFormik>
-                </div>
+          <div className="mt-6 hidden w-72 lg:block">
+            <Image src="/ContactUsImage.png" alt="" width={600} height={545} />
+          </div>
+        </div>
 
+        <Formik
+          initialValues={initialValues}
+          validationSchema={ContactUsSchema}
+          onSubmit={async (data) => {
+            setLoading(true);
+            let successful = await postContactUsForm(data);
+            if (successful) {
+              setLoading(false);
+              setIsSuccess(true);
+            } else {
+              setLoading(false);
+              setIsSuccess(false);
+              setButtonText("ERROR, try again");
+            }
+          }}
+        >
+          {({ handleSubmit }) => (
+            <div className="flex w-full flex-col items-start rounded-3xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-200/60 sm:p-8">
+              <div className="grid w-full gap-x-4 sm:grid-cols-2">
+                <InputTextFieldWithLabelFormik
+                  labelText={"Name"}
+                  forNameId={"aboutQuestions.name"}
+                  labelLeftAligned={true}
+                  wrapperClassN="flex w-full flex-col justify-end mb-4"
+                >
+                  <ErrorFormik
+                    field="name"
+                    parent={"aboutQuestions"}
+                    id={"err-name"}
+                  />
+                </InputTextFieldWithLabelFormik>
+
+                <InputTextFieldWithLabelFormik
+                  labelText={"Email"}
+                  forNameId={"aboutQuestions.email"}
+                  labelLeftAligned={true}
+                  wrapperClassN="flex w-full flex-col justify-end mb-4"
+                >
+                  <ErrorFormik
+                    field="email"
+                    parent={"aboutQuestions"}
+                    id={"err-email"}
+                  />
+                </InputTextFieldWithLabelFormik>
+              </div>
+
+              <div className="w-full">
                 <InputTextAreaFormik
                   labelText={"Message"}
                   forNameId={"message"}
-                  fieldclassN="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-52 p-2.5 mb-4"
-                  labelclassN="block mb-2 text-lg font-normal font-poppins text-left"
+                  fieldclassN="border border-gray-300 text-gray-900 text-sm font-poppins rounded-xl focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none block w-full h-44 p-3 mb-4"
+                  labelclassN="block mb-1.5 text-sm font-medium font-poppins text-gray-800 text-left"
                 >
                   <ErrorFormik field="message" id={"err-message"} />
                 </InputTextAreaFormik>
-                <ShowButtonTextOnSubmit
-                  loading={loading}
-                  isSuccess={isSuccess}
-                  buttonText={buttonText}
-                  submitHandler={handleSubmit}
-                  animalName={"message"}
-                />
               </div>
-            )}
-          </Formik>
-          <div className="flex justify-center basis-2/3">
-            <div className="w-full sm:w-4/5 xl:w-full">
-              <Image
-                src="/ContactUsImage.png"
-                alt=""
-                width={600}
-                height={545}
+              <ShowButtonTextOnSubmit
+                loading={loading}
+                isSuccess={isSuccess}
+                buttonText={buttonText}
+                submitHandler={handleSubmit}
+                animalName={"message"}
               />
             </div>
-          </div>
-        </div>
+          )}
+        </Formik>
       </div>
-    </>
+    </section>
   );
 };
+
 export let submittingButtonIcon = () => {
   return (
     <div
@@ -408,7 +562,7 @@ export const ShowButtonTextOnSubmit = ({
   return loading ? (
     <button
       type="submit"
-      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand text-white justify-center font-poppins text-sm font-medium"
       onClick={(e) => {
         e.preventDefault();
         submitHandler();
@@ -419,7 +573,7 @@ export const ShowButtonTextOnSubmit = ({
   ) : isSuccess ? (
     <button
       type="submit"
-      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] opacity-50 cursor-not-allowed text-white justify-center hover:bg-[#398092]"
+      className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand opacity-50 cursor-not-allowed text-white justify-center font-poppins text-sm font-medium"
       onClick={(e) => {
         e.preventDefault();
       }}
@@ -429,7 +583,7 @@ export const ShowButtonTextOnSubmit = ({
   ) : (
     <button
       type="submit"
-      className="flex p-3 border mb-2 mt-2 rounded-lg w-56 bg-[#8B3479] text-white justify-center hover:bg-[#398092]"
+      className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand text-white justify-center transition hover:bg-brand-dark font-poppins text-sm font-medium"
       onClick={(e) => {
         e.preventDefault();
         submitHandler();

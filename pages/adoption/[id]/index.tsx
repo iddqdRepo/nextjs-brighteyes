@@ -4,26 +4,29 @@ import dbConnect from "../../../utils/dbConnect";
 import {
   DonationComponent,
   FooterSection,
+  HeadTag,
 } from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
 import {
   AdoptionRulesSection,
   AnimalDetailSection,
-  HeroBannerSection,
+  OtherPetsSection,
 } from "../../../components/LayoutComponents/Animal/AnimalLayout";
-import { Divider } from "../../../components/LayoutComponents/Animal/AnimalLayoutComponents";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
 function Animal({ animal }: { animal: [PetInterface] }) {
   return (
     <>
+      <HeadTag
+        title={`Meet ${animal[0].name} - Bright Eyes Animal Sanctuary`}
+        metaContent={`${animal[0].name} is looking for a loving forever home. Could you be their perfect match?`}
+        linkHref={`/adoption/${animal[0]._id}`}
+      />
       <NavbarComponent />
-
-      <HeroBannerSection name={animal[0].name} />
       <AnimalDetailSection animal={animal[0]} />
-      <Divider />
-      <DonationComponent />
+      <DonationComponent petName={animal[0].name} />
       <AdoptionRulesSection />
+      <OtherPetsSection currentId={animal[0]._id ?? ""} />
       <FooterSection />
     </>
   );
