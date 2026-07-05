@@ -23,7 +23,24 @@ export interface UserInterface {
   _id?: string;
 }
 
-export interface GiftaidFormInterface {
+export interface FormNote {
+  text: string;
+  by: string;
+  date?: string;
+}
+
+//Tracking fields shared by every submission type. New submissions are
+//created with status "new" and read false; forms missing these fields
+//entirely predate tracking and are shown as "Pre-update".
+export interface FormTrackingFields {
+  status?: "new" | "handled";
+  handledBy?: string | null;
+  handledAt?: string | null;
+  read?: boolean;
+  notes?: FormNote[];
+}
+
+export interface GiftaidFormInterface extends FormTrackingFields {
   aboutQuestions: {
     address: string;
     mobile: string;
@@ -40,7 +57,7 @@ export interface GiftaidFormInterface {
   archive: string;
   __v?: 0;
 }
-export interface ContactUsFormInterface {
+export interface ContactUsFormInterface extends FormTrackingFields {
   aboutQuestions: {
     name: string;
     email: string;
@@ -54,7 +71,7 @@ export interface ContactUsFormInterface {
   __v?: 0;
 }
 
-export interface PetAdoptionFormInterface {
+export interface PetAdoptionFormInterface extends FormTrackingFields {
   aboutQuestions: {
     title: string;
     name: string;
@@ -169,7 +186,7 @@ export interface PetAdoptionFormInterface {
   archive: string;
   __v?: number;
 }
-export interface VolunteerFormInterface {
+export interface VolunteerFormInterface extends FormTrackingFields {
   aboutQuestions: {
     title: string;
     name: string;

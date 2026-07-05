@@ -91,7 +91,64 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       case "PUT": {
         const update = pickSchemaFields(model, req.body);
-        const form = await model.findByIdAndUpdate(id, update, {
+
+        //Tracking fields are stamped here from the authenticated requester,
+        //never taken from the client.
+        delete update.notes;
+        delete update.handledBy;
+        delete update.handledAt;
+
+        if (update.status !== undefined) {
+          if (update.status !== "new" && update.status !== "handled") {
+            return res.status(400).json({
+              success: false,
+              message: "status must be 'new' or 'handled'",
+            });
+          }
+          //Whole-form updates (e.g. archiving) echo the current status back;
+          //only an actual change re-stamps who is handling it.
+          const existing = await model.findById(id, { status: 1 }).lean();
+          if (!existing) {
+            return res.status(404).json({
+              success: false,
+              message: `No ${type} form with ID of ${id} exists`,
+            });
+          }
+          const currentStatus = (existing as { status?: string }).status;
+          if (update.status !== (currentStatus ?? "new")) {
+            update.handledBy =
+              update.status === "handled" ? user.username : null;
+            update.handledAt = update.status === "handled" ? new Date() : null;
+          }
+        }
+
+        //Tracking-only updates must not bump updatedAt — the admin tables
+        //display it as the submission date.
+        const trackingKeys = [
+          "updatedAt",
+          "status",
+          "handledBy",
+          "handledAt",
+          "read",
+        ];
+        if (Object.keys(update).every((key) => trackingKeys.includes(key))) {
+          delete update.updatedAt;
+        }
+
+        const operations: Record<string, unknown> = { $set: update };
+        const noteText =
+          typeof req.body.addNote === "string" ? req.body.addNote.trim() : "";
+        if (noteText) {
+          operations.$push = {
+            notes: {
+              text: noteText.slice(0, 2000),
+              by: user.username,
+              date: new Date(),
+            },
+          };
+        }
+
+        const form = await model.findByIdAndUpdate(id, operations, {
           new: true,
           runValidators: true,
         });

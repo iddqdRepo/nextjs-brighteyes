@@ -58,6 +58,21 @@ export const udpateContactUsForm = async (data: ContactUsFormInterface) => {
   await axios.put(`/api/forms/${data._id}?type=contactus`, data);
 };
 
+//^-----------------TRACKING ROUTES-----------------
+//Meta updates (New/Being handled flag, staff notes, read marker) that leave
+//the submission content untouched. The server stamps who/when.
+
+export type FormApiType = "pet" | "giftaid" | "volunteer" | "contactus";
+
+export const updateFormTracking = async (
+  type: FormApiType,
+  id: string,
+  payload: { status?: "new" | "handled"; addNote?: string; read?: boolean }
+) => {
+  const updated = await axios.put(`/api/forms/${id}?type=${type}`, payload);
+  return updated.data;
+};
+
 //^-----------------DELETE ROUTES-----------------
 
 export const deletePetForm = async (id: string) => {

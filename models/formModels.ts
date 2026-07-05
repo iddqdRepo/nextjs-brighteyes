@@ -1,8 +1,29 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
+
+//Lightweight tracking shared by every submission type: a New → Being handled
+//flag (who/when stamped server-side in api/forms/[id]), staff notes, and a
+//read marker. New submissions get status "new" + read false on creation;
+//forms with none of these fields predate tracking and display as
+//"Pre-update" rather than nagging the team to re-read history. The note
+//timestamp is named `date` so stringifyIdsAndDates serialises it for
+//getServerSideProps.
+const formNoteSchema = new Schema(
+  { text: String, by: String, date: Date },
+  { _id: false }
+);
+const trackingFields = {
+  status: { type: String, enum: ["new", "handled"] },
+  handledBy: String,
+  handledAt: Date,
+  read: Boolean,
+  notes: [formNoteSchema],
+};
+
 const formPetAdoptionSchema = new Schema({
   type: String,
+  ...trackingFields,
   aboutQuestions: {
     title: String,
     name: String,
@@ -127,6 +148,7 @@ const formPetAdoptionSchema = new Schema({
 
 const formGiftAidSchema = new Schema({
   type: String,
+  ...trackingFields,
   date: {
     type: Date,
     default: new Date(),
@@ -149,6 +171,7 @@ const formGiftAidSchema = new Schema({
 
 const formVolunteerSchema = new Schema({
   type: String,
+  ...trackingFields,
   date: String,
   aboutQuestions: {
     title: String,
@@ -204,6 +227,7 @@ const formVolunteerSchema = new Schema({
 
 const formContactUsSchema = new Schema({
   type: String,
+  ...trackingFields,
   aboutQuestions: {
     name: String,
     email: String,

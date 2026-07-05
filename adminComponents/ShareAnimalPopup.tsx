@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
+import { Icon } from "@iconify/react";
 
-//Share popup for an animal's public page: copy the link for pasting into
-//Facebook, use the phone's native share sheet, or scan/print the QR code.
+//Share popup for an animal's public page: post straight to Facebook, copy
+//the link, use the phone's native share sheet, or scan/print the QR code.
 const ShareAnimalPopup = ({
   name,
   url,
@@ -32,6 +33,21 @@ const ShareAnimalPopup = ({
     }
   };
 
+  //Facebook's share dialog only needs the URL — Facebook's crawler fetches
+  //the page's Open Graph tags for the photo and description, which is why
+  //the preview only appears for the live site (it can't reach localhost).
+  //`quote` pre-fills the post text where supported. No SDK, no API key.
+  const handleFacebook = () => {
+    const quote = `Could you give ${name} a loving home?`;
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}&quote=${encodeURIComponent(quote)}`,
+      "_blank",
+      "noopener,noreferrer,width=626,height=436"
+    );
+  };
+
   return (
     <div className="fixed z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-slate-600">
       <div className="flex flex-col items-center p-6 bg-white border-2 shadow-lg h-fit w-96">
@@ -50,17 +66,25 @@ const ShareAnimalPopup = ({
           {url}
         </div>
 
-        <div className="flex mt-4">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          <button
+            id="share-facebook"
+            onClick={handleFacebook}
+            className="flex items-center gap-1.5 px-4 py-2 text-sm text-white rounded-lg bg-[#1877F2] hover:bg-[#0f65d0] font-poppins"
+          >
+            <Icon icon="mdi:facebook" width="17" height="17" />
+            Share to Facebook
+          </button>
           <button
             onClick={handleCopy}
-            className="px-4 py-2 mr-2 text-sm text-white rounded-lg bg-[#8b3479] hover:bg-[#398092] font-poppins"
+            className="px-4 py-2 text-sm text-white rounded-lg bg-brand hover:bg-brand-dark font-poppins"
           >
             {copied ? "Copied!" : "Copy link"}
           </button>
           {typeof navigator !== "undefined" && !!navigator.share && (
             <button
               onClick={handleShare}
-              className="px-4 py-2 text-sm text-white rounded-lg bg-[#8b3479] hover:bg-[#398092] font-poppins"
+              className="px-4 py-2 text-sm text-white rounded-lg bg-brand hover:bg-brand-dark font-poppins"
             >
               Share&hellip;
             </button>

@@ -53,9 +53,9 @@ function HappyTails({
             />
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-gray-600 sm:text-lg font-poppins">
-            Every one of these faces was rescued, cared for, and welcomed into a
-            loving forever home. This page exists because of adopters,
-            volunteers and supporters like you &#8212; thank you.
+            Since our website went live, every one of these faces was rescued,
+            cared for, and welcomed into a loving forever home. This page exists
+            because of adopters, volunteers and supporters like you - thank you.
           </p>
         </div>
       </section>

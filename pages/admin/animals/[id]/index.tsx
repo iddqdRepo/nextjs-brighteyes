@@ -16,6 +16,7 @@ import { updatePet } from "../../../../routes/petRoutes";
 import { ShowButtonTextOnSubmit } from "../../../../components/common/CommonComponents";
 import { AdminUser } from "../../../../utils/adminAccess";
 import { gateAdminPage } from "../../../../utils/auth";
+import UnsavedChangesGuard from "../../../../adminComponents/UnsavedChangesGuard";
 
 function Index({
   animal,
@@ -59,8 +60,9 @@ function Index({
                 }
               }}
             >
-              {({ values, handleSubmit, setFieldValue }) => (
+              {({ values, handleSubmit, setFieldValue, dirty }) => (
                 <div className="flex w-full flex-col items-center">
+                  <UnsavedChangesGuard when={dirty && !isSuccess && !loading} />
                   <AnimalFormSections
                     values={values}
                     setFieldValue={setFieldValue}

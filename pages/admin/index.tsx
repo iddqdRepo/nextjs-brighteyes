@@ -99,6 +99,17 @@ function Index({
           .length
       : 0;
 
+  //"Unread" means genuinely never opened — opening a message marks it read.
+  //Only post-tracking messages carry read=false; pre-update ones (no read
+  //field at all) aren't counted, so the team isn't told to re-read history.
+  const countUnread = (forms: any) =>
+    forms?.data
+      ? forms.data.filter(
+          (form: { archive: string; read?: boolean }) =>
+            form.archive === "No" && form.read === false
+        ).length
+      : 0;
+
   const recentForms: RecentForm[] = [
     ...(adoptionForms?.data ?? []),
     ...(giftAidForms?.data ?? []),
@@ -152,7 +163,7 @@ function Index({
                 subtitle="Needs your attention"
                 value={
                   !isContactUsFormsLoading ? (
-                    countPending(contactUsForms)
+                    countUnread(contactUsForms)
                   ) : (
                     <LoadingSpinner />
                   )

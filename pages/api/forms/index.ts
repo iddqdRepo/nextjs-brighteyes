@@ -61,7 +61,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .status(400)
             .json({ success: false, message: INVALID_TYPE_MESSAGE });
         }
-        const form = await model.create(req.body);
+        //Every new submission starts explicitly tracked; forms without these
+        //fields predate the tracking feature and are shown as "Pre-update".
+        //Overriding here also stops a visitor injecting tracking fields.
+        const form = await model.create({
+          ...req.body,
+          status: "new",
+          read: false,
+          notes: [],
+          handledBy: undefined,
+          handledAt: undefined,
+        });
         //Only after the form is safely saved; never blocks the submission.
         await notifyFormSubmission(
           String(query.type),

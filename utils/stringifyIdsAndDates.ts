@@ -19,6 +19,10 @@ export function stringifyIdsAndDates(dataStructure: any) {
       if (key === "date") {
         dataStructure["date"] = dataStructure["date"].toString();
       }
+      //null when a form is marked back as new, so guard before stringifying
+      if (key === "handledAt" && dataStructure["handledAt"]) {
+        dataStructure["handledAt"] = dataStructure["handledAt"].toString();
+      }
       //if key is an array, loop through and stringify the contents
       if (Array.isArray(dataStructure[key])) {
         dataStructure[key].map((item: any) => {
