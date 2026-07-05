@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
 import { getAuthUser } from "../../../utils/auth";
+import { isDataUri, uploadPetImage } from "../../../utils/cloudinary";
 
 //Only these fields may be set via the API, so a client cannot inject arbitrary
 //properties (e.g. _id, __v) through the request body.
@@ -62,6 +63,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .json({ success: false, message: "Unauthorized" });
         }
         const update = pickEditableFields(req.body);
+        //Inline base64 images go to Cloudinary; Mongo only stores the URL.
+        if (isDataUri(update.image)) {
+          update.image = await uploadPetImage(update.image);
+        }
         const pet = await petModel.findByIdAndUpdate(id, update, {
           new: true,
           runValidators: true,

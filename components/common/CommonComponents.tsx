@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import { Formik } from "formik";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState } from "react";
 import { postContactUsForm } from "../../routes/formRoutes";
 import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
@@ -46,7 +46,7 @@ export const FooterSection = () => {
   return (
     <div className="pt-4 bg-black h-fit">
       <div className="flex items-center justify-center">
-        <img className="w-32 h-32" src="/logo-nav.png" alt="" />
+        <Image src="/logo-nav.png" alt="" width={128} height={128} />
       </div>
       <div className="flex items-center justify-center w-full">
         <div className="flex flex-wrap items-center justify-center w-full 2xl:w-5/6">
@@ -292,11 +292,14 @@ export const ContactUsSection = () => {
             )}
           </Formik>
           <div className="flex justify-center basis-2/3">
-            <img
-              className="bg-center bg-no-repeat sm:w-4/5 xl:w-full"
-              src="/ContactUsImage.png"
-              alt=""
-            />
+            <div className="w-full sm:w-4/5 xl:w-full">
+              <Image
+                src="/ContactUsImage.png"
+                alt=""
+                width={600}
+                height={545}
+              />
+            </div>
           </div>
         </div>
       </div>

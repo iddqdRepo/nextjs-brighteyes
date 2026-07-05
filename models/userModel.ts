@@ -12,6 +12,16 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    //WebAuthn passkeys registered for this admin (one per device). Binary
+    //values are stored base64url-encoded.
+    authenticators: [
+      {
+        credentialID: { type: String, required: true },
+        credentialPublicKey: { type: String, required: true },
+        counter: { type: Number, required: true, default: 0 },
+        transports: [String],
+      },
+    ],
   },
   { timestamps: true }
 );

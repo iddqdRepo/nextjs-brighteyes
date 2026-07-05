@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
 import { getAuthUser } from "../../../utils/auth";
+import { isDataUri, uploadPetImage } from "../../../utils/cloudinary";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
@@ -35,7 +36,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .status(401)
             .json({ success: false, message: "Unauthorized" });
         }
-        const pets = await petModel.create(req.body);
+        const body = { ...req.body };
+        //Inline base64 images go to Cloudinary; Mongo only stores the URL.
+        if (isDataUri(body.image)) {
+          body.image = await uploadPetImage(body.image);
+        }
+        const pets = await petModel.create(body);
         return res.status(201).json({ success: true, data: pets });
       }
 

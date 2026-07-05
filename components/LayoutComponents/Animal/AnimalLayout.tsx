@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import { DetailContainer } from "./AnimalLayoutComponents";
 import { Icon } from "@iconify/react";
 import { PetInterface } from "../../../interfaces/interfaces";
@@ -19,11 +19,15 @@ export const HeroBannerSection = ({ name }: { name: string }) => {
         </div>
 
         <div className="flex justify-center basis-1/3">
-          <img
-            className="w-4/5 bg-center bg-no-repeat sm:w-2/5 xl:w-auto xl:h-4/5 rounded-xl"
-            src="/MeetBioSmall.png"
-            alt=""
-          />
+          <div className="w-4/5 sm:w-2/5 xl:w-auto">
+            <Image
+              className="rounded-xl"
+              src="/MeetBioSmall.png"
+              alt=""
+              width={732}
+              height={395}
+            />
+          </div>
         </div>
       </div>
     </div>

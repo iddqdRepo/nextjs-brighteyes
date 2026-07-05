@@ -22,6 +22,28 @@ const modelByType = (type: unknown): Model<any> | null => {
 const INVALID_TYPE_MESSAGE =
   "Please add a valid query type e.g. api/forms/<id>?type=volunteer";
 
+//Only fields the form's schema declares may be set via the API, so a client
+//cannot inject arbitrary properties (e.g. _id, __v) through the request body.
+const pickSchemaFields = (
+  model: Model<any>,
+  body: Record<string, unknown> = {}
+) => {
+  const allowed = new Set(
+    Object.keys(model.schema.paths).map((path) => path.split(".")[0])
+  );
+  allowed.delete("_id");
+  allowed.delete("__v");
+
+  const update: Record<string, unknown> = {};
+  for (const key of Object.keys(body)) {
+    if (allowed.has(key)) {
+      update[key] = body[key];
+    }
+  }
+  update.updatedAt = new Date();
+  return update;
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const id = query.id;
@@ -59,7 +81,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       case "PUT": {
-        const form = await model.findByIdAndUpdate(id, req.body, {
+        const update = pickSchemaFields(model, req.body);
+        const form = await model.findByIdAndUpdate(id, update, {
           new: true,
           runValidators: true,
         });

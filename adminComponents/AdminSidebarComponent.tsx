@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -91,11 +91,12 @@ function AdminSidebarComponent(props: any) {
       <div className="flex min-w-screen ml-1 mt-1 md:flex-col md:items-center md:w-20 md:min-h-screen lg:w-72 bg-white]">
         <div className="flex flex-col items-center py-6 text-base font-extrabold md:mb-10">
           <Link href={"/admin"}>
-            <a>
-              <img
-                className="hidden lg:flex lg:w-auto lg:h-20"
+            <a className="hidden lg:block">
+              <Image
                 src="/logo-nav.png"
-                alt=""
+                alt="Bright Eyes Animal Sanctuary"
+                width={87}
+                height={80}
               />
             </a>
           </Link>

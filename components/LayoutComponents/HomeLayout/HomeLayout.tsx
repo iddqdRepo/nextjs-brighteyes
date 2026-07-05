@@ -1,12 +1,19 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { InfoCard, AboutCard } from "../HomeLayout/HomeLayoutComponents";
 import { Button, DashedTitle } from "../../common/CommonComponents";
 import { RoughNotation } from "react-rough-notation";
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 export const HeroSection = () => {
   return (
-    <div className="relative block bg-no-repeat sm:bg-center sm:bg-cover bg-[url('../public/DogHero4.png')]">
+    <div className="relative block overflow-hidden">
+      <Image
+        src="/DogHero4.png"
+        alt=""
+        layout="fill"
+        objectFit="cover"
+        objectPosition="center"
+        priority
+      />
       <div className="h-85-vh"></div>
 
       <div className="absolute w-full rotate-180 -bottom-1 top-1/3 ">
@@ -101,11 +108,15 @@ export const AboutUsSection = () => {
           </div>
 
           <div className="flex justify-center basis-1/3">
-            <img
-              className="w-4/5 bg-center bg-no-repeat sm:w-2/5 xl:w-auto xl:h-4/5 rounded-xl"
-              src="/puppyDogEyes.jpg"
-              alt=""
-            />
+            <div className="w-4/5 sm:w-2/5 xl:w-auto">
+              <Image
+                className="rounded-xl"
+                src="/puppyDogEyes.jpg"
+                alt=""
+                width={1480}
+                height={1480}
+              />
+            </div>
           </div>
         </div>
       </div>

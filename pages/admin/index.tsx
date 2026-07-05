@@ -18,6 +18,7 @@ import {
   BigCard,
   SmallCard,
 } from "../../adminComponents/DashboardHome/DashboardHomeLayoutComponents";
+import RegisterPasskey from "../../adminComponents/RegisterPasskey";
 
 function Index() {
   const petsData = ["pets", getPets];
@@ -207,6 +208,7 @@ function Index() {
                   />
                 </div>
               </div>
+              <RegisterPasskey />
             </div>
           </div>
         </PageContainerComponent>

@@ -1,8 +1,7 @@
-import { sign } from "jsonwebtoken";
-import { serialize } from "cookie";
 import bcrypt from "bcrypt";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
+import { buildAuthCookie } from "../../../utils/auth";
 
 const secret = process.env.SECRET;
 
@@ -97,16 +96,7 @@ export default async function login(req, res) {
 
     attempts.delete(rateKey);
 
-    const token = sign({ username }, secret, { expiresIn: "30d" });
-
-    const serialised = serialize("BrightEyesJWTToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 30, //when the cookie expires
-      path: "/",
-    });
-    res.setHeader("Set-Cookie", serialised);
+    res.setHeader("Set-Cookie", buildAuthCookie(username));
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Login error", error);

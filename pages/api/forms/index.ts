@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import formModels from "../../../models/formModels";
 import dbConnect from "../../../utils/dbConnect";
 import { getAuthUser } from "../../../utils/auth";
+import { notifyFormSubmission } from "../../../utils/notifyFormSubmission";
 
 const modelByType = (type: unknown): Model<any> | null => {
   switch (type) {
@@ -54,6 +55,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .json({ success: false, message: INVALID_TYPE_MESSAGE });
         }
         const form = await model.create(req.body);
+        //Only after the form is safely saved; never blocks the submission.
+        await notifyFormSubmission(
+          String(query.type),
+          req.body?.aboutQuestions?.name
+        );
         return res.status(201).json({ success: true, data: form });
       }
 

@@ -11,6 +11,7 @@ import {
   AdminConfirmationPopup,
 } from "../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
+import ShareAnimalPopup from "../../../adminComponents/ShareAnimalPopup";
 import { useRouter } from "next/router";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deletePet, getPets, updatePet } from "../../../routes/petRoutes";
@@ -21,6 +22,7 @@ function Index() {
   const [filter, setFilter] = useState("");
   const [textFilter, setTextFilter] = useState("");
   const [hidden, setHidden] = useState(true);
+  const [shareTarget, setShareTarget] = useState<PetInterface | null>(null);
   const deleteOrUpdateInfo = useRef({
     name: "",
     id: "",
@@ -28,12 +30,15 @@ function Index() {
     action: "",
     promptText: "",
   });
-  const tableHeaderArray = ["Name", "Edit", "Archive", "Delete"];
 
   const router = useRouter();
   const queryClient = useQueryClient();
   let isArchive = router.query.archive;
   const highlighted = isArchive === "true" ? "AnimalArchive" : "Animals";
+  const tableHeaderArray =
+    isArchive === "true"
+      ? ["Name", "Edit", "Adopted", "Delete"]
+      : ["Name", "Edit", "Adopted", "Share", "Delete"];
   const { isLoading, data: pets } = useQuery("pets", getPets);
 
   const deletePetMutation = useMutation(deletePet, {
@@ -77,6 +82,13 @@ function Index() {
             archiveHandler={handleArchive}
             action={deleteOrUpdateInfo.current.action}
             promptText={deleteOrUpdateInfo.current.promptText}
+          />
+        )}
+        {shareTarget && (
+          <ShareAnimalPopup
+            name={shareTarget.name}
+            url={`${window.location.origin}/adoption/${shareTarget._id}`}
+            onClose={() => setShareTarget(null)}
           />
         )}
 
@@ -169,9 +181,8 @@ function Index() {
                               </TableData>
                               <TableData>
                                 <div className="flex flex-row items-center justify-center">
-                                  <Icon
-                                    className="w-auto h-6 cursor-pointer"
-                                    icon="fluent:tray-item-remove-24-filled"
+                                  <button
+                                    className="px-3 py-2 text-sm text-white rounded-lg bg-[#8b3479] hover:bg-[#398092] font-poppins whitespace-nowrap"
                                     onClick={() => {
                                       deleteOrUpdateInfo.current.name =
                                         pet.name;
@@ -184,15 +195,31 @@ function Index() {
                                         "archive";
                                       isArchive === "true"
                                         ? (deleteOrUpdateInfo.current.promptText =
-                                            "unArchive")
+                                            "mark as available")
                                         : (deleteOrUpdateInfo.current.promptText =
-                                            "archive");
+                                            "mark as adopted");
 
                                       setHidden(false);
                                     }}
-                                  />
+                                  >
+                                    {isArchive === "true"
+                                      ? "Mark available"
+                                      : "Mark adopted"}
+                                  </button>
                                 </div>
                               </TableData>
+                              {isArchive !== "true" && (
+                                <TableData>
+                                  <div className="flex flex-row items-center justify-center">
+                                    <Icon
+                                      className="w-auto h-6 cursor-pointer"
+                                      icon="carbon:share"
+                                      aria-label={`Share ${pet.name}`}
+                                      onClick={() => setShareTarget(pet)}
+                                    />
+                                  </div>
+                                </TableData>
+                              )}
                               <TableData>
                                 <div className="flex flex-row items-center justify-center">
                                   <Icon

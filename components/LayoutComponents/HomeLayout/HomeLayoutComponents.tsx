@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
 import React from "react";
 import { Button } from "../../common/CommonComponents";

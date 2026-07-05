@@ -1,7 +1,25 @@
 import { NextApiHandler, NextApiRequest } from "next";
-import { verify, JwtPayload } from "jsonwebtoken";
+import { sign, verify, JwtPayload } from "jsonwebtoken";
+import { serialize } from "cookie";
 
 export const AUTH_COOKIE = "BrightEyesJWTToken";
+
+//Serialized session cookie for a successfully authenticated admin — shared by
+//the password login and the WebAuthn login so both issue identical sessions.
+export const buildAuthCookie = (username: string): string => {
+  const secret = process.env.SECRET;
+  if (!secret) {
+    throw new Error("SECRET is not set");
+  }
+  const token = sign({ username }, secret, { expiresIn: "30d" });
+  return serialize(AUTH_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "strict",
+    maxAge: 60 * 60 * 24 * 30, //when the cookie expires
+    path: "/",
+  });
+};
 
 export type AuthUser = {
   username: string;
