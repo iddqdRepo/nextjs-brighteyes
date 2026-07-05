@@ -2,138 +2,130 @@ import { Model } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import formModels from "../../../models/formModels";
 import dbConnect from "../../../utils/dbConnect";
+import { getAuthUser } from "../../../utils/auth";
 
-dbConnect();
+const modelByType = (type: unknown): Model<any> | null => {
+  switch (type) {
+    case "pet":
+      return formModels.FormPetAdoptionModel;
+    case "giftaid":
+      return formModels.FormGiftAidModel;
+    case "volunteer":
+      return formModels.FormVolunteerModel;
+    case "contactus":
+      return formModels.FormContactUsModel;
+    default:
+      return null;
+  }
+};
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const INVALID_TYPE_MESSAGE =
+  "Please add a valid query type e.g. api/forms/<id>?type=volunteer";
+
+//Only fields the form's schema declares may be set via the API, so a client
+//cannot inject arbitrary properties (e.g. _id, __v) through the request body.
+const pickSchemaFields = (
+  model: Model<any>,
+  body: Record<string, unknown> = {}
+) => {
+  const allowed = new Set(
+    Object.keys(model.schema.paths).map((path) => path.split(".")[0])
+  );
+  allowed.delete("_id");
+  allowed.delete("__v");
+
+  const update: Record<string, unknown> = {};
+  for (const key of Object.keys(body)) {
+    if (allowed.has(key)) {
+      update[key] = body[key];
+    }
+  }
+  update.updatedAt = new Date();
+  return update;
+};
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const id = query.id;
   const type = query.type;
 
-  async function get(type: string, model: Model<any, {}, {}, {}, any>) {
-    const form = await model.findById(id);
-    if (!form) {
-      res.status(404).json({
-        success: false,
-        message: `No ${type} form with ID of ${id} exists`,
-      });
-      res.end();
-    } else {
-      res.status(200).json({
-        success: true,
-        message: `${type} form ${id} successfully retrieved`,
-        data: form,
-      });
-      res.end();
-    }
+  //Every operation on a single submission is admin only.
+  if (!getAuthUser(req)) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 
-  async function put(type: string, model: Model<any, {}, {}, {}, any>) {
-    const form = await model.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!form) {
-      res.status(404).json({
-        success: false,
-        message: `No ${type} form with ID of ${id} exists`,
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: `${type} form ${id} successfully updated`,
-        data: req.body,
-      });
-      res.end();
-    }
-  }
-  async function del(type: string, model: Model<any, {}, {}, {}>) {
-    const form = await model.deleteOne({
-      _id: id,
-    });
-    if (!form.deletedCount) {
-      res.status(404).json({
-        success: false,
-        message: `No ${type} form with ID of ${id} exists`,
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: `${type} form ${id} successfully deleted`,
-        data: {},
-      });
-      res.end();
-    }
+  const model = modelByType(type);
+  if (!model) {
+    return res
+      .status(400)
+      .json({ success: false, message: INVALID_TYPE_MESSAGE });
   }
 
-  switch (method) {
-    case "GET":
-      try {
-        if (type === "pet") {
-          get("pet", formModels.FormPetAdoptionModel);
-        } else if (type === "giftaid") {
-          get("giftaid", formModels.FormGiftAidModel);
-        } else if (type === "volunteer") {
-          get("volunteer", formModels.FormVolunteerModel);
-        } else if (type === "contactus") {
-          get("contactus", formModels.FormContactUsModel);
-        } else {
-          res
-            .status(404)
-            .json(
-              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
-            );
+  try {
+    await dbConnect();
+
+    switch (method) {
+      case "GET": {
+        const form = await model.findById(id);
+        if (!form) {
+          return res.status(404).json({
+            success: false,
+            message: `No ${type} form with ID of ${id} exists`,
+          });
         }
-      } catch (error: any) {
-        res.status(404).json({ message: error.message });
+        return res.status(200).json({
+          success: true,
+          message: `${type} form ${id} successfully retrieved`,
+          data: form,
+        });
       }
-      break;
-    case "PUT":
-      try {
-        if (type === "pet") {
-          put("pet", formModels.FormPetAdoptionModel);
-        } else if (type === "giftaid") {
-          put("giftaid", formModels.FormGiftAidModel);
-        } else if (type === "volunteer") {
-          put("volunteer", formModels.FormVolunteerModel);
-        } else if (type === "contactus") {
-          put("contactus", formModels.FormContactUsModel);
-        } else {
-          res
-            .status(404)
-            .json(
-              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
-            );
+
+      case "PUT": {
+        const update = pickSchemaFields(model, req.body);
+        const form = await model.findByIdAndUpdate(id, update, {
+          new: true,
+          runValidators: true,
+        });
+        if (!form) {
+          return res.status(404).json({
+            success: false,
+            message: `No ${type} form with ID of ${id} exists`,
+          });
         }
-      } catch (error: any) {
-        console.log("error posting pet in api/forms.ts");
-        res.status(404).json({ success: false, message: error });
+        return res.status(200).json({
+          success: true,
+          message: `${type} form ${id} successfully updated`,
+          data: form,
+        });
       }
-      break;
-    case "DELETE":
-      try {
-        if (type === "pet") {
-          del("pet", formModels.FormPetAdoptionModel);
-        } else if (type === "giftaid") {
-          del("giftaid", formModels.FormGiftAidModel);
-        } else if (type === "volunteer") {
-          del("volunteer", formModels.FormVolunteerModel);
-        } else if (type === "contactus") {
-          del("contactus", formModels.FormContactUsModel);
-        } else {
-          res
-            .status(404)
-            .json(
-              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
-            );
+
+      case "DELETE": {
+        const form = await model.deleteOne({ _id: id });
+        if (!form.deletedCount) {
+          return res.status(404).json({
+            success: false,
+            message: `No ${type} form with ID of ${id} exists`,
+          });
         }
-      } catch (error: any) {
-        console.log("error posting pet in api/forms.ts");
-        res.status(404).json({ success: false, message: error });
+        return res.status(200).json({
+          success: true,
+          message: `${type} form ${id} successfully deleted`,
+          data: {},
+        });
       }
-      break;
-    default:
-      res.status(400).json({ success: false });
-      break;
+
+      default:
+        res.setHeader("Allow", "GET, PUT, DELETE");
+        return res
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
+    }
+  } catch (error) {
+    console.error("api/forms/[id] error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong" });
   }
 };
+
+export default handler;

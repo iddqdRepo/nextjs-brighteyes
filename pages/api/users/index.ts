@@ -2,32 +2,53 @@ import { NextApiRequest, NextApiResponse } from "next";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
 import bcrypt from "bcrypt";
+import { requireAuth } from "../../../utils/auth";
 
-dbConnect();
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
-  switch (method) {
-    case "GET":
-      try {
-        const users = await userModel.find();
-        res.status(200).json({ success: true, data: users });
-      } catch (error: any) {
-        res.status(404).json({ message: error.message });
+
+  try {
+    await dbConnect();
+
+    switch (method) {
+      case "GET": {
+        const users = await userModel.find({}, { password: 0 });
+        return res.status(200).json({ success: true, data: users });
       }
-      break;
-    case "POST":
-      try {
-        const username = req.body.username;
-        const hash = bcrypt.hashSync(req.body.password, 10);
+
+      case "POST": {
+        const { username, password } = req.body || {};
+        if (
+          typeof username !== "string" ||
+          typeof password !== "string" ||
+          !username ||
+          !password
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "username and password are required",
+          });
+        }
+        const hash = bcrypt.hashSync(password, 10);
         const user = await userModel.create({ username, password: hash });
-        res.status(201).json({ success: true, data: user });
-      } catch (error: any) {
-        res.status(404).json({ success: false, message: error });
+        return res.status(201).json({
+          success: true,
+          data: { _id: user._id, username: user.username },
+        });
       }
-      break;
-    default:
-      res.status(400).json({ success: false });
-      break;
+
+      default:
+        res.setHeader("Allow", "GET, POST");
+        return res
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
+    }
+  } catch (error) {
+    console.error("api/users error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong" });
   }
 };
+
+export default requireAuth(handler);

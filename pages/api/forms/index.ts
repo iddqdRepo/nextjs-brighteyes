@@ -1,74 +1,80 @@
+import { Model } from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
 import formModels from "../../../models/formModels";
 import dbConnect from "../../../utils/dbConnect";
+import { getAuthUser } from "../../../utils/auth";
+import { notifyFormSubmission } from "../../../utils/notifyFormSubmission";
 
-dbConnect();
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { method, query } = req;
-  switch (method) {
-    case "GET":
-      try {
-        if (query.type === "pet") {
-          const petForm = await formModels.FormPetAdoptionModel.find();
-          res.status(200).json({ success: true, data: petForm });
-        } else if (query.type === "giftaid") {
-          const giftAidForm = await formModels.FormGiftAidModel.find();
-          res.status(200).json({ success: true, data: giftAidForm });
-        } else if (query.type === "volunteer") {
-          const volunteerForm = await formModels.FormVolunteerModel.find();
-          res.status(200).json({ success: true, data: volunteerForm });
-        } else if (query.type === "contactus") {
-          const contactUsForm = await formModels.FormContactUsModel.find();
-          res.status(200).json({ success: true, data: contactUsForm });
-        } else {
-          res
-            .status(404)
-            .json(
-              "ERROR getting, Please add a query type e.g. api/forms?type=volunteer"
-            );
-        }
-      } catch (error: any) {
-        // console.log("error retrieving products in api/forms.ts");
-        res.status(404).json({ message: error.message });
-      }
-      break;
-    case "POST":
-      try {
-        if (query.type === "pet") {
-          const petForm = await formModels.FormPetAdoptionModel.create(
-            req.body
-          );
-          res.status(201).json({ success: true, data: petForm });
-        } else if (query.type === "giftaid") {
-          const giftAidForm = await formModels.FormGiftAidModel.create(
-            req.body
-          );
-          res.status(201).json({ success: true, data: giftAidForm });
-        } else if (query.type === "volunteer") {
-          const volunteerForm = await formModels.FormVolunteerModel.create(
-            req.body
-          );
-          res.status(201).json({ success: true, data: volunteerForm });
-        } else if (query.type === "contactus") {
-          // console.log("API");
-          const contactUsForm = await formModels.FormContactUsModel.create(
-            req.body
-          );
-          res.status(201).json({ success: true, data: contactUsForm });
-        } else {
-          res
-            .status(404)
-            .json(
-              "ERROR posting, Please add a query type e.g. api/forms?type=volunteer"
-            );
-        }
-      } catch (error: any) {
-        res.status(404).json({ success: false, message: error });
-      }
-      break;
+const modelByType = (type: unknown): Model<any> | null => {
+  switch (type) {
+    case "pet":
+      return formModels.FormPetAdoptionModel;
+    case "giftaid":
+      return formModels.FormGiftAidModel;
+    case "volunteer":
+      return formModels.FormVolunteerModel;
+    case "contactus":
+      return formModels.FormContactUsModel;
     default:
-      res.status(400).json({ success: false });
-      break;
+      return null;
   }
 };
+
+const INVALID_TYPE_MESSAGE =
+  "Please add a valid query type e.g. api/forms?type=volunteer";
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { method, query } = req;
+  const model = modelByType(query.type);
+
+  try {
+    await dbConnect();
+
+    switch (method) {
+      case "GET": {
+        //Admin only: submitted forms contain applicants' personal data.
+        if (!getAuthUser(req)) {
+          return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+        }
+        if (!model) {
+          return res
+            .status(400)
+            .json({ success: false, message: INVALID_TYPE_MESSAGE });
+        }
+        const forms = await model.find();
+        return res.status(200).json({ success: true, data: forms });
+      }
+
+      case "POST": {
+        //Public: visitors submit adoption / gift aid / volunteer / contact forms.
+        if (!model) {
+          return res
+            .status(400)
+            .json({ success: false, message: INVALID_TYPE_MESSAGE });
+        }
+        const form = await model.create(req.body);
+        //Only after the form is safely saved; never blocks the submission.
+        await notifyFormSubmission(
+          String(query.type),
+          req.body?.aboutQuestions?.name
+        );
+        return res.status(201).json({ success: true, data: form });
+      }
+
+      default:
+        res.setHeader("Allow", "GET, POST");
+        return res
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
+    }
+  } catch (error) {
+    console.error("api/forms error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong" });
+  }
+};
+
+export default handler;

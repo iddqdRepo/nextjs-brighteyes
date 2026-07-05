@@ -1,21 +1,40 @@
 import mongoose from "mongoose";
 
-const connection = {};
+const MONGO_URI = process.env.MONGO_URI;
 
-//check if we’re connected to the database, if not then set up a connection
+//Reuse a single connection (and a single in-flight connection promise) across
+//serverless invocations. Without this, every cold lambda opens new connections
+//until MongoDB refuses them, which surfaces as intermittent 500s on form submits.
+let cached = global._mongooseConnection;
+
+if (!cached) {
+  cached = global._mongooseConnection = { conn: null, promise: null };
+}
+
 async function dbConnect() {
-  if (connection.isConnected) {
-    return;
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  const db = await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  if (!MONGO_URI) {
+    throw new Error("MONGO_URI is not set");
+  }
 
-  connection.isConnected = db.connections[0].readyState;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGO_URI).then((mongooseInstance) => {
+      return mongooseInstance;
+    });
+  }
 
-  console.log(connection.isConnected);
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    //Let the next request retry a fresh connection instead of caching a failure.
+    cached.promise = null;
+    throw error;
+  }
+
+  return cached.conn;
 }
 
 export default dbConnect;

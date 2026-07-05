@@ -191,28 +191,22 @@ function Index({ animal }: { animal: PetInterface[] }) {
 
 export default Index;
 
-export async function getStaticPaths() {
-  dbConnect();
-  const data = await petModel.find({}, { image: 0 });
-  //mapping through to create an array of the paths
-  const paths = data.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-      },
-    };
-  });
-  return {
-    paths, //paths which is the same as paths:paths
-    fallback: "blocking",
-  };
-}
-
-export async function getStaticProps(context: { params: { id: any } }) {
-  dbConnect();
+//Rendered at request time (never at build time), so builds no longer sweep
+//the whole pets collection and edits are always shown fresh. The middleware's
+//JWT check still gates every request to /admin pages.
+export async function getServerSideProps(context: { params: { id: string } }) {
+  await dbConnect();
   const id = context.params.id;
-  // console.log("id = ", context.params.id);
-  const dataTemp = await petModel.find({ _id: id }).lean();
+  let dataTemp;
+  try {
+    dataTemp = await petModel.find({ _id: id }).lean();
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true };
+  }
+  if (dataTemp.length === 0) {
+    return { notFound: true };
+  }
   const animal = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
     if (doc.name) {
@@ -231,6 +225,5 @@ export async function getStaticProps(context: { params: { id: any } }) {
     props: {
       animal,
     },
-    revalidate: 1,
   };
 }

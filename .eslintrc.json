@@ -4,5 +4,13 @@
   "env": {
     "cypress/globals": true
   },
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "overrides": [
+    {
+      "files": ["test/**/*.spec.js"],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }

@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import Image from "next/image";
 import { DashedTitle } from "../../common/CommonComponents";
 
 export const AboutPatSection = () => {
@@ -51,11 +51,15 @@ export const AboutPatSection = () => {
           </div>
 
           <div className="flex flex-col items-center justify-center mt-10 xl:mt-0 basis-1/3">
-            <img
-              className="w-4/5 bg-center bg-no-repeat shadow-2xlxl sm:w-2/5 xl:w-auto xl:h-80 rounded-xl"
-              src="/pat.jpg"
-              alt=""
-            />
+            <div className="w-4/5 sm:w-2/5 xl:w-80">
+              <Image
+                className="rounded-xl"
+                src="/pat.jpg"
+                alt="Pat Nolan, founder of Bright Eyes"
+                width={715}
+                height={703}
+              />
+            </div>
             <div className="flex justify-center text-3xl font-poppins">
               Pat Nolan
             </div>

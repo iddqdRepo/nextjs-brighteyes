@@ -18,6 +18,7 @@ import {
   BigCard,
   SmallCard,
 } from "../../adminComponents/DashboardHome/DashboardHomeLayoutComponents";
+import RegisterPasskey from "../../adminComponents/RegisterPasskey";
 
 function Index() {
   const petsData = ["pets", getPets];
@@ -52,44 +53,68 @@ function Index() {
   const [contactUsFormPendingCount, setContactUsFormPendingCount] =
     useState(LoadingSpinner);
 
-  const filterPets = (type: string, adopted: string) => {
-    return (
-      pets &&
-      pets.data.filter((pet: { type: string; adopted: string }) => {
-        return pet.type === type && pet.adopted === adopted;
-      }).length
-    );
-  };
-  const filterForms = (type: any, archived: string) => {
-    return type.filter((form: { archive: string }) => {
-      return form.archive === archived;
-    }).length;
-  };
   useEffect(() => {
-    if (!isPetLoading) {
-      setDogActiveCount(filterPets("Dog", "No"));
-      setDogArchiveCount(filterPets("Dog", "Yes"));
-      setCatActiveCount(filterPets("Cat", "No"));
-      setCatArchiveCount(filterPets("Cat", "Yes"));
+    if (!isPetLoading && pets?.data) {
+      setDogActiveCount(
+        pets.data.filter((pet: { type: string; adopted: string }) => {
+          return pet.type === "Dog" && pet.adopted === "No";
+        }).length
+      );
+      setDogArchiveCount(
+        pets.data.filter((pet: { type: string; adopted: string }) => {
+          return pet.type === "Dog" && pet.adopted === "Yes";
+        }).length
+      );
+      setCatActiveCount(
+        pets.data.filter((pet: { type: string; adopted: string }) => {
+          return pet.type === "Cat" && pet.adopted === "No";
+        }).length
+      );
+      setCatArchiveCount(
+        pets.data.filter((pet: { type: string; adopted: string }) => {
+          return pet.type === "Cat" && pet.adopted === "Yes";
+        }).length
+      );
     }
 
     if (!isAdoptionFormsLoading && adoptionForms) {
-      setAdoptionFormPendingCount(filterForms(adoptionForms.data, "No"));
+      setAdoptionFormPendingCount(
+        adoptionForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
     }
     if (!isGiftAidFormsLoading && giftAidForms) {
-      setGiftAidFormPendingCount(filterForms(giftAidForms.data, "No"));
+      setGiftAidFormPendingCount(
+        giftAidForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
     }
     if (!isVolunteerFormsLoading && volunteerForms) {
-      setVolunteerFormPendingCount(filterForms(volunteerForms.data, "No"));
+      setVolunteerFormPendingCount(
+        volunteerForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
     }
     if (!isContactUsFormsLoading && contactUsForms) {
-      setContactUsFormPendingCount(filterForms(contactUsForms.data, "No"));
+      setContactUsFormPendingCount(
+        contactUsForms.data.filter((form: { archive: string }) => {
+          return form.archive === "No";
+        }).length
+      );
     }
   }, [
+    pets,
     isPetLoading,
+    adoptionForms,
     isAdoptionFormsLoading,
+    giftAidForms,
     isGiftAidFormsLoading,
+    volunteerForms,
     isVolunteerFormsLoading,
+    contactUsForms,
     isContactUsFormsLoading,
   ]);
 
@@ -183,6 +208,7 @@ function Index() {
                   />
                 </div>
               </div>
+              <RegisterPasskey />
             </div>
           </div>
         </PageContainerComponent>

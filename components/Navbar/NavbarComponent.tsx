@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useRef } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import Image from "next/image";
 import { MobileNavListItem, NavbarListItem } from "./NavbarLayoutComponents";
 import useNavRef from "../../hooks/useNavRef";
 import { NavRefInterface } from "../../interfaces/interfaces";
@@ -43,11 +43,14 @@ function NavbarComponent() {
       <nav className="flex items-center justify-between w-full h-20">
         <div className="flex flex-col justify-end">
           <Link href="/">
-            <img
-              className="object-cover w-full h-16 cursor-pointer "
-              src="/logo-nav.png"
-              alt=""
-            />
+            <a className="cursor-pointer">
+              <Image
+                src="/logo-nav.png"
+                alt="Bright Eyes Animal Sanctuary"
+                width={70}
+                height={64}
+              />
+            </a>
           </Link>
         </div>
         <div className="hidden lg:flex">

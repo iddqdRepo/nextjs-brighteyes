@@ -39,7 +39,7 @@ function Index({ type }: { type: string }) {
       tempObj[key] = flattenNestedAdoptionObjectForFormBuilder(value);
     }
     setToShow({ ...tempObj });
-  }, []);
+  }, [type]);
 
   return (
     <>

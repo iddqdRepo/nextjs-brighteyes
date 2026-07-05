@@ -36,3 +36,6 @@ yarn-error.log*
 
 .vscode
 .eslintcache
+
+# local image-migration backups
+scripts/pets-image-backup-*.jsonl

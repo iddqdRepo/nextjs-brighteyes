@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { Icon } from "@iconify/react";
+import { startAuthentication } from "@simplewebauthn/browser";
 import { AdminHeadTag } from "../../adminComponents/commonAdminComponents";
 import { ShowButtonTextOnSubmit } from "../../components/common/CommonComponents";
 
@@ -15,23 +17,74 @@ function Index() {
 
   const handleLogin = async () => {
     const credentials = { username, password };
-    if (username && password && username != "admin") {
-      setLoading(true);
+    if (!username || !password) {
+      setResponse("Invalid username or password");
+      return;
+    }
 
+    setLoading(true);
+
+    try {
       const user = await axios.post("/api/auth/login", credentials);
 
       if (user.data.success) {
-        setLoading(false);
         setIsSuccess(true);
         router.push("/admin");
-      } else {
-        setLoading(false);
-        setIsSuccess(false);
-        setButtonText("ERROR, try again");
-        setResponse(user.data.message);
+        return;
       }
-    } else {
-      setResponse("Invalid username or password");
+
+      setLoading(false);
+      setIsSuccess(false);
+      setButtonText("ERROR, try again");
+      setResponse(user.data.message || "Invalid username or password");
+    } catch (error) {
+      setLoading(false);
+      setIsSuccess(false);
+      setButtonText("ERROR, try again");
+      setResponse(
+        axios.isAxiosError(error) && error.response?.data?.message
+          ? (error.response.data.message as string)
+          : "Invalid username or password"
+      );
+    }
+  };
+
+  //Passkey (WebAuthn) login: the phone/computer does the fingerprint or Face
+  //ID check locally; the server only ever sees a signed challenge.
+  const handlePasskeyLogin = async () => {
+    if (!username) {
+      setResponse("Enter your username first, then tap the fingerprint");
+      return;
+    }
+
+    setLoading(true);
+    setResponse("");
+
+    try {
+      const optionsResponse = await axios.post(
+        "/api/auth/webauthn/login-options",
+        { username }
+      );
+      const assertion = await startAuthentication(optionsResponse.data.options);
+      const verifyResponse = await axios.post(
+        "/api/auth/webauthn/login-verify",
+        assertion
+      );
+
+      if (verifyResponse.data.success) {
+        setIsSuccess(true);
+        router.push("/admin");
+        return;
+      }
+      throw new Error("Sign-in failed");
+    } catch (error) {
+      setLoading(false);
+      setIsSuccess(false);
+      setResponse(
+        axios.isAxiosError(error) && error.response?.data?.message
+          ? (error.response.data.message as string)
+          : "Fingerprint sign-in didn't work — you can still use your password"
+      );
     }
   };
 
@@ -95,6 +148,15 @@ function Index() {
               submitHandler={() => handleLogin()}
               animalName={""}
             />
+            <button
+              id="PasskeyLoginButton"
+              onClick={handlePasskeyLogin}
+              disabled={loading}
+              className="flex items-center justify-center w-5/6 px-4 py-3 mt-3 text-sm font-poppins border rounded-lg hover:bg-gray-100 disabled:opacity-50"
+            >
+              <Icon className="w-auto h-5 mr-2" icon="carbon:fingerprint" />
+              Use fingerprint / Face ID
+            </button>
           </div>
         </div>
       </div>

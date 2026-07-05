@@ -135,85 +135,39 @@ function Index({
 
 export default Index;
 
-export async function getStaticPaths() {
-  dbConnect();
-  const giftAids = await formModels.FormGiftAidModel.find();
-  const adoptionForms = await formModels.FormPetAdoptionModel.find();
-  const volunteerForms = await formModels.FormVolunteerModel.find();
-  const contactForms = await formModels.FormContactUsModel.find();
-
-  //mapping through to create an array of the paths
-  const giftAidPaths = giftAids.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-        type: "giftaid",
-      },
-    };
-  });
-  const adoptionFormPaths = adoptionForms.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-        type: "adoption",
-      },
-    };
-  });
-  const volunteerFormPaths = volunteerForms.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-        type: "volunteer",
-      },
-    };
-  });
-  const contactUsFormPaths = contactForms.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-        type: "contactus",
-      },
-    };
-  });
-  let newPaths = [
-    ...giftAidPaths,
-    ...adoptionFormPaths,
-    ...volunteerFormPaths,
-    ...contactUsFormPaths,
-  ];
-  return {
-    paths: newPaths,
-    fallback: "blocking", // false = if a user tries to visit a route that doesnt exist, it shows a 404 page
-  };
-}
-
-export async function getStaticProps(context: {
-  params: { id: any; type: string };
-}) {
-  dbConnect();
+//Rendered at request time (never at build time): submitted forms hold
+//applicants' personal data, which must not be baked into build artifacts.
+//The middleware's JWT check still gates every request to /admin pages.
+export async function getServerSideProps(context: { params: { id: string } }) {
+  await dbConnect();
   const id = context.params.id;
-  // console.log("id = ", context.params.id);
   let form:
     | PetAdoptionFormInterface[]
     | GiftaidFormInterface[]
     | VolunteerFormInterface[]
     | ContactUsFormInterface[] = [];
 
-  //try contactUs first, then giftAid, then volunteer, then adoption
-  if (form.length === 0) {
-    form = await formModels.FormContactUsModel.find({ _id: id }).lean();
+  try {
+    //try contactUs first, then giftAid, then volunteer, then adoption
+    if (form.length === 0) {
+      form = await formModels.FormContactUsModel.find({ _id: id }).lean();
+    }
+    if (form.length === 0) {
+      form = await formModels.FormGiftAidModel.find({ _id: id }).lean();
+    }
+    if (form.length === 0) {
+      form = await formModels.FormVolunteerModel.find({ _id: id }).lean();
+    }
+    if (form.length === 0) {
+      form = await formModels.FormPetAdoptionModel.find({ _id: id }).lean();
+    }
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true };
   }
+
   if (form.length === 0) {
-    form = await formModels.FormGiftAidModel.find({ _id: id }).lean();
-  }
-  if (form.length === 0) {
-    form = await formModels.FormVolunteerModel.find({ _id: id }).lean();
-  }
-  if (form.length === 0) {
-    form = await formModels.FormPetAdoptionModel.find({ _id: id }).lean();
-  }
-  if (form.length === 0) {
-    form = await formModels.FormPetAdoptionModel.find({ _id: id }).lean();
+    return { notFound: true };
   }
 
   stringifyIdsAndDates(form);
@@ -222,6 +176,5 @@ export async function getStaticProps(context: {
     props: {
       form,
     },
-    revalidate: 10,
   };
 }

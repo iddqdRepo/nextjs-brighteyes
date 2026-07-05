@@ -1,85 +1,94 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import userModel from "../../../models/userModel";
 import dbConnect from "../../../utils/dbConnect";
+import bcrypt from "bcrypt";
+import { requireAuth } from "../../../utils/auth";
 
-dbConnect();
+//Only username/password may be changed, and a new password is always hashed
+//so a plaintext password can never be written to the database.
+const buildUserUpdate = (body: Record<string, unknown> = {}) => {
+  const update: Record<string, unknown> = {};
+  if (typeof body.username === "string" && body.username) {
+    update.username = body.username;
+  }
+  if (typeof body.password === "string" && body.password) {
+    update.password = bcrypt.hashSync(body.password, 10);
+  }
+  return update;
+};
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method, query } = req;
   const passedInUser = query.username;
 
-  switch (method) {
-    case "GET":
-      try {
-        const user = await userModel.find({ username: passedInUser }).lean();
-        if (!user[0]) {
-          res.status(200).json({
+  try {
+    await dbConnect();
+
+    switch (method) {
+      case "GET": {
+        const user = await userModel
+          .findOne({ username: passedInUser }, { password: 0 })
+          .lean();
+        if (!user) {
+          return res.status(404).json({
             success: false,
             message: `No user with username of ${passedInUser} exists`,
           });
-        } else {
-          res.status(200).json({
-            success: true,
-            message: `user ${passedInUser} successfully retrieved`,
-            data: user,
-          });
         }
-      } catch (error: any) {
-        res.status(404).json({ message: error.message });
+        return res.status(200).json({
+          success: true,
+          message: `user ${passedInUser} successfully retrieved`,
+          data: [user],
+        });
       }
-      break;
 
-    case "PUT":
-      try {
+      case "PUT": {
+        const update = buildUserUpdate(req.body);
         const user = await userModel.findOneAndUpdate(
           { username: passedInUser },
-          req.body,
-          {
-            new: true,
-            runValidators: true,
-          }
+          update,
+          { new: true, runValidators: true, projection: { password: 0 } }
         );
         if (!user) {
-          res.status(404).json({
+          return res.status(404).json({
             success: false,
             message: `No user with username of ${passedInUser} exists`,
           });
-        } else {
-          res.status(200).json({
-            success: true,
-            message: `user ${passedInUser} successfully updated`,
-            data: req.body,
-          });
-          res.end();
         }
-      } catch (error: any) {
-        res.status(404).json({ success: false, message: error });
-      }
-      break;
-    case "DELETE":
-      try {
-        const user = await userModel.deleteOne({
-          username: passedInUser,
+        return res.status(200).json({
+          success: true,
+          message: `user ${passedInUser} successfully updated`,
+          data: user,
         });
+      }
+
+      case "DELETE": {
+        const user = await userModel.deleteOne({ username: passedInUser });
         if (!user.deletedCount) {
-          res.status(404).json({
+          return res.status(404).json({
             success: false,
             message: `No user with username of ${passedInUser} exists`,
           });
-        } else {
-          res.status(200).json({
-            success: true,
-            message: `user ${passedInUser} successfully deleted`,
-            data: {},
-          });
-          res.end();
         }
-      } catch (error: any) {
-        res.status(404).json({ success: false, message: error });
+        return res.status(200).json({
+          success: true,
+          message: `user ${passedInUser} successfully deleted`,
+          data: {},
+        });
       }
-      break;
-    default:
-      res.status(400).json({ success: false });
-      break;
+
+      default:
+        res.setHeader("Allow", "GET, PUT, DELETE");
+        return res
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
+    }
+  } catch (error) {
+    console.error("api/users/[username] error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong" });
   }
 };
+
+export default requireAuth(handler);
