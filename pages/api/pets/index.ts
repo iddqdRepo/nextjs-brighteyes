@@ -1,40 +1,55 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
-
-dbConnect();
+import { getAuthUser } from "../../../utils/auth";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // const { method } = req;
   const { method, query } = req;
   const NotAdopted = query.adopted;
-  switch (method) {
-    case "GET":
-      try {
-        if (NotAdopted) {
-          const pets = await petModel.find({ adopted: "No" });
-          res.status(200).json({ success: true, data: pets });
-        } else {
-          //^ Had to exclude image as the res exceeded 4mb so vercel returned err 500
-          const pets = await petModel.find({}, { image: 0 });
 
-          res.status(200).json({ success: true, data: pets });
+  try {
+    await dbConnect();
+
+    switch (method) {
+      case "GET": {
+        if (NotAdopted) {
+          //Public: the animals currently available for adoption.
+          const pets = await petModel.find({ adopted: "No" });
+          return res.status(200).json({ success: true, data: pets });
         }
-      } catch (error: any) {
-        res.status(404).json({ message: error.message });
+
+        //Admin only: the full list including adopted animals.
+        //^ Image excluded as the res exceeded 4mb so vercel returned err 500
+        if (!getAuthUser(req)) {
+          return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+        }
+        const pets = await petModel.find({}, { image: 0 });
+        return res.status(200).json({ success: true, data: pets });
       }
-      break;
-    case "POST":
-      try {
+
+      case "POST": {
+        if (!getAuthUser(req)) {
+          return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+        }
         const pets = await petModel.create(req.body);
-        res.status(201).json({ success: true, data: pets });
-      } catch (error: any) {
-        res.status(404).json({ success: false, message: error });
+        return res.status(201).json({ success: true, data: pets });
       }
-      break;
-    default:
-      res.status(400).json({ success: false });
-      break;
+
+      default:
+        res.setHeader("Allow", "GET, POST");
+        return res
+          .status(405)
+          .json({ success: false, message: "Method not allowed" });
+    }
+  } catch (error) {
+    console.error("api/pets error", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong" });
   }
 };
 

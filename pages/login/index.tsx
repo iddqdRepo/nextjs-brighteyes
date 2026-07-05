@@ -15,23 +15,35 @@ function Index() {
 
   const handleLogin = async () => {
     const credentials = { username, password };
-    if (username && password && username != "admin") {
-      setLoading(true);
+    if (!username || !password) {
+      setResponse("Invalid username or password");
+      return;
+    }
 
+    setLoading(true);
+
+    try {
       const user = await axios.post("/api/auth/login", credentials);
 
       if (user.data.success) {
-        setLoading(false);
         setIsSuccess(true);
         router.push("/admin");
-      } else {
-        setLoading(false);
-        setIsSuccess(false);
-        setButtonText("ERROR, try again");
-        setResponse(user.data.message);
+        return;
       }
-    } else {
-      setResponse("Invalid username or password");
+
+      setLoading(false);
+      setIsSuccess(false);
+      setButtonText("ERROR, try again");
+      setResponse(user.data.message || "Invalid username or password");
+    } catch (error) {
+      setLoading(false);
+      setIsSuccess(false);
+      setButtonText("ERROR, try again");
+      setResponse(
+        axios.isAxiosError(error) && error.response?.data?.message
+          ? (error.response.data.message as string)
+          : "Invalid username or password"
+      );
     }
   };
 
