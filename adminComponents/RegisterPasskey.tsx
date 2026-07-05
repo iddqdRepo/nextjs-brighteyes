@@ -42,32 +42,45 @@ const RegisterPasskey = () => {
   };
 
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm">
-      <div className="flex items-center mb-2 text-base font-semibold font-poppins">
-        <Icon className="w-auto h-6 mr-2" icon="carbon:fingerprint" />
-        Fingerprint / Face ID login
+    <div className="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:gap-5">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-50">
+        {/* carbon has no plain "fingerprint" icon — it renders as an empty
+            circle. mdi's does exist. */}
+        <Icon icon="mdi:fingerprint" color="#8b3479" width="28" height="28" />
       </div>
-      <div className="mb-3 text-sm text-center text-gray-600 font-poppins">
-        Set it up once on this phone or computer, then log in without typing a
-        password.
+      <div className="grow font-poppins">
+        <div className="text-base font-semibold text-gray-900">
+          Fingerprint / Face ID login
+        </div>
+        <div className="mt-0.5 max-w-xl text-sm text-gray-600">
+          Set it up once on this phone or computer, then log in quickly and
+          securely &#8212; no password to type.
+        </div>
+        {message && (
+          <div
+            className={`mt-2 text-sm font-medium ${
+              status === "error" ? "text-red-600" : "text-green-700"
+            }`}
+          >
+            {message}
+          </div>
+        )}
       </div>
       <button
         id="RegisterPasskey"
         onClick={handleRegister}
         disabled={status === "working"}
-        className="px-4 py-2 text-sm text-white rounded-lg bg-[#8b3479] hover:bg-[#398092] font-poppins disabled:opacity-50"
+        className="z-10 shrink-0 self-start rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark font-poppins disabled:opacity-50 sm:self-center"
       >
-        {status === "working" ? "Follow your device's prompt…" : "Set up"}
+        {status === "working" ? "Follow your device's prompt…" : "Set up now"}
       </button>
-      {message && (
-        <div
-          className={`mt-3 text-sm text-center font-poppins ${
-            status === "error" ? "text-red-600" : "text-green-700"
-          }`}
-        >
-          {message}
-        </div>
-      )}
+      {/* decorative shield, echoing the padlock in the design */}
+      <Icon
+        icon="mdi:shield-lock"
+        className="pointer-events-none absolute -right-4 -top-6 hidden text-brand-50 lg:block"
+        width="150"
+        height="150"
+      />
     </div>
   );
 };

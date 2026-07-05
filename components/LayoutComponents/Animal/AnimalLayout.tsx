@@ -51,7 +51,7 @@ export const AnimalDetailSection = ({ animal }: { animal: PetInterface }) => {
 
   return (
     <section className="overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
-      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-12 lg:grid-cols-2 lg:py-16">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] gap-10 py-12 lg:grid-cols-2 lg:py-16">
         <div>
           <h1 className="flex items-center gap-3 text-4xl font-semibold text-brand sm:text-5xl font-poppins">
             Meet {name}
@@ -137,7 +137,7 @@ const ButtonToForm = ({ name, type }: { name: string; type: string }) => {
 
 export const AdoptionRulesSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-10">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-10">
       <SectionEyebrow text="Before you apply" />
       <h2 className="text-3xl font-semibold text-gray-900 font-poppins">
         Adoption Criteria
@@ -181,7 +181,7 @@ export const OtherPetsSection = ({ currentId }: { currentId: string }) => {
   }
 
   return (
-    <section className="mx-auto w-11/12 max-w-6xl pb-16 pt-4">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] pb-16 pt-4">
       <SectionEyebrow text="Keep looking" />
       <h2 className="text-3xl font-semibold text-gray-900 font-poppins">
         Other pets you may like

@@ -15,12 +15,20 @@ import {
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
 function Animal({ animal }: { animal: [PetInterface] }) {
+  const pet = animal[0];
+  //Shared links (Facebook etc.) show the animal's own photo and story.
+  const shareText = pet.desc
+    ? pet.desc.length > 150
+      ? `${pet.desc.slice(0, 150).trim()}…`
+      : pet.desc
+    : `${pet.name} is looking for a loving forever home. Could you be their perfect match?`;
   return (
     <>
       <HeadTag
-        title={`Meet ${animal[0].name} - Bright Eyes Animal Sanctuary`}
-        metaContent={`${animal[0].name} is looking for a loving forever home. Could you be their perfect match?`}
-        linkHref={`/adoption/${animal[0]._id}`}
+        title={`Meet ${pet.name} - Bright Eyes Animal Sanctuary`}
+        metaContent={shareText}
+        linkHref={`/adoption/${pet._id}`}
+        image={pet.image}
       />
       <NavbarComponent />
       <AnimalDetailSection animal={animal[0]} />

@@ -10,6 +10,7 @@ import {
   HeroSection,
   CardsSection,
   AnimalsPreviewSection,
+  HappyTailsBand,
   HomeCriteriaSection,
   SupportSection,
   GetInvolvedSection,
@@ -32,9 +33,10 @@ function Home() {
       <AnimalsPreviewSection />
       <HomeCriteriaSection />
       <SupportSection />
+      <HappyTailsBand />
       <GetInvolvedSection />
       <ContactUsSection />
-      <section className="mx-auto w-11/12 max-w-6xl pb-16 pt-10">
+      <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] pb-16 pt-10">
         <SectionEyebrow text="Come and visit us" centered />
         <h2 className="mb-8 text-center text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
           Where to find us

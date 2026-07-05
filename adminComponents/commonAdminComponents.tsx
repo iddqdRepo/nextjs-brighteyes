@@ -167,10 +167,14 @@ export const AdminPageHeader = ({
   );
 };
 
+//Linked cards are clickable as a whole (with a chevron as the affordance)
+//rather than carrying a small "View all" text link — bigger tap targets for
+//phone-first admins.
 export const AdminStatCard = ({
   icon,
   label,
   value,
+  subtitle,
   link,
   linkText,
   tint = "white",
@@ -178,6 +182,7 @@ export const AdminStatCard = ({
   icon: string;
   label: string;
   value: React.ReactNode;
+  subtitle?: string;
   link?: string;
   linkText?: string;
   tint?: "white" | "blush" | "cream";
@@ -187,35 +192,53 @@ export const AdminStatCard = ({
     blush: "border-brand-100 bg-brand-50",
     cream: "border-amber-100 bg-cream",
   };
-  return (
-    <div
-      className={clsx(
-        "flex flex-col rounded-2xl border p-5 shadow-sm",
-        tints[tint]
-      )}
-    >
-      <div className="flex items-center gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100">
-          <Icon icon={icon} color="#8b3479" width="24" height="24" />
+  const iconCircles = {
+    white: "bg-brand-50",
+    blush: "bg-white",
+    cream: "bg-white",
+  };
+  const cardClass = clsx(
+    "flex items-center gap-4 rounded-2xl border p-5 shadow-sm",
+    tints[tint]
+  );
+  const body = (
+    <>
+      <div
+        className={clsx(
+          "flex h-14 w-14 shrink-0 items-center justify-center rounded-full",
+          iconCircles[tint]
+        )}
+      >
+        <Icon icon={icon} color="#8b3479" width="26" height="26" />
+      </div>
+      <div className="min-w-0 grow font-poppins">
+        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-3xl font-semibold leading-9 text-gray-900">
+          {value}
         </div>
-        <div>
-          <div className="text-sm font-medium text-gray-600 font-poppins">
-            {label}
-          </div>
-          <div className="text-2xl font-semibold text-gray-900 font-poppins">
-            {value}
-          </div>
-        </div>
+        {subtitle && (
+          <div className="mt-0.5 text-xs text-gray-500">{subtitle}</div>
+        )}
       </div>
       {link && (
-        <Link href={link}>
-          <a className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-brand transition hover:text-brand-dark font-poppins">
-            {linkText ? linkText : "View all"}
-            <Icon icon="fa:long-arrow-right" width="11" />
-          </a>
-        </Link>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+          <Icon icon="akar-icons:chevron-right" width="15" height="15" />
+        </span>
       )}
-    </div>
+    </>
+  );
+
+  return link ? (
+    <Link href={link}>
+      <a
+        aria-label={linkText ?? label}
+        className={clsx(cardClass, "transition hover:shadow-md")}
+      >
+        {body}
+      </a>
+    </Link>
+  ) : (
+    <div className={cardClass}>{body}</div>
   );
 };
 

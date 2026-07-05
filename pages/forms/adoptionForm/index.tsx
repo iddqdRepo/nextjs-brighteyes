@@ -59,7 +59,7 @@ function Index({ type }: { type: string }) {
       <NavbarComponent />
 
       <section className="bg-gradient-to-br from-brand-50 via-white to-white">
-        <div className="mx-auto w-11/12 max-w-6xl py-10 lg:py-14">
+        <div className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-10 lg:py-14">
           <SectionEyebrow text="Adoption application" />
           <h1 className="text-4xl font-semibold text-gray-900 sm:text-5xl font-poppins">
             Adopt a <span className="text-brand">{type}</span>
@@ -71,7 +71,7 @@ function Index({ type }: { type: string }) {
         </div>
       </section>
 
-      <div className="mx-auto grid w-11/12 max-w-6xl items-start gap-8 pb-16 pt-4 xl:grid-cols-[minmax(0,1fr),21rem]">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-start gap-8 pb-16 pt-4 xl:grid-cols-[minmax(0,1fr),21rem]">
         <form className="flex w-full flex-col items-center justify-center">
           <Formik
             initialValues={newAdoptionInitialValues}

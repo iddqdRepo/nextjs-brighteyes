@@ -58,6 +58,12 @@ export const resetUserPassword = async (username: string, password: string) => {
   return updated.data.success;
 };
 
+//Changes the signed-in admin's own password (any role, Settings page).
+export const updateMyPassword = async (password: string) => {
+  const updated = await axios.put(`/api/users/me`, { password });
+  return updated.data.success;
+};
+
 export const postUser = async (data: {
   username: string;
   password: string;

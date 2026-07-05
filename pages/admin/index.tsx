@@ -149,6 +149,7 @@ function Index({
               <AdminStatCard
                 icon="carbon:chat"
                 label="Unread Messages"
+                subtitle="Needs your attention"
                 value={
                   !isContactUsFormsLoading ? (
                     countPending(contactUsForms)
@@ -161,7 +162,8 @@ function Index({
               />
               <AdminStatCard
                 icon="carbon:document"
-                label="Pending Adoption Forms"
+                label="Adoption Forms"
+                subtitle="Pending review"
                 value={
                   !isAdoptionFormsLoading ? (
                     countPending(adoptionForms)
@@ -174,7 +176,8 @@ function Index({
               />
               <AdminStatCard
                 icon="akar-icons:gift"
-                label="Pending Gift Aid Forms"
+                label="Gift Aid Forms"
+                subtitle="Pending review"
                 value={
                   !isGiftAidFormsLoading ? (
                     countPending(giftAidForms)
@@ -187,7 +190,8 @@ function Index({
               />
               <AdminStatCard
                 icon="carbon:person-favorite"
-                label="Pending Volunteer Forms"
+                label="Volunteer Forms"
+                subtitle="Pending review"
                 value={
                   !isVolunteerFormsLoading ? (
                     countPending(volunteerForms)
@@ -206,6 +210,7 @@ function Index({
               tint="cream"
               icon="cil:dog"
               label="Active Dogs"
+              subtitle="Currently in care"
               value={
                 !isPetLoading ? countPets("Dog", "No") : <LoadingSpinner />
               }
@@ -216,6 +221,7 @@ function Index({
               tint="blush"
               icon="mdi:paw"
               label="Adopted Dogs"
+              subtitle="Found their homes"
               value={
                 !isPetLoading ? countPets("Dog", "Yes") : <LoadingSpinner />
               }
@@ -226,6 +232,7 @@ function Index({
               tint="cream"
               icon="cil:cat"
               label="Active Cats"
+              subtitle="Currently in care"
               value={
                 !isPetLoading ? countPets("Cat", "No") : <LoadingSpinner />
               }
@@ -236,6 +243,7 @@ function Index({
               tint="blush"
               icon="mdi:paw"
               label="Adopted Cats"
+              subtitle="Found their homes"
               value={
                 !isPetLoading ? countPets("Cat", "Yes") : <LoadingSpinner />
               }
@@ -244,11 +252,17 @@ function Index({
             />
           </div>
 
+          {/* prominent so every admin sets it up, instead of tucked in a
+              corner they never scroll to */}
+          <div className="mt-4">
+            <RegisterPasskey />
+          </div>
+
           <div
             className={
               canSeeDonations && canSeeForms
-                ? "mt-4 grid items-start gap-4 xl:grid-cols-[0.9fr,1.4fr,0.9fr]"
-                : "mt-4 grid items-start gap-4 xl:grid-cols-2"
+                ? "mt-4 grid items-start gap-4 xl:grid-cols-[0.9fr,1.6fr]"
+                : "mt-4 grid items-start gap-4"
             }
           >
             {canSeeDonations && donationSummary && (
@@ -395,8 +409,6 @@ function Index({
                 )}
               </AdminCard>
             )}
-
-            <RegisterPasskey />
           </div>
         </PageContainerComponent>
       </AdminSidebarComponent>

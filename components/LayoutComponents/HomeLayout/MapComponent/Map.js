@@ -22,9 +22,11 @@ function Map() {
         return;
       }
 
+      //14 shows Ballinamallard and the surrounding lanes; 11 was so far out
+      //the marker looked like it was in the middle of Fermanagh.
       const map = L.map(containerRef.current, {
         center: CENTER,
-        zoom: 11,
+        zoom: 14,
         scrollWheelZoom: false,
       });
       mapRef.current = map;

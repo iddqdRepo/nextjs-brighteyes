@@ -21,7 +21,7 @@ export const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
       <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-brand-100/70 blur-2xl"></div>
-      <div className="mx-auto grid w-11/12 max-w-6xl items-center gap-10 py-12 lg:grid-cols-[1.05fr,0.95fr] lg:py-20">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-center gap-10 py-12 lg:grid-cols-[1.05fr,0.95fr] lg:py-20">
         <div className="relative">
           <SectionEyebrow text="Rescue. Rehabilitate. Rehome." />
           <h1 className="text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl xl:text-6xl font-poppins">
@@ -75,7 +75,7 @@ export const HeroSection = () => {
 
 export const CardsSection = () => {
   return (
-    <section className="mx-auto -mt-2 w-11/12 max-w-6xl pb-4 lg:-mt-10 lg:pb-8">
+    <section className="mx-auto -mt-2 w-11/12 max-w-7xl 2xl:max-w-[85rem] pb-4 lg:-mt-10 lg:pb-8">
       <div className="relative z-10 grid divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white shadow-xl shadow-gray-200/60 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         <StatCard
           title="2,000+"
@@ -148,7 +148,7 @@ export const AnimalsPreviewSection = () => {
   );
 
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-12">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-12">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <SectionEyebrow text="Find your new best friend" />
@@ -221,7 +221,7 @@ export const AnimalsPreviewSection = () => {
 export const HomeCriteriaSection = () => {
   return (
     <section className="bg-cream py-14">
-      <div className="mx-auto w-11/12 max-w-6xl text-center">
+      <div className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] text-center">
         <SectionEyebrow text="Our adoption criteria" centered />
         <h2 className="text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
           Creating the perfect match
@@ -249,7 +249,7 @@ export const HomeCriteriaSection = () => {
 
 export const SupportSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-16">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-16">
       <div className="grid items-center gap-10 lg:grid-cols-2">
         <div>
           <SectionEyebrow text="Make a difference" />
@@ -262,8 +262,13 @@ export const SupportSection = () => {
             purely on the generosity of the public. Thank you for being their
             second chance.
           </p>
-          <div className="mt-6 hidden w-80 lg:block">
-            <Image src="/DonateDog.png" alt="" width={500} height={500} />
+          <div className="mt-6 hidden w-80 overflow-hidden rounded-[2.5rem] lg:block">
+            <Image
+              src="/DonationDog.jpg"
+              alt="A happy rescue dog"
+              width={500}
+              height={500}
+            />
           </div>
         </div>
         <DonationTeaserCard />
@@ -272,10 +277,38 @@ export const SupportSection = () => {
   );
 };
 
+export const HappyTailsBand = () => {
+  return (
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-14">
+      <div className="flex flex-col items-center gap-6 rounded-[2rem] bg-brand-100 p-8 text-center sm:p-10 lg:flex-row lg:text-left">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-brand">
+          <Icon icon="mdi:home-heart" color="#ffffff" width="38" height="38" />
+        </div>
+        <div className="grow">
+          <h2 className="text-2xl font-semibold text-brand-deep sm:text-3xl font-poppins">
+            Hundreds of happy endings &#8212; and counting
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base font-poppins">
+            Every animal we rehome is a story with a happy ending. Meet some of
+            the faces who found their forever homes through Bright Eyes.
+          </p>
+        </div>
+        <div className="-mt-5 shrink-0">
+          <Button
+            text="See Our Happy Tails"
+            iconStr="mdi:home-heart"
+            link={`/happy-tails`}
+          />
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export const GetInvolvedSection = () => {
   return (
     <section className="bg-gray-50 py-16">
-      <div className="mx-auto w-11/12 max-w-6xl">
+      <div className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem]">
         <SectionEyebrow text="Get involved" />
         <h2 className="text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
           There are many ways <span className="text-brand">to help</span>

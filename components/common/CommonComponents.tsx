@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
+import { server } from "../../config";
 import { postContactUsForm } from "../../routes/formRoutes";
 import { ContactUsSchema } from "../../utils/yup/contactUsYupSchema";
 import {
@@ -81,7 +82,7 @@ export const FooterSection = () => {
 
   return (
     <footer className="bg-night">
-      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr,1fr,1fr,0.8fr]">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr,1fr,1fr,0.8fr]">
         <div>
           <div className="flex items-center gap-3">
             <Image src="/logo-nav.png" alt="" width={56} height={51} />
@@ -155,6 +156,7 @@ export const FooterSection = () => {
           <ul>
             <FooterLink text="About Us" href="/about" />
             <FooterLink text="Adoption" href="/adoption" />
+            <FooterLink text="Happy Tails" href="/happy-tails" />
             <FooterLink text="Donate" href="/donate" />
             <FooterLink text="Forms" href="/forms" />
             <FooterLink text="Contact" href="/#contact" />
@@ -163,7 +165,7 @@ export const FooterSection = () => {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex w-11/12 max-w-6xl flex-col items-center justify-between gap-2 py-5 text-center text-xs text-white/55 font-poppins sm:flex-row sm:text-left">
+        <div className="mx-auto flex w-11/12 max-w-7xl 2xl:max-w-[85rem] flex-col items-center justify-between gap-2 py-5 text-center text-xs text-white/55 font-poppins sm:flex-row sm:text-left">
           <span>
             &copy; {new Date().getFullYear()} Bright Eyes Animal Sanctuary. All
             rights reserved.
@@ -260,27 +262,48 @@ export const ButtonWithQuery = ({
   );
 };
 
+//Also emits Open Graph / Twitter tags so pages shared on Facebook, WhatsApp
+//and the like show a proper photo and description. Pass image (e.g. the
+//animal's photo) to override the default site image.
 export const HeadTag = ({
   title,
   metaContent,
   linkHref,
+  image,
 }: {
   title: string;
   metaContent: string;
   linkHref: string;
+  image?: string;
 }) => {
+  const url = linkHref.startsWith("http") ? linkHref : `${server}${linkHref}`;
+  const shareImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${server}${image}`
+    : `${server}/HeroDogCat.jpg`;
   return (
     <Head>
       <title>{title}</title>
       <meta name="description" content={metaContent} />
-      <link rel="canonical" href={linkHref} />
+      <link rel="canonical" href={url} />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Bright Eyes Animal Sanctuary" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={metaContent} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={shareImage} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={metaContent} />
+      <meta name="twitter:image" content={shareImage} />
     </Head>
   );
 };
 
 export const DonationComponent = ({ petName }: { petName?: string }) => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-10">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-10">
       <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-brand-100 p-8 sm:p-10 lg:grid-cols-[auto,1fr,auto]">
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-brand">
           <Icon icon="bx:donate-heart" color="#ffffff" width="48" height="48" />
@@ -340,7 +363,7 @@ export const ContactUsSection = ({
 
   return (
     <section id="contact" className="bg-gray-50 py-16">
-      <div className="mx-auto grid w-11/12 max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr,1.1fr]">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-center gap-10 lg:grid-cols-[0.9fr,1.1fr]">
         <div>
           <SectionEyebrow text={eyebrow} />
           <h2 className="text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
@@ -384,8 +407,14 @@ export const ContactUsSection = ({
             </div>
           </div>
 
-          <div className="mt-6 hidden w-72 lg:block">
-            <Image src="/ContactUsImage.png" alt="" width={600} height={545} />
+          <div className="mt-8 hidden w-72 overflow-hidden rounded-[2rem] border border-gray-100 bg-white p-4 shadow-xl shadow-gray-200/60 lg:block">
+            <Image
+              src="/home.jpg"
+              alt="Two Bright Eyes dogs in their winter jumpers"
+              width={600}
+              height={600}
+              className="rounded-[1.5rem] object-cover"
+            />
           </div>
         </div>
 
@@ -573,12 +602,13 @@ export const ShowButtonTextOnSubmit = ({
   ) : isSuccess ? (
     <button
       type="submit"
-      className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand opacity-50 cursor-not-allowed text-white justify-center font-poppins text-sm font-medium"
+      className="flex items-center gap-2 p-3.5 mb-2 mt-2 rounded-full w-56 border-2 border-green-600 bg-green-50 cursor-default text-green-700 justify-center font-poppins text-sm font-semibold"
       onClick={(e) => {
         e.preventDefault();
       }}
     >
-      {animalName ? `Submitted ${animalName}` : ""}
+      <Icon icon="akar-icons:circle-check-fill" width="18" height="18" />
+      {animalName ? `Submitted ${animalName}` : "Submitted"}
     </button>
   ) : (
     <button

@@ -336,6 +336,20 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
                                   </a>
                                 </Link>
                               )}
+                              {canManage && isArchive !== "true" && (
+                                <Link href={`/admin/animals/${pet._id}/poster`}>
+                                  <a
+                                    title={`Print a poster for ${pet.name}`}
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
+                                  >
+                                    <Icon
+                                      icon="carbon:printer"
+                                      width="17"
+                                      height="17"
+                                    />
+                                  </a>
+                                </Link>
+                              )}
                               {canManage && (
                                 <ActionButton
                                   icon={
@@ -407,6 +421,18 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
                           <a className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
                             <Icon icon="bxs:edit" width="15" height="15" />
                             Edit
+                          </a>
+                        </Link>
+                      )}
+                      {canManage && isArchive !== "true" && (
+                        <Link href={`/admin/animals/${pet._id}/poster`}>
+                          <a className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
+                            <Icon
+                              icon="carbon:printer"
+                              width="15"
+                              height="15"
+                            />
+                            Poster
                           </a>
                         </Link>
                       )}

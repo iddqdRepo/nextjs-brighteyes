@@ -409,7 +409,7 @@ const DonationFormCard = () => {
 export const DonateSection = () => {
   return (
     <section className="overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
-      <div className="mx-auto grid w-11/12 max-w-6xl gap-10 py-12 lg:grid-cols-[0.9fr,1.1fr] lg:py-16">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] gap-10 py-12 lg:grid-cols-[0.9fr,1.1fr] lg:py-16">
         <div>
           <SectionEyebrow text="Card donations" />
           <h1 className="text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl font-poppins">
@@ -482,7 +482,7 @@ export const DonateUsesSection = () => {
 
   return (
     <section className="bg-cream py-14">
-      <div className="mx-auto w-11/12 max-w-6xl">
+      <div className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem]">
         <SectionEyebrow text="Why it matters" />
         <h2 className="flex items-center gap-3 text-3xl font-semibold text-gray-900 sm:text-4xl font-poppins">
           Your support makes every day possible.

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormikProps } from "formik";
+import { Icon } from "@iconify/react";
 import { ErrorFormik } from "../../components/IndividualFormLayout/CommonFormComponents";
 import { AdminCard } from "../commonAdminComponents";
 import { PetInterface } from "../../interfaces/interfaces";
@@ -8,6 +9,67 @@ import {
   InputOrTextArea,
 } from "./AddOrEditAnimalLayoutComponents";
 import { PetPhotoField } from "./PetPhotoField";
+import { TRAIT_OPTIONS, writePetDescription } from "../../utils/petDescription";
+
+//Trait chips + a "Write it for me" button that drafts the description from
+//the form fields, for staff who find a blank textarea intimidating.
+const DescriptionHelper = ({
+  values,
+  setFieldValue,
+}: {
+  values: PetInterface;
+  setFieldValue: FormikProps<PetInterface>["setFieldValue"];
+}) => {
+  const [traits, setTraits] = useState<string[]>([]);
+  const [variant, setVariant] = useState(0);
+
+  const toggleTrait = (trait: string) => {
+    setTraits(
+      traits.includes(trait)
+        ? traits.filter((t) => t !== trait)
+        : [...traits, trait]
+    );
+  };
+
+  return (
+    <div className="mb-4 rounded-xl border border-dashed border-brand/40 bg-brand-50/50 p-4">
+      <p className="text-sm font-semibold text-gray-800 font-poppins">
+        Stuck for words?
+      </p>
+      <p className="mt-0.5 text-xs text-gray-600 font-poppins">
+        Tick anything that describes them, then let us write a first draft. You
+        can change it however you like afterwards.
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {TRAIT_OPTIONS.map((trait) => (
+          <button
+            type="button"
+            key={trait}
+            onClick={() => toggleTrait(trait)}
+            className={
+              traits.includes(trait)
+                ? "rounded-full border border-brand bg-brand px-3 py-1.5 text-xs font-medium text-white font-poppins"
+                : "rounded-full border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
+            }
+          >
+            {trait}
+          </button>
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => {
+          setFieldValue("desc", writePetDescription(values, traits, variant));
+          setVariant(variant + 1);
+        }}
+        className="mt-3 flex items-center gap-1.5 rounded-full border border-brand bg-white px-4 py-2 text-xs font-semibold text-brand transition hover:bg-brand hover:text-white font-poppins"
+      >
+        <Icon icon="akar-icons:pencil" width="14" height="14" />
+        {variant === 0 ? "Write it for me" : "Write it differently"}
+      </button>
+    </div>
+  );
+};
 
 //The add and edit animal pages share these sections; only the Formik shell
 //around them differs.
@@ -47,7 +109,7 @@ export const AnimalFormSections = ({
           <DropdownField
             labelText={"Sex"}
             labelHForAndName={"sex"}
-            valueArray={["Male", "Female", "Mixed"]}
+            valueArray={["Male", "Female"]}
             wrapperClassN=""
           >
             <ErrorFormik field={"sex"} />
@@ -109,6 +171,7 @@ export const AnimalFormSections = ({
         >
           <ErrorFormik field={"desc"} />
         </InputOrTextArea>
+        <DescriptionHelper values={values} setFieldValue={setFieldValue} />
       </AdminCard>
 
       <AdminCard title="Photo">

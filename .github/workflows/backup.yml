@@ -1,0 +1,62 @@
+# Weekly encrypted backup of the LIVE database, kept as a GitHub artifact for
+# 90 days. Runs on GitHub's free tier — no extra services, no cost.
+#
+# Setup (one-off): add a repository secret called BACKUP_PASSPHRASE
+# (Settings → Secrets and variables → Actions). Use a long random phrase and
+# keep a copy somewhere safe — a backup you can't decrypt is no backup.
+#
+# To restore a backup:
+#   1. Download the artifact from the Actions run and unzip it.
+#   2. Decrypt:  openssl enc -d -aes-256-cbc -pbkdf2 -in brighteyes.archive.enc \
+#                  -out brighteyes.archive -pass pass:"<BACKUP_PASSPHRASE>"
+#   3. Restore:  mongorestore --uri="<MONGO_URI>" --archive=brighteyes.archive \
+#                  --gzip --drop
+#      (--drop replaces existing collections; leave it off to merge instead.)
+
+name: Weekly database backup
+
+on:
+  schedule:
+    # Every Monday at 03:15 UTC
+    - cron: "15 3 * * 1"
+  workflow_dispatch: # allows a manual run from the Actions tab
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check secrets are configured
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$MONGO_URI" ]; then echo "MONGO_URI secret is missing"; exit 1; fi
+          if [ -z "$BACKUP_PASSPHRASE" ]; then echo "BACKUP_PASSPHRASE secret is missing — add it in repo Settings → Secrets"; exit 1; fi
+
+      - name: Install MongoDB database tools
+        run: |
+          wget -q https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2404-x86_64-100.12.0.deb
+          sudo dpkg -i mongodb-database-tools-ubuntu2404-x86_64-100.12.0.deb
+
+      - name: Dump the database
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: mongodump --uri="$MONGO_URI" --archive=brighteyes.archive --gzip
+
+      - name: Encrypt the dump
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          openssl enc -aes-256-cbc -pbkdf2 -salt \
+            -in brighteyes.archive -out brighteyes.archive.enc \
+            -pass pass:"$BACKUP_PASSPHRASE"
+          rm brighteyes.archive
+
+      - name: Store as artifact (kept 90 days)
+        uses: actions/upload-artifact@v4
+        with:
+          name: brighteyes-db-backup-${{ github.run_id }}
+          path: brighteyes.archive.enc
+          retention-days: 90
+          if-no-files-found: error

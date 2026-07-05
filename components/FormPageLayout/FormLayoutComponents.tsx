@@ -65,7 +65,7 @@ export const FormCardContainer = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="mx-auto grid w-11/12 max-w-6xl gap-6 pb-6 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] gap-6 pb-6 sm:grid-cols-2 xl:grid-cols-4">
       {children}
     </div>
   );

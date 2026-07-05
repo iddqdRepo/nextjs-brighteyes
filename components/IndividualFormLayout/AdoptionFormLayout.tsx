@@ -93,14 +93,18 @@ export const AdoptionCriteriaCard = ({ type }: { type: string }) => {
   );
 };
 
-export const NeedHelpCard = () => {
+export const NeedHelpCard = ({
+  text = "Our team is here to support you through the adoption process.",
+}: {
+  text?: string;
+}) => {
   return (
     <div className="w-full rounded-3xl border border-gray-100 bg-white p-6 shadow-lg shadow-gray-200/60">
       <h2 className="text-lg font-semibold text-gray-900 font-poppins">
         Need help?
       </h2>
       <p className="mt-1 text-xs leading-5 text-gray-600 font-poppins">
-        Our team is here to support you through the adoption process.
+        {text}
       </p>
       <div className="mt-4 flex flex-col gap-3 text-sm text-gray-700 font-poppins">
         <div className="flex items-center gap-2.5">

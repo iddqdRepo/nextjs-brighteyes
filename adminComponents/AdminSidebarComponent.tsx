@@ -58,6 +58,14 @@ const NAV_GROUPS = [
       text: "Team",
     },
   ],
+  [
+    {
+      toggle: "Settings",
+      link: "/settings",
+      icon: "carbon:settings",
+      text: "Settings",
+    },
+  ],
 ];
 
 //Which nav items an admin can see; the server enforces the same rules, this

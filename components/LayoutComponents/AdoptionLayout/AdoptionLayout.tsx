@@ -51,7 +51,7 @@ const SORT_OPTIONS: {
 export const AdoptionHeroSection = () => {
   return (
     <section className="overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
-      <div className="mx-auto grid w-11/12 max-w-6xl items-center gap-10 py-12 lg:grid-cols-2 lg:py-16">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-center gap-10 py-12 lg:grid-cols-2 lg:py-16">
         <div>
           <SectionEyebrow text="Adopt. Love. Save a life." />
           <h1 className="text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl font-poppins">
@@ -103,7 +103,7 @@ export const AdoptionHeroSection = () => {
 
 export const AdoptionCriteriaSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-8">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-8">
       <div className="grid items-center gap-8 rounded-[2rem] bg-cream-deep p-8 sm:p-10 lg:grid-cols-[auto,1fr]">
         <div className="max-w-[14rem]">
           <h2 className="flex items-center gap-2 text-2xl font-semibold text-gray-900 font-poppins">
@@ -132,6 +132,9 @@ export const AdoptionCardSection = () => {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("default");
+  //Independent toggles for households with kids or existing pets.
+  const [childFriendly, setChildFriendly] = useState(false);
+  const [petFriendly, setPetFriendly] = useState(false);
   const { isLoading: isPetLoading, data: availablePets } = useQuery(
     "availablePets",
     getAvailablePets,
@@ -144,6 +147,12 @@ export const AdoptionCardSection = () => {
 
   const filteredPets = pets
     .filter((animal) => (filter ? animal.type === filter : true))
+    .filter((animal) =>
+      childFriendly ? /yes/i.test(animal.suitableForChildren) : true
+    )
+    .filter((animal) =>
+      petFriendly ? /yes/i.test(animal.suitableForAnimals) : true
+    )
     .filter((animal) => {
       const term = search.trim().toLowerCase();
       if (!term) {
@@ -159,7 +168,10 @@ export const AdoptionCardSection = () => {
   const sortedPets = sortFn ? [...filteredPets].sort(sortFn) : filteredPets;
 
   return (
-    <section id="animals" className="mx-auto w-11/12 max-w-6xl py-10">
+    <section
+      id="animals"
+      className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-10"
+    >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap gap-3">
           <FilterChip
@@ -176,6 +188,16 @@ export const AdoptionCardSection = () => {
             label="Cats"
             selected={filter === "Cat"}
             onClick={() => setFilter("Cat")}
+          />
+          <FilterChip
+            label="Good with children"
+            selected={childFriendly}
+            onClick={() => setChildFriendly((current) => !current)}
+          />
+          <FilterChip
+            label="Good with other pets"
+            selected={petFriendly}
+            onClick={() => setPetFriendly((current) => !current)}
           />
         </div>
 
@@ -246,7 +268,7 @@ export const AdoptionCardSection = () => {
 
 export const PerfectMatchSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl pb-16 pt-4">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] pb-16 pt-4">
       <div className="flex flex-col items-center gap-6 rounded-[2rem] bg-brand-100 p-8 text-center sm:p-10 lg:flex-row lg:text-left">
         <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-brand">
           <Icon

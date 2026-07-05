@@ -11,7 +11,7 @@ import {
 export const FormsHeroSection = () => {
   return (
     <section className="overflow-hidden bg-gradient-to-br from-brand-50 via-white to-white">
-      <div className="mx-auto grid w-11/12 max-w-6xl items-center gap-10 py-12 lg:grid-cols-[1.1fr,0.9fr] lg:py-16">
+      <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-center gap-10 py-12 lg:grid-cols-[1.1fr,0.9fr] lg:py-16">
         <div>
           <SectionEyebrow text="Forms & applications" />
           <h1 className="text-4xl font-semibold leading-tight text-gray-900 sm:text-5xl font-poppins">
@@ -99,7 +99,7 @@ export const FormCardSection = () => {
 
 export const FormsInfoSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl py-10">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] py-10">
       <div className="grid gap-8 rounded-[2rem] bg-cream-deep p-8 sm:p-10 lg:grid-cols-3">
         <FormsInfoItem
           icon="mdi:file-check-outline"
@@ -123,7 +123,7 @@ export const FormsInfoSection = () => {
 
 export const FormsHelpSection = () => {
   return (
-    <section className="mx-auto w-11/12 max-w-6xl pb-16 pt-2">
+    <section className="mx-auto w-11/12 max-w-7xl 2xl:max-w-[85rem] pb-16 pt-2">
       <div className="grid items-center gap-8 rounded-[2rem] border border-gray-100 bg-white p-8 shadow-xl shadow-gray-200/60 sm:p-10 lg:grid-cols-[1fr,auto]">
         <div>
           <h2 className="text-2xl font-semibold text-brand sm:text-3xl font-poppins">

@@ -26,8 +26,13 @@ const loadImage = (src: string) =>
 
 //Draws the selected area onto a canvas and returns it as an inline JPEG,
 //shrunk to a sensible upload size. The API sends it on to Cloudinary.
+//When the admin zooms out past the photo's edge, the empty space is filled
+//with a soft blurred copy of the photo — the same look the website's
+//PetPhoto frames use — instead of black bars.
 const cropToDataUrl = async (src: string, area: Area): Promise<string> => {
   const img = await loadImage(src);
+  const imgWidth = img.naturalWidth;
+  const imgHeight = img.naturalHeight;
   const scale = Math.min(1, MAX_OUTPUT_WIDTH / area.width);
   const canvas = document.createElement("canvas");
   canvas.width = Math.max(1, Math.round(area.width * scale));
@@ -36,17 +41,52 @@ const cropToDataUrl = async (src: string, area: Area): Promise<string> => {
   if (!context) {
     throw new Error("Could not read that image");
   }
-  context.drawImage(
-    img,
-    area.x,
-    area.y,
-    area.width,
-    area.height,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+
+  const spillsOutside =
+    area.x < 0 ||
+    area.y < 0 ||
+    area.x + area.width > imgWidth ||
+    area.y + area.height > imgHeight;
+  if (spillsOutside) {
+    //Cheap universal blur: shrink the photo to a few pixels, then stretch it
+    //back up to cover the canvas (works on every browser, no ctx.filter).
+    const tiny = document.createElement("canvas");
+    tiny.width = 16;
+    tiny.height = Math.max(1, Math.round((16 * canvas.height) / canvas.width));
+    const tinyContext = tiny.getContext("2d");
+    if (tinyContext) {
+      const cover = Math.max(tiny.width / imgWidth, tiny.height / imgHeight);
+      tinyContext.drawImage(
+        img,
+        (tiny.width - imgWidth * cover) / 2,
+        (tiny.height - imgHeight * cover) / 2,
+        imgWidth * cover,
+        imgHeight * cover
+      );
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
+      context.drawImage(tiny, 0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  //The sharp part: only the slice of the crop area the photo actually covers.
+  const left = Math.max(0, area.x);
+  const top = Math.max(0, area.y);
+  const right = Math.min(imgWidth, area.x + area.width);
+  const bottom = Math.min(imgHeight, area.y + area.height);
+  if (right > left && bottom > top) {
+    context.drawImage(
+      img,
+      left,
+      top,
+      right - left,
+      bottom - top,
+      (left - area.x) * scale,
+      (top - area.y) * scale,
+      (right - left) * scale,
+      (bottom - top) * scale
+    );
+  }
   return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
 };
 
@@ -68,15 +108,33 @@ export const PetPhotoField = ({
   const [source, setSource] = useState("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  //How far out the zoom may go: 1 for photos that match the frame, lower for
+  //tall or wide photos so the whole photo can fit inside the frame.
+  const [minZoom, setMinZoom] = useState(1);
   const [error, setError] = useState("");
   //Bakes can finish out of order while dragging; only the newest one counts.
   const bakeCounter = useRef(0);
+  //What the form held before adjusting started, so Cancel can put it back.
+  const preCropImage = useRef("");
 
   const startCropping = (nextSource: string) => {
+    preCropImage.current = image;
     setError("");
     setCrop({ x: 0, y: 0 });
     setZoom(1);
+    setMinZoom(1);
     setSource(nextSource);
+  };
+
+  const finishCropping = () => {
+    setSource("");
+  };
+
+  const cancelCropping = () => {
+    //Invalidate any bake still in flight, then restore the previous photo.
+    bakeCounter.current += 1;
+    onImageChange(preCropImage.current);
+    setSource("");
   };
 
   const handleFile = (file: File | undefined) => {
@@ -154,8 +212,25 @@ export const PetPhotoField = ({
                 image={source}
                 crop={crop}
                 zoom={zoom}
+                minZoom={minZoom}
+                maxZoom={3}
                 aspect={ASPECT}
                 showGrid={false}
+                restrictPosition={zoom >= 1}
+                onMediaLoaded={(mediaSize: {
+                  naturalWidth: number;
+                  naturalHeight: number;
+                }) => {
+                  //Let the photo zoom out until it fits entirely inside the
+                  //frame (the gap gets a soft blur fill, like the website).
+                  const imageAspect =
+                    mediaSize.naturalWidth / mediaSize.naturalHeight;
+                  const containZoom =
+                    imageAspect > ASPECT
+                      ? ASPECT / imageAspect
+                      : imageAspect / ASPECT;
+                  setMinZoom(Math.min(1, Math.max(0.2, containZoom)));
+                }}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={handleCropComplete}
@@ -168,13 +243,14 @@ export const PetPhotoField = ({
                 inline={true}
                 width="13"
               />
-              Drag the photo to move it &#8212; pinch or use the slider to zoom.
+              Drag the photo to move it. Zoom out to fit the whole photo in
+              &#8212; the gaps fill with a soft blur.
             </p>
             <div className="mt-2 flex items-center gap-3">
               <button
                 type="button"
                 aria-label="Zoom out"
-                onClick={() => setZoom(Math.max(1, zoom - 0.25))}
+                onClick={() => setZoom(Math.max(minZoom, zoom - 0.25))}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
               >
                 <Icon icon="akar-icons:minus" width="14" />
@@ -182,7 +258,7 @@ export const PetPhotoField = ({
               <input
                 type="range"
                 aria-label="Zoom"
-                min={1}
+                min={minZoom}
                 max={3}
                 step={0.01}
                 value={zoom}
@@ -196,6 +272,24 @@ export const PetPhotoField = ({
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
               >
                 <Icon icon="akar-icons:plus" width="14" />
+              </button>
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={finishCropping}
+                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-brand/20 transition hover:bg-brand-dark font-poppins sm:flex-none"
+              >
+                <Icon icon="charm:circle-tick" width="15" />
+                Done
+              </button>
+              <button
+                type="button"
+                onClick={cancelCropping}
+                className="flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 font-poppins sm:flex-none"
+              >
+                <Icon icon="akar-icons:cross" width="13" />
+                Cancel
               </button>
             </div>
           </div>

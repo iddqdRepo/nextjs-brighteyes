@@ -42,6 +42,22 @@ async function main() {
   await db.collection("pets").insertMany([
     {
       type: "Dog",
+      name: "Fixture Hope",
+      age: "5",
+      yearsOrMonths: "Years",
+      sex: "Female",
+      breed: "Spaniel",
+      size: "Medium",
+      image: PLACEHOLDER_IMAGE,
+      suitableForChildren: "Yes",
+      suitableForAnimals: "Yes",
+      adopted: "Yes",
+      desc: "Seeded adopted dog so Happy Tails has content locally",
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      type: "Dog",
       name: "Fixture Rex",
       age: "3",
       yearsOrMonths: "Years",
@@ -75,7 +91,7 @@ async function main() {
   ]);
 
   console.log(
-    `Seeded ${db.databaseName}: 1 admin (${TEST_ADMIN.username}), 2 pets`
+    `Seeded ${db.databaseName}: 1 admin (${TEST_ADMIN.username}), 3 pets`
   );
   await mongoose.disconnect();
 }

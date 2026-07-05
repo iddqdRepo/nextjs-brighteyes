@@ -6,7 +6,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/devWithTestDb.js",
+    "dev:live": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { text: "Home", path: "" },
   { text: "About", path: "about" },
   { text: "Adoption", path: "adoption" },
+  { text: "Happy Tails", path: "happy-tails" },
   { text: "Donate", path: "donate" },
   { text: "Forms", path: "forms" },
 ];
@@ -26,7 +27,7 @@ function NavbarComponent() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 shadow-sm backdrop-blur">
-      <nav className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 lg:px-8">
+      <nav className="mx-auto flex h-20 w-full max-w-7xl 2xl:max-w-[85rem] items-center justify-between gap-4 px-4 lg:px-8">
         <Link href="/">
           <a className="flex shrink-0 cursor-pointer items-center gap-2.5">
             <Image
