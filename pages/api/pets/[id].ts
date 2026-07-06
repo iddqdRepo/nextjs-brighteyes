@@ -4,6 +4,16 @@ import dbConnect from "../../../utils/dbConnect";
 import { FORBIDDEN_MESSAGE, getAdminUser } from "../../../utils/auth";
 import { isDataUri, uploadPetImage } from "../../../utils/cloudinary";
 
+//Edited photos travel as base64 data URLs; Next's default 1mb body limit
+//rejected larger photos with a 413. 4mb matches Vercel's platform cap.
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb",
+    },
+  },
+};
+
 //Only these fields may be set via the API, so a client cannot inject arbitrary
 //properties (e.g. _id, __v) through the request body.
 const EDITABLE_PET_FIELDS = [

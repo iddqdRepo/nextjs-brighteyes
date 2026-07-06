@@ -17,9 +17,15 @@ const petSchema = new Schema({
   suitableForAnimals: String,
   adopted: String,
   desc: String,
+  createdAt: {
+    type: Date,
+    //Date.now (a function) is evaluated per document; `new Date()` would be
+    //evaluated once at module load and stamp every pet with the boot time.
+    default: Date.now,
+  },
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
 });
 

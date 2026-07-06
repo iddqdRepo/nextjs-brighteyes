@@ -76,16 +76,18 @@ export const FormList = ({
   //Deleting a submission is permanent, so only superusers see the button.
   canDelete: boolean;
 }) => {
-  const visibleForms = list
+  //list is undefined when the query errored; render the empty state rather
+  //than crashing the whole page. A missing ?archive param means active view.
+  const visibleForms = (list || [])
     .sort(function (a: any, b: any) {
       // Show the newest first
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     })
     .filter((archiveFilter: { archive: string }) => {
-      if (isArchive === "false") {
-        return archiveFilter.archive === "No";
-      } else {
+      if (isArchive === "true") {
         return archiveFilter.archive === "Yes";
+      } else {
+        return archiveFilter.archive === "No";
       }
     })
     .filter((text: { aboutQuestions: { name: string } }) => {

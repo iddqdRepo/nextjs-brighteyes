@@ -21,6 +21,17 @@ export const notificationRecipient = () =>
   process.env.FORM_NOTIFY_EMAIL ||
   (process.env.VERCEL_ENV === "production" ? LIVE_EMAIL : TEST_EMAIL);
 
+//The name comes straight from the public request body; escaping it stops a
+//submitted "name" like <a href=evil>…</a> becoming live HTML in the
+//charity's inbox (a ready-made phishing vector).
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export const notifyFormSubmission = async (
   formType: string,
   submitterName?: string
@@ -31,12 +42,22 @@ export const notifyFormSubmission = async (
   }
 
   const label = FORM_LABELS[formType] || "Form";
-  const from = submitterName ? ` from ${submitterName}` : "";
+  const safeName =
+    typeof submitterName === "string"
+      ? escapeHtml(submitterName.slice(0, 80))
+      : "";
+  const from = safeName ? ` from ${safeName}` : "";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+
+  //Bound how long a slow email provider can hold up the 201 response; the
+  //visitor's submission is already saved at this point.
+  const abort = new AbortController();
+  const timeout = setTimeout(() => abort.abort(), 5000);
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
+      signal: abort.signal,
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
@@ -65,5 +86,7 @@ export const notifyFormSubmission = async (
     }
   } catch (error) {
     console.error("Form notification email failed:", error);
+  } finally {
+    clearTimeout(timeout);
   }
 };

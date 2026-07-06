@@ -14,11 +14,22 @@ export const deletePet = async (id: string) => {
   await axios.delete(`/api/pets/${id}`);
 };
 
+//Return false on failure instead of throwing, so the admin form shows
+//"ERROR, try again" rather than spinning forever (axios throws on non-2xx,
+//e.g. an expired session or a photo over the body-size limit).
 export const updatePet = async (data: PetInterface) => {
-  const updatePet = await axios.put(`/api/pets/${data._id}`, data);
-  return updatePet.data.success;
+  try {
+    const updatePet = await axios.put(`/api/pets/${data._id}`, data);
+    return updatePet.data?.success === true;
+  } catch {
+    return false;
+  }
 };
 export const postPet = async (data: PetInterface) => {
-  const addPet = await axios.post(`/api/pets`, data);
-  return addPet.data.success;
+  try {
+    const addPet = await axios.post(`/api/pets`, data);
+    return addPet.data?.success === true;
+  } catch {
+    return false;
+  }
 };

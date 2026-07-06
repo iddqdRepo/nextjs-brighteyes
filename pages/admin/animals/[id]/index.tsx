@@ -46,13 +46,17 @@ function Index({
             <Formik
               initialValues={animal[0]}
               validationSchema={AnimalSchema}
-              onSubmit={async (data) => {
+              onSubmit={async (data, { resetForm }) => {
                 setLoading(true);
                 let toPost: PetInterface = sanitizeInput(data as PetInterface);
                 let successful = await updatePet(toPost);
                 if (successful) {
                   setLoading(false);
                   setIsSuccess(true);
+                  //The saved values become the new baseline, so `dirty`
+                  //means "edited since the last save": editing again revives
+                  //the button and re-arms the unsaved-changes guard.
+                  resetForm({ values: data });
                 } else {
                   setLoading(false);
                   setIsSuccess(false);
@@ -62,14 +66,14 @@ function Index({
             >
               {({ values, handleSubmit, setFieldValue, dirty }) => (
                 <div className="flex w-full flex-col items-center">
-                  <UnsavedChangesGuard when={dirty && !isSuccess && !loading} />
+                  <UnsavedChangesGuard when={dirty && !loading} />
                   <AnimalFormSections
                     values={values}
                     setFieldValue={setFieldValue}
                   />
                   <ShowButtonTextOnSubmit
                     loading={loading}
-                    isSuccess={isSuccess}
+                    isSuccess={isSuccess && !dirty}
                     buttonText={buttonText}
                     submitHandler={handleSubmit}
                     animalName={values.name}

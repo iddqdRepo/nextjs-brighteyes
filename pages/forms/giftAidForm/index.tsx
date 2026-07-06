@@ -79,7 +79,7 @@ const Index = () => {
               }
               setLoading(true);
               let successful = await postGiftAidForm(data);
-              if (successful.success) {
+              if (successful) {
                 setLoading(false);
                 setIsSuccess(true);
               } else {

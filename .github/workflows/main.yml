@@ -15,8 +15,9 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # 22 is the active LTS and what Vercel deploys with (engines: 22.x),
+        # so CI tests the same runtime production uses.
+        node-version: [22.x]
 
     env:
       # CI runs against the brighteyes_test database (derived below), never live data.
@@ -24,9 +25,9 @@ jobs:
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           # cache: "npm"
@@ -46,7 +47,9 @@ jobs:
       - run: npm run build
 
       - name: Cypress tests
-        uses: cypress-io/github-action@v4
+        # v4 runs on the retired Node 16 actions runtime; v6 has the same
+        # interface and runs on Node 20+.
+        uses: cypress-io/github-action@v6
         with:
           install: false
           start: npm start

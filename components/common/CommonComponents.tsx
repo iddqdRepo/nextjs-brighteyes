@@ -211,8 +211,11 @@ export const Button = ({
   variant?: "primary" | "outline";
 }) => {
   return (
+    //A real <a> (not a <button>) so the CTA has an href: crawlers can follow
+    //it and open-in-new-tab / middle-click work. The classes set display
+    //flex, so it renders identically.
     <Link href={`${link}`}>
-      <button className={buttonStyles[variant]}>
+      <a className={buttonStyles[variant]}>
         <div className={buttonInnerStyles[variant]}>
           <span className="pr-3">{text}</span>
           <Icon
@@ -221,7 +224,7 @@ export const Button = ({
             color={variant === "primary" ? "white" : "#8b3479"}
           />
         </div>
-      </button>
+      </a>
     </Link>
   );
 };
@@ -248,7 +251,7 @@ export const ButtonWithQuery = ({
         },
       }}
     >
-      <button className={buttonStyles[variant]}>
+      <a className={buttonStyles[variant]}>
         <div className={buttonInnerStyles[variant]}>
           <span className="pr-3">{text}</span>
           <Icon
@@ -257,7 +260,7 @@ export const ButtonWithQuery = ({
             color={variant === "primary" ? "white" : "#8b3479"}
           />
         </div>
-      </button>
+      </a>
     </Link>
   );
 };
@@ -588,13 +591,14 @@ export const ShowButtonTextOnSubmit = ({
   submitHandler: any;
   animalName: string;
 }) => {
+  //The loading button deliberately has no submitHandler: an impatient tap on
+  //the spinner used to fire a second, duplicate submission mid-flight.
   return loading ? (
     <button
       type="submit"
       className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand text-white justify-center font-poppins text-sm font-medium"
       onClick={(e) => {
         e.preventDefault();
-        submitHandler();
       }}
     >
       {submittingButtonIcon()}

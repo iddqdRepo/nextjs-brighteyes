@@ -122,14 +122,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           }
         }
 
-        //Tracking-only updates must not bump updatedAt — the admin tables
-        //display it as the submission date.
+        //Tracking and filing updates must not bump updatedAt — the admin
+        //tables display it as the submission date, and archiving a June form
+        //must not relabel it as submitted today.
         const trackingKeys = [
           "updatedAt",
           "status",
           "handledBy",
           "handledAt",
           "read",
+          "archive",
         ];
         if (Object.keys(update).every((key) => trackingKeys.includes(key))) {
           delete update.updatedAt;

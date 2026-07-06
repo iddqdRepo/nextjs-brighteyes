@@ -116,14 +116,28 @@ export const PetPhotoField = ({
   const bakeCounter = useRef(0);
   //What the form held before adjusting started, so Cancel can put it back.
   const preCropImage = useRef("");
+  //When re-adjusting the saved photo, nothing is baked until the user
+  //actually moves or zooms: react-easy-crop emits a crop on load, and baking
+  //that would recompress (and later re-upload) an untouched photo.
+  const adjustingExisting = useRef(false);
+  const interacted = useRef(false);
 
-  const startCropping = (nextSource: string) => {
+  const startCropping = (nextSource: string, isExisting = false) => {
     preCropImage.current = image;
+    adjustingExisting.current = isExisting;
+    interacted.current = false;
     setError("");
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setMinZoom(1);
     setSource(nextSource);
+  };
+
+  const changeZoom = (nextZoom: number) => {
+    if (nextZoom !== zoom) {
+      interacted.current = true;
+    }
+    setZoom(nextZoom);
   };
 
   const finishCropping = () => {
@@ -149,6 +163,10 @@ export const PetPhotoField = ({
   };
 
   const handleCropComplete = async (_: Area, areaPixels: Area) => {
+    if (adjustingExisting.current && !interacted.current) {
+      //Opened but not touched: keep the original photo exactly as it is.
+      return;
+    }
     const bakeId = ++bakeCounter.current;
     try {
       const baked = await cropToDataUrl(source, areaPixels);
@@ -189,7 +207,7 @@ export const PetPhotoField = ({
         {!source && image && (
           <button
             type="button"
-            onClick={() => startCropping(image)}
+            onClick={() => startCropping(image, true)}
             className="flex items-center gap-2 rounded-full border-2 border-brand px-6 py-3 text-sm font-medium text-brand transition hover:bg-brand-50 font-poppins"
           >
             <Icon icon="carbon:move" width="16" height="16" />
@@ -231,8 +249,13 @@ export const PetPhotoField = ({
                       : imageAspect / ASPECT;
                   setMinZoom(Math.min(1, Math.max(0.2, containZoom)));
                 }}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
+                onCropChange={(nextCrop) => {
+                  if (nextCrop.x !== crop.x || nextCrop.y !== crop.y) {
+                    interacted.current = true;
+                  }
+                  setCrop(nextCrop);
+                }}
+                onZoomChange={changeZoom}
                 onCropComplete={handleCropComplete}
               />
             </div>
@@ -250,7 +273,7 @@ export const PetPhotoField = ({
               <button
                 type="button"
                 aria-label="Zoom out"
-                onClick={() => setZoom(Math.max(minZoom, zoom - 0.25))}
+                onClick={() => changeZoom(Math.max(minZoom, zoom - 0.25))}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
               >
                 <Icon icon="akar-icons:minus" width="14" />
@@ -262,13 +285,13 @@ export const PetPhotoField = ({
                 max={3}
                 step={0.01}
                 value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
+                onChange={(e) => changeZoom(Number(e.target.value))}
                 className="w-full accent-brand"
               />
               <button
                 type="button"
                 aria-label="Zoom in"
-                onClick={() => setZoom(Math.min(3, zoom + 0.25))}
+                onClick={() => changeZoom(Math.min(3, zoom + 0.25))}
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
               >
                 <Icon icon="akar-icons:plus" width="14" />

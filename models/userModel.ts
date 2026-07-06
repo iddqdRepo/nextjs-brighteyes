@@ -7,6 +7,9 @@ const userSchema = new Schema(
     username: {
       type: String,
       required: true,
+      //Backstop against two same-named accounts racing past the API's
+      //duplicate check; login/update/delete all look users up by username.
+      unique: true,
     },
     password: {
       type: String,

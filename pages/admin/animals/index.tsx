@@ -134,12 +134,13 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
     setHidden(true);
   };
   const handleArchive = () => {
-    if (deleteOrUpdateInfo.current.data.adopted === "Yes") {
-      deleteOrUpdateInfo.current.data.adopted = "No";
-    } else {
-      deleteOrUpdateInfo.current.data.adopted = "Yes";
-    }
-    updatePetMutation.mutate(deleteOrUpdateInfo.current.data);
+    //Work on a copy: flipping the cached object in place made a failed PUT
+    //look successful in the table until the next refetch.
+    const pet = deleteOrUpdateInfo.current.data;
+    updatePetMutation.mutate({
+      ...pet,
+      adopted: pet.adopted === "Yes" ? "No" : "Yes",
+    });
     setHidden(true);
   };
 
@@ -167,10 +168,11 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
 
   const visiblePets: PetInterface[] = (pets?.data ?? [])
     .filter((archiveFilter: { adopted: string }) => {
-      if (isArchive === "false") {
-        return archiveFilter.adopted === "No";
-      } else {
+      //Missing ?archive param means the active view, matching the heading.
+      if (isArchive === "true") {
         return archiveFilter.adopted === "Yes";
+      } else {
+        return archiveFilter.adopted === "No";
       }
     })
     .filter((applied: { type: string }) => {

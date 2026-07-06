@@ -171,7 +171,7 @@ function Index({
     return (
       <div className="flex flex-col items-center justify-start pt-2 mb-4 ml-1 mr-1 border border-gray-300 w-60">
         <Label
-          text={titleMap[labelText as keyof TitleMapInterface]}
+          text={titleMap[labelText as keyof TitleMapInterface] || labelText}
           hFor={"val"}
           classN="text-center text-xs"
         />
@@ -320,7 +320,7 @@ function Index({
               return (
                 <FieldSet key={fieldSetTitle} legendText={fieldSetTitle}>
                   <FieldAndAnswer
-                    labelText={"fieldSetTitle"}
+                    labelText={fieldSetTitle}
                     answer={fieldSetContent}
                   />
                 </FieldSet>

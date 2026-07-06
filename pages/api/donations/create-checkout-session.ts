@@ -23,9 +23,11 @@ const sanitizePayload = (payload: any) => {
     donor: {
       fullName: payload.donor.fullName.trim(),
       email: payload.donor.email.trim(),
-      phone: payload.donor.phone.trim(),
+      //phone and addressLine2 are optional in the schema, so a direct API
+      //call can omit them entirely — the site form always sends "".
+      phone: (payload.donor.phone || "").trim(),
       addressLine1: payload.donor.addressLine1.trim(),
-      addressLine2: payload.donor.addressLine2.trim(),
+      addressLine2: (payload.donor.addressLine2 || "").trim(),
       townCity: payload.donor.townCity.trim(),
       postcode: payload.donor.postcode.trim(),
     },

@@ -33,6 +33,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
         }
 
+        if (!/^[a-zA-Z0-9._-]{2,32}$/.test(username)) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "Usernames are 2-32 letters, numbers, dots, dashes or underscores.",
+          });
+        }
+        //"me" is the change-your-own-password route (/api/users/me), which
+        //shadows /api/users/<name> — an account with that name could never
+        //be managed, and resetting "me" would change the requester instead.
+        if (username.toLowerCase() === "me") {
+          return res.status(400).json({
+            success: false,
+            message: "That username is reserved — please pick another.",
+          });
+        }
+
+        if (password.length < 8) {
+          return res.status(400).json({
+            success: false,
+            message: "Password must be at least 8 characters.",
+          });
+        }
+
         const access = parseAccessFields(req.body);
         if (!access) {
           return res.status(400).json({
@@ -50,15 +74,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         const hash = bcrypt.hashSync(password, 10);
-        const user = await userModel.create({
-          username,
-          password: hash,
-          ...access,
-        });
-        return res.status(201).json({
-          success: true,
-          data: { _id: user._id, username: user.username, role: user.role },
-        });
+        try {
+          const user = await userModel.create({
+            username,
+            password: hash,
+            ...access,
+          });
+          return res.status(201).json({
+            success: true,
+            data: { _id: user._id, username: user.username, role: user.role },
+          });
+        } catch (error) {
+          //The unique index catches a double-click racing past the findOne.
+          if ((error as { code?: number }).code === 11000) {
+            return res.status(409).json({
+              success: false,
+              message: `A user called ${username} already exists`,
+            });
+          }
+          throw error;
+        }
       }
 
       default:

@@ -26,21 +26,40 @@ export const getContactUsForms = async () => {
 
 //^-----------------POST ROUTES-----------------
 
+//Axios throws on any non-2xx or network failure. These return false instead
+//of throwing so the form pages can show "ERROR, try again" — an uncaught
+//rejection would leave the visitor staring at an infinite spinner.
 export const postPetForm = async (data: PetAdoptionFormInterface) => {
-  const petform = await axios.post(`/api/forms?type=pet`, data);
-  return petform.data;
+  try {
+    const petform = await axios.post(`/api/forms?type=pet`, data);
+    return petform.data?.success === true;
+  } catch {
+    return false;
+  }
 };
 export const postGiftAidForm = async (data: GiftaidFormInterface) => {
-  const giftaidForm = await axios.post(`/api/forms?type=giftaid`, data);
-  return giftaidForm.data;
+  try {
+    const giftaidForm = await axios.post(`/api/forms?type=giftaid`, data);
+    return giftaidForm.data?.success === true;
+  } catch {
+    return false;
+  }
 };
 export const postVolunteerForm = async (data: VolunteerFormInterface) => {
-  const volunteerform = await axios.post(`/api/forms?type=volunteer`, data);
-  return volunteerform.data;
+  try {
+    const volunteerform = await axios.post(`/api/forms?type=volunteer`, data);
+    return volunteerform.data?.success === true;
+  } catch {
+    return false;
+  }
 };
 export const postContactUsForm = async (data: ContactUsFormInterface) => {
-  const contactUsform = await axios.post(`/api/forms?type=contactus`, data);
-  return contactUsform.data;
+  try {
+    const contactUsform = await axios.post(`/api/forms?type=contactus`, data);
+    return contactUsform.data?.success === true;
+  } catch {
+    return false;
+  }
 };
 
 //^-----------------UPDATE ROUTES-----------------

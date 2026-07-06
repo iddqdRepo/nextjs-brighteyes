@@ -60,10 +60,21 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context: { params: { id: any } }) {
-  dbConnect();
+  await dbConnect();
   const ids = context.params.id;
   // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
-  const dataTemp = await petModel.find({ _id: ids }).lean();
+  let dataTemp;
+  try {
+    dataTemp = await petModel.find({ _id: ids }).lean();
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true, revalidate: 10 };
+  }
+  //Deleted pets stay in Google's index and old Facebook shares for a while:
+  //those links must 404, not crash the render with an empty array.
+  if (dataTemp.length === 0) {
+    return { notFound: true, revalidate: 10 };
+  }
   const data = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
     if (doc.createdAt) {

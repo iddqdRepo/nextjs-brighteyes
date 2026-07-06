@@ -214,7 +214,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   await dbConnect();
 
-  const donation = await DonationModel.findById(context.params?.id).lean();
+  let donation;
+  try {
+    donation = await DonationModel.findById(context.params?.id).lean();
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true };
+  }
 
   if (!donation) {
     return {

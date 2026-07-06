@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @jest-environment node
  */
 import { sign } from "jsonwebtoken";
@@ -109,7 +109,7 @@ describe("team management is superuser-only", () => {
         cookies: cookieFor("boss"),
         body: {
           username: "volunteer",
-          password: "pw",
+          password: "long-enough-pw",
           role: "staff",
           permissions: { animals: true, forms: false, donations: false },
         },
@@ -138,7 +138,7 @@ describe("team management is superuser-only", () => {
         method: "POST",
         query: {},
         cookies: cookieFor("boss"),
-        body: { username: "taken", password: "pw" },
+        body: { username: "taken", password: "long-enough-pw" },
       },
       res
     );

@@ -49,6 +49,12 @@ const handler = async (
         //A new password is always hashed, so a plaintext password can never
         //be written to the database.
         if (typeof body.password === "string" && body.password) {
+          if (body.password.length < 8) {
+            return res.status(400).json({
+              success: false,
+              message: "Password must be at least 8 characters.",
+            });
+          }
           update.password = bcrypt.hashSync(body.password, 10);
         }
 
@@ -104,6 +110,21 @@ const handler = async (
             message: `No user with username of ${passedInUser} exists`,
           });
         }
+
+        //Belt and braces for the count-then-write race: if two superusers
+        //demote each other simultaneously, both pass the pre-check above.
+        //Re-checking after the write and undoing keeps at least one.
+        if (update.role === "staff" && (await countSuperusers()) === 0) {
+          await userModel.updateOne(
+            { username: passedInUser },
+            { role: "superuser" }
+          );
+          return res.status(400).json({
+            success: false,
+            message: "The team needs at least one superuser.",
+          });
+        }
+
         return res.status(200).json({
           success: true,
           message: `user ${passedInUser} successfully updated`,
@@ -136,6 +157,20 @@ const handler = async (
         }
 
         await userModel.deleteOne({ username: passedInUser });
+
+        //Same race guard as PUT: two superusers deleting each other can both
+        //pass the pre-check, so restore this account if it was the last one.
+        if (
+          toAdminUser(target).isSuperuser &&
+          (await countSuperusers()) === 0
+        ) {
+          await userModel.create(target);
+          return res.status(400).json({
+            success: false,
+            message: "The team needs at least one superuser.",
+          });
+        }
+
         return res.status(200).json({
           success: true,
           message: `user ${passedInUser} successfully deleted`,

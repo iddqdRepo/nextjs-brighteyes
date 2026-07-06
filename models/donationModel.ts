@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -61,7 +61,7 @@ const donationSchema = new Schema(
     },
     statusUpdatedAt: {
       type: Date,
-      default: new Date(),
+      default: Date.now,
     },
     paidAt: Date,
   },

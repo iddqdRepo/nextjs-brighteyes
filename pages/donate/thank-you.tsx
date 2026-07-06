@@ -194,6 +194,11 @@ export const getServerSideProps: GetServerSideProps<ThankYouProps> = async (
   let resolvedDonationId =
     typeof donationId === "string" ? donationId : undefined;
   let canManageDonation = false;
+  //Whether this request proved a right to see the donation's details: either
+  //it arrived from Stripe with a valid checkout session, or it carries the
+  //donor's access cookie. A bare ?donationId= URL proves nothing — those ids
+  //sit in browser histories and shared links, and must not leak donor PII.
+  let verifiedBySession = false;
 
   await dbConnect();
 
@@ -210,25 +215,32 @@ export const getServerSideProps: GetServerSideProps<ThankYouProps> = async (
 
       if (sessionDonationId) {
         resolvedDonationId = sessionDonationId;
+        verifiedBySession = true;
       }
 
       if (sessionDonationId) {
         const sessionStatus = getCheckoutSessionDonationStatus(session);
 
-        await DonationModel.findByIdAndUpdate(sessionDonationId, {
-          $set: compactObject({
-            status: sessionStatus,
-            statusUpdatedAt: new Date(),
-            paidAt:
-              sessionStatus === "paid" || sessionStatus === "active"
-                ? new Date()
-                : undefined,
-            "stripe.checkoutSessionId": session.id,
-            "stripe.customerId": getStripeId(session.customer),
-            "stripe.paymentIntentId": getStripeId(session.payment_intent),
-            "stripe.subscriptionId": getStripeId(session.subscription),
-          }),
-        });
+        //Only ever promote a donation still waiting on payment. Revisiting a
+        //bookmarked success URL must not overwrite a newer webhook-set
+        //status (e.g. flip a cancelled subscription back to active).
+        await DonationModel.findOneAndUpdate(
+          { _id: sessionDonationId, status: "pending" },
+          {
+            $set: compactObject({
+              status: sessionStatus,
+              statusUpdatedAt: new Date(),
+              paidAt:
+                sessionStatus === "paid" || sessionStatus === "active"
+                  ? new Date()
+                  : undefined,
+              "stripe.checkoutSessionId": session.id,
+              "stripe.customerId": getStripeId(session.customer),
+              "stripe.paymentIntentId": getStripeId(session.payment_intent),
+              "stripe.subscriptionId": getStripeId(session.subscription),
+            }),
+          }
+        );
       }
 
       if (
@@ -265,7 +277,14 @@ export const getServerSideProps: GetServerSideProps<ThankYouProps> = async (
     };
   }
 
-  const donation = await DonationModel.findById(resolvedDonationId).lean();
+  let donation;
+  try {
+    donation = await DonationModel.findById(resolvedDonationId).lean();
+  } catch {
+    //A malformed donationId fails the ObjectId cast; show "not found"
+    //rather than a 500.
+    donation = null;
+  }
 
   if (!donation) {
     return {
@@ -275,17 +294,29 @@ export const getServerSideProps: GetServerSideProps<ThankYouProps> = async (
     };
   }
 
+  let hasAccessCookie = false;
   if (!canManageDonation) {
     const accessToken = verifyDonationToken(
       getCookieValue(context.req, DONATION_ACCESS_COOKIE),
       "access"
     );
 
-    canManageDonation =
-      donation.donationType === "monthly" &&
+    hasAccessCookie =
       Boolean(donation.stripe?.customerId) &&
       accessToken?.donationId === resolvedDonationId &&
-      accessToken.customerId === donation.stripe?.customerId;
+      accessToken?.customerId === donation.stripe?.customerId;
+
+    canManageDonation = donation.donationType === "monthly" && hasAccessCookie;
+  }
+
+  //Bare ?donationId= links (history, shared URLs) get the generic page, not
+  //the donor's name and giving details.
+  if (!verifiedBySession && !canManageDonation && !hasAccessCookie) {
+    return {
+      props: {
+        donation: null,
+      },
+    };
   }
 
   return {

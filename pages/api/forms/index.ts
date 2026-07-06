@@ -63,14 +63,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         //Every new submission starts explicitly tracked; forms without these
         //fields predate the tracking feature and are shown as "Pre-update".
-        //Overriding here also stops a visitor injecting tracking fields.
+        //Overriding here also stops a visitor injecting tracking fields,
+        //spoofing the submitted date, or hiding a submission by posting it
+        //pre-archived.
         const form = await model.create({
           ...req.body,
+          _id: undefined,
+          __v: undefined,
           status: "new",
           read: false,
           notes: [],
           handledBy: undefined,
           handledAt: undefined,
+          archive: "No",
+          updatedAt: new Date(),
         });
         //Only after the form is safely saved; never blocks the submission.
         await notifyFormSubmission(

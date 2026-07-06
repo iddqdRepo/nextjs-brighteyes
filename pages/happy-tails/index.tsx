@@ -117,14 +117,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   await dbConnect();
 
   const [tails, totalAdopted] = await Promise.all([
-    //Newest arrivals first. updatedAt would be the natural sort, but a bulk
-    //image migration touched every record's updatedAt, so it's unreliable.
+    //Newest first. Sorted by _id (ObjectIds embed their creation time)
+    //because most existing pets predate the createdAt field, and updatedAt
+    //was rewritten for every record by a bulk image migration.
     petModel
-      .find(
-        { adopted: "Yes" },
-        { name: 1, breed: 1, type: 1, image: 1, createdAt: 1 }
-      )
-      .sort({ createdAt: -1 })
+      .find({ adopted: "Yes" }, { name: 1, breed: 1, type: 1, image: 1 })
+      .sort({ _id: -1 })
       .limit(24)
       .lean(),
     petModel.countDocuments({ adopted: "Yes" }),

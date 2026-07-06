@@ -54,7 +54,9 @@ const joinNaturally = (parts: readonly string[]): string => {
     return parts[0];
   }
 
-  return `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}`;
+  //parts[parts.length - 1] rather than .at(-1): Next 12 doesn't polyfill
+  //Array.prototype.at, so .at would crash phones on iOS < 15.4.
+  return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
 };
 
 const chunk = <T>(items: readonly T[], size: number): T[][] => {
@@ -123,7 +125,12 @@ const getIndefiniteArticle = (phrase: string): "a" | "an" => {
   if (/^\d/.test(firstPart)) {
     const number = Number.parseFloat(firstPart);
 
-    if ([8, 11, 18].includes(number)) {
+    //Ranges rather than exact matches so "8.5-month-old" gets "an" too.
+    if (
+      (number >= 8 && number < 9) ||
+      (number >= 11 && number < 12) ||
+      (number >= 18 && number < 19)
+    ) {
       return "an";
     }
 

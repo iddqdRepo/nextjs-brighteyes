@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-//Lightweight tracking shared by every submission type: a New → Being handled
+//Lightweight tracking shared by every submission type: a New â†’ Being handled
 //flag (who/when stamped server-side in api/forms/[id]), staff notes, and a
 //read marker. New submissions get status "new" + read false on creation;
 //forms with none of these fields predate tracking and display as
@@ -141,7 +141,7 @@ const formPetAdoptionSchema = new Schema({
   },
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   archive: String,
 });
@@ -151,7 +151,7 @@ const formGiftAidSchema = new Schema({
   ...trackingFields,
   date: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   giftAidFuture: String,
   giftAidPast: String,
@@ -164,7 +164,7 @@ const formGiftAidSchema = new Schema({
   },
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   archive: String,
 });
@@ -220,7 +220,7 @@ const formVolunteerSchema = new Schema({
   },
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   archive: String,
 });
@@ -234,12 +234,12 @@ const formContactUsSchema = new Schema({
   },
   date: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   message: String,
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   archive: String,
 });
