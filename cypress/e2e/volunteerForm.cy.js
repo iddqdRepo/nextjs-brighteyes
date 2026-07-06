@@ -1,8 +1,11 @@
 // <reference types="cypress" />
 
 describe("Volunteer Form", () => {
-  it("shows correct header", () => {
+  beforeEach(() => {
     cy.visit("http://localhost:3000/forms/volunteerForm");
+  });
+
+  it("shows correct header", () => {
     cy.contains("Volunteer Form");
   });
 

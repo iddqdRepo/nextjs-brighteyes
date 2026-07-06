@@ -46,7 +46,17 @@ async function main() {
   const next = spawn(
     process.execPath,
     [require.resolve("next/dist/bin/next"), "dev"],
-    { stdio: "inherit", env: { ...process.env, MONGO_URI: uri } }
+    {
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        MONGO_URI: uri,
+        //A local form-persistence test must not send a real email.
+        FORM_NOTIFICATIONS_DISABLED: "true",
+        //Prefer Stripe's explicitly test-only key if card checkout is tested.
+        STRIPE_SECRET_KEY: process.env.STRIPE_SK_TEST || "",
+      },
+    }
   );
   next.on("exit", (code) => process.exit(code ?? 0));
 }

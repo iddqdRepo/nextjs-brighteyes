@@ -42,11 +42,32 @@ export const getCheckoutSessionDonationStatus = ({
     return "cancelled";
   }
 
+  //A Checkout Session can be complete while a delayed payment method is
+  //still unpaid. Only Stripe's payment_status proves that money was paid (or
+  //that no payment was required); async success webhooks will promote it later.
+  const paymentComplete =
+    paymentStatus === "paid" || paymentStatus === "no_payment_required";
+
   if (mode === "subscription") {
-    return paymentStatus === "paid" || status === "complete"
-      ? "active"
-      : "pending";
+    return paymentComplete ? "active" : "pending";
   }
 
-  return paymentStatus === "paid" || status === "complete" ? "paid" : "pending";
+  return paymentComplete ? "paid" : "pending";
+};
+
+export const withStatusTimestampGuard = (
+  lookup: Record<string, unknown>,
+  statusUpdatedAt: unknown
+) => {
+  if (!(statusUpdatedAt instanceof Date)) {
+    return lookup;
+  }
+
+  return {
+    ...lookup,
+    $or: [
+      { statusUpdatedAt: { $exists: false } },
+      { statusUpdatedAt: { $lte: statusUpdatedAt } },
+    ],
+  };
 };

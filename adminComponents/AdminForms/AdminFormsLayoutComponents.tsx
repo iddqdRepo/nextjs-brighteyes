@@ -21,6 +21,13 @@ type AnyForm =
   | VolunteerFormInterface
   | ContactUsFormInterface;
 
+const applicantName = (form: AnyForm) => {
+  const name = form.aboutQuestions?.name;
+  return typeof name === "string" && name.trim()
+    ? name.trim()
+    : "Unknown applicant";
+};
+
 //New submissions are stamped status "new" on creation; forms with no status
 //field predate the tracking feature, so they're marked Pre-update rather
 //than pretending nobody has looked at them.
@@ -90,13 +97,13 @@ export const FormList = ({
         return archiveFilter.archive === "No";
       }
     })
-    .filter((text: { aboutQuestions: { name: string } }) => {
+    .filter((form: AnyForm) => {
       if (searchText) {
-        return text.aboutQuestions.name
+        return applicantName(form)
           .toLowerCase()
           .includes(searchText.toLowerCase());
       } else {
-        return text;
+        return form;
       }
     })
     .filter((dropdownType: { type: string }) => {
@@ -112,7 +119,7 @@ export const FormList = ({
     });
 
   const promptArchive = (form: AnyForm) => {
-    deleteOrUpdateInfo.current.name = form.aboutQuestions.name;
+    deleteOrUpdateInfo.current.name = applicantName(form);
     if (form._id) {
       deleteOrUpdateInfo.current.id = form._id;
     }
@@ -125,7 +132,7 @@ export const FormList = ({
   };
 
   const promptDelete = (form: AnyForm) => {
-    deleteOrUpdateInfo.current.name = form.aboutQuestions.name;
+    deleteOrUpdateInfo.current.name = applicantName(form);
     if (form._id) {
       deleteOrUpdateInfo.current.id = form._id;
     }
@@ -144,12 +151,13 @@ export const FormList = ({
 
           <tbody className="bg-white">
             {visibleForms.map((form: AnyForm) => {
+              const name = applicantName(form);
               return (
                 <tr key={form._id} className="transition hover:bg-brand-50/40">
                   <TableData>
                     <div className="flex flex-col items-center gap-1">
                       <div className="text-center text-sm font-semibold text-gray-900 font-poppins">
-                        {form.aboutQuestions.name}
+                        {name}
                       </div>
                       {isArchive !== "true" && <StatusChip form={form} />}
                     </div>
@@ -165,17 +173,12 @@ export const FormList = ({
                     </div>
                   </TableData>
                   <TableData>
-                    <Link href={`/admin/forms/${form._id}`}>
-                      <a
-                        className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
-                        title={`View ${form.aboutQuestions.name}'s form`}
-                      >
-                        <Icon
-                          icon="carbon:view-filled"
-                          width="17"
-                          height="17"
-                        />
-                      </a>
+                    <Link
+                      href={`/admin/forms/${form._id}`}
+                      className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
+                      title={`View ${name}'s form`}
+                    >
+                      <Icon icon="carbon:view-filled" width="17" height="17" />
                     </Link>
                   </TableData>
                   <TableData>
@@ -183,13 +186,13 @@ export const FormList = ({
                       className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
                       title={
                         isArchive === "true"
-                          ? `Unarchive ${form.aboutQuestions.name}'s form`
-                          : `Archive ${form.aboutQuestions.name}'s form`
+                          ? `Unarchive ${name}'s form`
+                          : `Archive ${name}'s form`
                       }
                       aria-label={
                         isArchive === "true"
-                          ? `Unarchive ${form.aboutQuestions.name}'s form`
-                          : `Archive ${form.aboutQuestions.name}'s form`
+                          ? `Unarchive ${name}'s form`
+                          : `Archive ${name}'s form`
                       }
                       onClick={() => promptArchive(form)}
                     >
@@ -208,8 +211,8 @@ export const FormList = ({
                     <TableData>
                       <button
                         className="mx-auto flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-600 transition hover:bg-red-100"
-                        title={`Delete ${form.aboutQuestions.name}'s form`}
-                        aria-label={`Delete ${form.aboutQuestions.name}'s form`}
+                        title={`Delete ${name}'s form`}
+                        aria-label={`Delete ${name}'s form`}
                         onClick={() => promptDelete(form)}
                       >
                         <Icon
@@ -231,49 +234,52 @@ export const FormList = ({
           </div>
         )}
       </div>
-
       <MobileCardList className="mt-6">
-        {visibleForms.map((form: AnyForm) => (
-          <MobileCard key={form._id}>
-            <div className="flex items-center justify-between gap-2">
-              <span className="truncate text-base font-semibold text-gray-900 font-poppins">
-                {form.aboutQuestions.name}
-              </span>
-              <span className="shrink-0 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand font-poppins">
-                {form.type}
-              </span>
-            </div>
-            <div className="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-gray-500 font-poppins">
-              Submitted {form.updatedAt && form.updatedAt.slice(0, 10)}
-              {isArchive !== "true" && <StatusChip form={form} />}
-            </div>
-            <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
-              <Link href={`/admin/forms/${form._id}`}>
-                <a className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
+        {visibleForms.map((form: AnyForm) => {
+          const name = applicantName(form);
+          return (
+            <MobileCard key={form._id}>
+              <div className="flex items-center justify-between gap-2">
+                <span className="truncate text-base font-semibold text-gray-900 font-poppins">
+                  {name}
+                </span>
+                <span className="shrink-0 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand font-poppins">
+                  {form.type}
+                </span>
+              </div>
+              <div className="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-gray-500 font-poppins">
+                Submitted {form.updatedAt && form.updatedAt.slice(0, 10)}
+                {isArchive !== "true" && <StatusChip form={form} />}
+              </div>
+              <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
+                <Link
+                  href={`/admin/forms/${form._id}`}
+                  className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
+                >
                   <Icon icon="carbon:view-filled" width="15" height="15" />
                   View
-                </a>
-              </Link>
-              <MobileActionButton
-                icon={
-                  isArchive === "true"
-                    ? "fluent:tray-item-add-24-filled"
-                    : "fluent:tray-item-remove-24-filled"
-                }
-                label={isArchive === "true" ? "Restore" : "Archive"}
-                onClick={() => promptArchive(form)}
-              />
-              {canDelete && (
+                </Link>
                 <MobileActionButton
-                  danger
-                  icon="fluent:delete-20-filled"
-                  label="Delete"
-                  onClick={() => promptDelete(form)}
+                  icon={
+                    isArchive === "true"
+                      ? "fluent:tray-item-add-24-filled"
+                      : "fluent:tray-item-remove-24-filled"
+                  }
+                  label={isArchive === "true" ? "Restore" : "Archive"}
+                  onClick={() => promptArchive(form)}
                 />
-              )}
-            </div>
-          </MobileCard>
-        ))}
+                {canDelete && (
+                  <MobileActionButton
+                    danger
+                    icon="fluent:delete-20-filled"
+                    label="Delete"
+                    onClick={() => promptDelete(form)}
+                  />
+                )}
+              </div>
+            </MobileCard>
+          );
+        })}
         {visibleForms.length === 0 && (
           <MobileCard className="py-8 text-center text-sm text-gray-500 font-poppins">
             No forms match the current filters.

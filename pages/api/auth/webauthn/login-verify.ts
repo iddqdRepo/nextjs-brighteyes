@@ -75,7 +75,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         "authenticators.credentialID": authenticator.credentialID,
       },
       {
-        $set: {
+        //Two passkey logins can finish out of order. $max keeps the stored
+        //signature counter monotonic instead of letting the slower request
+        //write an older value back over a newer one.
+        $max: {
           "authenticators.$.counter":
             verification.authenticationInfo.newCounter,
         },

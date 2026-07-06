@@ -52,7 +52,7 @@ export const getAuthUser = (req: AuthCookieCarrier): AuthUser | null => {
   }
 
   try {
-    const decoded = verify(token, secret);
+    const decoded = verify(token, secret, { algorithms: ["HS256"] });
     if (typeof decoded === "string") {
       return null;
     }

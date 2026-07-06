@@ -246,13 +246,12 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
             </AdminSelect>
             {isArchive === "false" && canManage && (
               <div className="sm:ml-auto">
-                <Link href={"/admin/animals/addAnimal"}>
-                  <button
-                    id="AddAnimal"
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-white shadow-lg shadow-brand/20 transition hover:bg-brand-dark font-poppins sm:w-auto"
-                  >
-                    + Add Animal
-                  </button>
+                <Link
+                  href="/admin/animals/addAnimal"
+                  id="AddAnimal"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-medium text-white shadow-lg shadow-brand/20 transition hover:bg-brand-dark font-poppins sm:w-auto"
+                >
+                  + Add Animal
                 </Link>
               </div>
             )}
@@ -325,31 +324,29 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
                           <TableData>
                             <div className="flex items-center gap-2">
                               {canManage && (
-                                <Link href={`/admin/animals/${pet._id}`}>
-                                  <a
-                                    title={`Edit ${pet.name}`}
-                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
-                                  >
-                                    <Icon
-                                      icon="bxs:edit"
-                                      width="17"
-                                      height="17"
-                                    />
-                                  </a>
+                                <Link
+                                  href={`/admin/animals/${pet._id}`}
+                                  title={`Edit ${pet.name}`}
+                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
+                                >
+                                  <Icon
+                                    icon="bxs:edit"
+                                    width="17"
+                                    height="17"
+                                  />
                                 </Link>
                               )}
                               {canManage && isArchive !== "true" && (
-                                <Link href={`/admin/animals/${pet._id}/poster`}>
-                                  <a
-                                    title={`Print a poster for ${pet.name}`}
-                                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
-                                  >
-                                    <Icon
-                                      icon="carbon:printer"
-                                      width="17"
-                                      height="17"
-                                    />
-                                  </a>
+                                <Link
+                                  href={`/admin/animals/${pet._id}/poster`}
+                                  title={`Print a poster for ${pet.name}`}
+                                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-brand hover:text-brand"
+                                >
+                                  <Icon
+                                    icon="carbon:printer"
+                                    width="17"
+                                    height="17"
+                                  />
                                 </Link>
                               )}
                               {canManage && (
@@ -419,23 +416,21 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
                     </div>
                     <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
                       {canManage && (
-                        <Link href={`/admin/animals/${pet._id}`}>
-                          <a className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
-                            <Icon icon="bxs:edit" width="15" height="15" />
-                            Edit
-                          </a>
+                        <Link
+                          href={`/admin/animals/${pet._id}`}
+                          className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
+                        >
+                          <Icon icon="bxs:edit" width="15" height="15" />
+                          Edit
                         </Link>
                       )}
                       {canManage && isArchive !== "true" && (
-                        <Link href={`/admin/animals/${pet._id}/poster`}>
-                          <a className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
-                            <Icon
-                              icon="carbon:printer"
-                              width="15"
-                              height="15"
-                            />
-                            Poster
-                          </a>
+                        <Link
+                          href={`/admin/animals/${pet._id}/poster`}
+                          className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-2 py-2.5 text-xs font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
+                        >
+                          <Icon icon="carbon:printer" width="15" height="15" />
+                          Poster
                         </Link>
                       )}
                       {canManage && (

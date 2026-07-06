@@ -31,6 +31,7 @@ import {
   flattenNestedAdoptionObjectForFormBuilder,
   revertDataObjectsBackToOriginalFormat,
 } from "../../../utils/FormFlattenAndRevert";
+import { normalizeCheckboxFields } from "../../../utils/formSubmission";
 
 function Index({ type }: { type: string }) {
   const [toShow, setToShow] = useState({} as AdoptionInitialValuesInterface);
@@ -72,31 +73,25 @@ function Index({ type }: { type: string }) {
       </section>
 
       <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-start gap-8 pb-16 pt-4 xl:grid-cols-[minmax(0,1fr),21rem]">
-        <form className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <Formik
             initialValues={newAdoptionInitialValues}
             validationSchema={
               type === "Dog" ? DogAdoptionSchema : CatAdoptionSchema
             }
             onSubmit={async (data) => {
-              const checkBox = data.homeQuestions;
               setLoading(true);
-              if (checkBox["planning>baby"]) {
-                checkBox["planning>baby"] = checkBox["planning>baby"][0];
-              }
-              if (checkBox["planning>moving"]) {
-                checkBox["planning>moving"] = checkBox["planning>moving"][0];
-              }
-              if (checkBox["planning>workHoursChange"]) {
-                checkBox["planning>workHoursChange"] =
-                  checkBox["planning>workHoursChange"][0];
-              }
-              if (checkBox["planning>holiday"]) {
-                checkBox["planning>holiday"] = checkBox["planning>holiday"][0];
-              }
-
-              let newData = await revertDataObjectsBackToOriginalFormat(
-                data,
+              const homeQuestions = normalizeCheckboxFields(
+                data.homeQuestions,
+                [
+                  "planning>baby",
+                  "planning>moving",
+                  "planning>workHoursChange",
+                  "planning>holiday",
+                ]
+              );
+              const newData = revertDataObjectsBackToOriginalFormat(
+                { ...data, homeQuestions },
                 type
               );
               let successful = await postPetForm(newData);
@@ -111,7 +106,7 @@ function Index({ type }: { type: string }) {
             }}
           >
             {({ handleSubmit }) => (
-              <FormikFormContainer>
+              <FormikFormContainer submitting={loading}>
                 <FieldSet id="About-you" legendText="1. About You">
                   <QuestionsMap
                     getUseState={toShow}
@@ -197,7 +192,7 @@ function Index({ type }: { type: string }) {
               </FormikFormContainer>
             )}
           </Formik>
-        </form>
+        </div>
 
         <aside className="flex w-full flex-col gap-6 xl:sticky xl:top-24">
           <AdoptionProcessCard />

@@ -72,10 +72,11 @@ export const FooterSection = () => {
 
   const FooterLink = ({ text, href }: { text: string; href: string }) => (
     <li className="mb-2">
-      <Link href={href}>
-        <a className="text-sm text-white/75 transition hover:text-white font-poppins">
-          {text}
-        </a>
+      <Link
+        href={href}
+        className="text-sm text-white/75 transition hover:text-white font-poppins"
+      >
+        {text}
       </Link>
     </li>
   );
@@ -214,17 +215,15 @@ export const Button = ({
     //A real <a> (not a <button>) so the CTA has an href: crawlers can follow
     //it and open-in-new-tab / middle-click work. The classes set display
     //flex, so it renders identically.
-    <Link href={`${link}`}>
-      <a className={buttonStyles[variant]}>
-        <div className={buttonInnerStyles[variant]}>
-          <span className="pr-3">{text}</span>
-          <Icon
-            icon={iconStr ? iconStr : "fa:long-arrow-right"}
-            inline={true}
-            color={variant === "primary" ? "white" : "#8b3479"}
-          />
-        </div>
-      </a>
+    <Link href={`${link}`} className={buttonStyles[variant]}>
+      <div className={buttonInnerStyles[variant]}>
+        <span className="pr-3">{text}</span>
+        <Icon
+          icon={iconStr ? iconStr : "fa:long-arrow-right"}
+          inline={true}
+          color={variant === "primary" ? "white" : "#8b3479"}
+        />
+      </div>
     </Link>
   );
 };
@@ -250,17 +249,16 @@ export const ButtonWithQuery = ({
           type: query,
         },
       }}
+      className={buttonStyles[variant]}
     >
-      <a className={buttonStyles[variant]}>
-        <div className={buttonInnerStyles[variant]}>
-          <span className="pr-3">{text}</span>
-          <Icon
-            icon={iconStr ? iconStr : "fa:long-arrow-right"}
-            inline={true}
-            color={variant === "primary" ? "white" : "#8b3479"}
-          />
-        </div>
-      </a>
+      <div className={buttonInnerStyles[variant]}>
+        <span className="pr-3">{text}</span>
+        <Icon
+          icon={iconStr ? iconStr : "fa:long-arrow-right"}
+          inline={true}
+          color={variant === "primary" ? "white" : "#8b3479"}
+        />
+      </div>
     </Link>
   );
 };
@@ -332,8 +330,8 @@ export const DonationComponent = ({ petName }: { petName?: string }) => {
           <Image
             src="/TabbyCatBlanket.jpg"
             alt=""
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
           />
         </div>
       </div>
@@ -438,7 +436,16 @@ export const ContactUsSection = ({
           }}
         >
           {({ handleSubmit }) => (
-            <div className="flex w-full flex-col items-start rounded-3xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-200/60 sm:p-8">
+            <form
+              onSubmit={(event) => {
+                if (loading) {
+                  event.preventDefault();
+                  return;
+                }
+                handleSubmit(event);
+              }}
+              className="flex w-full flex-col items-start rounded-3xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-200/60 sm:p-8"
+            >
               <div className="grid w-full gap-x-4 sm:grid-cols-2">
                 <InputTextFieldWithLabelFormik
                   labelText={"Name"}
@@ -484,7 +491,7 @@ export const ContactUsSection = ({
                 submitHandler={handleSubmit}
                 animalName={"message"}
               />
-            </div>
+            </form>
           )}
         </Formik>
       </div>
@@ -595,21 +602,17 @@ export const ShowButtonTextOnSubmit = ({
   //the spinner used to fire a second, duplicate submission mid-flight.
   return loading ? (
     <button
-      type="submit"
+      type="button"
+      disabled
       className="flex p-3.5 mb-2 mt-2 rounded-full w-56 bg-brand text-white justify-center font-poppins text-sm font-medium"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
     >
       {submittingButtonIcon()}
     </button>
   ) : isSuccess ? (
     <button
-      type="submit"
+      type="button"
+      disabled
       className="flex items-center gap-2 p-3.5 mb-2 mt-2 rounded-full w-56 border-2 border-green-600 bg-green-50 cursor-default text-green-700 justify-center font-poppins text-sm font-semibold"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
     >
       <Icon icon="akar-icons:circle-check-fill" width="18" height="18" />
       {animalName ? `Submitted ${animalName}` : "Submitted"}

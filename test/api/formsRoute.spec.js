@@ -19,7 +19,9 @@ jest.mock("../../models/formModels", () => ({
       create: (...args) => mockCreate(...args),
     },
     FormPetAdoptionModel: {},
-    FormGiftAidModel: {},
+    FormGiftAidModel: {
+      create: (...args) => mockCreate(...args),
+    },
     FormVolunteerModel: {},
   },
 }));
@@ -162,12 +164,111 @@ describe("POST /api/forms (public submission)", () => {
         method: "POST",
         query: { type: "contactus" },
         cookies: {},
-        body: { message: "Is this dog still available?" },
+        body: {
+          message: "Is this dog still available?",
+          aboutQuestions: {
+            name: "Visitor",
+            email: "visitor@example.com",
+          },
+        },
       },
       res
     );
 
     expect(res.status).toHaveBeenCalledWith(201);
     expect(mockCreate).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects malformed submissions before they reach MongoDB", async () => {
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "POST",
+        query: { type: "contactus" },
+        cookies: {},
+        body: { message: "hello", aboutQuestions: null },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it("rejects an adoption payload whose record type is not Dog or Cat", async () => {
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "POST",
+        query: { type: "pet" },
+        cookies: {},
+        body: {
+          type: "contactUs",
+          aboutQuestions: { name: "Visitor" },
+        },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it("rejects a Gift Aid submission without a declaration and donation period", async () => {
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "POST",
+        query: { type: "giftaid" },
+        body: {
+          aboutQuestions: {
+            name: "Taxpayer",
+            address: "1 High Street",
+            postcode: "BT1 1AA",
+          },
+        },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(mockCreate).not.toHaveBeenCalled();
+  });
+
+  it("server-stamps an auditable Gift Aid declaration", async () => {
+    const res = makeRes();
+    await formsHandler(
+      {
+        method: "POST",
+        query: { type: "giftaid" },
+        body: {
+          giftAidFuture: "Yes",
+          giftAidPast: "",
+          declarationAccepted: true,
+          declarationText: "forged wording",
+          acceptedAt: "1999-01-01",
+          aboutQuestions: {
+            name: " Taxpayer ",
+            address: " 1 High Street ",
+            postcode: " BT1 1AA ",
+          },
+        },
+      },
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(mockCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "giftAid",
+        giftAidFuture: "Yes",
+        giftAidPast: "",
+        declarationAccepted: true,
+        declarationText: expect.stringContaining(
+          "Bright Eyes Animal Sanctuary"
+        ),
+        declarationTextVersion: "2026-07",
+        acceptedAt: expect.any(Date),
+      })
+    );
   });
 });

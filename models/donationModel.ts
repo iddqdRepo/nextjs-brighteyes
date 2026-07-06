@@ -1,5 +1,10 @@
 ﻿import mongoose from "mongoose";
 
+import {
+  MAX_DONATION_AMOUNT,
+  MIN_DONATION_AMOUNT,
+} from "../utils/donationConstants";
+
 const Schema = mongoose.Schema;
 
 const donationSchema = new Schema(
@@ -12,6 +17,8 @@ const donationSchema = new Schema(
     amount: {
       type: Number,
       required: true,
+      min: MIN_DONATION_AMOUNT,
+      max: MAX_DONATION_AMOUNT,
     },
     currency: {
       type: String,

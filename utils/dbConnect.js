@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+//Preserve Mongoose 6's current query filtering semantics explicitly and avoid
+//a silent behavior change when the next major version is adopted.
+mongoose.set("strictQuery", true);
+
 const MONGO_URI = process.env.MONGO_URI;
 
 //Reuse a single connection (and a single in-flight connection promise) across

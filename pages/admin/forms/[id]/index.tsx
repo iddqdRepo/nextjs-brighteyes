@@ -82,9 +82,16 @@ function Index({
   const record = form[0];
   const recordId = record._id as string;
   const apiType = API_TYPE[record.type] ?? "pet";
-  const about = record.aboutQuestions as {
-    [key: string]: string | undefined;
-  };
+  const about =
+    record.aboutQuestions && typeof record.aboutQuestions === "object"
+      ? (record.aboutQuestions as {
+          [key: string]: string | undefined;
+        })
+      : {};
+  const applicantName =
+    typeof about.name === "string" && about.name.trim()
+      ? about.name.trim()
+      : "Unknown applicant";
 
   //"legacy" = submitted before tracking existed (no status field).
   const [status, setStatus] = useState<"new" | "handled" | "legacy">(
@@ -191,9 +198,7 @@ function Index({
       />
       <AdminSidebarComponent highlighted="" currentUser={currentUser}>
         <PageContainerComponent>
-          <PageHeader>
-            {form[0].type + " Form for " + form[0].aboutQuestions.name}
-          </PageHeader>
+          <PageHeader>{form[0].type + " Form for " + applicantName}</PageHeader>
 
           {/* who's on it + one-tap ways to reach the applicant */}
           <div className="mt-4 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -315,19 +320,32 @@ function Index({
             if (
               fieldSetTitle === "message" ||
               fieldSetTitle === "giftAidFuture" ||
-              fieldSetTitle === "giftAidPast"
+              fieldSetTitle === "giftAidPast" ||
+              fieldSetTitle === "declarationAccepted" ||
+              fieldSetTitle === "declarationText" ||
+              fieldSetTitle === "declarationTextVersion" ||
+              fieldSetTitle === "acceptedAt"
             ) {
               return (
                 <FieldSet key={fieldSetTitle} legendText={fieldSetTitle}>
                   <FieldAndAnswer
                     labelText={fieldSetTitle}
-                    answer={fieldSetContent}
+                    answer={
+                      typeof fieldSetContent === "boolean"
+                        ? fieldSetContent
+                          ? "Yes"
+                          : "No"
+                        : String(fieldSetContent ?? "")
+                    }
                   />
                 </FieldSet>
               );
             } else {
               return (
-                !HIDDEN_FIELDS.has(fieldSetTitle) && (
+                !HIDDEN_FIELDS.has(fieldSetTitle) &&
+                fieldSetContent !== null &&
+                typeof fieldSetContent === "object" &&
+                !Array.isArray(fieldSetContent) && (
                   <FieldSet key={fieldSetTitle} legendText={fieldSetTitle}>
                     {Object.entries(fieldSetContent).map(
                       ([question, answer]) => {

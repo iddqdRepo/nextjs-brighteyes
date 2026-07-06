@@ -64,7 +64,7 @@ export const readChallenge = (
     return null;
   }
   try {
-    const decoded = verify(token, secret);
+    const decoded = verify(token, secret, { algorithms: ["HS256"] });
     if (typeof decoded === "string") {
       return null;
     }

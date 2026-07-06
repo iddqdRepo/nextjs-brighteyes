@@ -146,4 +146,29 @@ describe("POST /api/auth/login", () => {
     expect(res.status).toHaveBeenCalledWith(429);
     expect(mockFindOne).toHaveBeenCalledTimes(10);
   });
+
+  it("cannot bypass the client limit by rotating usernames", async () => {
+    const ip = "203.0.113.6";
+
+    for (let i = 0; i < 10; i++) {
+      await login(
+        makeReq({
+          body: { username: `made-up-${i}`, password: "wrong" },
+          ip,
+        }),
+        makeRes()
+      );
+    }
+
+    const res = makeRes();
+    await login(
+      makeReq({
+        body: { username: "another-name", password: "wrong" },
+        ip,
+      }),
+      res
+    );
+
+    expect(res.status).toHaveBeenCalledWith(429);
+  });
 });

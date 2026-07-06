@@ -1,8 +1,11 @@
 // <reference types="cypress" />
 
 describe("GiftAid Form", () => {
-  it("shows correct GiftAid fields", () => {
+  beforeEach(() => {
     cy.visit("http://localhost:3000/forms/giftAidForm");
+  });
+
+  it("shows correct GiftAid fields", () => {
     cy.contains("Gift Aid Form");
     cy.contains("Name");
     cy.contains("Address");
@@ -50,6 +53,8 @@ describe("GiftAid Form", () => {
       }
     });
 
+    cy.get('input[name="giftAidFuture"]').check();
+    cy.get('input[name="declarationAccepted"]').check();
     cy.get("button[type=submit]").click();
     cy.wait("@addForm");
     cy.contains("Submitted form");

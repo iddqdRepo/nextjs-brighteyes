@@ -54,15 +54,28 @@ export const FormPageTitle = ({ title }: { title: string }) => {
 };
 export const FormikFormContainer = ({
   children,
+  submitting = false,
 }: {
   children: React.ReactNode;
+  submitting?: boolean;
 }) => {
+  const { handleSubmit } = useFormikContext();
+
   return (
-    <div className="flex justify-center w-full">
+    <form
+      className="flex justify-center w-full"
+      onSubmit={(event) => {
+        if (submitting) {
+          event.preventDefault();
+          return;
+        }
+        handleSubmit(event);
+      }}
+    >
       <div className="flex flex-col items-center w-full p-4 bg-white border border-gray-100 shadow-xl shadow-gray-200/60 rounded-3xl sm:p-8">
         {children}
       </div>
-    </div>
+    </form>
   );
 };
 

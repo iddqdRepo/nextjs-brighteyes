@@ -9,6 +9,7 @@ import { donationInitialValues } from "../../../utils/formik/donationInitialValu
 import {
   DONATION_PRESET_AMOUNTS,
   GIFT_AID_DECLARATION_TEXT,
+  MAX_DONATION_AMOUNT,
   MIN_DONATION_AMOUNT,
 } from "../../../utils/donationConstants";
 import { DonationSchema } from "../../../utils/yup/donationYupSchema";
@@ -30,12 +31,18 @@ const DonationInput = ({
   type = "text",
   placeholder,
   autoComplete,
+  min,
+  max,
+  step,
 }: {
   label: string;
   name: string;
   type?: string;
   placeholder?: string;
   autoComplete?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }) => {
   return (
     <div className="flex flex-col">
@@ -51,6 +58,9 @@ const DonationInput = ({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        min={min}
+        max={max}
+        step={step}
         className="h-11 rounded-xl border border-gray-300 bg-white px-4 text-sm font-poppins text-gray-900 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30"
       />
       <FormFieldError name={name} />
@@ -102,7 +112,10 @@ const DonationFormCard = () => {
     return {
       ...donationInitialValues,
       amount:
-        !isNaN(queryAmount) && queryAmount >= MIN_DONATION_AMOUNT
+        !isNaN(queryAmount) &&
+        Number.isInteger(queryAmount) &&
+        queryAmount >= MIN_DONATION_AMOUNT &&
+        queryAmount <= MAX_DONATION_AMOUNT
           ? queryAmount
           : donationInitialValues.amount,
       donationType:
@@ -240,6 +253,9 @@ const DonationFormCard = () => {
                   name="amount"
                   type="number"
                   placeholder="25"
+                  min={MIN_DONATION_AMOUNT}
+                  max={MAX_DONATION_AMOUNT}
+                  step={1}
                 />
               </div>
             </div>
@@ -449,8 +465,8 @@ export const DonateSection = () => {
             <Image
               src="/HeroDogCat.jpg"
               alt="A dog and cat together at Bright Eyes Animal Sanctuary"
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: "cover" }}
             />
           </div>
         </div>

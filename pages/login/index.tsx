@@ -96,7 +96,15 @@ function Index() {
         linkHref={"/login"}
       />
       <div className="flex justify-center px-10 py-20">
-        <div className="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (!loading) {
+              handleLogin();
+            }
+          }}
+          className="flex flex-col px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md"
+        >
           <div className="mb-4">
             <label
               className="block mb-2 font-sans text-sm font-bold text-grey-darker"
@@ -149,6 +157,7 @@ function Index() {
               animalName={""}
             />
             <button
+              type="button"
               id="PasskeyLoginButton"
               onClick={handlePasskeyLogin}
               disabled={loading}
@@ -158,7 +167,7 @@ function Index() {
               Use fingerprint / Face ID
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

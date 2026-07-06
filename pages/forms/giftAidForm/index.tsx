@@ -10,6 +10,7 @@ import { FormikFormContainer } from "../../../components/IndividualFormLayout/Co
 import {
   AboutYouSection,
   GiftAidSection,
+  LegalAgreementSection,
 } from "../../../components/IndividualFormLayout/GiftAidFormLayout";
 import { NeedHelpCard } from "../../../components/IndividualFormLayout/AdoptionFormLayout";
 import {
@@ -19,6 +20,7 @@ import {
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 import { postGiftAidForm } from "../../../routes/formRoutes";
 import { giftAidInitialValues } from "../../../utils/formik/giftAidInitialValues";
+import { firstCheckboxValue } from "../../../utils/formSubmission";
 import { GiftAidSchema } from "../../../utils/yup/giftAidYupSchema";
 
 const GIFT_AID_STEPS = [
@@ -66,19 +68,18 @@ const Index = () => {
       </section>
 
       <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-start gap-8 pb-16 pt-4 xl:grid-cols-[minmax(0,1fr),21rem]">
-        <form className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <Formik
             initialValues={giftAidInitialValues}
             validationSchema={GiftAidSchema}
             onSubmit={async (data) => {
-              if (data.giftAidFuture) {
-                data.giftAidFuture = data.giftAidFuture[0];
-              }
-              if (data.giftAidPast) {
-                data.giftAidPast = data.giftAidPast[0];
-              }
               setLoading(true);
-              let successful = await postGiftAidForm(data);
+              const submission = {
+                ...data,
+                giftAidFuture: firstCheckboxValue(data.giftAidFuture),
+                giftAidPast: firstCheckboxValue(data.giftAidPast),
+              };
+              let successful = await postGiftAidForm(submission);
               if (successful) {
                 setLoading(false);
                 setIsSuccess(true);
@@ -90,9 +91,10 @@ const Index = () => {
             }}
           >
             {({ values, handleSubmit }) => (
-              <FormikFormContainer>
+              <FormikFormContainer submitting={loading}>
                 <AboutYouSection values={values} />
                 <GiftAidSection />
+                <LegalAgreementSection />
                 <ShowButtonTextOnSubmit
                   loading={loading}
                   isSuccess={isSuccess}
@@ -103,7 +105,7 @@ const Index = () => {
               </FormikFormContainer>
             )}
           </Formik>
-        </form>
+        </div>
 
         <aside className="flex w-full flex-col gap-6 xl:sticky xl:top-24">
           <FormStepsCard title="How Gift Aid works" steps={GIFT_AID_STEPS} />

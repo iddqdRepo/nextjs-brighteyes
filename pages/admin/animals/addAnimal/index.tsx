@@ -51,7 +51,7 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
             title="Add an animal"
             subtitle="Fill in the details and upload a photo — you can move the photo until it looks right."
           />
-          <form className="mt-6 flex flex-col items-center">
+          <div className="mt-6 flex flex-col items-center">
             <Formik
               initialValues={initialValues}
               validationSchema={AnimalSchema}
@@ -74,7 +74,16 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
               }}
             >
               {({ values, handleSubmit, setFieldValue, dirty, resetForm }) => (
-                <div className="flex w-full flex-col items-center">
+                <form
+                  onSubmit={(event) => {
+                    if (loading) {
+                      event.preventDefault();
+                      return;
+                    }
+                    handleSubmit(event);
+                  }}
+                  className="flex w-full flex-col items-center"
+                >
                   <UnsavedChangesGuard when={dirty && !loading} />
                   <AnimalFormSections
                     values={values as PetInterface}
@@ -117,10 +126,10 @@ function Index({ currentUser }: { currentUser: AdminUser }) {
                       </span>
                     </div>
                   )}
-                </div>
+                </form>
               )}
             </Formik>
-          </form>
+          </div>
         </PageContainerComponent>
       </AdminSidebarComponent>
     </>

@@ -229,13 +229,12 @@ export const AdminStatCard = ({
   );
 
   return link ? (
-    <Link href={link}>
-      <a
-        aria-label={linkText ?? label}
-        className={clsx(cardClass, "transition hover:shadow-md")}
-      >
-        {body}
-      </a>
+    <Link
+      href={link}
+      aria-label={linkText ?? label}
+      className={clsx(cardClass, "transition hover:shadow-md")}
+    >
+      {body}
     </Link>
   ) : (
     <div className={cardClass}>{body}</div>

@@ -109,35 +109,29 @@ export const PetPhoto = ({
 export const AnimalCard = ({ pet }: { pet: AnimalCardData }) => {
   return (
     <div className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl">
-      <Link href={`/adoption/${pet._id}`}>
-        <a className="flex h-full flex-col">
-          <PetPhoto image={pet.image} className="h-56 w-full" />
-          <div className="flex grow flex-col p-4">
-            <span className="text-lg font-semibold text-gray-900 font-poppins">
-              {pet.name}
+      <Link href={`/adoption/${pet._id}`} className="flex h-full flex-col">
+        <PetPhoto image={pet.image} className="h-56 w-full" />
+        <div className="flex grow flex-col p-4">
+          <span className="text-lg font-semibold text-gray-900 font-poppins">
+            {pet.name}
+          </span>
+          <span className="text-sm font-medium text-brand font-poppins">
+            {pet.breed}
+          </span>
+          <div className="mt-3 flex items-center gap-4 border-t border-gray-100 pt-3 text-sm text-gray-600 font-roboto">
+            <span className="flex items-center gap-1.5">
+              <Icon icon="akar-icons:cake" inline={true} color="#8b3479" />
+              {pet.age} {pet.yearsOrMonths}
             </span>
-            <span className="text-sm font-medium text-brand font-poppins">
-              {pet.breed}
-            </span>
-            <div className="mt-3 flex items-center gap-4 border-t border-gray-100 pt-3 text-sm text-gray-600 font-roboto">
-              <span className="flex items-center gap-1.5">
-                <Icon icon="akar-icons:cake" inline={true} color="#8b3479" />
-                {pet.age} {pet.yearsOrMonths}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Icon
-                  icon="bi:gender-ambiguous"
-                  inline={true}
-                  color="#8b3479"
-                />
-                {pet.sex ? pet.sex : "N/A"}
-              </span>
-            </div>
-            <span className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand py-2 text-sm font-medium text-brand transition group-hover:bg-brand group-hover:text-white font-poppins">
-              Meet {pet.name}
+            <span className="flex items-center gap-1.5">
+              <Icon icon="bi:gender-ambiguous" inline={true} color="#8b3479" />
+              {pet.sex ? pet.sex : "N/A"}
             </span>
           </div>
-        </a>
+          <span className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand py-2 text-sm font-medium text-brand transition group-hover:bg-brand group-hover:text-white font-poppins">
+            Meet {pet.name}
+          </span>
+        </div>
       </Link>
     </div>
   );

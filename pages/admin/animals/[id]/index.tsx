@@ -42,7 +42,7 @@ function Index({
             title={`Editing ${animal[0].name}`}
             subtitle="Update the details or adjust the photo — changes show on the website straight away."
           />
-          <form className="mt-6 flex flex-col items-center">
+          <div className="mt-6 flex flex-col items-center">
             <Formik
               initialValues={animal[0]}
               validationSchema={AnimalSchema}
@@ -65,7 +65,16 @@ function Index({
               }}
             >
               {({ values, handleSubmit, setFieldValue, dirty }) => (
-                <div className="flex w-full flex-col items-center">
+                <form
+                  onSubmit={(event) => {
+                    if (loading) {
+                      event.preventDefault();
+                      return;
+                    }
+                    handleSubmit(event);
+                  }}
+                  className="flex w-full flex-col items-center"
+                >
                   <UnsavedChangesGuard when={dirty && !loading} />
                   <AnimalFormSections
                     values={values}
@@ -78,10 +87,10 @@ function Index({
                     submitHandler={handleSubmit}
                     animalName={values.name}
                   />
-                </div>
+                </form>
               )}
             </Formik>
-          </form>
+          </div>
         </PageContainerComponent>
       </AdminSidebarComponent>
     </>

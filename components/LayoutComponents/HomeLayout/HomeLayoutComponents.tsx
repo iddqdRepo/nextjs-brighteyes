@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "../../common/CommonComponents";
 import {
   DONATION_PRESET_AMOUNTS,
+  MAX_DONATION_AMOUNT,
   MIN_DONATION_AMOUNT,
 } from "../../../utils/donationConstants";
 
@@ -71,7 +72,12 @@ export const DonationTeaserCard = () => {
 
   const continueToDonate = () => {
     const validAmount =
-      typeof amount === "number" && amount >= MIN_DONATION_AMOUNT ? amount : 10;
+      typeof amount === "number" &&
+      Number.isInteger(amount) &&
+      amount >= MIN_DONATION_AMOUNT &&
+      amount <= MAX_DONATION_AMOUNT
+        ? amount
+        : 10;
     router.push({
       pathname: "/donate",
       query: { type: donationType, amount: validAmount },
@@ -147,6 +153,8 @@ export const DonationTeaserCard = () => {
           id="home-custom-amount"
           type="number"
           min={MIN_DONATION_AMOUNT}
+          max={MAX_DONATION_AMOUNT}
+          step={1}
           value={amount}
           onChange={(e) =>
             setAmount(e.target.value === "" ? "" : Number(e.target.value))

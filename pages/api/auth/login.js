@@ -17,14 +17,14 @@ const MAX_ATTEMPTS = 10;
 const WINDOW_MS = 15 * 60 * 1000;
 const attempts = new Map();
 
-const getClientKey = (req, username) => {
+const getClientKey = (req) => {
   const forwarded = req.headers["x-forwarded-for"];
   const ip = Array.isArray(forwarded)
     ? forwarded[0]
     : (forwarded || "").split(",")[0].trim() ||
       req.socket?.remoteAddress ||
       "unknown";
-  return `${ip}:${username || ""}`;
+  return ip;
 };
 
 const isRateLimited = (key) => {
@@ -40,6 +40,21 @@ const isRateLimited = (key) => {
 };
 
 const recordFailure = (key) => {
+  //Keep a spray of made-up client addresses from growing this warm-instance
+  //cache without bound. Expired entries go first; the oldest remaining entry
+  //is discarded only if the hard cap is still reached.
+  if (attempts.size >= 10000) {
+    const now = Date.now();
+    for (const [attemptKey, attempt] of attempts) {
+      if (now - attempt.firstAttempt > WINDOW_MS) {
+        attempts.delete(attemptKey);
+      }
+    }
+    if (attempts.size >= 10000) {
+      attempts.delete(attempts.keys().next().value);
+    }
+  }
+
   const entry = attempts.get(key);
   if (!entry || Date.now() - entry.firstAttempt > WINDOW_MS) {
     attempts.set(key, { count: 1, firstAttempt: Date.now() });
@@ -70,7 +85,9 @@ export default async function login(req, res) {
       .json({ success: false, message: "Invalid username or password" });
   }
 
-  const rateKey = getClientKey(req, username);
+  //Throttle the client, not client+username. Otherwise changing the username
+  //on every request bypasses the limit and grows the in-memory map forever.
+  const rateKey = getClientKey(req);
   if (isRateLimited(rateKey)) {
     return res.status(429).json({
       success: false,

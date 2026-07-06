@@ -121,11 +121,12 @@ export const NeedHelpCard = ({
           brighteyes.sanctuary@btinternet.com
         </div>
       </div>
-      <Link href="/#contact">
-        <a className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand py-2.5 text-sm font-medium text-brand transition hover:bg-brand hover:text-white font-poppins">
-          Contact Us
-          <Icon icon="foundation:paw" width="14" />
-        </a>
+      <Link
+        href="/#contact"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-brand py-2.5 text-sm font-medium text-brand transition hover:bg-brand hover:text-white font-poppins"
+      >
+        Contact Us
+        <Icon icon="foundation:paw" width="14" />
       </Link>
     </div>
   );

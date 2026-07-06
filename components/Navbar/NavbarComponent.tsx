@@ -28,23 +28,24 @@ function NavbarComponent() {
   return (
     <header className="sticky top-0 z-50 bg-white/95 shadow-sm backdrop-blur">
       <nav className="mx-auto flex h-20 w-full max-w-7xl 2xl:max-w-[85rem] items-center justify-between gap-4 px-4 lg:px-8">
-        <Link href="/">
-          <a className="flex shrink-0 cursor-pointer items-center gap-2.5">
-            <Image
-              src="/logo-nav.png"
-              alt="Bright Eyes Animal Sanctuary"
-              width={54}
-              height={49}
-            />
-            <span className="hidden font-poppins sm:block">
-              <span className="block text-lg font-semibold leading-5 tracking-wide text-brand">
-                BRIGHT EYES
-              </span>
-              <span className="block text-[0.6rem] uppercase tracking-[0.28em] text-gray-500">
-                Animal Sanctuary
-              </span>
+        <Link
+          href="/"
+          className="flex shrink-0 cursor-pointer items-center gap-2.5"
+        >
+          <Image
+            src="/logo-nav.png"
+            alt="Bright Eyes Animal Sanctuary"
+            width={54}
+            height={49}
+          />
+          <span className="hidden font-poppins sm:block">
+            <span className="block text-lg font-semibold leading-5 tracking-wide text-brand">
+              BRIGHT EYES
             </span>
-          </a>
+            <span className="block text-[0.6rem] uppercase tracking-[0.28em] text-gray-500">
+              Animal Sanctuary
+            </span>
+          </span>
         </Link>
 
         <ul className="hidden items-center gap-6 lg:flex">
@@ -97,7 +98,6 @@ function NavbarComponent() {
           />
         </button>
       </nav>
-
       {mobileOpen && (
         <div className="absolute left-0 top-20 w-full border-t border-gray-100 bg-white shadow-xl lg:hidden">
           <ul className="flex flex-col gap-1 p-4">

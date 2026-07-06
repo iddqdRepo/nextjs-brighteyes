@@ -117,25 +117,24 @@ function AdminSidebarComponent(props: {
   }) => {
     const selected = toggleSelected === toggle;
     return (
-      <Link href={"/admin" + link}>
-        <a
-          id={toggle}
-          onClick={() => setMobileOpen(false)}
+      <Link
+        href={"/admin" + link}
+        id={toggle}
+        onClick={() => setMobileOpen(false)}
+        className={
+          selected
+            ? "flex items-center gap-3 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white font-poppins"
+            : "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-brand-50 hover:text-brand font-poppins"
+        }
+      >
+        <Icon
+          id={`icon-${toggle}`}
           className={
-            selected
-              ? "flex items-center gap-3 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white font-poppins"
-              : "flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-brand-50 hover:text-brand font-poppins"
+            selected ? "h-5 w-auto text-white" : "h-5 w-auto text-gray-400"
           }
-        >
-          <Icon
-            id={`icon-${toggle}`}
-            className={
-              selected ? "h-5 w-auto text-white" : "h-5 w-auto text-gray-400"
-            }
-            icon={icon}
-          />
-          {text}
-        </a>
+          icon={icon}
+        />
+        {text}
       </Link>
     );
   };
@@ -176,23 +175,21 @@ function AdminSidebarComponent(props: {
     <div className="flex min-h-screen w-full flex-col bg-gray-50 lg:flex-row">
       {/* mobile top bar */}
       <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-gray-100 bg-white px-4 lg:hidden">
-        <Link href={"/admin"}>
-          <a className="flex items-center gap-2">
-            <Image
-              src="/logo-nav.png"
-              alt="Bright Eyes Animal Sanctuary"
-              width={42}
-              height={38}
-            />
-            <span className="font-poppins">
-              <span className="block text-sm font-semibold leading-4 tracking-wide text-brand">
-                BRIGHT EYES
-              </span>
-              <span className="block text-[0.55rem] uppercase tracking-[0.25em] text-gray-500">
-                Admin
-              </span>
+        <Link href={"/admin"} className="flex items-center gap-2">
+          <Image
+            src="/logo-nav.png"
+            alt="Bright Eyes Animal Sanctuary"
+            width={42}
+            height={38}
+          />
+          <span className="font-poppins">
+            <span className="block text-sm font-semibold leading-4 tracking-wide text-brand">
+              BRIGHT EYES
             </span>
-          </a>
+            <span className="block text-[0.55rem] uppercase tracking-[0.25em] text-gray-500">
+              Admin
+            </span>
+          </span>
         </Link>
         <button
           className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200"
@@ -213,32 +210,28 @@ function AdminSidebarComponent(props: {
           <NavContent />
         </div>
       )}
-
       {/* desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-gray-100 bg-white lg:flex">
         <div className="flex flex-col items-center py-8">
-          <Link href={"/admin"}>
-            <a className="flex flex-col items-center gap-2">
-              <Image
-                src="/logo-nav.png"
-                alt="Bright Eyes Animal Sanctuary"
-                width={72}
-                height={66}
-              />
-              <span className="text-center font-poppins">
-                <span className="block text-base font-semibold tracking-[0.2em] text-brand">
-                  BRIGHT EYES
-                </span>
-                <span className="block text-[0.6rem] uppercase tracking-[0.3em] text-gray-500">
-                  Animal Sanctuary
-                </span>
+          <Link href={"/admin"} className="flex flex-col items-center gap-2">
+            <Image
+              src="/logo-nav.png"
+              alt="Bright Eyes Animal Sanctuary"
+              width={72}
+              height={66}
+            />
+            <span className="text-center font-poppins">
+              <span className="block text-base font-semibold tracking-[0.2em] text-brand">
+                BRIGHT EYES
               </span>
-            </a>
+              <span className="block text-[0.6rem] uppercase tracking-[0.3em] text-gray-500">
+                Animal Sanctuary
+              </span>
+            </span>
           </Link>
         </div>
         <NavContent />
       </aside>
-
       <div className="flex w-full grow flex-col">
         {props.children}
         <footer className="mt-auto border-t border-gray-100 bg-white px-6 py-4 text-center text-xs text-gray-400 font-poppins">

@@ -3,6 +3,7 @@ import DonationModel from "../../../models/donationModel";
 import {
   DONATION_ACCESS_COOKIE,
   getCookieValue,
+  getDonationAccessCookieName,
   verifyDonationToken,
 } from "../../../utils/donationAuth";
 import dbConnect from "../../../utils/dbConnect";
@@ -27,7 +28,8 @@ export default async function handler(
     await dbConnect();
     const stripe = getStripe();
     const accessToken = verifyDonationToken(
-      getCookieValue(req, DONATION_ACCESS_COOKIE),
+      getCookieValue(req, getDonationAccessCookieName(donationId)) ||
+        getCookieValue(req, DONATION_ACCESS_COOKIE),
       "access"
     );
 

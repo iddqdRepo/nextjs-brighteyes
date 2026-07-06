@@ -49,8 +49,8 @@ const ShareAnimalPopup = ({
   };
 
   return (
-    <div className="fixed z-50 flex items-center justify-center w-full h-full bg-opacity-50 bg-slate-600">
-      <div className="flex flex-col items-center p-6 bg-white border-2 shadow-lg h-fit w-96">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-slate-600 p-4">
+      <div className="flex h-fit w-full max-w-sm flex-col items-center rounded-2xl border-2 bg-white p-6 shadow-lg">
         <div className="text-lg font-roboto">
           Share <span className="font-semibold">{name}</span>
         </div>

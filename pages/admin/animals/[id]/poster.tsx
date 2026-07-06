@@ -25,15 +25,15 @@ function Poster({ animal }: { animal: PetInterface[] }) {
         metaContent={"Printable adoption poster, Bright Eyes"}
         linkHref={"/admin/animals"}
       />
-
       <div className="min-h-screen bg-gray-100 py-8 print:bg-white print:py-0">
         {/* toolbar — never printed */}
         <div className="mx-auto mb-6 flex w-[210mm] max-w-full items-center justify-between px-4 print:hidden">
-          <Link href={"/admin/animals?archive=false"}>
-            <a className="flex items-center gap-2 rounded-full border-2 border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins">
-              <Icon icon="akar-icons:arrow-left" width="14" />
-              Back to Animals
-            </a>
+          <Link
+            href={"/admin/animals?archive=false"}
+            className="flex items-center gap-2 rounded-full border-2 border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
+          >
+            <Icon icon="akar-icons:arrow-left" width="14" />
+            Back to Animals
           </Link>
           <button
             type="button"

@@ -62,10 +62,11 @@ function DonationDetailPage({
           </PageHeader>
 
           <div className="mx-auto mt-6 flex w-11/12 max-w-6xl justify-end">
-            <Link href="/admin/donations">
-              <a className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-500 hover:bg-slate-50">
-                Back to donations
-              </a>
+            <Link
+              href="/admin/donations"
+              className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-500 hover:bg-slate-50"
+            >
+              Back to donations
             </Link>
           </div>
 

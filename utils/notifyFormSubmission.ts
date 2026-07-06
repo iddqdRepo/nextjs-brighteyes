@@ -36,6 +36,10 @@ export const notifyFormSubmission = async (
   formType: string,
   submitterName?: string
 ) => {
+  if (process.env.FORM_NOTIFICATIONS_DISABLED === "true") {
+    return;
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return; //Notifications are optional; the form has already been saved.

@@ -26,10 +26,11 @@ function DonationCancelPage() {
             No problem. You can return to the donation form whenever you are
             ready.
           </p>
-          <Link href="/donate">
-            <a className="mt-8 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
-              Back to donate
-            </a>
+          <Link
+            href="/donate"
+            className="mt-8 inline-flex rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          >
+            Back to donate
           </Link>
         </div>
       </main>

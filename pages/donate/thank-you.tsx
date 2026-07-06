@@ -13,6 +13,7 @@ import {
   DONATION_ACCESS_COOKIE,
   DONATION_CHECKOUT_COOKIE,
   getCookieValue,
+  getDonationAccessCookieName,
   verifyDonationToken,
 } from "../../utils/donationAuth";
 import dbConnect from "../../utils/dbConnect";
@@ -297,7 +298,10 @@ export const getServerSideProps: GetServerSideProps<ThankYouProps> = async (
   let hasAccessCookie = false;
   if (!canManageDonation) {
     const accessToken = verifyDonationToken(
-      getCookieValue(context.req, DONATION_ACCESS_COOKIE),
+      getCookieValue(
+        context.req,
+        getDonationAccessCookieName(resolvedDonationId)
+      ) || getCookieValue(context.req, DONATION_ACCESS_COOKIE),
       "access"
     );
 

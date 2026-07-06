@@ -53,6 +53,10 @@ export interface GiftaidFormInterface extends FormTrackingFields {
   date?: string;
   giftAidFuture: string;
   giftAidPast: string;
+  declarationAccepted?: boolean;
+  declarationText?: string;
+  declarationTextVersion?: string;
+  acceptedAt?: string;
   updatedAt?: string;
   archive: string;
   __v?: 0;
@@ -348,6 +352,10 @@ export interface TitleMapInterface {
   offenderDetails: string;
   giftAidFuture: string;
   giftAidPast: string;
+  declarationAccepted: string;
+  declarationText: string;
+  declarationTextVersion: string;
+  acceptedAt: string;
   //* Subcategories
   aboutQuestions: string;
   dogMatchingQuestions: string;

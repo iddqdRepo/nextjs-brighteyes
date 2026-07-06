@@ -119,7 +119,13 @@ describe("POST stamps tracking fields on every new submission", () => {
         method: "POST",
         query: { type: "contactus" },
         cookies: {},
-        body: { message: "hello", aboutQuestions: { name: "Visitor" } },
+        body: {
+          message: "hello",
+          aboutQuestions: {
+            name: "Visitor",
+            email: "visitor@example.com",
+          },
+        },
       },
       res
     );
@@ -138,10 +144,16 @@ describe("POST stamps tracking fields on every new submission", () => {
         cookies: {},
         body: {
           message: "hello",
+          type: "Dog",
+          date: "1999-01-01",
           status: "handled",
           read: true,
           handledBy: "hacker",
           notes: [{ text: "fake note" }],
+          aboutQuestions: {
+            name: "Visitor",
+            email: "visitor@example.com",
+          },
         },
       },
       makeRes()
@@ -153,6 +165,9 @@ describe("POST stamps tracking fields on every new submission", () => {
     expect(created.notes).toEqual([]);
     expect(created.handledBy).toBeUndefined();
     expect(created.handledAt).toBeUndefined();
+    expect(created.type).toBe("contactUs");
+    expect(created.date).toBeUndefined();
+    expect(created.updatedAt).toBeInstanceOf(Date);
   });
 });
 

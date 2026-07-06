@@ -91,8 +91,8 @@ export const AdoptionHeroSection = () => {
           <Image
             src="/HeroDogCat.jpg"
             alt="A rescue dog and cat at Bright Eyes Animal Sanctuary"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
             priority
           />
         </div>

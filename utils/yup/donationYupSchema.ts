@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { MIN_DONATION_AMOUNT } from "../donationConstants";
+import { MAX_DONATION_AMOUNT, MIN_DONATION_AMOUNT } from "../donationConstants";
 
 export const DonationSchema = Yup.object({
   donationType: Yup.mixed<"one_off" | "monthly">()
@@ -9,6 +9,7 @@ export const DonationSchema = Yup.object({
     .typeError("Enter a donation amount")
     .integer("Use a whole pound amount")
     .min(MIN_DONATION_AMOUNT, `Minimum donation is GBP ${MIN_DONATION_AMOUNT}`)
+    .max(MAX_DONATION_AMOUNT, `Maximum donation is GBP ${MAX_DONATION_AMOUNT}`)
     .required("Enter a donation amount"),
   donor: Yup.object({
     fullName: Yup.string().trim().required("Enter your full name"),

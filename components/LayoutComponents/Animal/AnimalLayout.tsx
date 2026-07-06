@@ -152,11 +152,12 @@ export const AdoptionRulesSection = () => {
           These criteria help us ensure the best possible match for our animals
           and adopters.
         </p>
-        <Link href="/adoption">
-          <a className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:text-brand-dark font-poppins">
-            View full adoption criteria
-            <Icon icon="fa:long-arrow-right" width="14" />
-          </a>
+        <Link
+          href="/adoption"
+          className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-brand transition hover:text-brand-dark font-poppins"
+        >
+          View full adoption criteria
+          <Icon icon="fa:long-arrow-right" width="14" />
         </Link>
       </div>
     </section>

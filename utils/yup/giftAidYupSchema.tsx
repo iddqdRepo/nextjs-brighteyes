@@ -23,6 +23,30 @@ const aboutQuestionsSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export const GiftAidSchema = Yup.object().shape({
-  aboutQuestions: aboutQuestionsSchema,
-});
+export const GiftAidSchema = Yup.object()
+  .shape({
+    aboutQuestions: aboutQuestionsSchema,
+    giftAidFuture: Yup.mixed(),
+    giftAidPast: Yup.mixed(),
+    declarationAccepted: Yup.boolean().oneOf(
+      [true],
+      "Please confirm the Gift Aid declaration"
+    ),
+  })
+  .test(
+    "gift-aid-period",
+    "Choose at least one set of donations",
+    function (values) {
+      const selected = (value: unknown) =>
+        value === "Yes" || (Array.isArray(value) && value.includes("Yes"));
+
+      if (!selected(values?.giftAidFuture) && !selected(values?.giftAidPast)) {
+        return this.createError({
+          path: "giftAidFuture",
+          message: "Choose at least one set of donations",
+        });
+      }
+
+      return true;
+    }
+  );

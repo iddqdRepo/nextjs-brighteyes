@@ -38,8 +38,8 @@ export const FormsHeroSection = () => {
           <Image
             src="/HeroDogCat.jpg"
             alt="A dog and cat together at Bright Eyes Animal Sanctuary"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
           />
         </div>
       </div>
@@ -143,8 +143,8 @@ export const FormsHelpSection = () => {
           <Image
             src="/puppyDogEyes.jpg"
             alt=""
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
           />
         </div>
       </div>

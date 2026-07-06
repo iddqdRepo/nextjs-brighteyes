@@ -98,6 +98,9 @@ export default async function handler(
     const amountInPence = Math.round(normalizedPayload.amount * 100);
     const checkoutNonce = randomBytes(24).toString("hex");
     const stripe = getStripe();
+    //Validate deployment configuration before creating a Mongo record or
+    //Stripe customer that could never receive a usable Checkout Session.
+    const baseUrl = getBaseUrl();
 
     const donation = await DonationModel.create({
       ...normalizedPayload,
@@ -135,8 +138,8 @@ export default async function handler(
           ? "subscription"
           : "payment",
       customer: customer.id,
-      success_url: `${getBaseUrl()}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${getBaseUrl()}/donate/cancel`,
+      success_url: `${baseUrl}/donate/thank-you?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/donate/cancel`,
       line_items: [buildLineItem(validatedPayload, amountInPence)],
       metadata,
     };
@@ -161,7 +164,7 @@ export default async function handler(
         "stripe.customerId": customer.id,
         "stripe.checkoutSessionId": session.id,
         status: "pending",
-        statusUpdatedAt: new Date(),
+        statusUpdatedAt: new Date(session.created * 1000),
       },
     });
 

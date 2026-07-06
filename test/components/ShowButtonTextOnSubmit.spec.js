@@ -34,6 +34,7 @@ describe("ShowButtonTextOnSubmit", () => {
     const button = screen.getByRole("button", { name: /Submitted Rex/ });
     //Cypress specs assert this exact wording — it must not change.
     expect(button).toHaveTextContent("Submitted Rex");
+    expect(button).toBeDisabled();
     fireEvent.click(button);
     expect(submitHandler).not.toHaveBeenCalled();
   });
@@ -46,5 +47,6 @@ describe("ShowButtonTextOnSubmit", () => {
   it("shows the spinner while submitting", () => {
     renderButton({ loading: true });
     expect(screen.getByText("Submitting...")).toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeDisabled();
   });
 });

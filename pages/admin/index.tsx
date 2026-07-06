@@ -137,7 +137,6 @@ function Index({
         metaContent={"Admin dashboard, Bright Eyes"}
         linkHref={"/admin"}
       />
-
       <AdminSidebarComponent highlighted="Dashboard" currentUser={currentUser}>
         <PageContainerComponent>
           <div className="pt-6">
@@ -280,11 +279,12 @@ function Index({
               <AdminCard
                 title="Donations Overview"
                 action={
-                  <Link href="/admin/donations">
-                    <a className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins">
-                      View all
-                      <Icon icon="fa:long-arrow-right" width="11" />
-                    </a>
+                  <Link
+                    href="/admin/donations"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins"
+                  >
+                    View all
+                    <Icon icon="fa:long-arrow-right" width="11" />
                   </Link>
                 }
               >
@@ -329,11 +329,12 @@ function Index({
               <AdminCard
                 title="Recent Form Submissions"
                 action={
-                  <Link href="/admin/forms?archive=false">
-                    <a className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins">
-                      Go to Forms
-                      <Icon icon="fa:long-arrow-right" width="11" />
-                    </a>
+                  <Link
+                    href="/admin/forms?archive=false"
+                    className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-dark font-poppins"
+                  >
+                    Go to Forms
+                    <Icon icon="fa:long-arrow-right" width="11" />
                   </Link>
                 }
               >
@@ -374,13 +375,14 @@ function Index({
                                 </div>
                               </TableData>
                               <TableData>
-                                <Link href={`/admin/forms/${form._id}`}>
-                                  <a className="flex justify-center">
-                                    <Icon
-                                      className="h-5 w-auto cursor-pointer text-gray-500 hover:text-brand"
-                                      icon="carbon:view-filled"
-                                    />
-                                  </a>
+                                <Link
+                                  href={`/admin/forms/${form._id}`}
+                                  className="flex justify-center"
+                                >
+                                  <Icon
+                                    className="h-5 w-auto cursor-pointer text-gray-500 hover:text-brand"
+                                    icon="carbon:view-filled"
+                                  />
                                 </Link>
                               </TableData>
                             </tr>
@@ -391,24 +393,26 @@ function Index({
 
                     <div className="divide-y divide-gray-100 md:hidden">
                       {recentForms.map((form) => (
-                        <Link key={form._id} href={`/admin/forms/${form._id}`}>
-                          <a className="flex items-center gap-3 py-3">
-                            <div className="min-w-0 grow font-poppins">
-                              <div className="truncate text-sm font-semibold text-gray-900">
-                                {form.aboutQuestions?.name}
-                              </div>
-                              <div className="mt-0.5 text-xs text-gray-500">
-                                {FORM_TYPE_LABELS[form.type] ?? form.type}{" "}
-                                &middot;{" "}
-                                {form.updatedAt && form.updatedAt.slice(0, 10)}
-                              </div>
+                        <Link
+                          key={form._id}
+                          href={`/admin/forms/${form._id}`}
+                          className="flex items-center gap-3 py-3"
+                        >
+                          <div className="min-w-0 grow font-poppins">
+                            <div className="truncate text-sm font-semibold text-gray-900">
+                              {form.aboutQuestions?.name}
                             </div>
-                            <Icon
-                              className="shrink-0 text-gray-400"
-                              icon="akar-icons:chevron-right"
-                              width="16"
-                            />
-                          </a>
+                            <div className="mt-0.5 text-xs text-gray-500">
+                              {FORM_TYPE_LABELS[form.type] ?? form.type}{" "}
+                              &middot;{" "}
+                              {form.updatedAt && form.updatedAt.slice(0, 10)}
+                            </div>
+                          </div>
+                          <Icon
+                            className="shrink-0 text-gray-400"
+                            icon="akar-icons:chevron-right"
+                            width="16"
+                          />
                         </Link>
                       ))}
                     </div>
@@ -447,7 +451,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const donations = await DonationModel.find(
     {},
-    { amount: 1, status: 1, createdAt: 1, "giftAid.wantsGiftAid": 1 }
+    { amount: 1, status: 1, paidAt: 1, "giftAid.wantsGiftAid": 1 }
   ).lean();
 
   const paidStatuses = ["paid", "active"];
@@ -465,9 +469,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const amount = Number(donation.amount) || 0;
     if (paidStatuses.includes(donation.status)) {
       summary.totalAmount += amount;
-      if (donation.createdAt && new Date(donation.createdAt) >= monthStart) {
-        summary.monthAmount += amount;
-      }
+    }
+    //A recurring donation can be years old but still pay this month. Count
+    //the successful payment even if the subscription was cancelled later.
+    if (donation.paidAt && new Date(donation.paidAt) >= monthStart) {
+      summary.monthAmount += amount;
     }
     if (donation.giftAid?.wantsGiftAid) {
       summary.giftAidCount += 1;

@@ -4,6 +4,7 @@ import {
   getCheckoutSessionDonationStatus,
   getStripeId,
   mapSubscriptionStatus,
+  withStatusTimestampGuard,
 } from "../../../utils/donationStatus";
 import dbConnect from "../../../utils/dbConnect";
 import { getStripe } from "../../../utils/stripe";
@@ -91,7 +92,13 @@ const updateDonationFromStripe = async (
     return;
   }
 
-  await DonationModel.findOneAndUpdate(lookup, {
+  const statusUpdatedAt = update.statusUpdatedAt;
+  const guardedLookup = withStatusTimestampGuard(lookup, statusUpdatedAt);
+
+  //Stripe can retry an old event after a newer cancellation or payment
+  //failure. The timestamp guard prevents stale delivery from rolling status
+  //and references backwards.
+  await DonationModel.findOneAndUpdate(guardedLookup, {
     $set: compactObject(update),
   });
 };
@@ -128,6 +135,9 @@ export default async function handler(
       signature,
       webhookSecret
     );
+    //Use Stripe's stable event time rather than webhook processing time.
+    //Retries must not move paidAt into a later day or month.
+    const eventDate = new Date(event.created * 1000);
 
     await dbConnect();
 
@@ -151,9 +161,9 @@ export default async function handler(
           }),
           {
             status,
-            statusUpdatedAt: new Date(),
+            statusUpdatedAt: eventDate,
             paidAt:
-              status === "paid" || status === "active" ? new Date() : undefined,
+              status === "paid" || status === "active" ? eventDate : undefined,
             "stripe.checkoutSessionId": session.id,
             "stripe.customerId": customerId,
             "stripe.paymentIntentId": paymentIntentId,
@@ -173,7 +183,7 @@ export default async function handler(
           }),
           {
             status: "cancelled",
-            statusUpdatedAt: new Date(),
+            statusUpdatedAt: eventDate,
             "stripe.checkoutSessionId": session.id,
             "stripe.customerId": getStripeId(session.customer),
           }
@@ -191,6 +201,9 @@ export default async function handler(
         const isSuccessfulInvoice =
           event.type === "invoice.paid" ||
           event.type === "invoice.payment_succeeded";
+        const invoicePaidAt = invoice.status_transitions?.paid_at
+          ? new Date(invoice.status_transitions.paid_at * 1000)
+          : eventDate;
 
         await updateDonationFromStripe(
           getDonationLookup({
@@ -201,8 +214,8 @@ export default async function handler(
           }),
           {
             status: isSuccessfulInvoice ? "active" : "failed",
-            statusUpdatedAt: new Date(),
-            paidAt: isSuccessfulInvoice ? new Date() : undefined,
+            statusUpdatedAt: eventDate,
+            paidAt: isSuccessfulInvoice ? invoicePaidAt : undefined,
             "stripe.subscriptionId": subscriptionId,
             "stripe.customerId": customerId,
             "stripe.paymentIntentId": paymentIntentId,
@@ -229,7 +242,7 @@ export default async function handler(
               event.type === "customer.subscription.deleted"
                 ? "cancelled"
                 : mapSubscriptionStatus(subscription.status),
-            statusUpdatedAt: new Date(),
+            statusUpdatedAt: eventDate,
             "stripe.subscriptionId": subscription.id,
             "stripe.customerId": customerId,
           }

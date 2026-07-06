@@ -22,6 +22,7 @@ import DonationModel from "../../../models/donationModel";
 import dbConnect from "../../../utils/dbConnect";
 import { serializeDonation } from "../../../utils/donationRecords";
 import { AdminUser, gateAdminPage } from "../../../utils/auth";
+import { escapeCsvCell } from "../../../utils/csv";
 
 const currencyFormatter = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -45,11 +46,6 @@ const STATUS_STYLES: { [key: string]: string } = {
   active: "bg-green-100 text-green-700",
   failed: "bg-red-100 text-red-700",
   cancelled: "bg-gray-100 text-gray-600",
-};
-
-const escapeCsvCell = (value: string | number | boolean | null) => {
-  const stringValue = value === null ? "" : String(value);
-  return `"${stringValue.replace(/"/g, '""')}"`;
 };
 
 function DonationsIndex({
@@ -328,10 +324,11 @@ function DonationsIndex({
                       </TableData>
                       <TableData>
                         <div className="flex justify-center">
-                          <Link href={`/admin/donations/${donation.id}`}>
-                            <a className="rounded-full border-2 border-brand px-4 py-1.5 text-xs font-medium text-brand transition hover:bg-brand hover:text-white font-poppins">
-                              View
-                            </a>
+                          <Link
+                            href={`/admin/donations/${donation.id}`}
+                            className="rounded-full border-2 border-brand px-4 py-1.5 text-xs font-medium text-brand transition hover:bg-brand hover:text-white font-poppins"
+                          >
+                            View
                           </Link>
                         </div>
                       </TableData>
@@ -387,10 +384,11 @@ function DonationsIndex({
                     {formatDate(donation.updatedAt)}
                   </MobileCardRow>
                 </div>
-                <Link href={`/admin/donations/${donation.id}`}>
-                  <a className="mt-3 flex w-full items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 text-sm font-medium text-brand transition hover:bg-brand hover:text-white font-poppins">
-                    View Donation
-                  </a>
+                <Link
+                  href={`/admin/donations/${donation.id}`}
+                  className="mt-3 flex w-full items-center justify-center rounded-full border-2 border-brand px-4 py-2.5 text-sm font-medium text-brand transition hover:bg-brand hover:text-white font-poppins"
+                >
+                  View Donation
                 </Link>
               </MobileCard>
             ))}

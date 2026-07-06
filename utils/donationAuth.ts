@@ -3,6 +3,8 @@ import { parse, serialize } from "cookie";
 import { sign, verify } from "jsonwebtoken";
 
 export const DONATION_CHECKOUT_COOKIE = "BrightEyesDonationCheckout";
+//Kept as a fallback for access cookies issued before per-donation names were
+//introduced.
 export const DONATION_ACCESS_COOKIE = "BrightEyesDonationAccess";
 
 type DonationTokenType = "checkout" | "access";
@@ -84,8 +86,15 @@ export const createDonationAccessCookie = (
     }
   );
 
-  return createCookie(DONATION_ACCESS_COOKIE, token, 60 * 60 * 24 * 30);
+  return createCookie(
+    getDonationAccessCookieName(donationId),
+    token,
+    60 * 60 * 24 * 30
+  );
 };
+
+export const getDonationAccessCookieName = (donationId: string) =>
+  `${DONATION_ACCESS_COOKIE}_${donationId}`;
 
 export const clearDonationCookie = (cookieName: string) => {
   return serialize(cookieName, "", {
@@ -119,7 +128,9 @@ export const verifyDonationToken = (
   }
 
   try {
-    const decoded = verify(token, getDonationAuthSecret());
+    const decoded = verify(token, getDonationAuthSecret(), {
+      algorithms: ["HS256"],
+    });
 
     if (typeof decoded === "string") {
       return null;

@@ -155,6 +155,10 @@ const formGiftAidSchema = new Schema({
   },
   giftAidFuture: String,
   giftAidPast: String,
+  declarationAccepted: Boolean,
+  declarationText: String,
+  declarationTextVersion: String,
+  acceptedAt: Date,
   aboutQuestions: {
     name: String,
     address: String,

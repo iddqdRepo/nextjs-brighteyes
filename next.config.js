@@ -20,6 +20,9 @@ module.exports = {
   },
   reactStrictMode: true,
   images: {
-    domains: ["www.paypal.com", "res.cloudinary.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "www.paypal.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
   },
 };

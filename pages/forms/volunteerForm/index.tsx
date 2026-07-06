@@ -68,7 +68,7 @@ function Index() {
       </section>
 
       <div className="mx-auto grid w-11/12 max-w-7xl 2xl:max-w-[85rem] items-start gap-8 pb-16 pt-4 xl:grid-cols-[minmax(0,1fr),21rem]">
-        <form className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <Formik
             initialValues={volunteerInitialValues}
             validationSchema={VolunteerSchema}
@@ -87,7 +87,7 @@ function Index() {
             validateOnChange={true}
           >
             {({ handleSubmit }) => (
-              <FormikFormContainer>
+              <FormikFormContainer submitting={loading}>
                 <FieldSet legendText="About you">
                   <QuestionsMap
                     getUseState={toShow}
@@ -148,7 +148,7 @@ function Index() {
               </FormikFormContainer>
             )}
           </Formik>
-        </form>
+        </div>
 
         <aside className="flex w-full flex-col gap-6 xl:sticky xl:top-24">
           <FormStepsCard title="What happens next" steps={VOLUNTEER_STEPS} />
