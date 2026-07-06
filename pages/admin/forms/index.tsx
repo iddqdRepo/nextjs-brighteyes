@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import { GetServerSideProps } from "next";
 import AdminSidebarComponent from "../../../adminComponents/AdminSidebarComponent";
 import {
   AdminConfirmationPopup,
   AdminHeadTag,
+  AdminPageHeader,
+  AdminSelect,
+  AdminStatCard,
   PageContainerComponent,
-  PageHeader,
   SearchInput,
 } from "../../../adminComponents/commonAdminComponents";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -32,13 +35,17 @@ import {
 } from "../../../interfaces/interfaces";
 import { useFormsAndPets } from "../../../hooks/useFormAndPets";
 import { FormList } from "../../../adminComponents/AdminForms/AdminFormsLayoutComponents";
+import { AdminUser, gateAdminPage } from "../../../utils/auth";
 
-function Index() {
+function Index({ currentUser }: { currentUser: AdminUser }) {
   const router = useRouter();
   let isArchive = router.query.archive;
   const [hidden, setHidden] = useState(true);
   const [petFilter, setPetFilter] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  //Deleting a submission is permanent, so only superusers see the option.
+  const canDelete = currentUser.isSuperuser;
 
   const deleteOrUpdateInfo = useRef({
     name: "",
@@ -55,8 +62,8 @@ function Index() {
     "Type",
     "Submitted",
     "View",
-    "Archive",
-    "Delete",
+    isArchive === "true" ? "Restore" : "Archive",
+    ...(canDelete ? ["Delete"] : []),
   ];
   const tabsMapList = [
     "Adoption Forms",
@@ -113,6 +120,15 @@ function Index() {
     archiveFormMutation: archiveContactUsFormMutation,
   } = useFormsAndPets(contactFormType);
 
+  //Missing ?archive param counts as the active view, matching the heading.
+  const countInView = (forms: any) =>
+    forms?.data
+      ? forms.data.filter(
+          (form: { archive: string }) =>
+            form.archive === (isArchive === "true" ? "Yes" : "No")
+        ).length
+      : "…";
+
   const handleDelete = () => {
     let data = deleteOrUpdateInfo.current;
     if (data.type === "Dog" || data.type === "Cat") {
@@ -139,24 +155,32 @@ function Index() {
 
   const handleArchive = () => {
     let type = deleteOrUpdateInfo.current.type;
-    let form = deleteOrUpdateInfo.current.data;
+    const form = deleteOrUpdateInfo.current.data;
     if (type === "Dog" || type === "Cat") {
       type = "pet";
     }
-    form.archive === "Yes" ? (form.archive = "No") : (form.archive = "Yes");
+
+    //Send only the flag, without touching the cached object. PUTting the
+    //whole (possibly stale) form back used to revert a colleague's
+    //status/read tracking and re-stamp the submitted date; and mutating the
+    //cache before the request made a failed PUT look like it worked.
+    const change = {
+      _id: deleteOrUpdateInfo.current.id,
+      archive: form.archive === "Yes" ? "No" : "Yes",
+    };
 
     switch (type) {
       case "giftAid":
-        archiveGiftAidFormMutation.mutate(form as GiftaidFormInterface);
+        archiveGiftAidFormMutation.mutate(change as GiftaidFormInterface);
         break;
       case "pet":
-        archivePetFormMutation.mutate(form as PetAdoptionFormInterface);
+        archivePetFormMutation.mutate(change as PetAdoptionFormInterface);
         break;
       case "volunteer":
-        archiveVolunteerFormMutation.mutate(form as VolunteerFormInterface);
+        archiveVolunteerFormMutation.mutate(change as VolunteerFormInterface);
         break;
       case "contactUs":
-        archiveContactUsFormMutation.mutate(form as ContactUsFormInterface);
+        archiveContactUsFormMutation.mutate(change as ContactUsFormInterface);
         break;
       default:
         console.log("Invalid form type");
@@ -171,7 +195,10 @@ function Index() {
         metaContent={"Admin Forms, Bright Eyes"}
         linkHref={"/admin/forms"}
       />
-      <AdminSidebarComponent highlighted={highlighted}>
+      <AdminSidebarComponent
+        highlighted={highlighted}
+        currentUser={currentUser}
+      >
         {!hidden && (
           <AdminConfirmationPopup
             name={deleteOrUpdateInfo.current.name}
@@ -183,18 +210,47 @@ function Index() {
           />
         )}
         <PageContainerComponent>
-          <PageHeader>
-            {isArchive === "true" ? "Archived Forms" : "Active Forms"}
-          </PageHeader>
-          <div className="flex flex-col items-center mt-14">
+          <AdminPageHeader
+            title={isArchive === "true" ? "Archived Forms" : "Active Forms"}
+            subtitle={
+              isArchive === "true"
+                ? "View, restore or delete forms that have been archived."
+                : "Manage and monitor all forms submitted to Bright Eyes."
+            }
+          />
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <AdminStatCard
+              icon="carbon:document"
+              label="Adoption Forms"
+              value={!petFormsLoading ? countInView(petForms) : "…"}
+            />
+            <AdminStatCard
+              icon="akar-icons:gift"
+              label="Gift Aid Forms"
+              value={!giftAidLoading ? countInView(giftAidForms) : "…"}
+            />
+            <AdminStatCard
+              icon="carbon:person-favorite"
+              label="Volunteer Forms"
+              value={!volunteerLoading ? countInView(volunteerForms) : "…"}
+            />
+            <AdminStatCard
+              icon="carbon:chat"
+              label="Contact Messages"
+              value={!contactLoading ? countInView(contactForms) : "…"}
+            />
+          </div>
+
+          <div className="mt-6">
             <Tabs>
-              <TabList className="flex justify-center">
+              <TabList className="flex flex-wrap gap-2">
                 {tabsMapList.map((tab) => {
                   return (
                     <Tab
                       key={tab}
-                      selectedClassName="inline-block p-4 text-[#8B3479] border-b-2 border-[#8B3479] mr-2 rounded-t-lg"
-                      className="inline-block p-4 mr-2 border-b-2 rounded-t-lg cursor-pointer"
+                      selectedClassName="!bg-brand !text-white !border-brand shadow-lg shadow-brand/20"
+                      className="cursor-pointer rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:border-brand hover:text-brand font-poppins"
                       onClick={() => setSearchText("")}
                     >
                       {tab}
@@ -203,112 +259,107 @@ function Index() {
                 })}
               </TabList>
               <TabPanel>
-                <div className="flex flex-col items-center mt-3">
+                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
                   <SearchInput
                     id={"petFilter"}
                     change={setSearchText}
                     val={searchText}
-                    placehold={"Search by name"}
+                    placehold={"Search by applicant name..."}
                   />
-                  <select
-                    className="flex w-56 px-2 mb-2 border rounded-lg h-14 sm:mr-0"
-                    name="type"
+                  <AdminSelect
                     id="type"
-                    onChange={(e) => setPetFilter(e.target.value)}
+                    value={petFilter}
+                    onChange={setPetFilter}
                   >
-                    <option value="">All</option>
+                    <option value="">All Form Types</option>
                     <option value="Dog">Dog Forms</option>
                     <option value="Cat">Cat Forms</option>
-                  </select>
+                  </AdminSelect>
                 </div>
 
-                <div className="lg:mr-20 lg:ml-20">
-                  {!petFormsLoading ? (
-                    <FormList
-                      list={petForms && petForms.data}
-                      type="pet"
-                      isArchive={isArchive}
-                      searchText={searchText}
-                      tableHeaderArray={tableHeaderArray}
-                      deleteOrUpdateInfo={deleteOrUpdateInfo}
-                      petFilter={petFilter}
-                      setHidden={setHidden}
-                    />
-                  ) : (
-                    <div className="flex justify-center">
-                      <LoadingIcon />
-                    </div>
-                  )}
-                </div>
+                {!petFormsLoading ? (
+                  <FormList
+                    list={petForms && petForms.data}
+                    type="pet"
+                    isArchive={isArchive}
+                    searchText={searchText}
+                    tableHeaderArray={tableHeaderArray}
+                    deleteOrUpdateInfo={deleteOrUpdateInfo}
+                    petFilter={petFilter}
+                    setHidden={setHidden}
+                    canDelete={canDelete}
+                  />
+                ) : (
+                  <div className="flex justify-center">
+                    <LoadingIcon />
+                  </div>
+                )}
               </TabPanel>
               <TabPanel>
-                <div className="flex flex-col items-center mt-3">
+                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
                   <SearchInput
                     id={"giftAidTextFilter"}
                     change={setSearchText}
                     val={searchText}
-                    placehold={"Search by name"}
+                    placehold={"Search by applicant name..."}
                   />
                 </div>
-                <div className="lg:mr-20 lg:ml-20">
-                  {!giftAidLoading && (
-                    <FormList
-                      list={giftAidForms && giftAidForms.data}
-                      type="giftAid"
-                      isArchive={isArchive}
-                      searchText={searchText}
-                      tableHeaderArray={tableHeaderArray}
-                      deleteOrUpdateInfo={deleteOrUpdateInfo}
-                      setHidden={setHidden}
-                    />
-                  )}
-                </div>
+                {!giftAidLoading && (
+                  <FormList
+                    list={giftAidForms && giftAidForms.data}
+                    type="giftAid"
+                    isArchive={isArchive}
+                    searchText={searchText}
+                    tableHeaderArray={tableHeaderArray}
+                    deleteOrUpdateInfo={deleteOrUpdateInfo}
+                    setHidden={setHidden}
+                    canDelete={canDelete}
+                  />
+                )}
               </TabPanel>
               <TabPanel>
-                <div className="flex flex-col items-center mt-3">
+                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
                   <SearchInput
                     id={"volunteerTextFilter"}
                     change={setSearchText}
                     val={searchText}
-                    placehold={"Search by name"}
+                    placehold={"Search by applicant name..."}
                   />
                 </div>
-                <div className="lg:mr-20 lg:ml-20">
-                  {!volunteerLoading && (
-                    <FormList
-                      list={volunteerForms && volunteerForms.data}
-                      type="volunteer"
-                      isArchive={isArchive}
-                      searchText={searchText}
-                      tableHeaderArray={tableHeaderArray}
-                      deleteOrUpdateInfo={deleteOrUpdateInfo}
-                      setHidden={setHidden}
-                    />
-                  )}
-                </div>
+                {!volunteerLoading && (
+                  <FormList
+                    list={volunteerForms && volunteerForms.data}
+                    type="volunteer"
+                    isArchive={isArchive}
+                    searchText={searchText}
+                    tableHeaderArray={tableHeaderArray}
+                    deleteOrUpdateInfo={deleteOrUpdateInfo}
+                    setHidden={setHidden}
+                    canDelete={canDelete}
+                  />
+                )}
               </TabPanel>
               <TabPanel>
-                <div className="flex flex-col items-center mt-3">
+                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
                   <SearchInput
                     id={"contactUsTextFilter"}
                     change={setSearchText}
                     val={searchText}
-                    placehold={"Search by name"}
+                    placehold={"Search by name..."}
                   />
                 </div>
-                <div className="lg:mr-20 lg:ml-20">
-                  {!contactLoading && (
-                    <FormList
-                      list={contactForms && contactForms.data}
-                      type="contactUs"
-                      isArchive={isArchive}
-                      searchText={searchText}
-                      tableHeaderArray={tableHeaderArray}
-                      deleteOrUpdateInfo={deleteOrUpdateInfo}
-                      setHidden={setHidden}
-                    />
-                  )}
-                </div>
+                {!contactLoading && (
+                  <FormList
+                    list={contactForms && contactForms.data}
+                    type="contactUs"
+                    isArchive={isArchive}
+                    searchText={searchText}
+                    tableHeaderArray={tableHeaderArray}
+                    deleteOrUpdateInfo={deleteOrUpdateInfo}
+                    setHidden={setHidden}
+                    canDelete={canDelete}
+                  />
+                )}
               </TabPanel>
             </Tabs>
           </div>
@@ -319,3 +370,13 @@ function Index() {
 }
 
 export default Index;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  //Submitted forms contain applicants' personal data, so the whole page
+  //needs the forms permission.
+  const gate = await gateAdminPage(context.req, "forms");
+  if (gate.redirect) {
+    return gate.redirect;
+  }
+  return { props: { currentUser: gate.user } };
+};

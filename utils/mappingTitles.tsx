@@ -111,6 +111,10 @@ const titleMap = {
   giftAidFuture: "Gift Aid future donations until further notice",
   giftAidPast:
     "Gift Aid previous donations for the current year, and all the previous four tax years",
+  declarationAccepted: "Gift Aid declaration accepted",
+  declarationText: "Gift Aid declaration wording",
+  declarationTextVersion: "Gift Aid declaration version",
+  acceptedAt: "Gift Aid declaration accepted date",
   //* Subcategories
   aboutQuestions: "About Information",
   dogMatchingQuestions: "Dog Matching Information",

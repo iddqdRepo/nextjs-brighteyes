@@ -20,7 +20,7 @@ function useNavRef() {
         element[1].className = "";
       }
     });
-  }, []);
+  }, [router.pathname]);
 
   return navRefs;
 }

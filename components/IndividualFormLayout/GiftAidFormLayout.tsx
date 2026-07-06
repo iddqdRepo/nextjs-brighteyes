@@ -12,9 +12,10 @@ export const AboutYouSection = ({ values }: { values: any }) => {
     </FieldSet>
   );
 };
+
 export const GiftAidSection = () => {
   return (
-    <FieldSet legendText="GiftAid">
+    <FieldSet legendText="Gift Aid declaration">
       <CheckboxGiftAidFormik />
     </FieldSet>
   );
@@ -22,34 +23,18 @@ export const GiftAidSection = () => {
 
 export const LegalAgreementSection = () => {
   return (
-    <FieldSet legendText={"Legal Agreement"}>
-      <ul className="flex flex-col ">
-        <span className="mb-5 font-medium text-gray-900 font-poppins">
-          Notes:
-        </span>
+    <FieldSet legendText="Important information">
+      <ul className="flex flex-col">
         <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          You can cancel this Declaration at any time by notifying Bright Eyes.
+          You can cancel this declaration at any time by notifying Bright Eyes.
         </li>
         <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          If your circumstances change and you no pay enough income or capital
-          gains tax to cover the amount claimed by Bright Eyes, please inform us
-          in writing.
-        </li>
-        <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          If you pay tax at the higher rate, you can claim further tax relief
-          via your Self Assessment tax return (currently 25p for each £1 you
-          give).
+          If your circumstances change and you no longer pay enough Income Tax
+          or Capital Gains Tax to cover the Gift Aid claimed on your donations,
+          please notify Bright Eyes.
         </li>
         <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
           Please notify Bright Eyes if you change your name or address.
-        </li>
-        <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          Gift Aid is linked to basic rate tax. Basic rate tax is currently 20%
-          which allows charities to reclaim 25 pence on the pound.
-        </li>
-        <li className="mb-1 ml-4 font-normal text-gray-900 list-disc font-roboto">
-          Higher rate taxpayers can claim back the difference between basic rate
-          and higher rate tax.
         </li>
       </ul>
     </FieldSet>

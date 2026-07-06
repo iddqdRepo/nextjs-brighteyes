@@ -2,28 +2,29 @@ import React, { useState } from "react";
 import petModel from "../../../../models/petModel";
 import dbConnect from "../../../../utils/dbConnect";
 import { Formik } from "formik";
-import {
-  ErrorFormik,
-  FormPageTitle,
-} from "../../../../components/IndividualFormLayout/CommonFormComponents";
 import { PetInterface } from "../../../../interfaces/interfaces";
 import {
   AdminHeadTag,
+  AdminPageHeader,
   PageContainerComponent,
 } from "../../../../adminComponents/commonAdminComponents";
 import AdminSidebarComponent from "../../../../adminComponents/AdminSidebarComponent";
 import { AnimalSchema } from "../../../../utils/yup/animalYupSchema";
-import {
-  InputOrTextArea,
-  DropdownField,
-  ChooseFile,
-} from "../../../../adminComponents/AddOrEditAnimal/AddOrEditAnimalLayoutComponents";
+import { AnimalFormSections } from "../../../../adminComponents/AddOrEditAnimal/AnimalFormSections";
 import { sanitizeInput } from "../../../../utils/sanitizeData";
 import { updatePet } from "../../../../routes/petRoutes";
 import { ShowButtonTextOnSubmit } from "../../../../components/common/CommonComponents";
+import { AdminUser } from "../../../../utils/adminAccess";
+import { gateAdminPage } from "../../../../utils/auth";
+import UnsavedChangesGuard from "../../../../adminComponents/UnsavedChangesGuard";
 
-function Index({ animal }: { animal: PetInterface[] }) {
-  const [resizedImage, setResizedImage] = useState("");
+function Index({
+  animal,
+  currentUser,
+}: {
+  animal: PetInterface[];
+  currentUser: AdminUser;
+}) {
   const [loading, setLoading] = useState(false);
   const [buttonText, setButtonText] = useState(`Make Edit`);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -35,22 +36,27 @@ function Index({ animal }: { animal: PetInterface[] }) {
         metaContent={"Admin Edit Animal, Bright Eyes"}
         linkHref={"/admin/animals/"}
       />
-      <AdminSidebarComponent highlighted={""}>
+      <AdminSidebarComponent highlighted={"Animals"} currentUser={currentUser}>
         <PageContainerComponent>
-          <form className="flex flex-col items-center justify-center ">
-            <FormPageTitle
-              title={`Editing ${animal[0].name}'s adoption form`}
-            />
+          <AdminPageHeader
+            title={`Editing ${animal[0].name}`}
+            subtitle="Update the details or adjust the photo — changes show on the website straight away."
+          />
+          <div className="mt-6 flex flex-col items-center">
             <Formik
               initialValues={animal[0]}
               validationSchema={AnimalSchema}
-              onSubmit={async (data) => {
+              onSubmit={async (data, { resetForm }) => {
                 setLoading(true);
                 let toPost: PetInterface = sanitizeInput(data as PetInterface);
                 let successful = await updatePet(toPost);
                 if (successful) {
                   setLoading(false);
                   setIsSuccess(true);
+                  //The saved values become the new baseline, so `dirty`
+                  //means "edited since the last save": editing again revives
+                  //the button and re-arms the unsaved-changes guard.
+                  resetForm({ values: data });
                 } else {
                   setLoading(false);
                   setIsSuccess(false);
@@ -58,131 +64,33 @@ function Index({ animal }: { animal: PetInterface[] }) {
                 }
               }}
             >
-              {({ values, handleSubmit }) => (
-                <div className="flex justify-center w-full">
-                  <div className="flex flex-col items-center w-full p-8 bg-white border rounded-md shadow-md 2xl:w-11/12">
-                    <InputOrTextArea
-                      labelText={"Name"}
-                      labelHForAndName={"name"}
-                    >
-                      <ErrorFormik field={"name"} />
-                    </InputOrTextArea>
-
-                    <DropdownField
-                      labelText={"Type"}
-                      labelHForAndName={"type"}
-                      valueArray={["Dog", "Cat"]}
-                    >
-                      <ErrorFormik field={"type"} />
-                    </DropdownField>
-
-                    <div className="flex">
-                      <InputOrTextArea
-                        labelText={"Age"}
-                        labelHForAndName={"age"}
-                        labelClassN="w-12"
-                        fieldClassN="w-12"
-                      >
-                        <ErrorFormik field={"age"} />
-                      </InputOrTextArea>
-
-                      <DropdownField
-                        labelText={"Years/Months"}
-                        labelHForAndName={"yearsOrMonths"}
-                        valueArray={["Months", "Years"]}
-                        labelClassN="w-28"
-                        fieldClassN="w-28"
-                      >
-                        <ErrorFormik field={"yearsOrMonths"} />
-                      </DropdownField>
-                    </div>
-
-                    <DropdownField
-                      labelText={"Sex"}
-                      labelHForAndName={"sex"}
-                      valueArray={["Male", "Female"]}
-                    >
-                      <ErrorFormik field={"sex"} />
-                    </DropdownField>
-
-                    <DropdownField
-                      labelText={"Size"}
-                      labelHForAndName={"size"}
-                      valueArray={["Small", "Medium", "Large", "Giant"]}
-                    >
-                      <ErrorFormik field={"size"} />
-                    </DropdownField>
-
-                    <DropdownField
-                      labelText={"Suitable for children"}
-                      labelHForAndName={"suitableForChildren"}
-                      valueArray={["Yes", "No"]}
-                    >
-                      <ErrorFormik field={"suitableForChildren"} />
-                    </DropdownField>
-                    <DropdownField
-                      labelText={"Suitable for animals"}
-                      labelHForAndName={"suitableForAnimals"}
-                      valueArray={["Yes", "No"]}
-                    >
-                      <ErrorFormik field={"suitableForAnimals"} />
-                    </DropdownField>
-
-                    <DropdownField
-                      labelText={"Adopted"}
-                      labelHForAndName={"adopted"}
-                      valueArray={["Yes", "No"]}
-                    >
-                      <ErrorFormik field={"adopted"} />
-                    </DropdownField>
-                    <InputOrTextArea
-                      labelText={"Description"}
-                      labelHForAndName="desc"
-                      fieldClassN="w-64 h-32"
-                      fieldAs="textarea"
-                    >
-                      <ErrorFormik field={"desc"} />
-                    </InputOrTextArea>
-                    <ChooseFile
-                      labelHForAndName="image"
-                      setter={setResizedImage}
-                      values={values}
-                    >
-                      <ErrorFormik field={"desc"} />
-                    </ChooseFile>
-                    <div className="flex justify-center w-full p-5 md:w-3/6 md:p-0">
-                      <div
-                        className="bg-no-repeat bg-cover w-60 h-60 2xl:w-60 rounded-xl 2xl:h-60"
-                        style={{
-                          backgroundImage: `url("${
-                            resizedImage ? resizedImage : values.image
-                          }")`,
-                        }}
-                      ></div>
-                    </div>
-                    <ShowButtonTextOnSubmit
-                      loading={loading}
-                      isSuccess={isSuccess}
-                      buttonText={buttonText}
-                      submitHandler={handleSubmit}
-                      animalName={values.name}
-                    />
-                    {/* <pre>
-                      {JSON.stringify(
-                        values,
-                        (key, value) => {
-                          if (key != "image") {
-                            return value;
-                          }
-                        },
-                        1
-                      )}
-                    </pre> */}
-                  </div>
-                </div>
+              {({ values, handleSubmit, setFieldValue, dirty }) => (
+                <form
+                  onSubmit={(event) => {
+                    if (loading) {
+                      event.preventDefault();
+                      return;
+                    }
+                    handleSubmit(event);
+                  }}
+                  className="flex w-full flex-col items-center"
+                >
+                  <UnsavedChangesGuard when={dirty && !loading} />
+                  <AnimalFormSections
+                    values={values}
+                    setFieldValue={setFieldValue}
+                  />
+                  <ShowButtonTextOnSubmit
+                    loading={loading}
+                    isSuccess={isSuccess && !dirty}
+                    buttonText={buttonText}
+                    submitHandler={handleSubmit}
+                    animalName={values.name}
+                  />
+                </form>
               )}
             </Formik>
-          </form>
+          </div>
         </PageContainerComponent>
       </AdminSidebarComponent>
     </>
@@ -191,28 +99,29 @@ function Index({ animal }: { animal: PetInterface[] }) {
 
 export default Index;
 
-export async function getStaticPaths() {
-  dbConnect();
-  const data = await petModel.find({}, { image: 0 });
-  //mapping through to create an array of the paths
-  const paths = data.map((obj) => {
-    return {
-      params: {
-        id: obj._id.toString().trim(),
-      },
-    };
-  });
-  return {
-    paths, //paths which is the same as paths:paths
-    fallback: "blocking",
-  };
-}
+//Rendered at request time (never at build time), so builds no longer sweep
+//the whole pets collection and edits are always shown fresh.
+export async function getServerSideProps(context: {
+  params: { id: string };
+  req: { cookies?: Partial<{ [key: string]: string }> };
+}) {
+  const gate = await gateAdminPage(context.req, "animals");
+  if (gate.redirect) {
+    return gate.redirect;
+  }
 
-export async function getStaticProps(context: { params: { id: any } }) {
-  dbConnect();
+  await dbConnect();
   const id = context.params.id;
-  // console.log("id = ", context.params.id);
-  const dataTemp = await petModel.find({ _id: id }).lean();
+  let dataTemp;
+  try {
+    dataTemp = await petModel.find({ _id: id }).lean();
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true };
+  }
+  if (dataTemp.length === 0) {
+    return { notFound: true };
+  }
   const animal = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
     if (doc.name) {
@@ -230,7 +139,7 @@ export async function getStaticProps(context: { params: { id: any } }) {
   return {
     props: {
       animal,
+      currentUser: gate.user,
     },
-    revalidate: 1,
   };
 }

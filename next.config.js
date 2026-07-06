@@ -19,10 +19,10 @@ module.exports = {
     ];
   },
   reactStrictMode: true,
-  env: {
-    MAPS_API: process.env.MAPS_API,
-  },
   images: {
-    domains: ["www.paypal.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "www.paypal.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
   },
 };

@@ -2,12 +2,33 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+html {
+  scroll-behavior: smooth;
+  /* keep anchor targets clear of the sticky navbar */
+  scroll-padding-top: 6rem;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+/* dropdown option lists don't inherit the select's font in some browsers,
+   so give them the site font explicitly */
+option {
+  font-family: Poppins, sans-serif;
+}
+
+/* hide horizontal scrollbars on carousels while keeping them scrollable */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 a {

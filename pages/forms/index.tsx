@@ -1,10 +1,14 @@
 import React from "react";
 import {
-  DashedTitle,
   FooterSection,
   HeadTag,
 } from "../../components/common/CommonComponents";
-import { FormCardSection } from "../../components/FormPageLayout/FormPageLayout";
+import {
+  FormCardSection,
+  FormsHelpSection,
+  FormsHeroSection,
+  FormsInfoSection,
+} from "../../components/FormPageLayout/FormPageLayout";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
 
 function Forms() {
@@ -20,8 +24,10 @@ function Forms() {
         linkHref={"/forms"}
       />
       <NavbarComponent />
-      <DashedTitle text={"Forms"} />
+      <FormsHeroSection />
       <FormCardSection />
+      <FormsInfoSection />
+      <FormsHelpSection />
       <FooterSection />
     </>
   );

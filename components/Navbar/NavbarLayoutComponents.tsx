@@ -4,33 +4,26 @@ import Link from "next/link";
 export const NavbarListItem = ({
   text,
   path,
-  listRef,
-  onClickFunction,
+  active,
 }: {
   text: string;
   path: string;
-  listRef: any;
-  onClickFunction: () => void;
+  active: boolean;
 }) => {
   return (
     <li>
-      <Link href={path}>
-        <a
-          onClick={onClickFunction}
-          className="flex items-center mr-5 text-lg font-medium font-poppins"
-        >
-          <div className="w-5">
-            <div ref={listRef} className="hidden">
-              <Icon
-                icon="foundation:paw"
-                color="#8b3479"
-                width="20"
-                height="20"
-              />
-            </div>
-          </div>
-          <span className="cursor-pointer">{text}</span>
-        </a>
+      <Link
+        href={path}
+        className={`flex items-center gap-1.5 border-b-2 pb-1 text-base font-medium transition font-poppins ${
+          active
+            ? "border-brand text-brand"
+            : "border-transparent text-gray-800 hover:text-brand"
+        }`}
+      >
+        {active && (
+          <Icon icon="foundation:paw" color="#8b3479" width="16" height="16" />
+        )}
+        {text}
       </Link>
     </li>
   );
@@ -39,21 +32,26 @@ export const NavbarListItem = ({
 export const MobileNavListItem = ({
   text,
   path,
+  active,
   onClickFunction,
 }: {
   text: string;
   path: string;
+  active: boolean;
   onClickFunction: () => void;
 }) => {
   return (
-    <li
-      className="flex py-4 mx-4 text-lg font-medium text-black font-poppins justify-left"
-      onClick={onClickFunction}
-    >
-      <Link href={"/" + path}>
-        <a className="text-lg font-normal leading-6 text-black" href="#">
-          {text}
-        </a>
+    <li onClick={onClickFunction}>
+      <Link
+        href={"/" + path}
+        className={`flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium font-poppins ${
+          active ? "bg-brand-50 text-brand" : "text-gray-800"
+        }`}
+      >
+        {active && (
+          <Icon icon="foundation:paw" color="#8b3479" width="16" height="16" />
+        )}
+        {text}
       </Link>
     </li>
   );

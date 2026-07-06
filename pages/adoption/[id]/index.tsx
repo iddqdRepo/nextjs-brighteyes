@@ -1,30 +1,40 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import petModel from "../../../models/petModel";
 import dbConnect from "../../../utils/dbConnect";
 import {
   DonationComponent,
   FooterSection,
+  HeadTag,
 } from "../../../components/common/CommonComponents";
 import { PetInterface } from "../../../interfaces/interfaces";
 import {
   AdoptionRulesSection,
   AnimalDetailSection,
-  HeroBannerSection,
+  OtherPetsSection,
 } from "../../../components/LayoutComponents/Animal/AnimalLayout";
-import { Divider } from "../../../components/LayoutComponents/Animal/AnimalLayoutComponents";
 import NavbarComponent from "../../../components/Navbar/NavbarComponent";
 
 function Animal({ animal }: { animal: [PetInterface] }) {
+  const pet = animal[0];
+  //Shared links (Facebook etc.) show the animal's own photo and story.
+  const shareText = pet.desc
+    ? pet.desc.length > 150
+      ? `${pet.desc.slice(0, 150).trim()}…`
+      : pet.desc
+    : `${pet.name} is looking for a loving forever home. Could you be their perfect match?`;
   return (
     <>
+      <HeadTag
+        title={`Meet ${pet.name} - Bright Eyes Animal Sanctuary`}
+        metaContent={shareText}
+        linkHref={`/adoption/${pet._id}`}
+        image={pet.image}
+      />
       <NavbarComponent />
-
-      <HeroBannerSection name={animal[0].name} />
       <AnimalDetailSection animal={animal[0]} />
-      <Divider />
-      <DonationComponent />
+      <DonationComponent petName={animal[0].name} />
       <AdoptionRulesSection />
+      <OtherPetsSection currentId={animal[0]._id ?? ""} />
       <FooterSection />
     </>
   );
@@ -50,10 +60,21 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context: { params: { id: any } }) {
-  dbConnect();
+  await dbConnect();
   const ids = context.params.id;
   // Find and return the page to be rendered (in this case, with the correct slug that we used to build the paths)
-  const dataTemp = await petModel.find({ _id: ids }).lean();
+  let dataTemp;
+  try {
+    dataTemp = await petModel.find({ _id: ids }).lean();
+  } catch {
+    //A malformed id fails the ObjectId cast; treat it as not found.
+    return { notFound: true, revalidate: 10 };
+  }
+  //Deleted pets stay in Google's index and old Facebook shares for a while:
+  //those links must 404, not crash the render with an empty array.
+  if (dataTemp.length === 0) {
+    return { notFound: true, revalidate: 10 };
+  }
   const data = dataTemp.map((doc) => {
     doc._id = doc._id.toString();
     if (doc.createdAt) {

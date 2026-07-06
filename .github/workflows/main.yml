@@ -3,6 +3,15 @@
 
 name: Node.js CI
 
+permissions:
+  contents: read
+
+# Every run uses the same deliberately isolated Atlas test database. Queue
+# runs instead of letting two seeds drop that database underneath each other.
+concurrency:
+  group: brighteyes-shared-test-database
+  cancel-in-progress: false
+
 on:
   push:
     branches: [main]
@@ -15,26 +24,42 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # Match the runtime selected for production by engines: 22.x.
+        node-version: [22.x]
+
+    env:
+      # CI runs against the brighteyes_test database (derived below), never live data.
+      SECRET: ci-only-test-secret
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: "npm"
-      # - run: npm install --legacy-peer-deps
+          package-manager-cache: false
       - run: npm ci
       - run: npm run lint
       - run: npm run check-format
-      - run: npm run build
+      - run: npx jest
+
+      - name: Point MONGO_URI at the test database
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          BASE_MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: node -e "const uri = require('./scripts/testDbUri')(process.env.BASE_MONGO_URI); require('fs').appendFileSync(process.env.GITHUB_ENV, 'MONGO_URI=' + uri + '\n')"
+
+      - name: Seed the test database
+        run: node scripts/seedTestDb.js
+
+      - run: npm run build
 
       - name: Cypress tests
-        uses: cypress-io/github-action@v4
+        # v7 uses the supported Node 24 action runtime; the project commands
+        # still run under the Node 22 version configured above.
+        uses: cypress-io/github-action@v7
         with:
           install: false
           start: npm start
+          wait-on: http://localhost:3000
+          wait-on-timeout: 120

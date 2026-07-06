@@ -1,8 +1,9 @@
 export const giftAidInitialValues = {
   type: "giftAid",
   archive: "No",
-  giftAidFuture: "",
-  giftAidPast: "",
+  giftAidFuture: [] as string[],
+  giftAidPast: [] as string[],
+  declarationAccepted: false,
   aboutQuestions: {
     name: "",
     address: "",

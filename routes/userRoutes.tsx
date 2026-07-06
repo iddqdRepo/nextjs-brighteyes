@@ -1,7 +1,26 @@
 import axios from "axios";
-import { UserInterface } from "../interfaces/interfaces";
 
 import { server } from "../config";
+
+export type AccessSelection = {
+  superuser: boolean;
+  animals: boolean;
+  forms: boolean;
+  donations: boolean;
+};
+
+//Shape of the access fields the users API expects.
+const toAccessPayload = (access: AccessSelection) =>
+  access.superuser
+    ? { role: "superuser" as const }
+    : {
+        role: "staff" as const,
+        permissions: {
+          animals: access.animals,
+          forms: access.forms,
+          donations: access.donations,
+        },
+      };
 
 export const getUsers = async () => {
   const users = await axios.get(`/api/users`);
@@ -14,16 +33,46 @@ export const getUserByUsername = async (username: string) => {
 };
 
 export const deleteUser = async (username: string) => {
-  const deleteUser = await axios.delete(`/api/users/${username}`);
+  const deleteUser = await axios.delete(
+    `/api/users/${encodeURIComponent(username)}`
+  );
   return deleteUser.data.success;
 };
 
-export const updateUser = async (data: UserInterface) => {
-  const updateUser = await axios.put(`/api/users/${data.username}`, data);
-  return updateUser.data.success;
+export const updateUserAccess = async (
+  username: string,
+  access: AccessSelection
+) => {
+  const updated = await axios.put(
+    `/api/users/${encodeURIComponent(username)}`,
+    toAccessPayload(access)
+  );
+  return updated.data.success;
 };
 
-export const postUser = async (data: UserInterface) => {
-  const addUser = await axios.post(`/api/users`, data);
+export const resetUserPassword = async (username: string, password: string) => {
+  const updated = await axios.put(
+    `/api/users/${encodeURIComponent(username)}`,
+    { password }
+  );
+  return updated.data.success;
+};
+
+//Changes the signed-in admin's own password (any role, Settings page).
+export const updateMyPassword = async (password: string) => {
+  const updated = await axios.put(`/api/users/me`, { password });
+  return updated.data.success;
+};
+
+export const postUser = async (data: {
+  username: string;
+  password: string;
+  access: AccessSelection;
+}) => {
+  const addUser = await axios.post(`/api/users`, {
+    username: data.username,
+    password: data.password,
+    ...toAccessPayload(data.access),
+  });
   return addUser.data.success;
 };

@@ -8,6 +8,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        brand: {
+          DEFAULT: "#8b3479",
+          dark: "#6e2960",
+          deep: "#571f4c",
+          light: "#b05a9d",
+          50: "#faf3f8",
+          100: "#f4e3ef",
+          200: "#e8c7de",
+        },
+        cream: {
+          DEFAULT: "#fdf5e6",
+          deep: "#fef4df",
+        },
+        night: "#181330",
+      },
       fontFamily: {
         sans: ["Noto Sans"],
         poppins: ["Poppins"],

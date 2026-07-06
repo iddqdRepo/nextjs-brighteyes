@@ -7,6 +7,9 @@
 
 # testing
 /coverage
+/cypress/downloads
+/cypress/screenshots
+/cypress/videos
 
 # next.js
 /.next/
@@ -36,3 +39,6 @@ yarn-error.log*
 
 .vscode
 .eslintcache
+
+# local image-migration backups
+scripts/pets-image-backup-*.jsonl

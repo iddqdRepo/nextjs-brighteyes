@@ -7,17 +7,22 @@ export function stringifyIdsAndDates(dataStructure: any) {
   ) {
     Object.keys(dataStructure).forEach((key) => {
       //loop through dataStructure and check if value is _id || array || object
-      if (key === "_id") {
+      //Every branch guards against null: a raw API call can store null in
+      //any of these fields, and .toString() on null would 500 the page.
+      if (key === "_id" && dataStructure["_id"]) {
         dataStructure["_id"] = dataStructure["_id"].toString();
       }
-      if (key === "createdAt") {
+      if (key === "createdAt" && dataStructure["createdAt"]) {
         dataStructure["createdAt"] = dataStructure["createdAt"].toString();
       }
-      if (key === "updatedAt") {
+      if (key === "updatedAt" && dataStructure["updatedAt"]) {
         dataStructure["updatedAt"] = dataStructure["updatedAt"].toString();
       }
-      if (key === "date") {
+      if (key === "date" && dataStructure["date"]) {
         dataStructure["date"] = dataStructure["date"].toString();
+      }
+      if (key === "handledAt" && dataStructure["handledAt"]) {
+        dataStructure["handledAt"] = dataStructure["handledAt"].toString();
       }
       //if key is an array, loop through and stringify the contents
       if (Array.isArray(dataStructure[key])) {

@@ -4,9 +4,9 @@ import {
   HeadTag,
 } from "../../components/common/CommonComponents";
 import {
-  DonateHeroSection,
+  DonateSection,
+  DonateQuoteSection,
   DonateUsesSection,
-  DonationTypesSection,
 } from "../../components/LayoutComponents/DonateLayout/DonateLayout";
 import NavbarComponent from "../../components/Navbar/NavbarComponent";
 
@@ -14,17 +14,21 @@ function Donate() {
   return (
     <>
       <HeadTag
-        title={"Donate, Change a Life Today - Bright Eyes Animal Sanctuary"}
+        title={"Donate by Card - Bright Eyes Animal Sanctuary"}
         metaContent={
-          "In the past 5 years we have rehomed over 1000 cats and dogs. We receive no government funding, every little helps."
+          "Donate by card to Bright Eyes Animal Sanctuary with optional Gift Aid and monthly giving."
         }
         linkHref={"/donate"}
       />
       <NavbarComponent />
-      <DonateHeroSection />
-      <DonationTypesSection />
+      <DonateSection />
       <DonateUsesSection />
-      <ContactUsSection />
+      <DonateQuoteSection />
+      <ContactUsSection
+        eyebrow="Questions about donating?"
+        title="We're here to help"
+        text="If you have any questions about your donation or need assistance, please get in touch with our team."
+      />
       <FooterSection />
     </>
   );
